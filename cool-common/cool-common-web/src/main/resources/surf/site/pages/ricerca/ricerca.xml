@@ -1,0 +1,15 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<page>
+	<id>ricerca</id>
+	<title>Ricerca Avanzata</title>
+	<template-instance>bootstrap</template-instance>
+	<authentication>user</authentication>
+  	<format-id>navbar/admin</format-id>
+	<order-id>11</order-id>
+	<components>
+		<component>
+			<region-id>main</region-id>
+			<url>/ricerca/main</url>
+		</component>
+	</components>
+</page>

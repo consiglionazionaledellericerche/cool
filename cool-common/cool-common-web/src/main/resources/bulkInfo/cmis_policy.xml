@@ -1,0 +1,5 @@
+<bulkInfo xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns="http://www.cnr.it/schema/BulkInfo" xsi:schemaLocation="http://www.cnr.it/schema/BulkInfo BulkInfo.xsd"
+	shortDescription="CMIS Policy" longDescription="CMIS Policy"
+	cmisTypeName="cmis:policy" cmisQueryName="cmis:policy">
+</bulkInfo>

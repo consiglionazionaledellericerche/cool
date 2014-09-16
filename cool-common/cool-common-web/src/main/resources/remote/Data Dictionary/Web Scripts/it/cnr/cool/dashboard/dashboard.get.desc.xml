@@ -1,0 +1,10 @@
+<webscript>
+   <shortname>Workflow Dashboard</shortname>
+   <description>
+      Workflow Dashboard
+   </description>
+   <url>/workflow/dashboard</url>
+   <format default="json">argument</format>
+   <authentication>user</authentication>
+   <transaction>requiresnew</transaction>
+</webscript>

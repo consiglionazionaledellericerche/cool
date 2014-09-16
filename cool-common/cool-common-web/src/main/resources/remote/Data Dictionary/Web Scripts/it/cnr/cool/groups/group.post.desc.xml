@@ -1,0 +1,18 @@
+<webscript>
+   <shortname>Create Group.</shortname>
+   <description><![CDATA[
+      Remove child authority to given Group
+      {
+         "parent_node_ref" : "workspace://SpacesStore/5c8c8311-d73d-47ab-96a9-8d7ede91efa1",
+         "parent_group_name" : "GROUP_PARENT",
+         "group_name" : "PROVA",
+         "display_name" : "DESCRIZIONE PROVA"
+      }
+   ]]>
+   </description>
+   <url>/authority/group</url>
+   <format default="json">argument</format>
+   <authentication>user</authentication>
+   <transaction>required</transaction>
+   <lifecycle>draft_public_api</lifecycle>
+</webscript>

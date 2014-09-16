@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>it.cnr.si.cool</groupId>
+    <artifactId>cool-common</artifactId>
+    <version>1.3</version>
+  </parent>
+
+  <artifactId>cool-common-web</artifactId>
+  <name>Cool Platform - Common - Web</name>
+
+  <dependencies>
+    <dependency>
+      <groupId>it.cnr.si.cool</groupId>
+      <artifactId>cool-common-rest</artifactId>
+      <version>1.3</version>
+    </dependency>
+    <dependency>
+      <groupId>it.cnr.si</groupId>
+      <artifactId>cool-bulkinfo</artifactId>
+      <version>0.1</version>
+    </dependency>
+    <dependency>
+      <groupId>it.cnr.si.cool</groupId>
+      <artifactId>cool-common-web-js</artifactId>
+      <version>0.2</version>
+    </dependency>
+  </dependencies>
+
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.lesscss</groupId>
+        <artifactId>lesscss-maven-plugin</artifactId>
+        <configuration>
+          <includes>
+            <include>cool/cool.less</include>
+          </includes>
+        </configuration>
+        <executions>
+          <execution>
+            <goals>
+              <goal>compile</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+  </build>
+
+
+  <profiles>
+    <profile>
+      <id>produzione</id>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.lesscss</groupId>
+            <artifactId>lesscss-maven-plugin</artifactId>
+            <configuration>
+              <compress>true</compress>
+            </configuration>
+          </plugin>
+      </plugins>
+      </build>
+    </profile>
+  </profiles>
+
+</project>

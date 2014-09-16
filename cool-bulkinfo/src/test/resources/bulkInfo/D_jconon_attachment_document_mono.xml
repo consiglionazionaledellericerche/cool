@@ -1,0 +1,13 @@
+<bulkInfo xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns="http://www.cnr.it/schema/BulkInfo" xsi:schemaLocation="http://www.cnr.it/schema/BulkInfo BulkInfo.xsd"
+	shortDescription="Allegato generico Mono" longDescription="Allegato generico Mono"
+	cmisTypeName="D:jconon_attachment:document_mono" 
+	cmisQueryName="jconon_attachment:document_mono"
+	cmisExtendsName="D:jconon_attachment:document">
+
+	<formFieldProperty name="messaggio" 
+		inputType="DIV"
+		text="message.alert.document.mono"
+		class="alert alert-error no-controls"/>
+		
+</bulkInfo>

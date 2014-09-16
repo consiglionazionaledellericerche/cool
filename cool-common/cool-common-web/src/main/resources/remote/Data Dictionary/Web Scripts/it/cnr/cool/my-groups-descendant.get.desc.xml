@@ -1,0 +1,8 @@
+<webscript>
+   <shortname>My Groups Descendants</shortname>
+   <description>
+   </description>
+   <url>/search/groups/descendant/{user}?zone={zone?}</url>
+   <format default="json">argument</format>
+   <authentication>user</authentication>
+</webscript>

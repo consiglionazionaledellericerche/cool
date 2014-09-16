@@ -1,0 +1,15 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<page>
+	<id>frontOffice</id>
+	<title>Pagina di lettura dei documenti per il Front Office</title>
+	<template-instance>bootstrap</template-instance>
+    <format-id>navbar/admin</format-id>
+	<authentication>user</authentication>
+	<order-id>9</order-id>
+	<components>
+		<component>
+			<region-id>main</region-id>
+			<url>/frontOffice/main</url>
+		</component>
+	</components>
+</page>

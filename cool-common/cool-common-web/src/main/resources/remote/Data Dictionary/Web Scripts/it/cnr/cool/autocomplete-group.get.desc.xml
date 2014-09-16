@@ -1,0 +1,10 @@
+<webscript>
+   <shortname>Autocomplete Group</shortname>
+   <description>
+      Get a collection of groups stored in the repository. This can optionally be
+      filtered according to a given filter query string
+   </description>
+   <url>/search/autocomplete/group?filter={filterQuery?}&amp;maxItems={maxItems?}</url>
+   <format default="json">argument</format>
+   <authentication>user</authentication>
+</webscript>

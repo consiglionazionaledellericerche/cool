@@ -1,0 +1,16 @@
+<webscript>
+   <shortname>Remove child authorities from group.</shortname>
+   <description><![CDATA[
+      Remove child authority to given Group
+      {
+         "parentNodeRef" : "workspace://SpacesStore/5c8c8311-d73d-47ab-96a9-8d7ede91efa1",
+         "childFullName" : "mario.rossi"
+      }
+   ]]>
+   </description>
+   <url>/authority/groups/children</url>
+   <format default="json">argument</format>
+   <authentication>user</authentication>
+   <transaction>required</transaction>
+   <lifecycle>draft_public_api</lifecycle>
+</webscript>

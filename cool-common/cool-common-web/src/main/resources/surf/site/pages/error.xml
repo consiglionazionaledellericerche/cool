@@ -1,0 +1,14 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<page>
+	<id>error-generic</id>
+	<title>Generic Error</title>
+	<template-instance>bootstrap</template-instance>
+	<authentication>none</authentication>
+	<order-id>100</order-id>
+	<components>
+		<component>
+			<region-id>main</region-id>
+			<url>/error/generic.html</url>
+		</component>
+	</components>
+</page>

@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<model name="faq:model" xmlns="http://www.alfresco.org/model/dictionary/1.0"
+ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+ xsi:noNamespaceSchemaLocation="http://www.alfresco.org/model/dictionary/1.0">
+
+  <description>FAQ Model</description>
+  <author>Paolo Enrico Cirone</author>
+  <version>1.0</version>
+
+  <imports>
+    <import uri="http://www.alfresco.org/model/dictionary/1.0" prefix="d" />
+    <import uri="http://www.alfresco.org/model/content/1.0" prefix="cm" />
+  </imports>
+
+  <namespaces>
+    <namespace uri="http://www.cnr.it/model/faq" prefix="faq" />
+  </namespaces>
+
+  <types>
+      <type name="faq:document">
+      <title>FAQ Document</title>
+      <description>Documento contenente le informazioni contenute nelle FAQ</description>
+      <parent>cm:content</parent>
+      <properties>
+        <property name="faq:type">
+          <title>Tipo Bando</title>
+          <description>Tipo di bando a cui è riferita la FAQ</description>
+          <type>d:text</type>
+          <mandatory>true</mandatory>
+          <index enabled="true">
+            <atomic>true</atomic>
+            <stored>false</stored>
+            <tokenised>both</tokenised>
+          </index>
+        </property>
+        <property name="faq:question">
+          <title>Text</title>
+          <description>Domanda della FAQ</description>
+          <type>d:text</type>
+          <mandatory>true</mandatory>
+          <index enabled="true">
+            <atomic>true</atomic>
+            <stored>false</stored>
+            <tokenised>both</tokenised>
+          </index>
+        </property>
+        <property name="faq:answer">
+          <title>Risposta</title>
+          <description>Risposta della FAQ</description>
+          <type>d:text</type>
+          <mandatory>true</mandatory>
+          <index enabled="true">
+            <atomic>true</atomic>
+            <stored>false</stored>
+            <tokenised>both</tokenised>
+          </index>
+        </property>
+        <property name="faq:data">
+          <title>Data</title>
+          <description>Data di pubblicazione della FAQ</description>
+          <type>d:datetime</type>
+          <mandatory>true</mandatory>
+          <index enabled="true">
+            <atomic>true</atomic>
+            <stored>false</stored>
+            <tokenised>both</tokenised>
+          </index>
+        </property>
+        <property name="faq:number">
+          <title>number</title>
+          <description>Numero della faq</description>
+          <type>d:int</type>
+          <mandatory>true</mandatory>
+          <index enabled="true">
+            <atomic>true</atomic>
+            <stored>false</stored>
+            <tokenised>both</tokenised>
+          </index>
+        </property>
+        <property name="faq:show">
+          <type>d:boolean</type>
+          <default>true</default>
+        </property>
+      </properties>
+    </type>
+  </types>
+</model>

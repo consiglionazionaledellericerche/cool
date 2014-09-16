@@ -1,0 +1,16 @@
+<form class="form-horizontal">
+  {{#each bulkinfo}}
+    <div class="control-group">
+      <label class="control-label" for="bulkinfo_{{key}}">{{key}}</label>
+      <div class="controls">
+        <label id="bulkinfo_{{key}}" class="control-label">
+          {{#if properties.uppercase}}
+            {{properties.uppercase}}
+          {{else}}
+            <input type="text" id="bulkinfo_{{key}}" class="input-block-level" placeholder="{{value}}">
+          {{/if}}
+        </label>
+      </div>
+    </div>
+  {{/each}}
+</form>

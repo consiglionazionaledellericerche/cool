@@ -1,0 +1,6 @@
+<webscript>
+	<shortname>Gestione Utenti</shortname>
+	<description>Gestione Utenti</description>
+	<authentication>user</authentication>
+	<url>/gestione-utenti/main</url>
+</webscript>

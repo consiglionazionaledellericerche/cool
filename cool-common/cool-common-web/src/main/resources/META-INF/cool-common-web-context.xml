@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:util="http://www.springframework.org/schema/util"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd
+		http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-3.0.xsd">
+
+	<import resource="classpath*:fonts.xml" />
+	<import resource="classpath*:META-INF/cool-common-rest-context.xml" />
+	<import resource="classpath*:META-INF/cool-bulkinfo-context.xml" />
+
+
+	<!-- Turn on AspectJ @Configurable support. As a result, any time you instantiate
+		an object, Spring will attempt to perform dependency injection on that object.
+		This occurs for instantiation via the "new" keyword, as well as via reflection.
+		This is possible because AspectJ is used to "weave" Roo-based applications
+		at compile time. In effect this feature allows dependency injection of any
+		object at all in your system, which is a very useful feature (without @Configurable
+		you'd only be able to dependency inject objects acquired from Spring or subsequently
+		presented to a specific Spring dependency injection method). Roo applications
+		use this useful feature in a number of areas, such as @PersistenceContext
+		injection into entities. -->
+	<context:spring-configured />
+
+	<!-- This declaration will cause Spring to locate every @Component, @Repository
+		and @Service in your application. In practical terms this allows you to write
+		a POJO and then simply annotate the new POJO as an @Service and Spring will
+		automatically detect, instantiate and dependency inject your service at startup
+		time. Importantly, you can then also have your new service injected into
+		any other class that requires it simply by declaring a field for your service
+		inside the relying class and Spring will inject it. Note that two exclude
+		filters are declared. The first ensures that Spring doesn't spend time introspecting
+		Roo-specific ITD aspects. The second ensures Roo doesn't instantiate your
+		@Controller classes, as these should be instantiated by a web tier application
+		context. Refer to web.xml for more details about the web tier application
+		context setup services. Furthermore, this turns on @Autowired, @PostConstruct
+		etc support. These annotations allow you to use common Spring and Java Enterprise
+		Edition annotations in your classes without needing to do any special configuration.
+		The most commonly used annotation is @Autowired, which instructs Spring to
+		dependency inject an object into your class. -->
+	<context:component-scan base-package="org.app.surf">
+		<context:exclude-filter expression=".*_Roo_.*"
+			type="regex" />
+		<context:exclude-filter expression="org.springframework.stereotype.Controller"
+			type="annotation" />
+	</context:component-scan>
+
+	<!-- Set up to auto-resolve to url based views -->
+	<bean id="handlerMappings" parent="webframeworkHandlerMappings">
+		<property name="order" value="0" />
+
+		<!-- Remove the default handler for interoperability with other handlers -->
+		<property name="defaultHandler">
+			<bean class="it.cnr.cool.controller.WebScriptController" />
+		</property>
+	</bean>
+
+	<bean id="webframeworkHandlerMappings"
+		class="org.springframework.web.servlet.handler.SimpleUrlHandlerMapping"
+		abstract="true">
+		<property name="interceptors">
+			<list>
+				<ref bean="requestContextInterceptor" />
+				<ref bean="themeInterceptor" />
+			</list>
+		</property>
+		<property name="mappings">
+			<value>
+				/system/**=remoteController
+				/resource/**=jcononResourceController
+				/dologin/**=loginController
+				/dologout/**=logoutController
+			</value>
+		</property>
+	</bean>
+	<!-- Maps requests to @Controllers based on @RequestMapping("path") annotation
+		values If no annotation-based path mapping is found, Spring MVC sends a 404
+		response and logs a pageNotFound warning. -->
+	<bean
+		class="org.springframework.web.servlet.mvc.annotation.DefaultAnnotationHandlerMapping">
+		<property name="order" value="1" />
+
+		<!-- SURF: required interceptors -->
+		<property name="interceptors">
+			<list>
+				<ref bean="requestContextInterceptor" />
+				<ref bean="themeInterceptor" />
+				<ref bean="previewContextInterceptor" />
+			</list>
+		</property>
+	</bean>
+
+
+	<!-- SURF: interoperability with annotated controllers -->
+	<!-- Enables annotated @Controllers; responsible for invoking an annotated
+		POJO @Controller when one is mapped. -->
+	<bean id="annotationMethodHandlerAdapter"
+		class="org.springframework.web.servlet.mvc.annotation.AnnotationMethodHandlerAdapter" />
+
+	<!-- SURF: interoperability with simple controllers -->
+	<!-- Support for Default Surf Controllers -->
+	<bean id="simpleControllerHandlerAdapter"
+		class="org.springframework.web.servlet.mvc.SimpleControllerHandlerAdapter" />
+
+	<bean id="webframework.store.classpath.bulkinfo" parent="webframework.store.classpath.abstract">
+		<property name="mustExist">
+			<value>false</value>
+		</property>
+		<property name="classPath">
+			<value>bulkInfo</value>
+		</property>
+	</bean>
+
+	<bean id="webscriptViewResolver"
+		class="org.springframework.extensions.webscripts.servlet.mvc.WebScriptViewResolver">
+		<property name="container" ref="webscripts.container" />
+		<property name="authenticatorFactory" ref="webframework.factory.user.cmis" />
+	</bean>
+	<!-- End User Factory Bean -->
+
+	<bean id="baseProxyInterceptor" abstract="true" init-method="register">
+		<property name="interceptor">
+			<ref bean="proxyInterceptor" />
+		</property>
+		<property name="cmisService" ref="cmisService" />
+	</bean>
+
+  <bean class="it.cnr.cool.web.servlet.handler.MappingExceptionResolver">
+    <property name="interceptors">
+      <list>
+        <ref bean="requestContextInterceptor" />
+        <ref bean="themeInterceptor" />
+      </list>
+    </property>
+    <property name="exceptionMappings">
+      <map>
+        <entry
+          key="org.springframework.web.multipart.MaxUploadSizeExceededException"
+          value="error-generic" />
+      </map>
+    </property>
+    <property name="defaultErrorViewAjax" value="error/generic" />
+  </bean>
+
+
+  <bean id="pageViewResolver" class="it.cnr.cool.extensions.surf.mvc.CoolPageViewResolver"
+    parent="abstractWebFrameworkViewResolver">
+    <property name="permission" ref="permission" />
+  </bean>
+
+</beans>

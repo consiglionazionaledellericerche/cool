@@ -1,0 +1,9 @@
+<webscript kind="org.alfresco.repository.content.stream">
+   <shortname>Workflow Diagram</shortname>
+   <description>
+      Workflow diagram
+   </description>
+   <url>/workflow/diagram.png?definitionId={definitionId}</url>
+   <format default="">argument</format>
+   <authentication>user</authentication>
+</webscript>

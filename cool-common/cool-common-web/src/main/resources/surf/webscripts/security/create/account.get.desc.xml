@@ -1,0 +1,5 @@
+<webscript>
+  <shortname>Create a new Account</shortname>
+  <description>Create a new Account</description>
+  <url>/create-account/main</url>
+</webscript>

@@ -1,0 +1,12 @@
+<webscript>
+   <shortname>Delete group.</shortname>
+   <description><![CDATA[
+	Delete Group with parameter cascade also delete member group
+   ]]>
+   </description>
+   <url>/authority/group?group_name={group_name?}&amp;group_node_ref={group_node_ref?}&amp;cascade={cascade?}</url>
+   <format default="json">argument</format>
+   <authentication>user</authentication>
+   <transaction>required</transaction>
+   <lifecycle>draft_public_api</lifecycle>
+</webscript>

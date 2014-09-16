@@ -1,0 +1,11 @@
+{{#each bulkinfoMap}}
+	<div class="bulkInfo">
+		{{description}}
+		<br />
+		{{i18n "label.cm_owner"}} {{properties_cm_owner}}
+		<br />
+		data di riferimento: {{date properties_bpm_completionDate}}
+		<br />
+		{{i18n "label.bpm.comment"}} {{properties_bpm_comment}}
+	</div>
+{{/each}}

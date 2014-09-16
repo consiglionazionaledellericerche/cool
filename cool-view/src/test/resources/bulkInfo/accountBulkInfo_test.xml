@@ -1,0 +1,246 @@
+<bulkInfo
+		xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		xmlns="http://www.cnr.it/schema/BulkInfo" 
+		xsi:schemaLocation="http://www.cnr.it/schema/BulkInfo BulkInfo.xsd"
+		shortDescription="Account"
+		longDescription="Account">
+	<fieldProperty
+		name="firstName"
+		property="firstName"
+		label="label.account.firstName"
+		jsonvalidator='{"required": true}'
+		inputType="TEXT"/>
+	<fieldProperty
+		name="lastName"
+		property="lastName"
+		label="label.account.lastName"
+		labelClass="control-label"
+		jsonvalidator='{"required": true}'
+		inputType="TEXT" />
+	<fieldProperty
+		name="email"
+		property="email"
+		label="label.account.email"
+		tooltip="tooltip.account.email"
+		nullable="false"
+		jsonvalidator='{"required": true, "email": true}'
+		inputType="TEXT" />
+	<fieldProperty
+		name="emailForgotPass"
+		property="email"
+		placeholder="label.account.email"
+		class="input-xlarge"
+		jsonvalidator='{"required": true, "email": true}'
+		inputType="TEXT" />
+	<fieldProperty
+		name="userName"
+		property="userName"
+		label="label.account.userName"
+		tooltip="tooltip.account.userName"
+		jsonvalidator='{"required": true, "controlloUserId": true, "minlength": "6", "maxlength": "18"}'
+		inputType="TEXT" />
+	<fieldProperty
+		name="username"
+		property="username"
+		label="label.account.userName"
+		labelClass="control-label"
+		tooltip="tooltip.account.userName"
+		jsonvalidator='{"required": true, "minlength": "8"}'
+		inputType="TEXT" />
+	<fieldProperty
+		name="hiddenUsername"
+		property="userName"
+		inputType="HIDDEN" />
+	<fieldProperty
+		name="oldpassword"
+		property="oldpassword"
+		label="label.account.oldpassword"
+		labelClass="control-label"
+		jsonvalidator='{"required": true}'
+		inputType="PASSWORD" />
+	<fieldProperty
+		name="password"
+		property="password"
+		label="label.account.password"
+		labelClass="control-label"
+		nullable="false"
+		jsonvalidator='{"minlength": "3"}'
+		inputType="PASSWORD" />
+	<fieldProperty
+		name="confirmPassword"
+		property="confirmPassword"
+		label="label.account.confirmPassword"
+		labelClass="control-label"
+		nullable="false"
+		jsonvalidator='{"required": true, "equalTo" : "#password"}'
+		inputType="PASSWORD" />
+	<fieldProperty
+		name="codicefiscale"
+		property="companyaddress1"
+		label="label.account.codicefiscale"
+		labelClass="control-label"
+		jsonvalidator='{"required": true, "controlloCodicefiscale": true}'
+		class="uppercase"
+		inputType="TEXT" />
+
+	<fieldProperty
+		name="nazionalita"
+		property="companyaddress3"
+		label="label.account.nazionalita"
+		labelClass="control-label"
+		inputType="RADIOGROUP"
+		widget="ui.radio"
+		jsonvalidator='{"requiredWidget": true}'
+		jsonlist='[
+			{
+			 "key" : "true",
+			 "id" : "italy",
+			 "label" : "label.account.nationality.italian",
+			 "defaultLabel" : "Italiana"
+			},
+			{
+			 "key" : "false",
+			 "id" : "foreign",
+			 "label" : "label.account.nationality.foreign",
+			 "defaultLabel" : "Estera"
+			}
+		]'
+		default="true"
+		class="check" />
+		
+	<fieldProperty
+		name="sesso"
+		property="companypostcode"
+		label="label.account.sesso"
+		labelClass="control-label"
+		jsonvalidator='{"requiredWidget": true}'
+		inputType="RADIOGROUP" 
+		widget="ui.radio"
+		jsonlist='[
+			{
+			 "key" : "M",
+			 "label" : "label.account.sesso.M",
+			 "defaultLabel" : "M"
+			},
+			{
+			 "key" : "F",
+			 "label" : "label.account.sesso.M",
+			 "defaultLabel" : "F"
+			}
+		]'		
+		class="check" />
+	<fieldProperty
+		name="dataDiNascita"
+		property="companyaddress2"
+		label="label.account.data.nascita"
+		nullable="false"
+		jsonvalidator='{"requiredWidget": true}'
+		class="input-small"
+		format="DD/MM/YYYY"
+		inputType="TEXT"
+		widget="ui.datepicker"/>
+	<fieldProperty
+		name="companytelephone"
+		property="companytelephone"
+		label="label.account.statoestero"
+		class="input-large"		
+		widget="ui.country"
+		jsonvalidator='{"requiredWidget": true}'
+		inputType="TEXT" />
+
+	<formFieldProperty 
+		name="firstName" />
+	<formFieldProperty 
+		name="lastName" />
+	<formFieldProperty 
+		name="email" />
+	<formFieldProperty 
+		name="emailForgotPass" />
+	<formFieldProperty 
+		name="userName" />
+	<formFieldProperty 
+		name="username" />
+	<formFieldProperty 
+		name="password" />
+	<formFieldProperty 
+		name="confirmPassword" />
+	<formFieldProperty 
+		name="codicefiscale" />
+	<formFieldProperty 
+		name="nazionalita" />
+	<formFieldProperty 
+		name="sesso" />
+	<formFieldProperty 
+		name="dataDiNascita" />
+	<formFieldProperty 
+		name="companytelephone" />
+	
+	<form name="infoUser">
+		<formFieldProperty 
+			name="lastName" />
+		<formFieldProperty 
+			name="email" />
+	</form>
+	<form name="forgotPassword">
+		<formFieldProperty
+			name="password"/>
+		<formFieldProperty
+			name="confirmPassword"/>
+	</form>
+	<form name="changePassword">
+		<formFieldProperty
+			name="oldpassword"/>
+		<formFieldProperty
+			name="password"/>
+		<formFieldProperty
+			name="confirmPassword"/>
+	</form>
+
+	<form name="italy">
+		<formFieldProperty 
+			name="codicefiscale" />
+	</form>
+	<form name="foreign">
+		<formFieldProperty 
+			name="sesso" />
+		<formFieldProperty 
+			name="dataDiNascita" />
+		<formFieldProperty 
+			name="companytelephone" />
+	</form>
+
+	<form name="createUser">
+		<formFieldProperty
+			name="firstName"/>
+		<formFieldProperty
+			name="lastName"/>
+		<formFieldProperty
+			name="email"/>
+		<formFieldProperty 
+			name="userName" />
+		<formFieldProperty 
+			name="password" />
+		<formFieldProperty 
+			name="confirmPassword" />
+		<formFieldProperty 
+			name="nazionalita" />
+	</form>
+	
+	<form name="editUser">
+		<formFieldProperty
+			name="hiddenUsername"/>
+		<formFieldProperty
+			name="firstName"/>
+		<formFieldProperty
+			name="lastName"/>
+		<formFieldProperty
+			name="email"/>
+		<formFieldProperty 
+			name="nazionalita" />			
+	</form>
+	<form name="forgotPass">
+		<formFieldProperty
+			name="emailForgotPass"/>
+	</form>
+
+</bulkInfo>

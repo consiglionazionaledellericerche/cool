@@ -1,0 +1,12 @@
+<webscript>
+   <shortname>Delete specific version</shortname>
+   <description><![CDATA[
+   ]]>
+   </description>
+   <url>/cnr/nodeversion</url>
+   <format default="json">argument</format>
+   <family>CNR</family>
+   <authentication>user</authentication>
+   <transaction>required</transaction>
+   <lifecycle>draft_public_api</lifecycle>
+</webscript>

@@ -1,0 +1,9 @@
+<webscript>
+   <shortname>Disable People</shortname>
+   <description>
+      Disable (or enable) people stored in the repository.
+   </description>
+   <url>/cnr/disableAccount</url>
+   <format default="json">argument</format>
+   <authentication>user</authentication>
+</webscript>

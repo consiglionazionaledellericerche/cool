@@ -1,0 +1,6 @@
+<webscript>
+  <shortname>createModify frontOffice</shortname>
+  <description>FrontOffice: pagina di creazione e modifica delle notice e delle faq</description>
+  <authentication>user</authentication>
+  <url>/frontOfficeCreateModify/main</url>
+</webscript>

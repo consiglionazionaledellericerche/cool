@@ -1,0 +1,29 @@
+<webscript>
+  <shortname>Issue Facet Query (query)</shortname>
+  <description>
+  <![CDATA[
+  Executes a CMIS Facet query statement against the contents of the Repository.
+  ]]>
+  </description>
+  <url>/search/facet?q={q}&amp;skipCount={skipCount?}&amp;maxItems={maxItems?}&amp;facet.field={facet.field?}</url>
+  <args>
+    <arg>
+        <shortname>q</shortname>
+        <description>query statement to execute</description>
+    </arg>
+    <arg>
+        <shortname>skipCount</shortname>
+    </arg>
+    <arg>
+        <shortname>maxItems</shortname>
+    </arg>
+    <arg>
+        <shortname>facet.field</shortname>
+        <description><![CDATA[The name of the Facet, you can also add different argument like "f."+facet.field+".facet.limit" or "f."+facet.field+".facet.prefix"]]></description>
+    </arg>
+  </args>
+  <format default="html"/> 
+  <transaction allow="readonly"/>
+  <family>SEARCH</family>
+  <lifecycle>public_api</lifecycle>
+</webscript>

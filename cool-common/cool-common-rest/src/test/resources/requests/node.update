@@ -1,0 +1,19 @@
+------WebKitFormBoundary
+Content-Disposition: form-data; name="cmis:objectId"
+
+XXXXX
+------WebKitFormBoundary
+Content-Disposition: form-data; name="cmis:objectTypeDocument"
+
+cmis:document
+------WebKitFormBoundary
+Content-Disposition: form-data; name="crudStatus"
+
+UPDATE
+------WebKitFormBoundary
+Content-Disposition: form-data; name="file-0"; filename="VisualElementsManifest.xml"
+Content-Type: text/xml
+
+<Application>
+</Application>
+------WebKitFormBoundary--

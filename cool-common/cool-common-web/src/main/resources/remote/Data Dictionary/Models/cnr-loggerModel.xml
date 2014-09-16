@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<model name="logger:model" xmlns="http://www.alfresco.org/model/dictionary/1.0"
+ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+ xsi:noNamespaceSchemaLocation="http://www.alfresco.org/model/dictionary/1.0">
+
+	<description>Logger Model</description>
+	<author>Paolo Enrico Cirone</author>
+	<version>1.0</version>
+
+	<imports>
+		<import uri="http://www.alfresco.org/model/dictionary/1.0" prefix="d" />
+		<import uri="http://www.alfresco.org/model/content/1.0" prefix="cm" />
+	</imports>
+
+	<namespaces>
+		<namespace uri="http://www.cnr.it/model/logger" prefix="logger" />
+	</namespaces>
+
+	<types>
+	   	<type name="logger:document">
+			<title>Logger Document</title>
+			<description>Documento contenente le informazioni contenute nei log</description>
+			<parent>cm:content</parent>
+			<archive>false</archive>
+			<properties>
+				<property name="logger:type">
+					<title>Type</title>
+					<description>Tipo di problema che ha causato la generazione del log</description>
+					<type>d:text</type>
+					<mandatory>true</mandatory>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+				<property name="logger:user">
+					<title>User</title>
+					<description>User che ha generato il log</description>
+					<type>d:text</type>
+					<mandatory>true</mandatory>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+				<property name="logger:application">
+					<title>Application</title>
+					<description>Application in cui è stato generato il log</description>
+					<type>d:text</type>
+					<mandatory>true</mandatory>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+				<property name="logger:codice">
+					<title>Codice</title>
+					<description>Codice dell'errore che ha generato il log</description>
+					<type>d:int</type>
+					<mandatory>true</mandatory>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+			</properties>
+		</type>
+	</types>
+</model>

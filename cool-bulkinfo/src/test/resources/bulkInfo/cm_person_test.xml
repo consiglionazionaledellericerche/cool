@@ -1,0 +1,79 @@
+<bulkInfo xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns="http://www.cnr.it/schema/BulkInfo" xsi:schemaLocation="http://www.cnr.it/schema/BulkInfo BulkInfo.xsd"
+	shortDescription="Person" longDescription="Person">
+	<fieldProperty 
+		name="name" 
+		property="cm:userName" 
+		label="cm.userName"
+		inputType="TEXT" 
+		nullable="false" 
+		labelClass="control-label"
+		class="input-xlarge"/>
+	<fieldProperty 
+		name="firstName" 
+		property="cm:firstName" 
+		label="cm.firstName"
+		inputType="TEXT" 
+		nullable="false" 
+		labelClass="control-label"
+		class="input-large"/>
+	<fieldProperty 
+		name="lastName" 
+		property="cm:lastName" 
+		label="cm.lastName"
+		inputType="TEXT" 
+		nullable="false" 
+		labelClass="control-label"
+		class="input-large"/>
+	<fieldProperty 
+		name="email" 
+		property="cm:email" 
+		label="cm.email"
+		inputType="TEXT" 
+		nullable="false" 
+		labelClass="control-label"
+		class="input-xlarge"/>
+	<fieldProperty 
+		name="codfis" 
+		property="cm:companyaddress1" 
+		label="cm.codfis"
+		inputType="TEXT" 
+		nullable="false" 
+		labelClass="control-label"
+		class="input-xlarge"/>
+	<fieldProperty 
+		name="mobile" 
+		property="cm:mobile" 
+		label="cm.mobile"
+		inputType="TEXT" 
+		nullable="false" 
+		labelClass="control-label"
+		class="input-large"/>
+
+	<formFieldProperty 
+		name="name" />
+	<formFieldProperty 
+		name="firstName" />
+	<formFieldProperty 
+		name="lastName" />
+	<formFieldProperty 
+		name="email" />
+	<formFieldProperty 
+		name="codfis" />
+	<formFieldProperty 
+		name="mobile" />
+
+	<columnFieldProperty 
+		name="name" />
+	<columnFieldProperty 
+		name="firstName" />
+	<columnFieldProperty 
+		name="lastName" />
+	<columnFieldProperty 
+		name="email" />
+	<columnFieldProperty 
+		name="codfis" />
+	<columnFieldProperty 
+		name="mobile" />
+
+</bulkInfo>

@@ -1,0 +1,40 @@
+<alfresco-config>
+	<config evaluator="string-compare" condition="WebFramework">
+		<web-framework>
+			<!-- Autowire Runtime Settings -->
+			<autowire>
+				<!-- Pick the runtime: classpath, webapp, local, cmis -->
+				<runtime>webapp</runtime>
+				<!-- Pick the mode: development, preview, production -->
+				<mode>production</mode>
+			</autowire>
+            <object-type>
+                <id>page</id>
+                <version>1.0</version>
+                <name>COOL Page</name>
+                <description>COOL Page</description>
+                <namespace></namespace>
+                <class>it.cnr.cool.extensions.surf.types.CoolPageImpl</class>
+            </object-type>
+            <object-type>
+                <id>bulkInfo</id>
+                <version>1.0</version>
+                <name>BulkInfo for CMIS types</name>
+                <description>BulkInfo for CMIS types</description>
+                <namespace></namespace>
+                <class>it.cnr.cool.extensions.surf.types.BulkInfoImpl</class>
+            </object-type>
+			<defaults>
+				<page-type>
+					<id>login</id>
+					<page-instance-id>login</page-instance-id>
+				</page-type>
+				<page-type>
+					<id>logout</id>
+					<page-instance-id>logout</page-instance-id>
+				</page-type>
+				<user-factory>webframework.factory.user.cmis</user-factory>
+			</defaults>
+		</web-framework>
+	</config>
+</alfresco-config>

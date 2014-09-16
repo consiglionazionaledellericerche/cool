@@ -1,0 +1,28 @@
+<bulkInfo xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns="http://www.cnr.it/schema/BulkInfo" xsi:schemaLocation="http://www.cnr.it/schema/BulkInfo BulkInfo.xsd"
+	shortDescription="Aspect Title" longDescription="Aspect Title"
+	cmisTypeName="P:cm:titled" cmisQueryName="cm:titled">
+	<fieldProperty 
+		name="title" 
+		property="cm:title" 
+		label="cm.title"
+		inputType="TEXT" 
+		nullable="true" 
+		labelClass="control-label"
+		class="input-xlarge"/>
+	<fieldProperty 
+		name="description" 
+		property="cm:description" 
+		label="cm.description"
+		inputType="TEXTAREA" 
+		nullable="true"
+		labelClass="control-label"
+		class="input-xlarge" />
+
+	<formFieldProperty name="title" />
+	<formFieldProperty name="description" />
+
+	<columnFieldProperty name="title" />
+	<columnFieldProperty name="description" />
+
+</bulkInfo>

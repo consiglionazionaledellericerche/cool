@@ -1,0 +1,8 @@
+<webscript>
+   <shortname>Create Person</shortname>
+   <description>Create the details of a person.</description>
+   <url>/cnr/person</url>
+   <format default="json">argument</format>
+   <authentication>admin</authentication>
+   <transaction>required</transaction>
+</webscript>

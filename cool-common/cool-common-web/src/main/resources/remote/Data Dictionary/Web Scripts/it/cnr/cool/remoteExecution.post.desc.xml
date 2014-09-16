@@ -1,0 +1,9 @@
+<webscript>
+   <shortname>Javascript remote execution</shortname>
+   <description>
+      Javascript remote execution
+   </description>
+   <url>/jsRemote</url>
+   <format default="json">argument</format>
+   <authentication>user</authentication>
+</webscript>

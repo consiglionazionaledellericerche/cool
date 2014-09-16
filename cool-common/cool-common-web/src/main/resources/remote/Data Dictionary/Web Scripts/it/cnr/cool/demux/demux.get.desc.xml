@@ -1,0 +1,15 @@
+<webscript>
+   <shortname>Server side FetchCmisObject</shortname>
+   <description><![CDATA[
+   ]]>
+   </description>
+   <url>/demux</url>
+   <format default="json">argument</format>
+   <authentication>user</authentication>
+   <transaction>required</transaction>
+	  <cache>
+	    <public>true</public>
+	    <never>false</never>
+	    <mustrevalidate>false</mustrevalidate>
+	  </cache>
+</webscript>

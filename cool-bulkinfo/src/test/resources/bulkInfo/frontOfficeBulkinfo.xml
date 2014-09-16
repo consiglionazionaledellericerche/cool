@@ -1,0 +1,352 @@
+<bulkInfo
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns="http://www.cnr.it/schema/BulkInfo"
+    xsi:schemaLocation="http://www.cnr.it/schema/BulkInfo BulkInfo.xsd"
+    shortDescription="Cool Document"
+    longDescription="Bulkinfo comune per il ReaderLog e per il gestoreAvvisi">
+
+<fieldProperty
+    labelClass="control-label"
+    visible="true"
+    name="dateFrom"
+    label="iniziato dal"
+    inputType="TEXT"
+    widget="ui.datepicker"
+    jsonvalidator='{"requiredWidget": false}'/>
+<fieldProperty
+    labelClass="control-label"
+    visible="true"
+    name="dateTo"
+    label="al"
+    inputType="TEXT"
+    widget="ui.datepicker"
+    jsonvalidator='{"requiredWidget": false}'/>
+<fieldProperty
+    name="typeBando"
+    property="typeBando"
+    label="Tipologia Bando"
+    inputType="SELECT"
+    widget="ui.select"
+    jsonvalidator='{"requiredWidget": false}'
+    i18n="true"
+    visible="false"
+    jsonlist='[{
+        "defaultLabel" : "Tutti i Bandi",
+        "label" : "Tutti i Bandi",
+        "key" : "Tutti i Bandi"
+       }, {
+        "defaultLabel" : "Assegni di Ricerca",
+        "label" : "Assegni di Ricerca",
+        "key" : "Assegni di Ricerca"
+       }, {
+        "defaultLabel" : "Borse di Studio",
+        "label" : "Borse di Studio",
+        "key" : "Borse di Studio"
+       }, {
+        "key"  :  "Direttori",
+        "defaultLabel"  :  "Direttori",
+        "label"  :  "Direttori"
+       },
+       {
+        "key"  :  "Mobilità",
+        "defaultLabel"  :  "Mobilità",
+        "label"  :  "Mobilità"
+       },
+       {
+        "key"  :  "Selezioni per dipendenti CNR",
+        "defaultLabel"  :  "Selezioni per dipendenti CNR",
+        "label"  :  "Selezioni per dipendenti CNR"
+       },
+       {
+        "key"  :  "Tempo Determinato",
+        "defaultLabel"  :  "Tempo Determinato",
+        "label"  :  "Tempo Determinato"
+       },
+       {
+        "key"  :  "Tempo Indeterminato",
+        "defaultLabel"  :  "Tempo Indeterminato",
+        "label"  :  "Tempo Indeterminato"
+       }
+      ]'/>
+<formFieldProperty
+    name="userLog"
+    property="logger:user"
+    label="Utente: "
+    widget="ui.authority"
+    jsonvalidator='{"requiredWidget": true}'
+    jsonsettings='{"usersOnly":true}'/>
+
+<fieldProperty
+    name="noticeBando"
+    property="avvisi:type"
+    label="Tipologia Bando"
+    inputType="SELECT"
+    widget="ui.select"
+    jsonvalidator='{"requiredWidget": false}'
+    i18n="true"
+    visible="false"
+    jsonlist='[{
+        "defaultLabel" : "Tutti i Bandi",
+        "label" : "Tutti i Bandi",
+        "key" : "Tutti i Bandi"
+       }, {
+        "defaultLabel" : "Assegni di Ricerca",
+        "label" : "Assegni di Ricerca",
+        "key" : "Assegni di Ricerca"
+       }, {
+        "defaultLabel" : "Borse di Studio",
+        "label" : "Borse di Studio",
+        "key" : "Borse di Studio"
+       }, {
+        "key"  :  "Direttori",
+        "defaultLabel"  :  "Direttori",
+        "label"  :  "Direttori"
+       },
+       {
+        "key"  :  "Mobilità",
+        "defaultLabel"  :  "Mobilità",
+        "label"  :  "Mobilità"
+       },
+       {
+        "key"  :  "Selezioni per dipendenti CNR",
+        "defaultLabel"  :  "Selezioni per dipendenti CNR",
+        "label"  :  "Selezioni per dipendenti CNR"
+       },
+       {
+        "key"  :  "Tempo Determinato",
+        "defaultLabel"  :  "Tempo Determinato",
+        "label"  :  "Tempo Determinato"
+       },
+       {
+        "key"  :  "Tempo Indeterminato",
+        "defaultLabel"  :  "Tempo Indeterminato",
+        "label"  :  "Tempo Indeterminato"
+       }
+      ]'/>
+<fieldProperty
+    name="noticeTitle"
+    property="avvisi:title"
+    label="Titolo dell'avviso"
+    inputType="TEXT"/>
+<fieldProperty
+    name="noticeText"
+    property="avvisi:text"
+    label="Testo dell'avviso"
+    i18n="true"
+    inputType="TEXTAREA"
+    class="input-xxlarge"
+    widget="ui.wysiwyg"
+    jsonvalidator='{"requiredWidget": true}'/>
+<fieldProperty
+    labelClass="control-label"
+    visible="true"
+    property="avvisi:data"
+    name="noticeDate"
+    label="Data pubblicazione avviso"
+    inputType="TEXT"
+    widget="ui.datepicker"
+    jsonvalidator='{"requiredWidget": true}'/>
+<fieldProperty
+    labelClass="control-label"
+    visible="true"
+    property="avvisi:dataScadenza"
+    name="noticeDateScadenza"
+    label="Data scadenza avviso"
+    inputType="TEXT"
+    widget="ui.datepicker"
+    jsonvalidator='{"requiredWidget": true}'/>
+<fieldProperty
+    name="noticeStyle"
+    property="avvisi:style"
+    label="Style Avviso"
+    inputType="SELECT"
+    widget="ui.select"
+    jsonvalidator='{"requiredWidget": false}'
+    i18n="true"
+    visible="false"
+    jsonlist='[{
+        "defaultLabel" : "alert",
+        "label" : "alert",
+        "key" : "alert"
+       }, {
+        "defaultLabel" : "success",
+        "label" : "success",
+        "key" : "success"
+       }, {
+        "defaultLabel" : "error",
+        "label" : "error",
+        "key" : "error"
+       }, {
+        "key"  :  "warning",
+        "defaultLabel"  :  "warning",
+        "label"  :  "warning"
+       },
+       {
+        "key"  :  "information",
+        "defaultLabel"  :  "information",
+        "label"  :  "information"
+       }
+      ]'/>
+<fieldProperty
+    name="noticeNumber"
+    property="avvisi:number"
+    label="Numero per l'ordinamento dell'avviso"
+    inputType="TEXT"
+    jsonvalidator='{"required": true}' />
+<formFieldProperty
+    name="noticeAuthority"
+    property="avvisi:authority"
+    label="Visibilità dell'avviso: "
+    widget="ui.authority"
+    jsonvalidator='{"requiredWidget": true}'
+    jsonsettings='{"groupsOnly":true}'
+    default="GROUP_EVERYONE"/>
+
+<fieldProperty
+    name="faqBando"
+    property="faq:type"
+    label="Tipologia Bando"
+    inputType="SELECT"
+    widget="ui.select"
+    jsonvalidator='{"requiredWidget": false}'
+    i18n="true"
+    visible="false"
+    jsonlist='[{
+        "defaultLabel" : "Tutti i Bandi",
+        "label" : "Tutti i Bandi",
+        "key" : "Tutti i Bandi"
+       }, {
+        "defaultLabel" : "Assegni di Ricerca",
+        "label" : "Assegni di Ricerca",
+        "key" : "Assegni di Ricerca"
+       }, {
+        "defaultLabel" : "Borse di Studio",
+        "label" : "Borse di Studio",
+        "key" : "Borse di Studio"
+       }, {
+        "key"  :  "Direttori",
+        "defaultLabel"  :  "Direttori",
+        "label"  :  "Direttori"
+       },
+       {
+        "key"  :  "Mobilità",
+        "defaultLabel"  :  "Mobilità",
+        "label"  :  "Mobilità"
+       },
+       {
+        "key"  :  "Selezioni per dipendenti CNR",
+        "defaultLabel"  :  "Selezioni per dipendenti CNR",
+        "label"  :  "Selezioni per dipendenti CNR"
+       },
+       {
+        "key"  :  "Tempo Determinato",
+        "defaultLabel"  :  "Tempo Determinato",
+        "label"  :  "Tempo Determinato"
+       },
+       {
+        "key"  :  "Tempo Indeterminato",
+        "defaultLabel"  :  "Tempo Indeterminato",
+        "label"  :  "Tempo Indeterminato"
+       }
+      ]'/>
+<fieldProperty
+    labelClass="control-label"
+    visible="true"
+    property="faq:data"
+    name="faqDate"
+    label="Data pubblicazione Faq"
+    inputType="TEXT"
+    widget="ui.datepicker"
+    jsonvalidator='{"requiredWidget": true}'/>
+<fieldProperty
+    name="faqQuestion"
+    property="faq:question"
+    label="Domanda"
+    i18n="true"
+    inputType="TEXTAREA"
+    jsonvalidator='{"maxlength":900, "required": true}'/>
+<fieldProperty
+    name="faqAnswer"
+    property="faq:answer"
+    label="Risposta"
+    i18n="true"
+    widget="ui.wysiwyg"
+    jsonvalidator='{"requiredWidget": true}'/>
+<fieldProperty
+    name="faqNumber"
+    property="faq:number"
+    label="Numero per l'ordinamento della FAQ"
+    inputType="TEXT"
+    jsonvalidator='{"required": true}' />
+<fieldProperty
+    name="faqShow"
+    property="faq:show"
+    label="Flag di pubblicazione della FAQ"
+    inputType="RADIOGROUP"
+    widget="ui.radio"
+    nullable="false"
+    labelClass="control-label"
+    type="buttonset"
+    jsonvalidator='{"requiredWidget": true}'
+    jsonlist='[
+      {
+       "key" : "true",
+       "label" : "true",
+       "defaultLabel" : "Visibile"
+      },
+      {
+       "key" : "false",
+       "label" : "false",
+       "defaultLabel" : "Nascosto"
+      }
+    ]'
+    class="check" />
+
+
+<form name="coolDocument">
+  <formFieldProperty
+    name="userLog"/>
+  <formFieldProperty
+    name="dateFrom"/>
+  <formFieldProperty
+    name="dateTo"/>
+  <formFieldProperty
+    name="typeBando"/>
+</form>
+
+<form name="loadNotice">
+  <formFieldProperty
+    name="noticeNumber"/>
+  <formFieldProperty
+    name="noticeStyle"/>
+  <formFieldProperty
+    name="noticeBando"/>
+  <formFieldProperty
+    name="noticeDate"/>
+  <formFieldProperty
+    name="noticeDateScadenza"/>
+  <formFieldProperty
+    name="noticeTitle"/>
+  <formFieldProperty
+    name="noticeText"/>
+  <formFieldProperty
+    name="noticeAuthority"/>
+</form>
+
+<form name="loadFAQ">
+  <formFieldProperty
+    name="faqNumber"/>
+  <formFieldProperty
+    name="faqDate"/>
+  <formFieldProperty
+    name="faqBando"/>
+  <formFieldProperty
+    name="faqQuestion"
+    rows="4"/>
+  <formFieldProperty
+    name="faqAnswer"/>
+  <formFieldProperty
+    name="faqShow"/>
+</form>
+
+</bulkInfo>

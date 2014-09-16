@@ -1,0 +1,10 @@
+<!-- copied from Alfresco 4.1.5 org/alfresco/slingshot/documentlibrary/permissions.get  -->
+<webscript>
+   <shortname>cnr-permissions</shortname>
+   <description>Document List Component - permissions data webscript</description>
+   <url>/cnr/permissions/{store_type}/{store_id}/{id}</url>
+   <format default="json">argument</format>
+   <authentication>user</authentication>
+   <transaction>required</transaction>
+  <lifecycle>internal</lifecycle>
+</webscript>

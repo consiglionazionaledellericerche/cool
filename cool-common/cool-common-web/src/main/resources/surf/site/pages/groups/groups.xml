@@ -1,0 +1,15 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<page>
+	<id>groups</id>
+	<title>Groups</title>
+	<template-instance>bootstrap</template-instance>
+	<authentication>user</authentication>
+	<format-id>navbar/admin</format-id>
+	<order-id>2</order-id>
+	<components>
+		<component>
+			<region-id>main</region-id>
+			<url>/groups/main</url>
+		</component>
+	</components>
+</page>

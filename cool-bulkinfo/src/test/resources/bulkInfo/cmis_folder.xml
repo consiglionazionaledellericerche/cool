@@ -1,0 +1,16 @@
+<bulkInfo xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns="http://www.cnr.it/schema/BulkInfo" xsi:schemaLocation="http://www.cnr.it/schema/BulkInfo BulkInfo.xsd"
+	shortDescription="CMIS Folder" longDescription="CMIS Folder"
+	cmisTypeName="cmis:folder" cmisQueryName="cmis:folder">
+	<cmisImplementsName name="P:cm:titled" join="true"/>
+	<fieldProperty 
+		name="name" 
+		property="cmis:name" 
+		label="cmis.name"
+		inputType="TEXT" 
+		jsonvalidator='{"required": true}'
+		labelClass="control-label"
+		class="input-xlarge"/>
+	<formFieldProperty 
+		name="name" />
+</bulkInfo>

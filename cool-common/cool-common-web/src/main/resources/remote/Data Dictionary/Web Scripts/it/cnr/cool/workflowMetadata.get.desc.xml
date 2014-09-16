@@ -1,0 +1,9 @@
+<webscript>
+   <shortname>Workflow properties</shortname>
+   <description>
+      Retrieve custom workflow/task properties
+   </description>
+   <url>/workflow/properties?properties={properties}</url>
+   <format default="json">argument</format>
+   <authentication>user</authentication>
+</webscript>

@@ -1,0 +1,10 @@
+{{#each bulkinfo}}
+  <table class="table table-striped">
+    {{#each this}}
+      <tr>
+        <td><strong>{{{key}}}</strong></td>
+		<td>{{{displayValue value}}}</td>
+      </tr>
+    {{/each}}
+  </table>
+{{/each}}

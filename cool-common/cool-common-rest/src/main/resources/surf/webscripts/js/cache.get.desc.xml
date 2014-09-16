@@ -1,0 +1,17 @@
+<webscript>
+  <shortname>Cache javascript API</shortname>
+  <description>
+  <![CDATA[
+  	Cache javascript API.
+  ]]>
+  </description>
+  <url>/cache</url>
+  <format default="json"/> 
+  <authentication>none</authentication>
+  <family>javascript</family>
+  <cache>
+    <public>true</public>
+    <never>false</never>
+    <mustrevalidate>false</mustrevalidate>
+  </cache>
+</webscript>

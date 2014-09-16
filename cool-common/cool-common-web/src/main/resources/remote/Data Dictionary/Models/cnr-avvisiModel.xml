@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<model name="avvisi:model" xmlns="http://www.alfresco.org/model/dictionary/1.0"
+ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+ xsi:noNamespaceSchemaLocation="http://www.alfresco.org/model/dictionary/1.0">
+
+  <description>Avvisi Model</description>
+  <author>Paolo Enrico Cirone</author>
+  <version>1.0</version>
+
+  <imports>
+    <import uri="http://www.alfresco.org/model/dictionary/1.0" prefix="d" />
+    <import uri="http://www.alfresco.org/model/content/1.0" prefix="cm" />
+  </imports>
+
+  <namespaces>
+    <namespace uri="http://www.cnr.it/model/avvisi" prefix="avvisi" />
+  </namespaces>
+
+  <types>
+      <type name="avvisi:document">
+      <title>Avvisi Document</title>
+      <description>Documento contenente le informazioni contenute negli avvisi</description>
+      <parent>cm:content</parent>
+      <properties>
+        <property name="avvisi:type">
+          <title>Type</title>
+          <description>Tipologia del bando a cui è riferito l'avviso</description>
+          <type>d:text</type>
+          <mandatory>true</mandatory>
+          <index enabled="true">
+            <atomic>true</atomic>
+            <stored>false</stored>
+            <tokenised>both</tokenised>
+          </index>
+        </property>
+        <property name="avvisi:text">
+          <title>Text</title>
+          <description>Testo dell'avviso</description>
+          <type>d:text</type>
+          <mandatory>true</mandatory>
+          <index enabled="true">
+            <atomic>true</atomic>
+            <stored>false</stored>
+            <tokenised>both</tokenised>
+          </index>
+        </property>
+        <property name="avvisi:style">
+          <title>noticeStyle</title>
+          <description>Style di visualizzazione dell'avviso</description>
+          <type>d:text</type>
+          <mandatory>true</mandatory>
+          <index enabled="true">
+            <atomic>true</atomic>
+            <stored>false</stored>
+            <tokenised>both</tokenised>
+          </index>
+        </property>
+        <property name="avvisi:title">
+          <title>noticeTitle</title>
+          <description>Titolo dell'avviso</description>
+          <type>d:text</type>
+          <mandatory>true</mandatory>
+          <index enabled="true">
+            <atomic>true</atomic>
+            <stored>false</stored>
+            <tokenised>both</tokenised>
+          </index>
+        </property>
+        <property name="avvisi:data">
+          <title>Data</title>
+          <description>Data di pubblicazione dell'avviso</description>
+          <type>d:datetime</type>
+          <mandatory>true</mandatory>
+          <index enabled="true">
+            <atomic>true</atomic>
+            <stored>false</stored>
+            <tokenised>both</tokenised>
+          </index>
+        </property>
+        <property name="avvisi:dataScadenza">
+          <title>Data</title>
+          <description>Data di scadenza dell'avviso</description>
+          <type>d:datetime</type>
+          <mandatory>true</mandatory>
+          <index enabled="true">
+            <atomic>true</atomic>
+            <stored>false</stored>
+            <tokenised>both</tokenised>
+          </index>
+        </property>
+        <property name="avvisi:number">
+          <title>number</title>
+          <description>Numero dell'avviso</description>
+          <type>d:int</type>
+          <mandatory>true</mandatory>
+          <index enabled="true">
+            <atomic>true</atomic>
+            <stored>false</stored>
+            <tokenised>both</tokenised>
+          </index>
+        </property>
+        <property name="avvisi:authority">
+          <title>Authority</title>
+          <description>Visibilita' dell'avviso</description>
+          <type>d:text</type>
+          <mandatory>true</mandatory>
+          <index enabled="true">
+            <atomic>true</atomic>
+            <stored>false</stored>
+            <tokenised>both</tokenised>
+          </index>
+        </property>
+      </properties>
+    </type>
+  </types>
+</model>

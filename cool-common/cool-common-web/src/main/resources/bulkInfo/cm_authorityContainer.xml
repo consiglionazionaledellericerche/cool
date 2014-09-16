@@ -1,0 +1,32 @@
+<bulkInfo xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns="http://www.cnr.it/schema/BulkInfo" xsi:schemaLocation="http://www.cnr.it/schema/BulkInfo BulkInfo.xsd"
+	shortDescription="Group" longDescription="Group">
+	<fieldProperty 
+		name="authorityName" 
+		property="cm:authorityName" 
+		label="cm.authorityName"
+		inputType="ROTEXT" 
+		nullable="false" 
+		labelClass="control-label"
+		class="input-xlarge"/>
+	<fieldProperty 
+		name="authorityDisplayName" 
+		property="cm:authorityDisplayName" 
+		label="cm.authorityDisplayName"
+		inputType="TEXTAREA" 
+		rows="3"
+		nullable="false" 
+		labelClass="control-label"
+		class="input-large"/>
+
+	<formFieldProperty 
+		name="authorityName" />
+	<formFieldProperty 
+		name="authorityDisplayName" />
+
+	<columnFieldProperty 
+		name="authorityName" />
+	<columnFieldProperty 
+		name="authorityDisplayName" />
+
+</bulkInfo>

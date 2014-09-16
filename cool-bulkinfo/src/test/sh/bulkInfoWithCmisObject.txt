@@ -1,0 +1,6 @@
+frontOfficeBulkinfo/form/loadFAQ?v=1.0&ajax=true&cmis%3AobjectId=workspace%3A%2F%2FSpacesStore%2Fe205593b-f79c-4f4e-b831-0b7293be1ad5%3B1.0&guest=true
+frontOfficeBulkinfo/form/loadFAQ?v=1.0&ajax=true&cmis%3AobjectId=workspace%3A%2F%2FSpacesStore%2F49dd3a12-15a2-42c0-a2b3-a5fbffbb46d0%3B1.0&guest=true
+frontOfficeBulkinfo/form/loadFAQ?v=1.0&ajax=true&cmis%3AobjectId=workspace%3A%2F%2FSpacesStore%2Fe205593b-f79c-4f4e-b831-0b7293be1ad5%3B1.0&guest=true
+frontOfficeBulkinfo/form/loadNotice?v=1.0&ajax=true&cmis%3AobjectId=workspace%3A%2F%2FSpacesStore%2Fa6dada82-0fa6-4c2e-876b-742e5c05e7a6%3B1.0&guest=true
+frontOfficeBulkinfo/form/loadNotice?v=1.0&ajax=true&cmis%3AobjectId=workspace%3A%2F%2FSpacesStore%2F0e5da3b0-281a-4114-a098-ef0f8e7097df%3B1.0&guest=true
+P_cvelement_commonProgetto/form/all?cmis%3AobjectId=workspace://SpacesStore/d604c43a-0764-488e-86de-5b8b7b1a5797

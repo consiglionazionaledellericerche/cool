@@ -1,0 +1,2477 @@
+D:cvelement:attivita_incarichi_tecnologo/column/default
+D:cvelement:direzioneResponsabilita/column/default
+D:cvelement:incarico_ricercatore/column/default
+D:cvelement:progettoPartecipazione/column/default
+D:cvpeople:articolo/column/default
+D:cvpeople:libro_ricercatore/column/default
+D:jconon_attachment:call_commission_modification/column/default
+D:jconon_dic_sost:attachment/column/default
+D:cvelement:progetto/column/default
+D:jconon_allegato_generico:attachment/column/default
+D:jconon_attachment:call_coordinated_text/column/default
+D:jconon_attachment:call_prorogation/column/default
+F:jconon_application:folder/form/affix_tabAnagrafica,affix_tabResidenza,affix_tabDatiCNR,affix_tabTitoli,affix_tabCurriculum,affix_tabElencoProdotti,affix_tabProdottiScelti,P:jconon_application:aspect_inquadramento,P:jconon_application:aspect_struttura_appartenenza,P:jconon_application:aspect_settore_scientifico_tecnologico
+F:jconon_application:folder/form/affix_tabAnagrafica,affix_tabResidenza,affix_tabDatiCNR,affix_tabTitoli,affix_tabCurriculum,affix_tabProdottiScelti,P:jconon_application:aspect_inquadramento,P:jconon_application:aspect_struttura_appartenenza
+F:jconon_call_tind:folder/form/affix_sezione_1,affix_sezione_2,affix_sezione_3,affix_sezione_permessi,affix_sezione_commissione,affix_sezione_allegati
+159d158
+<       "visible": "true",
+266a266
+>       "visible": "true",
+F:jconon_application:folder/form/affix_tabAnagrafica,affix_tabResidenza,affix_tabTitoli,affix_tabDichiarazioni,affix_tabReperibilita,affix_tabDichiarazioniConclusive
+cmis:document/column/default
+helpdeskBulkInfo/form/reopen_HelpDesk
+F:jconon_call_employees:folder/form/affix_sezione_1,affix_sezione_2,affix_sezione_3,affix_sezione_permessi,affix_sezione_commissione,affix_sezione_allegati
+140d139
+<       "visible": "true",
+247a247
+>       "visible": "true",
+253d252
+<       "inSelect": "false",
+277d275
+<       "visible": "true",
+314a313
+>       "visible": "true",
+325d323
+<       "visible": "true",
+337a336
+>       "visible": "true",
+D:jconon_attachment:call_en/column/default
+F:jconon_call_director:folder/form/affix_sezione_1,affix_sezione_2,affix_sezione_3,affix_sezione_permessi,affix_sezione_commissione,affix_sezione_allegati
+418a419
+>       "inSelect": "true",
+D:jconon_allegato_generico:attachment/form/default
+D:jconon_attachment:call_commission/column/default
+D:jconon_attachment:call_provvedimento_nomina_segretario/column/default
+D:jconon_documento_riconoscimento:attachment/column/default
+F:jconon_application:folder/form/affix_tabAnagrafica,affix_tabResidenza,affix_tabTitoli,affix_tabDichiarazioni,affix_tabDichiarazioniConclusive,affix_tabReperibilita,P:jconon_application:aspect_possesso_requisiti,P:jconon_application:aspect_iscrizione_liste_elettorali,P:jconon_application:aspect_condanne_penali,P:jconon_application:aspect_godimento_diritti,P:jconon_application:aspect_destituito_altro_impiego,P:jconon_application:aspect_decaduto_altro_impiego,P:jconon_application:aspect_servizioCNR,P:jconon_application:aspect_servizio_altre_amministrazioni,P:jconon_application:aspect_titolo_riserva_posti,P:jconon_application:aspect_titolo_preferenza_posti,P:jconon_application:aspect_diversamente_abile
+F:jconon_application:folder/form/affix_tabAnagrafica,affix_tabResidenza,affix_tabDatiCNR,affix_tabTitoli,affix_tabCurriculum,affix_tabElencoProdotti,affix_tabProdottiScelti,affix_tabUlterioriDati,P:jconon_application:aspect_inquadramento,P:jconon_application:aspect_struttura_appartenenza,P:jconon_application:aspect_area_scientifica,P:jconon_application:aspect_h_index
+D:jconon_attachment:call_correction_prorogation/column/default
+D:jconon_attachment:call_generic/column/default
+cm:person/column/default
+D:jconon_curriculum_vitae:attachment/column/default
+D:jconon_documento_riconoscimento:attachment/form/default
+accountBulkInfo/form/forgotPassword
+D:jconon_curriculum_vitae:attachment/form/default
+F:jconon_application:folder/form/affix_tabAnagrafica,affix_tabResidenza,affix_tabTitoli,affix_tabDichiarazioni,affix_tabReperibilita,affix_tabDichiarazioniConclusive,P:jconon_application:aspect_possesso_requisiti,P:jconon_application:aspect_iscrizione_liste_elettorali,P:jconon_application:aspect_condanne_penali,P:jconon_application:aspect_godimento_diritti,P:jconon_application:aspect_destituito_altro_impiego,P:jconon_application:aspect_decaduto_altro_impiego,P:jconon_application:aspect_servizioCNR,P:jconon_application:aspect_servizio_altre_amministrazioni
+D:jconon_attachment:call_it/column/default
+accountBulkInfo/form/forgotPass
+accountBulkInfo/form/editUser,italy,foreign
+helpdeskBulkInfo/form/helpDesk
+accountBulkInfo/form/createUser,italy,foreign
+helpdeskBulkInfo/form/user_HelpDesk
+F:jconon_call_employees:folder/column/default
+116a117,237
+>       "class": "multiselect very-input-xlarge",
+>       "property": "jconon_call:area_scientifica",
+>       "nullable": "true",
+>       "label": "label.column.jconon_call_area_scientifica",
+>       "jsonlist": [
+>         {
+>           "defaultLabel": "Scienze della terra",
+>           "label": "Scienze della terra",
+>           "key": "Scienze della terra"
+>         },
+>         {
+>           "defaultLabel": "Scienze dell'ambiente",
+>           "label": "Scienze dell'ambiente",
+>           "key": "Scienze dell'ambiente"
+>         },
+>         {
+>           "defaultLabel": "Scienze agrarie, agroalimentari e veterinarie",
+>           "label": "Scienze agrarie, agroalimentari e veterinarie",
+>           "key": "Scienze agrarie, agroalimentari e veterinarie"
+>         },
+>         {
+>           "defaultLabel": "Scienze biologiche",
+>           "label": "Scienze biologiche",
+>           "key": "Scienze biologiche"
+>         },
+>         {
+>           "defaultLabel": "Scienze mediche",
+>           "label": "Scienze mediche",
+>           "key": "Scienze mediche"
+>         },
+>         {
+>           "defaultLabel": "Scienze chimiche",
+>           "label": "Scienze chimiche",
+>           "key": "Scienze chimiche"
+>         },
+>         {
+>           "defaultLabel": "Scienze e tecnologie dei materiali",
+>           "label": "Scienze e tecnologie dei materiali",
+>           "key": "Scienze e tecnologie dei materiali"
+>         },
+>         {
+>           "defaultLabel": "Scienze fisiche",
+>           "label": "Scienze fisiche",
+>           "key": "Scienze fisiche"
+>         },
+>         {
+>           "defaultLabel": "Scienze matematiche",
+>           "label": "Scienze matematiche",
+>           "key": "Scienze matematiche"
+>         },
+>         {
+>           "defaultLabel": "Scienze informatiche e ingegneria dell'informazione",
+>           "label": "Scienze informatiche e ingegneria dell'informazione",
+>           "key": "Scienze informatiche e ingegneria dell'informazione"
+>         },
+>         {
+>           "defaultLabel": "Ingegneria civile e architettura",
+>           "label": "Ingegneria civile e architettura",
+>           "key": "Ingegneria civile e architettura"
+>         },
+>         {
+>           "defaultLabel": "Ingegneria industriale",
+>           "label": "Ingegneria industriale",
+>           "key": "Ingegneria industriale"
+>         },
+>         {
+>           "defaultLabel": "Scienze, tecnologie e valorizzazione dei beni culturali",
+>           "label": "Scienze, tecnologie e valorizzazione dei beni culturali",
+>           "key": "Scienze, tecnologie e valorizzazione dei beni culturali"
+>         },
+>         {
+>           "defaultLabel": "Scienze dell'antichità e storico-artistiche",
+>           "label": "Scienze dell'antichità e storico-artistiche",
+>           "key": "Scienze dell'antichità e storico-artistiche"
+>         },
+>         {
+>           "defaultLabel": "Scienze filologiche lingusitiche e letterarie",
+>           "label": "Scienze filologiche lingusitiche e letterarie",
+>           "key": "Scienze filologiche lingusitiche e letterarie"
+>         },
+>         {
+>           "defaultLabel": "Scienze storiche e geografiche",
+>           "label": "Scienze storiche e geografiche",
+>           "key": "Scienze storiche e geografiche"
+>         },
+>         {
+>           "defaultLabel": "Scienze filosofiche",
+>           "label": "Scienze filosofiche",
+>           "key": "Scienze filosofiche"
+>         },
+>         {
+>           "defaultLabel": "Scienze pedagogiche e psicologiche",
+>           "label": "Scienze pedagogiche e psicologiche",
+>           "key": "Scienze pedagogiche e psicologiche"
+>         },
+>         {
+>           "defaultLabel": "Scienze giuridiche",
+>           "label": "Scienze giuridiche",
+>           "key": "Scienze giuridiche"
+>         },
+>         {
+>           "defaultLabel": "Scienze economiche",
+>           "label": "Scienze economiche",
+>           "key": "Scienze economiche"
+>         },
+>         {
+>           "defaultLabel": "Scienze statistiche e demografiche",
+>           "label": "Scienze statistiche e demografiche",
+>           "key": "Scienze statistiche e demografiche"
+>         },
+>         {
+>           "defaultLabel": "Scienze e metodologie politologiche",
+>           "label": "Scienze e metodologie politologiche",
+>           "key": "Scienze e metodologie politologiche"
+>         },
+>         {
+>           "defaultLabel": "Scienze sociali",
+>           "label": "Scienze sociali",
+>           "key": "Scienze sociali"
+>         }
+>       ],
+118d238
+<       "name": "area_scientifica",
+119a240
+>       "name": "area_scientifica",
+121,125d241
+<       "class": "multiselect very-input-xlarge",
+<       "label": "label.column.jconon_call_area_scientifica",
+<       "nullable": "true",
+<       "property": "jconon_call:area_scientifica",
+<       "widget": "ui.select",
+126a243
+>       "widget": "ui.select",
+130a248,269
+>       "jsonlist": [
+>         {
+>           "defaultLabel": "Organizzativo - gestionale",
+>           "label": "Organizzativo - gestionale",
+>           "key": "Organizzativo - gestionale"
+>         },
+>         {
+>           "defaultLabel": "Giuridico - amministrativo",
+>           "label": "Giuridico - amministrativo",
+>           "key": "Giuridico - amministrativo"
+>         },
+>         {
+>           "defaultLabel": "Supporto alla ricerca",
+>           "label": "Supporto alla ricerca",
+>           "key": "Supporto alla ricerca"
+>         },
+>         {
+>           "defaultLabel": "Progettazione e/o gestione impianti, strumentazioni, servizi",
+>           "label": "Progettazione e/o gestione impianti, strumentazioni, servizi",
+>           "key": "Progettazione e/o gestione impianti, strumentazioni, servizi"
+>         }
+>       ],
+141a281,317
+>       "jsonlist": [
+>         {
+>           "defaultLabel": "Scienze biomediche",
+>           "label": "Scienze biomediche",
+>           "key": "Scienze biomediche"
+>         },
+>         {
+>           "defaultLabel": "Scienze fisiche e Tecnologie della Materia",
+>           "label": "Scienze fisiche e Tecnologie della Materia",
+>           "key": "Scienze fisiche e Tecnologie della Materia"
+>         },
+>         {
+>           "defaultLabel": "Scienze del sistema terra e tecnologie per l'ambiente",
+>           "label": "Scienze del sistema terra e tecnologie per l'ambiente",
+>           "key": "Scienze del sistema terra e tecnologie per l'ambiente"
+>         },
+>         {
+>           "defaultLabel": "Scienze chimiche e Tecnologie dei materiali",
+>           "label": "Scienze chimiche e Tecnologie dei materiali",
+>           "key": "Scienze chimiche e Tecnologie dei materiali"
+>         },
+>         {
+>           "defaultLabel": "Ingegneria, ICT e Tecnologie per l'energia e i trasporti",
+>           "label": "Ingegneria, ICT e Tecnologie per l'energia e i trasporti",
+>           "key": "Ingegneria, ICT e Tecnologie per l'energia e i trasporti"
+>         },
+>         {
+>           "defaultLabel": "Scienze Bio-Agroalimentari",
+>           "label": "Scienze Bio-Agroalimentari",
+>           "key": "Scienze Bio-Agroalimentari"
+>         },
+>         {
+>           "defaultLabel": "Scienze umane e sociali, Patrimonio Culturale",
+>           "label": "Scienze umane e sociali, Patrimonio Culturale",
+>           "key": "Scienze umane e sociali, Patrimonio Culturale"
+>         }
+>       ],
+154a331,437
+>       "jsonlist": [
+>         {
+>           "defaultLabel": "Operatore di Amministrazione VIII livello",
+>           "label": "Operatore di Amministrazione VIII livello",
+>           "key": "Operatore di Amministrazione VIII livello"
+>         },
+>         {
+>           "defaultLabel": "Operatore di Amministrazione VII livello",
+>           "label": "Operatore di Amministrazione VII livello",
+>           "key": "Operatore di Amministrazione VII livello"
+>         },
+>         {
+>           "defaultLabel": "Operatore Tecnico VIII livello",
+>           "label": "Operatore Tecnico VIII livello",
+>           "key": "Operatore Tecnico VIII livello"
+>         },
+>         {
+>           "defaultLabel": "Operatore Tecnico VII livello",
+>           "label": "Operatore Tecnico VII livello",
+>           "key": "Operatore Tecnico VII livello"
+>         },
+>         {
+>           "defaultLabel": "Operatore Tecnico VI livello",
+>           "label": "Operatore Tecnico VI livello",
+>           "key": "Operatore Tecnico VI livello"
+>         },
+>         {
+>           "defaultLabel": "Collaboratore di Amministrazione VII livello",
+>           "label": "Collaboratore di Amministrazione VII livello",
+>           "key": "Collaboratore di Amministrazione VII livello"
+>         },
+>         {
+>           "defaultLabel": "Collaboratore di Amministrazione VI livello",
+>           "label": "Collaboratore di Amministrazione VI livello",
+>           "key": "Collaboratore di Amministrazione VI livello"
+>         },
+>         {
+>           "defaultLabel": "Collaboratore di Amministrazione V livello",
+>           "label": "Collaboratore di Amministrazione V livello",
+>           "key": "Collaboratore di Amministrazione V livello"
+>         },
+>         {
+>           "defaultLabel": "Collaboratore tecnico enti di ricerca VI livello",
+>           "label": "Collaboratore tecnico enti di ricerca VI livello",
+>           "key": "Collaboratore tecnico enti di ricerca VI livello"
+>         },
+>         {
+>           "defaultLabel": "Collaboratore tecnico enti di ricerca V livello",
+>           "label": "Collaboratore tecnico enti di ricerca V livello",
+>           "key": "Collaboratore tecnico enti di ricerca V livello"
+>         },
+>         {
+>           "defaultLabel": "Collaboratore tecnico enti di ricerca IV livello",
+>           "label": "Collaboratore tecnico enti di ricerca IV livello",
+>           "key": "Collaboratore tecnico enti di ricerca IV livello"
+>         },
+>         {
+>           "defaultLabel": "Funzionario di Amministrazione V livello",
+>           "label": "Funzionario di Amministrazione V livello",
+>           "key": "Funzionario di Amministrazione V livello"
+>         },
+>         {
+>           "defaultLabel": "Funzionario di Amministrazione IV livello",
+>           "label": "Funzionario di Amministrazione IV livello",
+>           "key": "Funzionario di Amministrazione IV livello"
+>         },
+>         {
+>           "defaultLabel": "Ricercatore III livello",
+>           "label": "Ricercatore III livello",
+>           "key": "Ricercatore III livello"
+>         },
+>         {
+>           "defaultLabel": "Tecnologo III livello",
+>           "label": "Tecnologo III livello",
+>           "key": "Tecnologo III livello"
+>         },
+>         {
+>           "defaultLabel": "I Ricercatore II livello",
+>           "label": "I Ricercatore II livello",
+>           "key": "I Ricercatore II livello"
+>         },
+>         {
+>           "defaultLabel": "I Tecnologo II livello",
+>           "label": "I Tecnologo II livello",
+>           "key": "I Tecnologo II livello"
+>         },
+>         {
+>           "defaultLabel": "Dirigente di Ricerca I livello",
+>           "label": "Dirigente di Ricerca I livello",
+>           "key": "Dirigente di Ricerca I livello"
+>         },
+>         {
+>           "defaultLabel": "Dirigente Tecnologo I livello",
+>           "label": "Dirigente Tecnologo I livello",
+>           "key": "Dirigente Tecnologo I livello"
+>         },
+>         {
+>           "defaultLabel": "Ricercatore/Tecnologo",
+>           "label": "Ricercatore/Tecnologo",
+>           "key": "Ricercatore/Tecnologo"
+>         },
+>         {
+>           "defaultLabel": "Dirigente II Fascia",
+>           "label": "Dirigente II Fascia",
+>           "key": "Dirigente II Fascia"
+>         }
+>       ],
+160d442
+<       "inSelect": "false",
+164a447,458
+>       "jsonlist": [
+>         {
+>           "defaultLabel": "Organizzativo - gestionale/Giuridico - amministrativo",
+>           "label": "Organizzativo - gestionale/Giuridico - amministrativo",
+>           "key": "Organizzativo - gestionale/Giuridico - amministrativo"
+>         },
+>         {
+>           "defaultLabel": "Supporto alla ricerca/Progettazione e/o gestione impianti, strumentazioni, servizi",
+>           "label": "Supporto alla ricerca/Progettazione e/o gestione impianti, strumentazioni, servizi",
+>           "key": "Supporto alla ricerca/Progettazione e/o gestione impianti, strumentazioni, servizi"
+>         }
+>       ],
+F:jconon_application:folder/form/affix_tabAnagrafica,affix_tabResidenza,affix_tabTitoli,affix_tabDichiarazioni,affix_tabReperibilita,affix_tabDichiarazioniConclusive,P:jconon_application:aspect_possesso_requisiti,P:jconon_application:aspect_iscrizione_liste_elettorali,P:jconon_application:aspect_condanne_penali,P:jconon_application:aspect_godimento_diritti,P:jconon_application:aspect_destituito_altro_impiego,P:jconon_application:aspect_decaduto_altro_impiego,P:jconon_application:aspect_servizioCNR,P:jconon_application:aspect_servizio_altre_amministrazioni,P:jconon_application:aspect_servizio_altra_attivita
+F:jconon_call_tind:folder/column/default
+114a115,235
+>       "class": "multiselect very-input-xlarge",
+>       "property": "jconon_call:area_scientifica",
+>       "nullable": "true",
+>       "label": "label.column.jconon_call_area_scientifica",
+>       "jsonlist": [
+>         {
+>           "defaultLabel": "Scienze della terra",
+>           "label": "Scienze della terra",
+>           "key": "Scienze della terra"
+>         },
+>         {
+>           "defaultLabel": "Scienze dell'ambiente",
+>           "label": "Scienze dell'ambiente",
+>           "key": "Scienze dell'ambiente"
+>         },
+>         {
+>           "defaultLabel": "Scienze agrarie, agroalimentari e veterinarie",
+>           "label": "Scienze agrarie, agroalimentari e veterinarie",
+>           "key": "Scienze agrarie, agroalimentari e veterinarie"
+>         },
+>         {
+>           "defaultLabel": "Scienze biologiche",
+>           "label": "Scienze biologiche",
+>           "key": "Scienze biologiche"
+>         },
+>         {
+>           "defaultLabel": "Scienze mediche",
+>           "label": "Scienze mediche",
+>           "key": "Scienze mediche"
+>         },
+>         {
+>           "defaultLabel": "Scienze chimiche",
+>           "label": "Scienze chimiche",
+>           "key": "Scienze chimiche"
+>         },
+>         {
+>           "defaultLabel": "Scienze e tecnologie dei materiali",
+>           "label": "Scienze e tecnologie dei materiali",
+>           "key": "Scienze e tecnologie dei materiali"
+>         },
+>         {
+>           "defaultLabel": "Scienze fisiche",
+>           "label": "Scienze fisiche",
+>           "key": "Scienze fisiche"
+>         },
+>         {
+>           "defaultLabel": "Scienze matematiche",
+>           "label": "Scienze matematiche",
+>           "key": "Scienze matematiche"
+>         },
+>         {
+>           "defaultLabel": "Scienze informatiche e ingegneria dell'informazione",
+>           "label": "Scienze informatiche e ingegneria dell'informazione",
+>           "key": "Scienze informatiche e ingegneria dell'informazione"
+>         },
+>         {
+>           "defaultLabel": "Ingegneria civile e architettura",
+>           "label": "Ingegneria civile e architettura",
+>           "key": "Ingegneria civile e architettura"
+>         },
+>         {
+>           "defaultLabel": "Ingegneria industriale",
+>           "label": "Ingegneria industriale",
+>           "key": "Ingegneria industriale"
+>         },
+>         {
+>           "defaultLabel": "Scienze, tecnologie e valorizzazione dei beni culturali",
+>           "label": "Scienze, tecnologie e valorizzazione dei beni culturali",
+>           "key": "Scienze, tecnologie e valorizzazione dei beni culturali"
+>         },
+>         {
+>           "defaultLabel": "Scienze dell'antichità e storico-artistiche",
+>           "label": "Scienze dell'antichità e storico-artistiche",
+>           "key": "Scienze dell'antichità e storico-artistiche"
+>         },
+>         {
+>           "defaultLabel": "Scienze filologiche lingusitiche e letterarie",
+>           "label": "Scienze filologiche lingusitiche e letterarie",
+>           "key": "Scienze filologiche lingusitiche e letterarie"
+>         },
+>         {
+>           "defaultLabel": "Scienze storiche e geografiche",
+>           "label": "Scienze storiche e geografiche",
+>           "key": "Scienze storiche e geografiche"
+>         },
+>         {
+>           "defaultLabel": "Scienze filosofiche",
+>           "label": "Scienze filosofiche",
+>           "key": "Scienze filosofiche"
+>         },
+>         {
+>           "defaultLabel": "Scienze pedagogiche e psicologiche",
+>           "label": "Scienze pedagogiche e psicologiche",
+>           "key": "Scienze pedagogiche e psicologiche"
+>         },
+>         {
+>           "defaultLabel": "Scienze giuridiche",
+>           "label": "Scienze giuridiche",
+>           "key": "Scienze giuridiche"
+>         },
+>         {
+>           "defaultLabel": "Scienze economiche",
+>           "label": "Scienze economiche",
+>           "key": "Scienze economiche"
+>         },
+>         {
+>           "defaultLabel": "Scienze statistiche e demografiche",
+>           "label": "Scienze statistiche e demografiche",
+>           "key": "Scienze statistiche e demografiche"
+>         },
+>         {
+>           "defaultLabel": "Scienze e metodologie politologiche",
+>           "label": "Scienze e metodologie politologiche",
+>           "key": "Scienze e metodologie politologiche"
+>         },
+>         {
+>           "defaultLabel": "Scienze sociali",
+>           "label": "Scienze sociali",
+>           "key": "Scienze sociali"
+>         }
+>       ],
+116d236
+<       "name": "area_scientifica",
+117a238
+>       "name": "area_scientifica",
+119,123d239
+<       "class": "multiselect very-input-xlarge",
+<       "label": "label.column.jconon_call_area_scientifica",
+<       "nullable": "true",
+<       "property": "jconon_call:area_scientifica",
+<       "widget": "ui.select",
+124a241
+>       "widget": "ui.select",
+128a246,267
+>       "jsonlist": [
+>         {
+>           "defaultLabel": "Organizzativo - gestionale",
+>           "label": "Organizzativo - gestionale",
+>           "key": "Organizzativo - gestionale"
+>         },
+>         {
+>           "defaultLabel": "Giuridico - amministrativo",
+>           "label": "Giuridico - amministrativo",
+>           "key": "Giuridico - amministrativo"
+>         },
+>         {
+>           "defaultLabel": "Supporto alla ricerca",
+>           "label": "Supporto alla ricerca",
+>           "key": "Supporto alla ricerca"
+>         },
+>         {
+>           "defaultLabel": "Progettazione e/o gestione impianti, strumentazioni, servizi",
+>           "label": "Progettazione e/o gestione impianti, strumentazioni, servizi",
+>           "key": "Progettazione e/o gestione impianti, strumentazioni, servizi"
+>         }
+>       ],
+142a282,388
+>       "jsonlist": [
+>         {
+>           "defaultLabel": "Operatore di Amministrazione VIII livello",
+>           "label": "Operatore di Amministrazione VIII livello",
+>           "key": "Operatore di Amministrazione VIII livello"
+>         },
+>         {
+>           "defaultLabel": "Operatore di Amministrazione VII livello",
+>           "label": "Operatore di Amministrazione VII livello",
+>           "key": "Operatore di Amministrazione VII livello"
+>         },
+>         {
+>           "defaultLabel": "Operatore Tecnico VIII livello",
+>           "label": "Operatore Tecnico VIII livello",
+>           "key": "Operatore Tecnico VIII livello"
+>         },
+>         {
+>           "defaultLabel": "Operatore Tecnico VII livello",
+>           "label": "Operatore Tecnico VII livello",
+>           "key": "Operatore Tecnico VII livello"
+>         },
+>         {
+>           "defaultLabel": "Operatore Tecnico VI livello",
+>           "label": "Operatore Tecnico VI livello",
+>           "key": "Operatore Tecnico VI livello"
+>         },
+>         {
+>           "defaultLabel": "Collaboratore di Amministrazione VII livello",
+>           "label": "Collaboratore di Amministrazione VII livello",
+>           "key": "Collaboratore di Amministrazione VII livello"
+>         },
+>         {
+>           "defaultLabel": "Collaboratore di Amministrazione VI livello",
+>           "label": "Collaboratore di Amministrazione VI livello",
+>           "key": "Collaboratore di Amministrazione VI livello"
+>         },
+>         {
+>           "defaultLabel": "Collaboratore di Amministrazione V livello",
+>           "label": "Collaboratore di Amministrazione V livello",
+>           "key": "Collaboratore di Amministrazione V livello"
+>         },
+>         {
+>           "defaultLabel": "Collaboratore tecnico enti di ricerca VI livello",
+>           "label": "Collaboratore tecnico enti di ricerca VI livello",
+>           "key": "Collaboratore tecnico enti di ricerca VI livello"
+>         },
+>         {
+>           "defaultLabel": "Collaboratore tecnico enti di ricerca V livello",
+>           "label": "Collaboratore tecnico enti di ricerca V livello",
+>           "key": "Collaboratore tecnico enti di ricerca V livello"
+>         },
+>         {
+>           "defaultLabel": "Collaboratore tecnico enti di ricerca IV livello",
+>           "label": "Collaboratore tecnico enti di ricerca IV livello",
+>           "key": "Collaboratore tecnico enti di ricerca IV livello"
+>         },
+>         {
+>           "defaultLabel": "Funzionario di Amministrazione V livello",
+>           "label": "Funzionario di Amministrazione V livello",
+>           "key": "Funzionario di Amministrazione V livello"
+>         },
+>         {
+>           "defaultLabel": "Funzionario di Amministrazione IV livello",
+>           "label": "Funzionario di Amministrazione IV livello",
+>           "key": "Funzionario di Amministrazione IV livello"
+>         },
+>         {
+>           "defaultLabel": "Ricercatore III livello",
+>           "label": "Ricercatore III livello",
+>           "key": "Ricercatore III livello"
+>         },
+>         {
+>           "defaultLabel": "Tecnologo III livello",
+>           "label": "Tecnologo III livello",
+>           "key": "Tecnologo III livello"
+>         },
+>         {
+>           "defaultLabel": "I Ricercatore II livello",
+>           "label": "I Ricercatore II livello",
+>           "key": "I Ricercatore II livello"
+>         },
+>         {
+>           "defaultLabel": "I Tecnologo II livello",
+>           "label": "I Tecnologo II livello",
+>           "key": "I Tecnologo II livello"
+>         },
+>         {
+>           "defaultLabel": "Dirigente di Ricerca I livello",
+>           "label": "Dirigente di Ricerca I livello",
+>           "key": "Dirigente di Ricerca I livello"
+>         },
+>         {
+>           "defaultLabel": "Dirigente Tecnologo I livello",
+>           "label": "Dirigente Tecnologo I livello",
+>           "key": "Dirigente Tecnologo I livello"
+>         },
+>         {
+>           "defaultLabel": "Ricercatore/Tecnologo",
+>           "label": "Ricercatore/Tecnologo",
+>           "key": "Ricercatore/Tecnologo"
+>         },
+>         {
+>           "defaultLabel": "Dirigente II Fascia",
+>           "label": "Dirigente II Fascia",
+>           "key": "Dirigente II Fascia"
+>         }
+>       ],
+148d393
+<       "inSelect": "false",
+F:jconon_call:folder/form/all-filters
+F:jconon_call_mobility:folder/column/home
+109a110,230
+>       "class": "multiselect very-input-xlarge",
+>       "property": "jconon_call:area_scientifica",
+>       "label": "label.jconon_call_area_scientifica",
+>       "nullable": "true",
+>       "jsonlist": [
+>         {
+>           "defaultLabel": "Scienze della terra",
+>           "label": "Scienze della terra",
+>           "key": "Scienze della terra"
+>         },
+>         {
+>           "defaultLabel": "Scienze dell'ambiente",
+>           "label": "Scienze dell'ambiente",
+>           "key": "Scienze dell'ambiente"
+>         },
+>         {
+>           "defaultLabel": "Scienze agrarie, agroalimentari e veterinarie",
+>           "label": "Scienze agrarie, agroalimentari e veterinarie",
+>           "key": "Scienze agrarie, agroalimentari e veterinarie"
+>         },
+>         {
+>           "defaultLabel": "Scienze biologiche",
+>           "label": "Scienze biologiche",
+>           "key": "Scienze biologiche"
+>         },
+>         {
+>           "defaultLabel": "Scienze mediche",
+>           "label": "Scienze mediche",
+>           "key": "Scienze mediche"
+>         },
+>         {
+>           "defaultLabel": "Scienze chimiche",
+>           "label": "Scienze chimiche",
+>           "key": "Scienze chimiche"
+>         },
+>         {
+>           "defaultLabel": "Scienze e tecnologie dei materiali",
+>           "label": "Scienze e tecnologie dei materiali",
+>           "key": "Scienze e tecnologie dei materiali"
+>         },
+>         {
+>           "defaultLabel": "Scienze fisiche",
+>           "label": "Scienze fisiche",
+>           "key": "Scienze fisiche"
+>         },
+>         {
+>           "defaultLabel": "Scienze matematiche",
+>           "label": "Scienze matematiche",
+>           "key": "Scienze matematiche"
+>         },
+>         {
+>           "defaultLabel": "Scienze informatiche e ingegneria dell'informazione",
+>           "label": "Scienze informatiche e ingegneria dell'informazione",
+>           "key": "Scienze informatiche e ingegneria dell'informazione"
+>         },
+>         {
+>           "defaultLabel": "Ingegneria civile e architettura",
+>           "label": "Ingegneria civile e architettura",
+>           "key": "Ingegneria civile e architettura"
+>         },
+>         {
+>           "defaultLabel": "Ingegneria industriale",
+>           "label": "Ingegneria industriale",
+>           "key": "Ingegneria industriale"
+>         },
+>         {
+>           "defaultLabel": "Scienze, tecnologie e valorizzazione dei beni culturali",
+>           "label": "Scienze, tecnologie e valorizzazione dei beni culturali",
+>           "key": "Scienze, tecnologie e valorizzazione dei beni culturali"
+>         },
+>         {
+>           "defaultLabel": "Scienze dell'antichità e storico-artistiche",
+>           "label": "Scienze dell'antichità e storico-artistiche",
+>           "key": "Scienze dell'antichità e storico-artistiche"
+>         },
+>         {
+>           "defaultLabel": "Scienze filologiche lingusitiche e letterarie",
+>           "label": "Scienze filologiche lingusitiche e letterarie",
+>           "key": "Scienze filologiche lingusitiche e letterarie"
+>         },
+>         {
+>           "defaultLabel": "Scienze storiche e geografiche",
+>           "label": "Scienze storiche e geografiche",
+>           "key": "Scienze storiche e geografiche"
+>         },
+>         {
+>           "defaultLabel": "Scienze filosofiche",
+>           "label": "Scienze filosofiche",
+>           "key": "Scienze filosofiche"
+>         },
+>         {
+>           "defaultLabel": "Scienze pedagogiche e psicologiche",
+>           "label": "Scienze pedagogiche e psicologiche",
+>           "key": "Scienze pedagogiche e psicologiche"
+>         },
+>         {
+>           "defaultLabel": "Scienze giuridiche",
+>           "label": "Scienze giuridiche",
+>           "key": "Scienze giuridiche"
+>         },
+>         {
+>           "defaultLabel": "Scienze economiche",
+>           "label": "Scienze economiche",
+>           "key": "Scienze economiche"
+>         },
+>         {
+>           "defaultLabel": "Scienze statistiche e demografiche",
+>           "label": "Scienze statistiche e demografiche",
+>           "key": "Scienze statistiche e demografiche"
+>         },
+>         {
+>           "defaultLabel": "Scienze e metodologie politologiche",
+>           "label": "Scienze e metodologie politologiche",
+>           "key": "Scienze e metodologie politologiche"
+>         },
+>         {
+>           "defaultLabel": "Scienze sociali",
+>           "label": "Scienze sociali",
+>           "key": "Scienze sociali"
+>         }
+>       ],
+111d231
+<       "name": "area_scientifica",
+112a233
+>       "name": "area_scientifica",
+114,118d234
+<       "class": "multiselect very-input-xlarge",
+<       "nullable": "true",
+<       "label": "label.jconon_call_area_scientifica",
+<       "property": "jconon_call:area_scientifica",
+<       "widget": "ui.select",
+119a236
+>       "widget": "ui.select",
+F:jconon_call_director:folder/column/default
+114a115,235
+>       "class": "multiselect very-input-xlarge",
+>       "property": "jconon_call:area_scientifica",
+>       "nullable": "true",
+>       "label": "label.column.jconon_call_area_scientifica",
+>       "jsonlist": [
+>         {
+>           "defaultLabel": "Scienze della terra",
+>           "label": "Scienze della terra",
+>           "key": "Scienze della terra"
+>         },
+>         {
+>           "defaultLabel": "Scienze dell'ambiente",
+>           "label": "Scienze dell'ambiente",
+>           "key": "Scienze dell'ambiente"
+>         },
+>         {
+>           "defaultLabel": "Scienze agrarie, agroalimentari e veterinarie",
+>           "label": "Scienze agrarie, agroalimentari e veterinarie",
+>           "key": "Scienze agrarie, agroalimentari e veterinarie"
+>         },
+>         {
+>           "defaultLabel": "Scienze biologiche",
+>           "label": "Scienze biologiche",
+>           "key": "Scienze biologiche"
+>         },
+>         {
+>           "defaultLabel": "Scienze mediche",
+>           "label": "Scienze mediche",
+>           "key": "Scienze mediche"
+>         },
+>         {
+>           "defaultLabel": "Scienze chimiche",
+>           "label": "Scienze chimiche",
+>           "key": "Scienze chimiche"
+>         },
+>         {
+>           "defaultLabel": "Scienze e tecnologie dei materiali",
+>           "label": "Scienze e tecnologie dei materiali",
+>           "key": "Scienze e tecnologie dei materiali"
+>         },
+>         {
+>           "defaultLabel": "Scienze fisiche",
+>           "label": "Scienze fisiche",
+>           "key": "Scienze fisiche"
+>         },
+>         {
+>           "defaultLabel": "Scienze matematiche",
+>           "label": "Scienze matematiche",
+>           "key": "Scienze matematiche"
+>         },
+>         {
+>           "defaultLabel": "Scienze informatiche e ingegneria dell'informazione",
+>           "label": "Scienze informatiche e ingegneria dell'informazione",
+>           "key": "Scienze informatiche e ingegneria dell'informazione"
+>         },
+>         {
+>           "defaultLabel": "Ingegneria civile e architettura",
+>           "label": "Ingegneria civile e architettura",
+>           "key": "Ingegneria civile e architettura"
+>         },
+>         {
+>           "defaultLabel": "Ingegneria industriale",
+>           "label": "Ingegneria industriale",
+>           "key": "Ingegneria industriale"
+>         },
+>         {
+>           "defaultLabel": "Scienze, tecnologie e valorizzazione dei beni culturali",
+>           "label": "Scienze, tecnologie e valorizzazione dei beni culturali",
+>           "key": "Scienze, tecnologie e valorizzazione dei beni culturali"
+>         },
+>         {
+>           "defaultLabel": "Scienze dell'antichità e storico-artistiche",
+>           "label": "Scienze dell'antichità e storico-artistiche",
+>           "key": "Scienze dell'antichità e storico-artistiche"
+>         },
+>         {
+>           "defaultLabel": "Scienze filologiche lingusitiche e letterarie",
+>           "label": "Scienze filologiche lingusitiche e letterarie",
+>           "key": "Scienze filologiche lingusitiche e letterarie"
+>         },
+>         {
+>           "defaultLabel": "Scienze storiche e geografiche",
+>           "label": "Scienze storiche e geografiche",
+>           "key": "Scienze storiche e geografiche"
+>         },
+>         {
+>           "defaultLabel": "Scienze filosofiche",
+>           "label": "Scienze filosofiche",
+>           "key": "Scienze filosofiche"
+>         },
+>         {
+>           "defaultLabel": "Scienze pedagogiche e psicologiche",
+>           "label": "Scienze pedagogiche e psicologiche",
+>           "key": "Scienze pedagogiche e psicologiche"
+>         },
+>         {
+>           "defaultLabel": "Scienze giuridiche",
+>           "label": "Scienze giuridiche",
+>           "key": "Scienze giuridiche"
+>         },
+>         {
+>           "defaultLabel": "Scienze economiche",
+>           "label": "Scienze economiche",
+>           "key": "Scienze economiche"
+>         },
+>         {
+>           "defaultLabel": "Scienze statistiche e demografiche",
+>           "label": "Scienze statistiche e demografiche",
+>           "key": "Scienze statistiche e demografiche"
+>         },
+>         {
+>           "defaultLabel": "Scienze e metodologie politologiche",
+>           "label": "Scienze e metodologie politologiche",
+>           "key": "Scienze e metodologie politologiche"
+>         },
+>         {
+>           "defaultLabel": "Scienze sociali",
+>           "label": "Scienze sociali",
+>           "key": "Scienze sociali"
+>         }
+>       ],
+116d236
+<       "name": "area_scientifica",
+117a238
+>       "name": "area_scientifica",
+119,123d239
+<       "class": "multiselect very-input-xlarge",
+<       "label": "label.column.jconon_call_area_scientifica",
+<       "nullable": "true",
+<       "property": "jconon_call:area_scientifica",
+<       "widget": "ui.select",
+124a241
+>       "widget": "ui.select",
+128a246,267
+>       "jsonlist": [
+>         {
+>           "defaultLabel": "Organizzativo - gestionale",
+>           "label": "Organizzativo - gestionale",
+>           "key": "Organizzativo - gestionale"
+>         },
+>         {
+>           "defaultLabel": "Giuridico - amministrativo",
+>           "label": "Giuridico - amministrativo",
+>           "key": "Giuridico - amministrativo"
+>         },
+>         {
+>           "defaultLabel": "Supporto alla ricerca",
+>           "label": "Supporto alla ricerca",
+>           "key": "Supporto alla ricerca"
+>         },
+>         {
+>           "defaultLabel": "Progettazione e/o gestione impianti, strumentazioni, servizi",
+>           "label": "Progettazione e/o gestione impianti, strumentazioni, servizi",
+>           "key": "Progettazione e/o gestione impianti, strumentazioni, servizi"
+>         }
+>       ],
+F:jconon_call_director:folder/column/home
+110a111,231
+>       "class": "multiselect very-input-xlarge",
+>       "property": "jconon_call:area_scientifica",
+>       "label": "label.jconon_call_area_scientifica",
+>       "nullable": "true",
+>       "jsonlist": [
+>         {
+>           "defaultLabel": "Scienze della terra",
+>           "label": "Scienze della terra",
+>           "key": "Scienze della terra"
+>         },
+>         {
+>           "defaultLabel": "Scienze dell'ambiente",
+>           "label": "Scienze dell'ambiente",
+>           "key": "Scienze dell'ambiente"
+>         },
+>         {
+>           "defaultLabel": "Scienze agrarie, agroalimentari e veterinarie",
+>           "label": "Scienze agrarie, agroalimentari e veterinarie",
+>           "key": "Scienze agrarie, agroalimentari e veterinarie"
+>         },
+>         {
+>           "defaultLabel": "Scienze biologiche",
+>           "label": "Scienze biologiche",
+>           "key": "Scienze biologiche"
+>         },
+>         {
+>           "defaultLabel": "Scienze mediche",
+>           "label": "Scienze mediche",
+>           "key": "Scienze mediche"
+>         },
+>         {
+>           "defaultLabel": "Scienze chimiche",
+>           "label": "Scienze chimiche",
+>           "key": "Scienze chimiche"
+>         },
+>         {
+>           "defaultLabel": "Scienze e tecnologie dei materiali",
+>           "label": "Scienze e tecnologie dei materiali",
+>           "key": "Scienze e tecnologie dei materiali"
+>         },
+>         {
+>           "defaultLabel": "Scienze fisiche",
+>           "label": "Scienze fisiche",
+>           "key": "Scienze fisiche"
+>         },
+>         {
+>           "defaultLabel": "Scienze matematiche",
+>           "label": "Scienze matematiche",
+>           "key": "Scienze matematiche"
+>         },
+>         {
+>           "defaultLabel": "Scienze informatiche e ingegneria dell'informazione",
+>           "label": "Scienze informatiche e ingegneria dell'informazione",
+>           "key": "Scienze informatiche e ingegneria dell'informazione"
+>         },
+>         {
+>           "defaultLabel": "Ingegneria civile e architettura",
+>           "label": "Ingegneria civile e architettura",
+>           "key": "Ingegneria civile e architettura"
+>         },
+>         {
+>           "defaultLabel": "Ingegneria industriale",
+>           "label": "Ingegneria industriale",
+>           "key": "Ingegneria industriale"
+>         },
+>         {
+>           "defaultLabel": "Scienze, tecnologie e valorizzazione dei beni culturali",
+>           "label": "Scienze, tecnologie e valorizzazione dei beni culturali",
+>           "key": "Scienze, tecnologie e valorizzazione dei beni culturali"
+>         },
+>         {
+>           "defaultLabel": "Scienze dell'antichità e storico-artistiche",
+>           "label": "Scienze dell'antichità e storico-artistiche",
+>           "key": "Scienze dell'antichità e storico-artistiche"
+>         },
+>         {
+>           "defaultLabel": "Scienze filologiche lingusitiche e letterarie",
+>           "label": "Scienze filologiche lingusitiche e letterarie",
+>           "key": "Scienze filologiche lingusitiche e letterarie"
+>         },
+>         {
+>           "defaultLabel": "Scienze storiche e geografiche",
+>           "label": "Scienze storiche e geografiche",
+>           "key": "Scienze storiche e geografiche"
+>         },
+>         {
+>           "defaultLabel": "Scienze filosofiche",
+>           "label": "Scienze filosofiche",
+>           "key": "Scienze filosofiche"
+>         },
+>         {
+>           "defaultLabel": "Scienze pedagogiche e psicologiche",
+>           "label": "Scienze pedagogiche e psicologiche",
+>           "key": "Scienze pedagogiche e psicologiche"
+>         },
+>         {
+>           "defaultLabel": "Scienze giuridiche",
+>           "label": "Scienze giuridiche",
+>           "key": "Scienze giuridiche"
+>         },
+>         {
+>           "defaultLabel": "Scienze economiche",
+>           "label": "Scienze economiche",
+>           "key": "Scienze economiche"
+>         },
+>         {
+>           "defaultLabel": "Scienze statistiche e demografiche",
+>           "label": "Scienze statistiche e demografiche",
+>           "key": "Scienze statistiche e demografiche"
+>         },
+>         {
+>           "defaultLabel": "Scienze e metodologie politologiche",
+>           "label": "Scienze e metodologie politologiche",
+>           "key": "Scienze e metodologie politologiche"
+>         },
+>         {
+>           "defaultLabel": "Scienze sociali",
+>           "label": "Scienze sociali",
+>           "key": "Scienze sociali"
+>         }
+>       ],
+112d232
+<       "name": "area_scientifica",
+113a234
+>       "name": "area_scientifica",
+115,119d235
+<       "class": "multiselect very-input-xlarge",
+<       "nullable": "true",
+<       "label": "label.jconon_call_area_scientifica",
+<       "property": "jconon_call:area_scientifica",
+<       "widget": "ui.select",
+120a237
+>       "widget": "ui.select",
+296a414,451
+>       "jsonlist": [
+>         {
+>           "defaultLabel": "Scienze biomediche",
+>           "label": "Scienze biomediche",
+>           "key": "Scienze biomediche"
+>         },
+>         {
+>           "defaultLabel": "Scienze fisiche e Tecnologie della Materia",
+>           "label": "Scienze fisiche e Tecnologie della Materia",
+>           "key": "Scienze fisiche e Tecnologie della Materia"
+>         },
+>         {
+>           "defaultLabel": "Scienze del sistema terra e tecnologie per l'ambiente",
+>           "label": "Scienze del sistema terra e tecnologie per l'ambiente",
+>           "key": "Scienze del sistema terra e tecnologie per l'ambiente"
+>         },
+>         {
+>           "defaultLabel": "Scienze chimiche e Tecnologie dei materiali",
+>           "label": "Scienze chimiche e Tecnologie dei materiali",
+>           "key": "Scienze chimiche e Tecnologie dei materiali"
+>         },
+>         {
+>           "defaultLabel": "Ingegneria, ICT e Tecnologie per l'energia e i trasporti",
+>           "label": "Ingegneria, ICT e Tecnologie per l'energia e i trasporti",
+>           "key": "Ingegneria, ICT e Tecnologie per l'energia e i trasporti"
+>         },
+>         {
+>           "defaultLabel": "Scienze Bio-Agroalimentari",
+>           "label": "Scienze Bio-Agroalimentari",
+>           "key": "Scienze Bio-Agroalimentari"
+>         },
+>         {
+>           "defaultLabel": "Scienze umane e sociali, Patrimonio Culturale",
+>           "label": "Scienze umane e sociali, Patrimonio Culturale",
+>           "key": "Scienze umane e sociali, Patrimonio Culturale"
+>         }
+>       ],
+>       "visible": "true",
+297a453,454
+>       "inputType": "SELECT",
+>       "class": "input-xxlarge",
+299c456,459
+<       "inSelect": "false"
+---
+>       "label": "label.jconon_call_elenco_macroaree",
+>       "inSelect": "false",
+>       "widget": "ui.select",
+>       "multiple": "multiple"
+301a462,474
+>       "jsonlist": [
+>         {
+>           "defaultLabel": "Organizzativo - gestionale/Giuridico - amministrativo",
+>           "label": "Organizzativo - gestionale/Giuridico - amministrativo",
+>           "key": "Organizzativo - gestionale/Giuridico - amministrativo"
+>         },
+>         {
+>           "defaultLabel": "Supporto alla ricerca/Progettazione e/o gestione impianti, strumentazioni, servizi",
+>           "label": "Supporto alla ricerca/Progettazione e/o gestione impianti, strumentazioni, servizi",
+>           "key": "Supporto alla ricerca/Progettazione e/o gestione impianti, strumentazioni, servizi"
+>         }
+>       ],
+>       "visible": "true",
+302a476,477
+>       "inputType": "SELECT",
+>       "class": "input-xxlarge",
+304c479,482
+<       "inSelect": "false"
+---
+>       "label": "label.jconon_call_elenco_settori_tecnologici",
+>       "inSelect": "false",
+>       "widget": "ui.select",
+>       "multiple": "multiple"
+315d492
+<       "nullable": "false",
+316a494
+>       "nullable": "false",
+F:jconon_call_employees:folder/column/home
+15a16,126
+>       "jsonvalidator": {
+>         "requiredWidget": true
+>       },
+>       "visible": "true",
+>       "jsonlist": [
+>         {
+>           "defaultLabel": "Operatore di Amministrazione VIII livello",
+>           "label": "Operatore di Amministrazione VIII livello",
+>           "key": "Operatore di Amministrazione VIII livello"
+>         },
+>         {
+>           "defaultLabel": "Operatore di Amministrazione VII livello",
+>           "label": "Operatore di Amministrazione VII livello",
+>           "key": "Operatore di Amministrazione VII livello"
+>         },
+>         {
+>           "defaultLabel": "Operatore Tecnico VIII livello",
+>           "label": "Operatore Tecnico VIII livello",
+>           "key": "Operatore Tecnico VIII livello"
+>         },
+>         {
+>           "defaultLabel": "Operatore Tecnico VII livello",
+>           "label": "Operatore Tecnico VII livello",
+>           "key": "Operatore Tecnico VII livello"
+>         },
+>         {
+>           "defaultLabel": "Operatore Tecnico VI livello",
+>           "label": "Operatore Tecnico VI livello",
+>           "key": "Operatore Tecnico VI livello"
+>         },
+>         {
+>           "defaultLabel": "Collaboratore di Amministrazione VII livello",
+>           "label": "Collaboratore di Amministrazione VII livello",
+>           "key": "Collaboratore di Amministrazione VII livello"
+>         },
+>         {
+>           "defaultLabel": "Collaboratore di Amministrazione VI livello",
+>           "label": "Collaboratore di Amministrazione VI livello",
+>           "key": "Collaboratore di Amministrazione VI livello"
+>         },
+>         {
+>           "defaultLabel": "Collaboratore di Amministrazione V livello",
+>           "label": "Collaboratore di Amministrazione V livello",
+>           "key": "Collaboratore di Amministrazione V livello"
+>         },
+>         {
+>           "defaultLabel": "Collaboratore tecnico enti di ricerca VI livello",
+>           "label": "Collaboratore tecnico enti di ricerca VI livello",
+>           "key": "Collaboratore tecnico enti di ricerca VI livello"
+>         },
+>         {
+>           "defaultLabel": "Collaboratore tecnico enti di ricerca V livello",
+>           "label": "Collaboratore tecnico enti di ricerca V livello",
+>           "key": "Collaboratore tecnico enti di ricerca V livello"
+>         },
+>         {
+>           "defaultLabel": "Collaboratore tecnico enti di ricerca IV livello",
+>           "label": "Collaboratore tecnico enti di ricerca IV livello",
+>           "key": "Collaboratore tecnico enti di ricerca IV livello"
+>         },
+>         {
+>           "defaultLabel": "Funzionario di Amministrazione V livello",
+>           "label": "Funzionario di Amministrazione V livello",
+>           "key": "Funzionario di Amministrazione V livello"
+>         },
+>         {
+>           "defaultLabel": "Funzionario di Amministrazione IV livello",
+>           "label": "Funzionario di Amministrazione IV livello",
+>           "key": "Funzionario di Amministrazione IV livello"
+>         },
+>         {
+>           "defaultLabel": "Ricercatore III livello",
+>           "label": "Ricercatore III livello",
+>           "key": "Ricercatore III livello"
+>         },
+>         {
+>           "defaultLabel": "Tecnologo III livello",
+>           "label": "Tecnologo III livello",
+>           "key": "Tecnologo III livello"
+>         },
+>         {
+>           "defaultLabel": "I Ricercatore II livello",
+>           "label": "I Ricercatore II livello",
+>           "key": "I Ricercatore II livello"
+>         },
+>         {
+>           "defaultLabel": "I Tecnologo II livello",
+>           "label": "I Tecnologo II livello",
+>           "key": "I Tecnologo II livello"
+>         },
+>         {
+>           "defaultLabel": "Dirigente di Ricerca I livello",
+>           "label": "Dirigente di Ricerca I livello",
+>           "key": "Dirigente di Ricerca I livello"
+>         },
+>         {
+>           "defaultLabel": "Dirigente Tecnologo I livello",
+>           "label": "Dirigente Tecnologo I livello",
+>           "key": "Dirigente Tecnologo I livello"
+>         },
+>         {
+>           "defaultLabel": "Ricercatore/Tecnologo",
+>           "label": "Ricercatore/Tecnologo",
+>           "key": "Ricercatore/Tecnologo"
+>         },
+>         {
+>           "defaultLabel": "Dirigente II Fascia",
+>           "label": "Dirigente II Fascia",
+>           "key": "Dirigente II Fascia"
+>         }
+>       ],
+16a128,129
+>       "inputType": "SELECT",
+>       "class": "input-xlarge",
+18c131,133
+<       "inSelect": "true"
+---
+>       "label": "label.jconon_call_profilo",
+>       "inSelect": "true",
+>       "widget": "ui.select"
+137a253,373
+>       "class": "multiselect very-input-xlarge",
+>       "property": "jconon_call:area_scientifica",
+>       "label": "label.jconon_call_area_scientifica",
+>       "nullable": "true",
+>       "jsonlist": [
+>         {
+>           "defaultLabel": "Scienze della terra",
+>           "label": "Scienze della terra",
+>           "key": "Scienze della terra"
+>         },
+>         {
+>           "defaultLabel": "Scienze dell'ambiente",
+>           "label": "Scienze dell'ambiente",
+>           "key": "Scienze dell'ambiente"
+>         },
+>         {
+>           "defaultLabel": "Scienze agrarie, agroalimentari e veterinarie",
+>           "label": "Scienze agrarie, agroalimentari e veterinarie",
+>           "key": "Scienze agrarie, agroalimentari e veterinarie"
+>         },
+>         {
+>           "defaultLabel": "Scienze biologiche",
+>           "label": "Scienze biologiche",
+>           "key": "Scienze biologiche"
+>         },
+>         {
+>           "defaultLabel": "Scienze mediche",
+>           "label": "Scienze mediche",
+>           "key": "Scienze mediche"
+>         },
+>         {
+>           "defaultLabel": "Scienze chimiche",
+>           "label": "Scienze chimiche",
+>           "key": "Scienze chimiche"
+>         },
+>         {
+>           "defaultLabel": "Scienze e tecnologie dei materiali",
+>           "label": "Scienze e tecnologie dei materiali",
+>           "key": "Scienze e tecnologie dei materiali"
+>         },
+>         {
+>           "defaultLabel": "Scienze fisiche",
+>           "label": "Scienze fisiche",
+>           "key": "Scienze fisiche"
+>         },
+>         {
+>           "defaultLabel": "Scienze matematiche",
+>           "label": "Scienze matematiche",
+>           "key": "Scienze matematiche"
+>         },
+>         {
+>           "defaultLabel": "Scienze informatiche e ingegneria dell'informazione",
+>           "label": "Scienze informatiche e ingegneria dell'informazione",
+>           "key": "Scienze informatiche e ingegneria dell'informazione"
+>         },
+>         {
+>           "defaultLabel": "Ingegneria civile e architettura",
+>           "label": "Ingegneria civile e architettura",
+>           "key": "Ingegneria civile e architettura"
+>         },
+>         {
+>           "defaultLabel": "Ingegneria industriale",
+>           "label": "Ingegneria industriale",
+>           "key": "Ingegneria industriale"
+>         },
+>         {
+>           "defaultLabel": "Scienze, tecnologie e valorizzazione dei beni culturali",
+>           "label": "Scienze, tecnologie e valorizzazione dei beni culturali",
+>           "key": "Scienze, tecnologie e valorizzazione dei beni culturali"
+>         },
+>         {
+>           "defaultLabel": "Scienze dell'antichità e storico-artistiche",
+>           "label": "Scienze dell'antichità e storico-artistiche",
+>           "key": "Scienze dell'antichità e storico-artistiche"
+>         },
+>         {
+>           "defaultLabel": "Scienze filologiche lingusitiche e letterarie",
+>           "label": "Scienze filologiche lingusitiche e letterarie",
+>           "key": "Scienze filologiche lingusitiche e letterarie"
+>         },
+>         {
+>           "defaultLabel": "Scienze storiche e geografiche",
+>           "label": "Scienze storiche e geografiche",
+>           "key": "Scienze storiche e geografiche"
+>         },
+>         {
+>           "defaultLabel": "Scienze filosofiche",
+>           "label": "Scienze filosofiche",
+>           "key": "Scienze filosofiche"
+>         },
+>         {
+>           "defaultLabel": "Scienze pedagogiche e psicologiche",
+>           "label": "Scienze pedagogiche e psicologiche",
+>           "key": "Scienze pedagogiche e psicologiche"
+>         },
+>         {
+>           "defaultLabel": "Scienze giuridiche",
+>           "label": "Scienze giuridiche",
+>           "key": "Scienze giuridiche"
+>         },
+>         {
+>           "defaultLabel": "Scienze economiche",
+>           "label": "Scienze economiche",
+>           "key": "Scienze economiche"
+>         },
+>         {
+>           "defaultLabel": "Scienze statistiche e demografiche",
+>           "label": "Scienze statistiche e demografiche",
+>           "key": "Scienze statistiche e demografiche"
+>         },
+>         {
+>           "defaultLabel": "Scienze e metodologie politologiche",
+>           "label": "Scienze e metodologie politologiche",
+>           "key": "Scienze e metodologie politologiche"
+>         },
+>         {
+>           "defaultLabel": "Scienze sociali",
+>           "label": "Scienze sociali",
+>           "key": "Scienze sociali"
+>         }
+>       ],
+139d374
+<       "name": "area_scientifica",
+140a376
+>       "name": "area_scientifica",
+142,146d377
+<       "class": "multiselect very-input-xlarge",
+<       "nullable": "true",
+<       "label": "label.jconon_call_area_scientifica",
+<       "property": "jconon_call:area_scientifica",
+<       "widget": "ui.select",
+147a379
+>       "widget": "ui.select",
+F:jconon_call_aric:folder/column/home
+106a107,227
+>       "class": "multiselect very-input-xlarge",
+>       "property": "jconon_call:area_scientifica",
+>       "label": "label.jconon_call_area_scientifica",
+>       "nullable": "true",
+>       "jsonlist": [
+>         {
+>           "defaultLabel": "Scienze della terra",
+>           "label": "Scienze della terra",
+>           "key": "Scienze della terra"
+>         },
+>         {
+>           "defaultLabel": "Scienze dell'ambiente",
+>           "label": "Scienze dell'ambiente",
+>           "key": "Scienze dell'ambiente"
+>         },
+>         {
+>           "defaultLabel": "Scienze agrarie, agroalimentari e veterinarie",
+>           "label": "Scienze agrarie, agroalimentari e veterinarie",
+>           "key": "Scienze agrarie, agroalimentari e veterinarie"
+>         },
+>         {
+>           "defaultLabel": "Scienze biologiche",
+>           "label": "Scienze biologiche",
+>           "key": "Scienze biologiche"
+>         },
+>         {
+>           "defaultLabel": "Scienze mediche",
+>           "label": "Scienze mediche",
+>           "key": "Scienze mediche"
+>         },
+>         {
+>           "defaultLabel": "Scienze chimiche",
+>           "label": "Scienze chimiche",
+>           "key": "Scienze chimiche"
+>         },
+>         {
+>           "defaultLabel": "Scienze e tecnologie dei materiali",
+>           "label": "Scienze e tecnologie dei materiali",
+>           "key": "Scienze e tecnologie dei materiali"
+>         },
+>         {
+>           "defaultLabel": "Scienze fisiche",
+>           "label": "Scienze fisiche",
+>           "key": "Scienze fisiche"
+>         },
+>         {
+>           "defaultLabel": "Scienze matematiche",
+>           "label": "Scienze matematiche",
+>           "key": "Scienze matematiche"
+>         },
+>         {
+>           "defaultLabel": "Scienze informatiche e ingegneria dell'informazione",
+>           "label": "Scienze informatiche e ingegneria dell'informazione",
+>           "key": "Scienze informatiche e ingegneria dell'informazione"
+>         },
+>         {
+>           "defaultLabel": "Ingegneria civile e architettura",
+>           "label": "Ingegneria civile e architettura",
+>           "key": "Ingegneria civile e architettura"
+>         },
+>         {
+>           "defaultLabel": "Ingegneria industriale",
+>           "label": "Ingegneria industriale",
+>           "key": "Ingegneria industriale"
+>         },
+>         {
+>           "defaultLabel": "Scienze, tecnologie e valorizzazione dei beni culturali",
+>           "label": "Scienze, tecnologie e valorizzazione dei beni culturali",
+>           "key": "Scienze, tecnologie e valorizzazione dei beni culturali"
+>         },
+>         {
+>           "defaultLabel": "Scienze dell'antichità e storico-artistiche",
+>           "label": "Scienze dell'antichità e storico-artistiche",
+>           "key": "Scienze dell'antichità e storico-artistiche"
+>         },
+>         {
+>           "defaultLabel": "Scienze filologiche lingusitiche e letterarie",
+>           "label": "Scienze filologiche lingusitiche e letterarie",
+>           "key": "Scienze filologiche lingusitiche e letterarie"
+>         },
+>         {
+>           "defaultLabel": "Scienze storiche e geografiche",
+>           "label": "Scienze storiche e geografiche",
+>           "key": "Scienze storiche e geografiche"
+>         },
+>         {
+>           "defaultLabel": "Scienze filosofiche",
+>           "label": "Scienze filosofiche",
+>           "key": "Scienze filosofiche"
+>         },
+>         {
+>           "defaultLabel": "Scienze pedagogiche e psicologiche",
+>           "label": "Scienze pedagogiche e psicologiche",
+>           "key": "Scienze pedagogiche e psicologiche"
+>         },
+>         {
+>           "defaultLabel": "Scienze giuridiche",
+>           "label": "Scienze giuridiche",
+>           "key": "Scienze giuridiche"
+>         },
+>         {
+>           "defaultLabel": "Scienze economiche",
+>           "label": "Scienze economiche",
+>           "key": "Scienze economiche"
+>         },
+>         {
+>           "defaultLabel": "Scienze statistiche e demografiche",
+>           "label": "Scienze statistiche e demografiche",
+>           "key": "Scienze statistiche e demografiche"
+>         },
+>         {
+>           "defaultLabel": "Scienze e metodologie politologiche",
+>           "label": "Scienze e metodologie politologiche",
+>           "key": "Scienze e metodologie politologiche"
+>         },
+>         {
+>           "defaultLabel": "Scienze sociali",
+>           "label": "Scienze sociali",
+>           "key": "Scienze sociali"
+>         }
+>       ],
+108d228
+<       "name": "area_scientifica",
+109a230
+>       "name": "area_scientifica",
+111,115d231
+<       "class": "multiselect very-input-xlarge",
+<       "nullable": "true",
+<       "label": "label.jconon_call_area_scientifica",
+<       "property": "jconon_call:area_scientifica",
+<       "widget": "ui.select",
+116a233
+>       "widget": "ui.select",
+F:jconon_application:folder/form/filters
+F:jconon_call_bstd:folder/column/home
+108a109,229
+>       "class": "multiselect very-input-xlarge",
+>       "property": "jconon_call:area_scientifica",
+>       "label": "label.jconon_call_area_scientifica",
+>       "nullable": "true",
+>       "jsonlist": [
+>         {
+>           "defaultLabel": "Scienze della terra",
+>           "label": "Scienze della terra",
+>           "key": "Scienze della terra"
+>         },
+>         {
+>           "defaultLabel": "Scienze dell'ambiente",
+>           "label": "Scienze dell'ambiente",
+>           "key": "Scienze dell'ambiente"
+>         },
+>         {
+>           "defaultLabel": "Scienze agrarie, agroalimentari e veterinarie",
+>           "label": "Scienze agrarie, agroalimentari e veterinarie",
+>           "key": "Scienze agrarie, agroalimentari e veterinarie"
+>         },
+>         {
+>           "defaultLabel": "Scienze biologiche",
+>           "label": "Scienze biologiche",
+>           "key": "Scienze biologiche"
+>         },
+>         {
+>           "defaultLabel": "Scienze mediche",
+>           "label": "Scienze mediche",
+>           "key": "Scienze mediche"
+>         },
+>         {
+>           "defaultLabel": "Scienze chimiche",
+>           "label": "Scienze chimiche",
+>           "key": "Scienze chimiche"
+>         },
+>         {
+>           "defaultLabel": "Scienze e tecnologie dei materiali",
+>           "label": "Scienze e tecnologie dei materiali",
+>           "key": "Scienze e tecnologie dei materiali"
+>         },
+>         {
+>           "defaultLabel": "Scienze fisiche",
+>           "label": "Scienze fisiche",
+>           "key": "Scienze fisiche"
+>         },
+>         {
+>           "defaultLabel": "Scienze matematiche",
+>           "label": "Scienze matematiche",
+>           "key": "Scienze matematiche"
+>         },
+>         {
+>           "defaultLabel": "Scienze informatiche e ingegneria dell'informazione",
+>           "label": "Scienze informatiche e ingegneria dell'informazione",
+>           "key": "Scienze informatiche e ingegneria dell'informazione"
+>         },
+>         {
+>           "defaultLabel": "Ingegneria civile e architettura",
+>           "label": "Ingegneria civile e architettura",
+>           "key": "Ingegneria civile e architettura"
+>         },
+>         {
+>           "defaultLabel": "Ingegneria industriale",
+>           "label": "Ingegneria industriale",
+>           "key": "Ingegneria industriale"
+>         },
+>         {
+>           "defaultLabel": "Scienze, tecnologie e valorizzazione dei beni culturali",
+>           "label": "Scienze, tecnologie e valorizzazione dei beni culturali",
+>           "key": "Scienze, tecnologie e valorizzazione dei beni culturali"
+>         },
+>         {
+>           "defaultLabel": "Scienze dell'antichità e storico-artistiche",
+>           "label": "Scienze dell'antichità e storico-artistiche",
+>           "key": "Scienze dell'antichità e storico-artistiche"
+>         },
+>         {
+>           "defaultLabel": "Scienze filologiche lingusitiche e letterarie",
+>           "label": "Scienze filologiche lingusitiche e letterarie",
+>           "key": "Scienze filologiche lingusitiche e letterarie"
+>         },
+>         {
+>           "defaultLabel": "Scienze storiche e geografiche",
+>           "label": "Scienze storiche e geografiche",
+>           "key": "Scienze storiche e geografiche"
+>         },
+>         {
+>           "defaultLabel": "Scienze filosofiche",
+>           "label": "Scienze filosofiche",
+>           "key": "Scienze filosofiche"
+>         },
+>         {
+>           "defaultLabel": "Scienze pedagogiche e psicologiche",
+>           "label": "Scienze pedagogiche e psicologiche",
+>           "key": "Scienze pedagogiche e psicologiche"
+>         },
+>         {
+>           "defaultLabel": "Scienze giuridiche",
+>           "label": "Scienze giuridiche",
+>           "key": "Scienze giuridiche"
+>         },
+>         {
+>           "defaultLabel": "Scienze economiche",
+>           "label": "Scienze economiche",
+>           "key": "Scienze economiche"
+>         },
+>         {
+>           "defaultLabel": "Scienze statistiche e demografiche",
+>           "label": "Scienze statistiche e demografiche",
+>           "key": "Scienze statistiche e demografiche"
+>         },
+>         {
+>           "defaultLabel": "Scienze e metodologie politologiche",
+>           "label": "Scienze e metodologie politologiche",
+>           "key": "Scienze e metodologie politologiche"
+>         },
+>         {
+>           "defaultLabel": "Scienze sociali",
+>           "label": "Scienze sociali",
+>           "key": "Scienze sociali"
+>         }
+>       ],
+110d230
+<       "name": "area_scientifica",
+111a232
+>       "name": "area_scientifica",
+113,117d233
+<       "class": "multiselect very-input-xlarge",
+<       "nullable": "true",
+<       "label": "label.jconon_call_area_scientifica",
+<       "property": "jconon_call:area_scientifica",
+<       "widget": "ui.select",
+118a235
+>       "widget": "ui.select",
+294a412,449
+>       "jsonlist": [
+>         {
+>           "defaultLabel": "Scienze biomediche",
+>           "label": "Scienze biomediche",
+>           "key": "Scienze biomediche"
+>         },
+>         {
+>           "defaultLabel": "Scienze fisiche e Tecnologie della Materia",
+>           "label": "Scienze fisiche e Tecnologie della Materia",
+>           "key": "Scienze fisiche e Tecnologie della Materia"
+>         },
+>         {
+>           "defaultLabel": "Scienze del sistema terra e tecnologie per l'ambiente",
+>           "label": "Scienze del sistema terra e tecnologie per l'ambiente",
+>           "key": "Scienze del sistema terra e tecnologie per l'ambiente"
+>         },
+>         {
+>           "defaultLabel": "Scienze chimiche e Tecnologie dei materiali",
+>           "label": "Scienze chimiche e Tecnologie dei materiali",
+>           "key": "Scienze chimiche e Tecnologie dei materiali"
+>         },
+>         {
+>           "defaultLabel": "Ingegneria, ICT e Tecnologie per l'energia e i trasporti",
+>           "label": "Ingegneria, ICT e Tecnologie per l'energia e i trasporti",
+>           "key": "Ingegneria, ICT e Tecnologie per l'energia e i trasporti"
+>         },
+>         {
+>           "defaultLabel": "Scienze Bio-Agroalimentari",
+>           "label": "Scienze Bio-Agroalimentari",
+>           "key": "Scienze Bio-Agroalimentari"
+>         },
+>         {
+>           "defaultLabel": "Scienze umane e sociali, Patrimonio Culturale",
+>           "label": "Scienze umane e sociali, Patrimonio Culturale",
+>           "key": "Scienze umane e sociali, Patrimonio Culturale"
+>         }
+>       ],
+>       "visible": "true",
+295a451,452
+>       "inputType": "SELECT",
+>       "class": "input-xxlarge",
+297c454,457
+<       "inSelect": "false"
+---
+>       "label": "label.jconon_call_elenco_macroaree",
+>       "inSelect": "false",
+>       "widget": "ui.select",
+>       "multiple": "multiple"
+299a460,472
+>       "jsonlist": [
+>         {
+>           "defaultLabel": "Organizzativo - gestionale/Giuridico - amministrativo",
+>           "label": "Organizzativo - gestionale/Giuridico - amministrativo",
+>           "key": "Organizzativo - gestionale/Giuridico - amministrativo"
+>         },
+>         {
+>           "defaultLabel": "Supporto alla ricerca/Progettazione e/o gestione impianti, strumentazioni, servizi",
+>           "label": "Supporto alla ricerca/Progettazione e/o gestione impianti, strumentazioni, servizi",
+>           "key": "Supporto alla ricerca/Progettazione e/o gestione impianti, strumentazioni, servizi"
+>         }
+>       ],
+>       "visible": "true",
+300a474,475
+>       "inputType": "SELECT",
+>       "class": "input-xxlarge",
+302c477,480
+<       "inSelect": "false"
+---
+>       "label": "label.jconon_call_elenco_settori_tecnologici",
+>       "inSelect": "false",
+>       "widget": "ui.select",
+>       "multiple": "multiple"
+313d490
+<       "nullable": "false",
+314a492
+>       "nullable": "false",
+F:jconon_call_tdet:folder/column/home
+111a112,232
+>       "class": "multiselect very-input-xlarge",
+>       "property": "jconon_call:area_scientifica",
+>       "label": "label.jconon_call_area_scientifica",
+>       "nullable": "true",
+>       "jsonlist": [
+>         {
+>           "defaultLabel": "Scienze della terra",
+>           "label": "Scienze della terra",
+>           "key": "Scienze della terra"
+>         },
+>         {
+>           "defaultLabel": "Scienze dell'ambiente",
+>           "label": "Scienze dell'ambiente",
+>           "key": "Scienze dell'ambiente"
+>         },
+>         {
+>           "defaultLabel": "Scienze agrarie, agroalimentari e veterinarie",
+>           "label": "Scienze agrarie, agroalimentari e veterinarie",
+>           "key": "Scienze agrarie, agroalimentari e veterinarie"
+>         },
+>         {
+>           "defaultLabel": "Scienze biologiche",
+>           "label": "Scienze biologiche",
+>           "key": "Scienze biologiche"
+>         },
+>         {
+>           "defaultLabel": "Scienze mediche",
+>           "label": "Scienze mediche",
+>           "key": "Scienze mediche"
+>         },
+>         {
+>           "defaultLabel": "Scienze chimiche",
+>           "label": "Scienze chimiche",
+>           "key": "Scienze chimiche"
+>         },
+>         {
+>           "defaultLabel": "Scienze e tecnologie dei materiali",
+>           "label": "Scienze e tecnologie dei materiali",
+>           "key": "Scienze e tecnologie dei materiali"
+>         },
+>         {
+>           "defaultLabel": "Scienze fisiche",
+>           "label": "Scienze fisiche",
+>           "key": "Scienze fisiche"
+>         },
+>         {
+>           "defaultLabel": "Scienze matematiche",
+>           "label": "Scienze matematiche",
+>           "key": "Scienze matematiche"
+>         },
+>         {
+>           "defaultLabel": "Scienze informatiche e ingegneria dell'informazione",
+>           "label": "Scienze informatiche e ingegneria dell'informazione",
+>           "key": "Scienze informatiche e ingegneria dell'informazione"
+>         },
+>         {
+>           "defaultLabel": "Ingegneria civile e architettura",
+>           "label": "Ingegneria civile e architettura",
+>           "key": "Ingegneria civile e architettura"
+>         },
+>         {
+>           "defaultLabel": "Ingegneria industriale",
+>           "label": "Ingegneria industriale",
+>           "key": "Ingegneria industriale"
+>         },
+>         {
+>           "defaultLabel": "Scienze, tecnologie e valorizzazione dei beni culturali",
+>           "label": "Scienze, tecnologie e valorizzazione dei beni culturali",
+>           "key": "Scienze, tecnologie e valorizzazione dei beni culturali"
+>         },
+>         {
+>           "defaultLabel": "Scienze dell'antichità e storico-artistiche",
+>           "label": "Scienze dell'antichità e storico-artistiche",
+>           "key": "Scienze dell'antichità e storico-artistiche"
+>         },
+>         {
+>           "defaultLabel": "Scienze filologiche lingusitiche e letterarie",
+>           "label": "Scienze filologiche lingusitiche e letterarie",
+>           "key": "Scienze filologiche lingusitiche e letterarie"
+>         },
+>         {
+>           "defaultLabel": "Scienze storiche e geografiche",
+>           "label": "Scienze storiche e geografiche",
+>           "key": "Scienze storiche e geografiche"
+>         },
+>         {
+>           "defaultLabel": "Scienze filosofiche",
+>           "label": "Scienze filosofiche",
+>           "key": "Scienze filosofiche"
+>         },
+>         {
+>           "defaultLabel": "Scienze pedagogiche e psicologiche",
+>           "label": "Scienze pedagogiche e psicologiche",
+>           "key": "Scienze pedagogiche e psicologiche"
+>         },
+>         {
+>           "defaultLabel": "Scienze giuridiche",
+>           "label": "Scienze giuridiche",
+>           "key": "Scienze giuridiche"
+>         },
+>         {
+>           "defaultLabel": "Scienze economiche",
+>           "label": "Scienze economiche",
+>           "key": "Scienze economiche"
+>         },
+>         {
+>           "defaultLabel": "Scienze statistiche e demografiche",
+>           "label": "Scienze statistiche e demografiche",
+>           "key": "Scienze statistiche e demografiche"
+>         },
+>         {
+>           "defaultLabel": "Scienze e metodologie politologiche",
+>           "label": "Scienze e metodologie politologiche",
+>           "key": "Scienze e metodologie politologiche"
+>         },
+>         {
+>           "defaultLabel": "Scienze sociali",
+>           "label": "Scienze sociali",
+>           "key": "Scienze sociali"
+>         }
+>       ],
+113d233
+<       "name": "area_scientifica",
+114a235
+>       "name": "area_scientifica",
+116,120d236
+<       "class": "multiselect very-input-xlarge",
+<       "nullable": "true",
+<       "label": "label.jconon_call_area_scientifica",
+<       "property": "jconon_call:area_scientifica",
+<       "widget": "ui.select",
+121a238
+>       "widget": "ui.select",
+297a415,452
+>       "jsonlist": [
+>         {
+>           "defaultLabel": "Scienze biomediche",
+>           "label": "Scienze biomediche",
+>           "key": "Scienze biomediche"
+>         },
+>         {
+>           "defaultLabel": "Scienze fisiche e Tecnologie della Materia",
+>           "label": "Scienze fisiche e Tecnologie della Materia",
+>           "key": "Scienze fisiche e Tecnologie della Materia"
+>         },
+>         {
+>           "defaultLabel": "Scienze del sistema terra e tecnologie per l'ambiente",
+>           "label": "Scienze del sistema terra e tecnologie per l'ambiente",
+>           "key": "Scienze del sistema terra e tecnologie per l'ambiente"
+>         },
+>         {
+>           "defaultLabel": "Scienze chimiche e Tecnologie dei materiali",
+>           "label": "Scienze chimiche e Tecnologie dei materiali",
+>           "key": "Scienze chimiche e Tecnologie dei materiali"
+>         },
+>         {
+>           "defaultLabel": "Ingegneria, ICT e Tecnologie per l'energia e i trasporti",
+>           "label": "Ingegneria, ICT e Tecnologie per l'energia e i trasporti",
+>           "key": "Ingegneria, ICT e Tecnologie per l'energia e i trasporti"
+>         },
+>         {
+>           "defaultLabel": "Scienze Bio-Agroalimentari",
+>           "label": "Scienze Bio-Agroalimentari",
+>           "key": "Scienze Bio-Agroalimentari"
+>         },
+>         {
+>           "defaultLabel": "Scienze umane e sociali, Patrimonio Culturale",
+>           "label": "Scienze umane e sociali, Patrimonio Culturale",
+>           "key": "Scienze umane e sociali, Patrimonio Culturale"
+>         }
+>       ],
+>       "visible": "true",
+298a454,455
+>       "inputType": "SELECT",
+>       "class": "input-xxlarge",
+300c457,460
+<       "inSelect": "false"
+---
+>       "label": "label.jconon_call_elenco_macroaree",
+>       "inSelect": "false",
+>       "widget": "ui.select",
+>       "multiple": "multiple"
+302a463,475
+>       "jsonlist": [
+>         {
+>           "defaultLabel": "Organizzativo - gestionale/Giuridico - amministrativo",
+>           "label": "Organizzativo - gestionale/Giuridico - amministrativo",
+>           "key": "Organizzativo - gestionale/Giuridico - amministrativo"
+>         },
+>         {
+>           "defaultLabel": "Supporto alla ricerca/Progettazione e/o gestione impianti, strumentazioni, servizi",
+>           "label": "Supporto alla ricerca/Progettazione e/o gestione impianti, strumentazioni, servizi",
+>           "key": "Supporto alla ricerca/Progettazione e/o gestione impianti, strumentazioni, servizi"
+>         }
+>       ],
+>       "visible": "true",
+303a477,478
+>       "inputType": "SELECT",
+>       "class": "input-xxlarge",
+305c480,483
+<       "inSelect": "false"
+---
+>       "label": "label.jconon_call_elenco_settori_tecnologici",
+>       "inSelect": "false",
+>       "widget": "ui.select",
+>       "multiple": "multiple"
+316d493
+<       "nullable": "false",
+317a495
+>       "nullable": "false",
+F:jconon_call_tind:folder/column/home
+110a111,231
+>       "class": "multiselect very-input-xlarge",
+>       "property": "jconon_call:area_scientifica",
+>       "label": "label.jconon_call_area_scientifica",
+>       "nullable": "true",
+>       "jsonlist": [
+>         {
+>           "defaultLabel": "Scienze della terra",
+>           "label": "Scienze della terra",
+>           "key": "Scienze della terra"
+>         },
+>         {
+>           "defaultLabel": "Scienze dell'ambiente",
+>           "label": "Scienze dell'ambiente",
+>           "key": "Scienze dell'ambiente"
+>         },
+>         {
+>           "defaultLabel": "Scienze agrarie, agroalimentari e veterinarie",
+>           "label": "Scienze agrarie, agroalimentari e veterinarie",
+>           "key": "Scienze agrarie, agroalimentari e veterinarie"
+>         },
+>         {
+>           "defaultLabel": "Scienze biologiche",
+>           "label": "Scienze biologiche",
+>           "key": "Scienze biologiche"
+>         },
+>         {
+>           "defaultLabel": "Scienze mediche",
+>           "label": "Scienze mediche",
+>           "key": "Scienze mediche"
+>         },
+>         {
+>           "defaultLabel": "Scienze chimiche",
+>           "label": "Scienze chimiche",
+>           "key": "Scienze chimiche"
+>         },
+>         {
+>           "defaultLabel": "Scienze e tecnologie dei materiali",
+>           "label": "Scienze e tecnologie dei materiali",
+>           "key": "Scienze e tecnologie dei materiali"
+>         },
+>         {
+>           "defaultLabel": "Scienze fisiche",
+>           "label": "Scienze fisiche",
+>           "key": "Scienze fisiche"
+>         },
+>         {
+>           "defaultLabel": "Scienze matematiche",
+>           "label": "Scienze matematiche",
+>           "key": "Scienze matematiche"
+>         },
+>         {
+>           "defaultLabel": "Scienze informatiche e ingegneria dell'informazione",
+>           "label": "Scienze informatiche e ingegneria dell'informazione",
+>           "key": "Scienze informatiche e ingegneria dell'informazione"
+>         },
+>         {
+>           "defaultLabel": "Ingegneria civile e architettura",
+>           "label": "Ingegneria civile e architettura",
+>           "key": "Ingegneria civile e architettura"
+>         },
+>         {
+>           "defaultLabel": "Ingegneria industriale",
+>           "label": "Ingegneria industriale",
+>           "key": "Ingegneria industriale"
+>         },
+>         {
+>           "defaultLabel": "Scienze, tecnologie e valorizzazione dei beni culturali",
+>           "label": "Scienze, tecnologie e valorizzazione dei beni culturali",
+>           "key": "Scienze, tecnologie e valorizzazione dei beni culturali"
+>         },
+>         {
+>           "defaultLabel": "Scienze dell'antichità e storico-artistiche",
+>           "label": "Scienze dell'antichità e storico-artistiche",
+>           "key": "Scienze dell'antichità e storico-artistiche"
+>         },
+>         {
+>           "defaultLabel": "Scienze filologiche lingusitiche e letterarie",
+>           "label": "Scienze filologiche lingusitiche e letterarie",
+>           "key": "Scienze filologiche lingusitiche e letterarie"
+>         },
+>         {
+>           "defaultLabel": "Scienze storiche e geografiche",
+>           "label": "Scienze storiche e geografiche",
+>           "key": "Scienze storiche e geografiche"
+>         },
+>         {
+>           "defaultLabel": "Scienze filosofiche",
+>           "label": "Scienze filosofiche",
+>           "key": "Scienze filosofiche"
+>         },
+>         {
+>           "defaultLabel": "Scienze pedagogiche e psicologiche",
+>           "label": "Scienze pedagogiche e psicologiche",
+>           "key": "Scienze pedagogiche e psicologiche"
+>         },
+>         {
+>           "defaultLabel": "Scienze giuridiche",
+>           "label": "Scienze giuridiche",
+>           "key": "Scienze giuridiche"
+>         },
+>         {
+>           "defaultLabel": "Scienze economiche",
+>           "label": "Scienze economiche",
+>           "key": "Scienze economiche"
+>         },
+>         {
+>           "defaultLabel": "Scienze statistiche e demografiche",
+>           "label": "Scienze statistiche e demografiche",
+>           "key": "Scienze statistiche e demografiche"
+>         },
+>         {
+>           "defaultLabel": "Scienze e metodologie politologiche",
+>           "label": "Scienze e metodologie politologiche",
+>           "key": "Scienze e metodologie politologiche"
+>         },
+>         {
+>           "defaultLabel": "Scienze sociali",
+>           "label": "Scienze sociali",
+>           "key": "Scienze sociali"
+>         }
+>       ],
+112d232
+<       "name": "area_scientifica",
+113a234
+>       "name": "area_scientifica",
+115,119d235
+<       "class": "multiselect very-input-xlarge",
+<       "nullable": "true",
+<       "label": "label.jconon_call_area_scientifica",
+<       "property": "jconon_call:area_scientifica",
+<       "widget": "ui.select",
+120a237
+>       "widget": "ui.select",
+296a414,451
+>       "jsonlist": [
+>         {
+>           "defaultLabel": "Scienze biomediche",
+>           "label": "Scienze biomediche",
+>           "key": "Scienze biomediche"
+>         },
+>         {
+>           "defaultLabel": "Scienze fisiche e Tecnologie della Materia",
+>           "label": "Scienze fisiche e Tecnologie della Materia",
+>           "key": "Scienze fisiche e Tecnologie della Materia"
+>         },
+>         {
+>           "defaultLabel": "Scienze del sistema terra e tecnologie per l'ambiente",
+>           "label": "Scienze del sistema terra e tecnologie per l'ambiente",
+>           "key": "Scienze del sistema terra e tecnologie per l'ambiente"
+>         },
+>         {
+>           "defaultLabel": "Scienze chimiche e Tecnologie dei materiali",
+>           "label": "Scienze chimiche e Tecnologie dei materiali",
+>           "key": "Scienze chimiche e Tecnologie dei materiali"
+>         },
+>         {
+>           "defaultLabel": "Ingegneria, ICT e Tecnologie per l'energia e i trasporti",
+>           "label": "Ingegneria, ICT e Tecnologie per l'energia e i trasporti",
+>           "key": "Ingegneria, ICT e Tecnologie per l'energia e i trasporti"
+>         },
+>         {
+>           "defaultLabel": "Scienze Bio-Agroalimentari",
+>           "label": "Scienze Bio-Agroalimentari",
+>           "key": "Scienze Bio-Agroalimentari"
+>         },
+>         {
+>           "defaultLabel": "Scienze umane e sociali, Patrimonio Culturale",
+>           "label": "Scienze umane e sociali, Patrimonio Culturale",
+>           "key": "Scienze umane e sociali, Patrimonio Culturale"
+>         }
+>       ],
+>       "visible": "true",
+297a453,454
+>       "inputType": "SELECT",
+>       "class": "input-xxlarge",
+299c456,459
+<       "inSelect": "false"
+---
+>       "label": "label.jconon_call_elenco_macroaree",
+>       "inSelect": "false",
+>       "widget": "ui.select",
+>       "multiple": "multiple"
+301a462,474
+>       "jsonlist": [
+>         {
+>           "defaultLabel": "Organizzativo - gestionale/Giuridico - amministrativo",
+>           "label": "Organizzativo - gestionale/Giuridico - amministrativo",
+>           "key": "Organizzativo - gestionale/Giuridico - amministrativo"
+>         },
+>         {
+>           "defaultLabel": "Supporto alla ricerca/Progettazione e/o gestione impianti, strumentazioni, servizi",
+>           "label": "Supporto alla ricerca/Progettazione e/o gestione impianti, strumentazioni, servizi",
+>           "key": "Supporto alla ricerca/Progettazione e/o gestione impianti, strumentazioni, servizi"
+>         }
+>       ],
+>       "visible": "true",
+302a476,477
+>       "inputType": "SELECT",
+>       "class": "input-xxlarge",
+304c479,482
+<       "inSelect": "false"
+---
+>       "label": "label.jconon_call_elenco_settori_tecnologici",
+>       "inSelect": "false",
+>       "widget": "ui.select",
+>       "multiple": "multiple"
+315d492
+<       "nullable": "false",
+316a494
+>       "nullable": "false",
+F:jconon_call:folder/column/default
+110a111,231
+>       "class": "multiselect very-input-xlarge",
+>       "property": "jconon_call:area_scientifica",
+>       "nullable": "true",
+>       "label": "label.column.jconon_call_area_scientifica",
+>       "jsonlist": [
+>         {
+>           "defaultLabel": "Scienze della terra",
+>           "label": "Scienze della terra",
+>           "key": "Scienze della terra"
+>         },
+>         {
+>           "defaultLabel": "Scienze dell'ambiente",
+>           "label": "Scienze dell'ambiente",
+>           "key": "Scienze dell'ambiente"
+>         },
+>         {
+>           "defaultLabel": "Scienze agrarie, agroalimentari e veterinarie",
+>           "label": "Scienze agrarie, agroalimentari e veterinarie",
+>           "key": "Scienze agrarie, agroalimentari e veterinarie"
+>         },
+>         {
+>           "defaultLabel": "Scienze biologiche",
+>           "label": "Scienze biologiche",
+>           "key": "Scienze biologiche"
+>         },
+>         {
+>           "defaultLabel": "Scienze mediche",
+>           "label": "Scienze mediche",
+>           "key": "Scienze mediche"
+>         },
+>         {
+>           "defaultLabel": "Scienze chimiche",
+>           "label": "Scienze chimiche",
+>           "key": "Scienze chimiche"
+>         },
+>         {
+>           "defaultLabel": "Scienze e tecnologie dei materiali",
+>           "label": "Scienze e tecnologie dei materiali",
+>           "key": "Scienze e tecnologie dei materiali"
+>         },
+>         {
+>           "defaultLabel": "Scienze fisiche",
+>           "label": "Scienze fisiche",
+>           "key": "Scienze fisiche"
+>         },
+>         {
+>           "defaultLabel": "Scienze matematiche",
+>           "label": "Scienze matematiche",
+>           "key": "Scienze matematiche"
+>         },
+>         {
+>           "defaultLabel": "Scienze informatiche e ingegneria dell'informazione",
+>           "label": "Scienze informatiche e ingegneria dell'informazione",
+>           "key": "Scienze informatiche e ingegneria dell'informazione"
+>         },
+>         {
+>           "defaultLabel": "Ingegneria civile e architettura",
+>           "label": "Ingegneria civile e architettura",
+>           "key": "Ingegneria civile e architettura"
+>         },
+>         {
+>           "defaultLabel": "Ingegneria industriale",
+>           "label": "Ingegneria industriale",
+>           "key": "Ingegneria industriale"
+>         },
+>         {
+>           "defaultLabel": "Scienze, tecnologie e valorizzazione dei beni culturali",
+>           "label": "Scienze, tecnologie e valorizzazione dei beni culturali",
+>           "key": "Scienze, tecnologie e valorizzazione dei beni culturali"
+>         },
+>         {
+>           "defaultLabel": "Scienze dell'antichità e storico-artistiche",
+>           "label": "Scienze dell'antichità e storico-artistiche",
+>           "key": "Scienze dell'antichità e storico-artistiche"
+>         },
+>         {
+>           "defaultLabel": "Scienze filologiche lingusitiche e letterarie",
+>           "label": "Scienze filologiche lingusitiche e letterarie",
+>           "key": "Scienze filologiche lingusitiche e letterarie"
+>         },
+>         {
+>           "defaultLabel": "Scienze storiche e geografiche",
+>           "label": "Scienze storiche e geografiche",
+>           "key": "Scienze storiche e geografiche"
+>         },
+>         {
+>           "defaultLabel": "Scienze filosofiche",
+>           "label": "Scienze filosofiche",
+>           "key": "Scienze filosofiche"
+>         },
+>         {
+>           "defaultLabel": "Scienze pedagogiche e psicologiche",
+>           "label": "Scienze pedagogiche e psicologiche",
+>           "key": "Scienze pedagogiche e psicologiche"
+>         },
+>         {
+>           "defaultLabel": "Scienze giuridiche",
+>           "label": "Scienze giuridiche",
+>           "key": "Scienze giuridiche"
+>         },
+>         {
+>           "defaultLabel": "Scienze economiche",
+>           "label": "Scienze economiche",
+>           "key": "Scienze economiche"
+>         },
+>         {
+>           "defaultLabel": "Scienze statistiche e demografiche",
+>           "label": "Scienze statistiche e demografiche",
+>           "key": "Scienze statistiche e demografiche"
+>         },
+>         {
+>           "defaultLabel": "Scienze e metodologie politologiche",
+>           "label": "Scienze e metodologie politologiche",
+>           "key": "Scienze e metodologie politologiche"
+>         },
+>         {
+>           "defaultLabel": "Scienze sociali",
+>           "label": "Scienze sociali",
+>           "key": "Scienze sociali"
+>         }
+>       ],
+112d232
+<       "name": "area_scientifica",
+113a234
+>       "name": "area_scientifica",
+115,119d235
+<       "class": "multiselect very-input-xlarge",
+<       "label": "label.column.jconon_call_area_scientifica",
+<       "nullable": "true",
+<       "property": "jconon_call:area_scientifica",
+<       "widget": "ui.select",
+120a237
+>       "widget": "ui.select",
+124a242,263
+>       "jsonlist": [
+>         {
+>           "defaultLabel": "Organizzativo - gestionale",
+>           "label": "Organizzativo - gestionale",
+>           "key": "Organizzativo - gestionale"
+>         },
+>         {
+>           "defaultLabel": "Giuridico - amministrativo",
+>           "label": "Giuridico - amministrativo",
+>           "key": "Giuridico - amministrativo"
+>         },
+>         {
+>           "defaultLabel": "Supporto alla ricerca",
+>           "label": "Supporto alla ricerca",
+>           "key": "Supporto alla ricerca"
+>         },
+>         {
+>           "defaultLabel": "Progettazione e/o gestione impianti, strumentazioni, servizi",
+>           "label": "Progettazione e/o gestione impianti, strumentazioni, servizi",
+>           "key": "Progettazione e/o gestione impianti, strumentazioni, servizi"
+>         }
+>       ],
+F:jconon_call:folder/column/home
+106a107,227
+>       "class": "multiselect very-input-xlarge",
+>       "property": "jconon_call:area_scientifica",
+>       "label": "label.jconon_call_area_scientifica",
+>       "nullable": "true",
+>       "jsonlist": [
+>         {
+>           "defaultLabel": "Scienze della terra",
+>           "label": "Scienze della terra",
+>           "key": "Scienze della terra"
+>         },
+>         {
+>           "defaultLabel": "Scienze dell'ambiente",
+>           "label": "Scienze dell'ambiente",
+>           "key": "Scienze dell'ambiente"
+>         },
+>         {
+>           "defaultLabel": "Scienze agrarie, agroalimentari e veterinarie",
+>           "label": "Scienze agrarie, agroalimentari e veterinarie",
+>           "key": "Scienze agrarie, agroalimentari e veterinarie"
+>         },
+>         {
+>           "defaultLabel": "Scienze biologiche",
+>           "label": "Scienze biologiche",
+>           "key": "Scienze biologiche"
+>         },
+>         {
+>           "defaultLabel": "Scienze mediche",
+>           "label": "Scienze mediche",
+>           "key": "Scienze mediche"
+>         },
+>         {
+>           "defaultLabel": "Scienze chimiche",
+>           "label": "Scienze chimiche",
+>           "key": "Scienze chimiche"
+>         },
+>         {
+>           "defaultLabel": "Scienze e tecnologie dei materiali",
+>           "label": "Scienze e tecnologie dei materiali",
+>           "key": "Scienze e tecnologie dei materiali"
+>         },
+>         {
+>           "defaultLabel": "Scienze fisiche",
+>           "label": "Scienze fisiche",
+>           "key": "Scienze fisiche"
+>         },
+>         {
+>           "defaultLabel": "Scienze matematiche",
+>           "label": "Scienze matematiche",
+>           "key": "Scienze matematiche"
+>         },
+>         {
+>           "defaultLabel": "Scienze informatiche e ingegneria dell'informazione",
+>           "label": "Scienze informatiche e ingegneria dell'informazione",
+>           "key": "Scienze informatiche e ingegneria dell'informazione"
+>         },
+>         {
+>           "defaultLabel": "Ingegneria civile e architettura",
+>           "label": "Ingegneria civile e architettura",
+>           "key": "Ingegneria civile e architettura"
+>         },
+>         {
+>           "defaultLabel": "Ingegneria industriale",
+>           "label": "Ingegneria industriale",
+>           "key": "Ingegneria industriale"
+>         },
+>         {
+>           "defaultLabel": "Scienze, tecnologie e valorizzazione dei beni culturali",
+>           "label": "Scienze, tecnologie e valorizzazione dei beni culturali",
+>           "key": "Scienze, tecnologie e valorizzazione dei beni culturali"
+>         },
+>         {
+>           "defaultLabel": "Scienze dell'antichità e storico-artistiche",
+>           "label": "Scienze dell'antichità e storico-artistiche",
+>           "key": "Scienze dell'antichità e storico-artistiche"
+>         },
+>         {
+>           "defaultLabel": "Scienze filologiche lingusitiche e letterarie",
+>           "label": "Scienze filologiche lingusitiche e letterarie",
+>           "key": "Scienze filologiche lingusitiche e letterarie"
+>         },
+>         {
+>           "defaultLabel": "Scienze storiche e geografiche",
+>           "label": "Scienze storiche e geografiche",
+>           "key": "Scienze storiche e geografiche"
+>         },
+>         {
+>           "defaultLabel": "Scienze filosofiche",
+>           "label": "Scienze filosofiche",
+>           "key": "Scienze filosofiche"
+>         },
+>         {
+>           "defaultLabel": "Scienze pedagogiche e psicologiche",
+>           "label": "Scienze pedagogiche e psicologiche",
+>           "key": "Scienze pedagogiche e psicologiche"
+>         },
+>         {
+>           "defaultLabel": "Scienze giuridiche",
+>           "label": "Scienze giuridiche",
+>           "key": "Scienze giuridiche"
+>         },
+>         {
+>           "defaultLabel": "Scienze economiche",
+>           "label": "Scienze economiche",
+>           "key": "Scienze economiche"
+>         },
+>         {
+>           "defaultLabel": "Scienze statistiche e demografiche",
+>           "label": "Scienze statistiche e demografiche",
+>           "key": "Scienze statistiche e demografiche"
+>         },
+>         {
+>           "defaultLabel": "Scienze e metodologie politologiche",
+>           "label": "Scienze e metodologie politologiche",
+>           "key": "Scienze e metodologie politologiche"
+>         },
+>         {
+>           "defaultLabel": "Scienze sociali",
+>           "label": "Scienze sociali",
+>           "key": "Scienze sociali"
+>         }
+>       ],
+108d228
+<       "name": "area_scientifica",
+109a230
+>       "name": "area_scientifica",
+111,115d231
+<       "class": "multiselect very-input-xlarge",
+<       "nullable": "true",
+<       "label": "label.jconon_call_area_scientifica",
+<       "property": "jconon_call:area_scientifica",
+<       "widget": "ui.select",
+116a233
+>       "widget": "ui.select",
+F:jconon_call:folder/form/filters

@@ -1,0 +1,3 @@
+{
+	"keyMessage" : "${status.exception.keyMessage}"
+}

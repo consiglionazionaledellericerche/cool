@@ -1,0 +1,16 @@
+<webscript>
+  <shortname>Get error</shortname>
+  <description>
+  <![CDATA[
+  	Get error
+  ]]>
+  </description>
+  <url>/error/generic</url>
+  <args>
+  </args>
+  <format default="json"/> 
+  <transaction allow="readonly"/>
+  <authentication>none</authentication>
+  <family>error</family>
+  <lifecycle>public_api</lifecycle>
+</webscript>

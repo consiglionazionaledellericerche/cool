@@ -1,0 +1,210 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:util="http://www.springframework.org/schema/util"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+    http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd
+    http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-3.0.xsd">
+
+
+
+	<import resource="classpath*:META-INF/cool-common-core-context.xml" />
+
+	<!-- This will automatically locate any and all property files you have
+		within your classpath, provided they fall under the META-INF/spring directory.
+		The located property files are parsed and their values can then be used within
+		application context files in the form of ${propertyKey}. -->
+	<bean
+		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		<property name="locations">
+			<list>
+				<value>classpath*:META-INF/spring/*.properties</value>
+				<value>classpath*:*/extension/repository.properties</value>
+			</list>
+		</property>
+		<property name="ignoreUnresolvablePlaceholders" value="true" />
+	</bean>
+
+	<!-- Locale Resolver -->
+	<bean id="localeResolver" class="it.cnr.cool.mvc.LocaleResolver">
+		<property name="paramName" value="lang" />
+	</bean>
+
+
+
+	<!-- Configures Apache Commons Fileupload -->
+	<bean id="multipartResolver"
+		class="it.cnr.cool.web.multipart.commons.CustomMultipartResolver">
+		<property name="maxUploadSize" value="15360000" />
+		<property name="characterEncoding" value="UTF-8" />
+	</bean>
+	<bean
+		class="org.springframework.extensions.surf.util.ResourceBundleBootstrapComponent">
+		<property name="resourceBundles">
+			<list>
+				<value>surf.webscripts.messages.cool-common</value>
+			</list>
+		</property>
+	</bean>
+
+
+	<!-- Mail service -->
+	<bean id="mailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl">
+		<property name="host" value="${mail.host}" />
+		<property name="port" value="${mail.port}" />
+		<property name="username" value="${mail.username}" />
+		<property name="password" value="${mail.password}" />
+		<property name="javaMailProperties">
+			<props>
+				<prop key="mail.from.default">${mail.from.default}</prop>
+				<!-- Use SMTP-AUTH to authenticate to SMTP server -->
+				<prop key="mail.smtp.auth">${mail.smtp.auth}</prop>
+				<!-- Use TLS to encrypt communication with SMTP server -->
+				<prop key="mail.smtp.starttls.enable">${mail.smtp.starttls.enable}</prop>
+			</props>
+		</property>
+	</bean>
+
+	<bean id="mailService" class="it.cnr.cool.mail.MailServiceImpl">
+		<property name="mailFromDefault" value="${mail.from.default}" />
+		<property name="mailToAdmin" value="${mail.admin}" />
+		<property name="mailToProtocollo" value="${mail.protocollo}" />
+		<property name="mailToHelpDesk" value="${mail.helpdesk}" />
+		<property name="mailToErrorMessage" value="${mail.to.error.message}" />
+		<property name="mailErrorEnabled" value="${mail.error.enabled}" />
+	</bean>
+
+	<bean id="webframework.templates.templateprocessor.freemarker"
+		class="it.cnr.cool.web.scripts.processor.FTLTemplateProcessorWithPOM">
+		<property name="searchPath" ref="webframework.templates.searchpath" />
+		<property name="defaultEncoding">
+			<value>UTF-8</value>
+		</property>
+		<property name="updateDelay">
+			<value>600</value>
+		</property>
+		<property name="templateProcessorRegistry"
+			ref="webframework.templates.registry.templateprocessor" />
+		<property name="versionService" ref="application.version" />
+	</bean>
+
+	<bean id="cmisBindingListener" class="it.cnr.cool.security.CmisBindingListener" />
+
+
+	<bean id="CoolClassPathStore" class="it.cnr.cool.cmis.service.CoolClassPathStore">
+		<property name="store">
+			<bean parent="webframework.store.classpath.abstract">
+				<property name="mustExist">
+					<value>false</value>
+				</property>
+				<property name="classPath">
+					<value>remote</value>
+				</property>
+			</bean>
+		</property>
+	</bean>
+
+	<bean id="webscript.org.springframework.extensions.surf.console.post"
+		class="it.cnr.cool.extensions.surf.bean.CoolConsoleUpdate" parent="webscript"
+		scope="prototype">
+		<property name="serviceRegistry" ref="webframework.service.registry" />
+		<property name="folderService" ref="cmisFolderService" />
+		<property name="cacheService" ref="cacheService" />
+		<property name="permission" ref="permission" />
+	</bean>
+
+	<bean id="jcononResourceController" class="it.cnr.cool.extensions.surf.mvc.CMISResourceController">
+		<property name="cacheSeconds" value="-1" />
+		<property name="useExpiresHeader">
+			<value>true</value>
+		</property>
+		<property name="useCacheControlHeader">
+			<value>true</value>
+		</property>
+		<property name="serviceRegistry" ref="webframework.service.registry" />
+		<property name="defaultUrl">
+			<value>/resources</value>
+		</property>
+		<property name="remoteStore" ref="webframework.webscripts.store.remote"></property>
+	</bean>
+
+
+	<!-- End CMIS service Bean -->
+
+	<bean id="webframework.factory.user.cmis" class="it.cnr.cool.security.CMISAuthenticatorFactory" />
+
+	<bean id="webframework.webscripts.templateprocessor.locale.freemarker"
+		class="it.cnr.cool.web.scripts.processor.LocaleFTLTemplateProcessor">
+		<property name="searchPath" ref="webframework.webscripts.searchpath" />
+		<property name="defaultEncoding">
+			<value>UTF-8</value>
+		</property>
+		<property name="templateProcessorRegistry"
+			ref="webframework.webscripts.registry.templateprocessor" />
+	</bean>
+
+	<bean abstract="true" id="abstractWebScript" parent="webscript"
+		class="it.cnr.cool.web.scripts.AbstractWebScript">
+		<property name="permission" ref="permission" />
+		<property name="userService" ref="userService" />
+		<property name="localeResolver" ref="localeResolver" />
+	</bean>
+
+
+	<bean id="webscript.default" parent="abstractWebScript"
+		class="it.cnr.cool.web.scripts.CMISWebScript" scope="prototype">
+		<property name="dataDictionaryPath" value="${dataDictionary.path}" />
+		<property name="versionService" ref="application.version" />
+	</bean>
+
+	<bean id="frontOffice" class="it.cnr.cool.rest.FrontOffice"></bean>
+    <bean class="it.cnr.cool.rest.TypesTree"></bean>
+    <bean class="it.cnr.cool.rest.WorkflowDefinitions"></bean>
+
+	<bean id="folderChildren" class="it.cnr.cool.rest.FolderChildren"></bean>
+
+	<bean id="cmisFindOperationContext"
+		class="org.apache.chemistry.opencmis.client.runtime.OperationContextImpl">
+		<property name="maxItemsPerPage" value="1000" />
+		<property name="includeAllowableActions" value="false" />
+		<property name="includePathSegments" value="false" />
+		<property name="cacheEnabled" value="false" />
+	</bean>
+	<bean id="cmisCountOperationContext"
+		class="org.apache.chemistry.opencmis.client.runtime.OperationContextImpl">
+		<property name="maxItemsPerPage" value="1" />
+		<property name="includeAllowableActions" value="false" />
+		<property name="includePathSegments" value="false" />
+		<property name="cacheEnabled" value="true" />
+	</bean>
+	<bean id="cmisAllOperationContext"
+		class="org.apache.chemistry.opencmis.client.runtime.OperationContextImpl">
+		<property name="maxItemsPerPage" value="10000" />
+		<property name="includeAllowableActions" value="true" />
+		<property name="includePathSegments" value="false" />
+		<property name="cacheEnabled" value="false" />
+	</bean>
+	<bean id="cmisAclOperationContext"
+		class="org.apache.chemistry.opencmis.client.runtime.OperationContextImpl">
+		<property name="cacheEnabled" value="true" />
+		<property name="includeAcls" value="true" />
+	</bean>
+
+
+	<bean class="java.util.ArrayList"></bean>
+
+	<bean class="it.cnr.cool.rest.Proxy">
+		<property name="proxyInterceptor" ref="proxyInterceptor" />
+	</bean>
+
+	<bean id="securityCheckInterceptor" class="it.cnr.cool.security.SecurityCheckInterceptor"></bean>
+
+	<bean id="proxyInterceptor" class="it.cnr.cool.interceptor.ProxyInterceptor" />
+
+	<bean id="createAccountService" class="it.cnr.cool.service.CreateAccountService"></bean>
+
+	<bean id="queryService" class="it.cnr.cool.service.QueryService"></bean>
+
+	<bean class="it.cnr.cool.service.NodeService"></bean>
+
+</beans>

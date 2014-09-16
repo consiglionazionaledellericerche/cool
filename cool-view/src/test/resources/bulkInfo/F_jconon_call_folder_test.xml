@@ -1,0 +1,452 @@
+<bulkInfo xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns="http://www.cnr.it/schema/BulkInfo" xsi:schemaLocation="http://www.cnr.it/schema/BulkInfo BulkInfo.xsd"
+	shortDescription="Bando" longDescription="Bando" 
+	cmisTypeName="F:jconon_call:folder"
+	cmisQueryName="jconon_call:folder">
+
+	<cmisImplementsName
+		name="P:jconon_call:aspect_macro_call"
+		join="false"/>
+
+	<fieldProperty name="codice" property="jconon_call:codice"
+		label="label.jconon_call_codice" class="input-small"
+		tooltip="tooltip.jconon_call_codice" inputType="TEXT" jsonvalidator='{"required": true}' />
+	<fieldProperty name="numero_posti" property="jconon_call:numero_posti"
+		label="label.jconon_call_numero_posti" tooltip="tooltip.jconon_call_numero_posti"
+		class="input-mini"
+		inputType="TEXT" jsonvalidator='{"required": true, "digits":true}' />
+
+	<fieldProperty name="descrizione" property="jconon_call:descrizione"
+		label="label.jconon_call_descrizione" tooltip="tooltip.jconon_call_descrizione"
+		 inputType="TEXTAREA" class="input-xxlarge"
+		i18n="true" jsonvalidator='{"requiredWidget": true}' widget="ui.wysiwyg" />
+	<fieldProperty name="descrizione_en" property="jconon_call:descrizione_en"
+		label="label.jconon_call_descrizione_en" inputType="TEXTAREA"
+		 class="input-xxlarge"
+		widget="ui.wysiwyg" />
+	<fieldProperty name="descrizione_ridotta" property="jconon_call:descrizione_ridotta"
+		label="label.jconon_call_descrizione_ridotta" tooltip="tooltip.jconon_call_descrizione_ridotta"
+		 inputType="TEXTAREA" class="input-xxlarge"
+		i18n="true" jsonvalidator='{"requiredWidget": true}' widget="ui.wysiwyg" />
+	<fieldProperty name="descrizione_ridotta_en" property="jconon_call:descrizione_ridotta_en"
+		label="label.jconon_call_descrizione_ridotta_en"
+		inputType="TEXTAREA" class="input-xxlarge"
+		widget="ui.wysiwyg" />
+
+	<fieldProperty name="sede" property="jconon_call:sede"
+		label="label.jconon_call_sede" i18n="true" class="input-xxlarge"
+		 inputType="TEXT" jsonvalidator='{"required": true}' />
+	<fieldProperty name="sede_en" property="jconon_call:sede_en"
+		label="label.jconon_call_sede_en" class="input-xxlarge"
+		inputType="TEXT" />
+	<fieldProperty name="struttura_destinataria" property="jconon_call:struttura_destinataria"
+		label="label.jconon_call_struttura_destinataria" class="input-xlarge"
+		i18n="true"  inputType="TEXT" jsonvalidator='{"required": true}' />
+	<fieldProperty name="struttura_destinataria_en"
+		property="jconon_call:struttura_destinataria_en"
+		label="label.jconon_call_struttura_destinataria_en"
+		class="input-xlarge" inputType="TEXT" />
+
+	<fieldProperty name="area_scientifica" property="jconon_call:area_scientifica"
+		label="label.jconon_call_area_scientifica" tooltip="tooltip.jconon_call_area_scientifica"
+		class="multiselect very-input-xlarge" i18n="true"
+		inputType="SELECT" multiple="multiple" style="height:150px" nullable="true"
+		widget="ui.select" />
+	<fieldProperty name="area_scientifica_en" property="jconon_call:area_scientifica_en"
+		label="label.jconon_call_area_scientifica_en" class="multiselect very-input-xlarge"
+		 inputType="SELECT" multiple="multiple"
+		style="height:150px" nullable="true" widget="ui.select" />
+
+	<fieldProperty name="settore_scientifico_tecnologico"
+		property="jconon_call:settore_scientifico_tecnologico" label="label.jconon_call_settore_scientifico_tecnologico"
+		tooltip="tooltip.jconon_call_settore_scientifico_tecnologico" class="input-xlarge"
+		 inputType="SELECT" nullable="true" widget="ui.select" />
+
+	<fieldProperty name="data_inizio_invio_domande"
+		property="jconon_call:data_inizio_invio_domande"
+		label="label.jconon_call_data_inizio_invio_domande"
+		 inputType="TEXT"
+		widget="ui.datetimepicker" jsonvalidator='{"requiredWidget": true}' />
+	<fieldProperty name="data_fine_invio_domande" property="jconon_call:data_fine_invio_domande"
+		label="label.jconon_call_data_fine_invio_domande"
+		 inputType="TEXT" widget="ui.datetimepicker" jsonvalidator='{"requiredWidget": true}' />
+
+	<fieldProperty name="requisiti_link" property="jconon_call:requisiti_link"
+		label="label.jconon_call_requisiti_link" class="input-xlarge" i18n="true"
+		 inputType="TEXT" jsonvalidator='{"required": true}' />
+	<fieldProperty name="requisiti_link_en" property="jconon_call:requisiti_link_en"
+		label="label.jconon_call_requisiti_link_en" class="input-xlarge"
+		 inputType="TEXT" />
+	<fieldProperty name="requisiti" property="jconon_call:requisiti"
+		label="label.jconon_call_requisiti" tooltip="tooltip.jconon_call_requisiti"
+		i18n="true"  inputType="TEXTAREA" class="input-xxlarge"
+		jsonvalidator='{"requiredWidget": true}' widget="ui.wysiwyg" />
+	<fieldProperty name="requisiti_en" property="jconon_call:requisiti_en"
+		label="label.jconon_call_requisiti_en" class="input-xxlarge"
+		inputType="TEXTAREA" widget="ui.wysiwyg" />
+
+	<fieldProperty name="elenco_aspects" property="jconon_call:elenco_aspects"
+		label="label.jconon_call_elenco_aspects"
+		class="input-xxlarge"
+		inputType="SELECT" multiple="multiple" widget="ui.select" />
+	<fieldProperty name="elenco_aspects_sezione_cnr" property="jconon_call:elenco_aspects_sezione_cnr"
+		label="label.jconon_call_elenco_aspects_sezione_cnr"
+		class="input-xxlarge"
+		inputType="SELECT" multiple="multiple" widget="ui.select" />
+	<fieldProperty name="elenco_aspects_ulteriori_dati" property="jconon_call:elenco_aspects_ulteriori_dati"
+		label="label.jconon_call_elenco_aspects_ulteriori_dati"
+		class="input-xxlarge"
+		inputType="SELECT" multiple="multiple" widget="ui.select" />
+
+	<fieldProperty name="elenco_association" property="jconon_call:elenco_association"
+		label="label.jconon_call_elenco_association" style="height:150px"
+		class="input-xxlarge" jsonvalidator='{"requiredWidget": true}'
+		inputType="SELECT" multiple="multiple" widget="ui.select" />
+	<fieldProperty name="elenco_field_not_required"
+		property="jconon_call:elenco_field_not_required"
+		label="label.jconon_call_elenco_field_not_required"
+		class="input-xxlarge"
+		inputType="SELECT" multiple="multiple" widget="ui.select" />
+	<fieldProperty name="elenco_sezioni_domanda"
+		property="jconon_call:elenco_sezioni_domanda" 
+		label="label.jconon_call_elenco_sezioni_domanda"
+		class="input-xxlarge" jsonvalidator='{"requiredWidget": true}'
+		inputType="SELECT" multiple="multiple" widget="ui.select" />
+	<fieldProperty name="print_dic_sost"
+		property="jconon_call:print_dic_sost" 
+		label="label.print.dic.sost"
+		inputType="CHECKBOX" widget="ui.checkbox" />
+	<fieldProperty name="elenco_sezioni_curriculum"
+		property="jconon_call:elenco_sezioni_curriculum" 
+		label="label.jconon_call_elenco_sezioni_curriculum"
+		class="input-xxlarge" 
+		inputType="SELECT" multiple="multiple" widget="ui.select" />
+	<fieldProperty name="elenco_prodotti"
+		property="jconon_call:elenco_prodotti" 
+		label="label.jconon_call_elenco_prodotti"
+		class="input-xxlarge" 
+		inputType="SELECT" multiple="multiple" widget="ui.select" />
+	<fieldProperty name="numero_max_prodotti"
+		property="jconon_call:numero_max_prodotti" 
+		label="label.jconon_call_numero_max_prodotti"
+		class="input-small" 
+		inputType="TEXT" jsonvalidator='{"digits":true}' />
+	<fieldProperty name="num_giorni_mail_sollecito"
+		property="jconon_call:num_giorni_mail_sollecito" 
+		label="label.jconon_call_num_giorni_mail_sollecito"
+		class="input-small" 
+		inputType="TEXT" jsonvalidator='{"digits":true}' />
+
+	<fieldProperty name="blocco_invio_domande"
+		property="jconon_call:blocco_invio_domande" 
+		label="label.jconon_call_blocco_invio_domande"
+		inputType="CHECKBOX" widget="ui.checkbox" />
+
+	<fieldProperty name="blocco_invio_domande_message"
+		property="jconon_call:blocco_invio_domande_message" 
+		label="label.jconon_call_blocco_invio_domande_message"
+		class="input-large" 
+		inputType="TEXT" />
+
+	<fieldProperty name="aspect_macro_call" property="add-remove-aspect"
+		label="label.jconon_call_aspect_macro_call"
+		jsonlist='[
+			{
+			 "key" : "add-P:jconon_call:aspect_macro_call",
+			 "label" : "label.yes",
+			 "defaultLabel" : "Si"
+			},
+			{
+			 "key" : "remove-P:jconon_call:aspect_macro_call",
+			 "label" : "label.no",
+			 "defaultLabel" : "No"
+			}
+		]'
+		inputType="RADIOGROUP"  default="remove-P:jconon_call:aspect_macro_call"
+		widget="ui.radio" jsonvalidator='{"requiredWidget":true}' />
+
+
+	<formFieldProperty name="codice" />
+	<formFieldProperty name="descrizione" />
+	<formFieldProperty name="descrizione_en" />
+	<formFieldProperty name="descrizione_ridotta" />
+	<formFieldProperty name="descrizione_ridotta_en" />
+	<formFieldProperty name="sede" />
+	<formFieldProperty name="sede_en" />
+	<formFieldProperty name="struttura_destinataria" />
+	<formFieldProperty name="struttura_destinataria_en" />
+	<formFieldProperty name="numero_posti" />
+	<formFieldProperty name="area_scientifica" />
+	<formFieldProperty name="settore_scientifico_tecnologico" />
+	<formFieldProperty name="area_scientifica_en" />
+	<formFieldProperty name="data_inizio_invio_domande" />
+	<formFieldProperty name="data_fine_invio_domande" />
+	<formFieldProperty name="requisiti_link" />
+	<formFieldProperty name="requisiti_link_en" />
+	<formFieldProperty name="requisiti" />
+	<formFieldProperty name="requisiti_en" />
+	<formFieldProperty name="elenco_aspects" />
+	<formFieldProperty name="elenco_aspects_sezione_cnr" />
+	<formFieldProperty name="elenco_aspects_ulteriori_dati" />
+	<formFieldProperty name="elenco_association" />
+	<formFieldProperty name="elenco_field_not_required" />
+	<formFieldProperty name="elenco_sezioni_domanda" />
+	<formFieldProperty name="elenco_sezioni_curriculum"/>
+	<formFieldProperty name="elenco_prodotti" />
+	<formFieldProperty name="num_giorni_mail_sollecito" />
+	<formFieldProperty name="blocco_invio_domande" />
+	<formFieldProperty name="blocco_invio_domande_message" />
+	
+	<form name="affix_sezione_1">
+		<formFieldProperty name="codice" />
+		<formFieldProperty name="numero_posti" />
+		<formFieldProperty name="aspect_macro_call" />
+		<formFieldProperty name="numero_max_domande"/>
+		<formFieldProperty name="path_macro_call"/>
+		<formFieldProperty name="descrizione" />
+		<formFieldProperty name="descrizione_en" />
+		<formFieldProperty name="descrizione_ridotta" />
+		<formFieldProperty name="descrizione_ridotta_en" />
+		<formFieldProperty name="struttura_destinataria" />
+		<formFieldProperty name="struttura_destinataria_en" />
+		<formFieldProperty name="sede" />
+		<formFieldProperty name="sede_en" />
+		<formFieldProperty name="requisiti_link" />
+		<formFieldProperty name="requisiti_link_en" />
+		<formFieldProperty name="requisiti" />
+		<formFieldProperty name="requisiti_en" />
+		<formFieldProperty name="data_inizio_invio_domande" />
+		<formFieldProperty name="data_fine_invio_domande" />
+		<formFieldProperty name="data_fine_invio_domande" />
+	</form>
+	<form name="affix_sezione_2">
+		<formFieldProperty name="elenco_aspects" />
+		<formFieldProperty name="elenco_aspects_sezione_cnr" />
+		<formFieldProperty name="elenco_aspects_ulteriori_dati" />		
+		<formFieldProperty name="elenco_association" />
+		<formFieldProperty name="elenco_sezioni_curriculum"/>
+		<formFieldProperty name="elenco_prodotti" />
+		<formFieldProperty name="numero_max_prodotti" />		
+	</form>
+	<form name="affix_sezione_3">
+		<formFieldProperty name="elenco_field_not_required" />
+		<formFieldProperty name="elenco_sezioni_domanda" />
+		<formFieldProperty name="print_dic_sost" />
+		<formFieldProperty name="num_giorni_mail_sollecito" />
+		<formFieldProperty name="blocco_invio_domande" />
+		<formFieldProperty name="blocco_invio_domande_message" />
+	</form>
+	<form name="affix_sezione_permessi"/>
+	<form name="affix_sezione_commissione"/>
+	<form name="affix_sezione_allegati"/>
+
+	<form name="create_child_call">
+		<formFieldProperty name="codice" />
+		<formFieldProperty name="numero_posti" />
+		<formFieldProperty name="struttura_destinataria" />
+		<formFieldProperty name="struttura_destinataria_en" />
+		<formFieldProperty name="sede" />
+		<formFieldProperty name="sede_en" />
+	</form>
+
+	<form name="filters">
+		<formFieldProperty
+			name="filters-attivi_scaduti"
+			property="filters-attivi_scaduti"
+
+			jsonlist='[
+				{
+				 "key" : "attivi",
+				 "label" : "label.attivi",
+				 "defaultLabel" : "Attivi"
+				},
+				{
+				 "key" : "scaduti",
+				 "label" : "label.scaduti",
+				 "defaultLabel" : "Scaduti"
+				},
+				{
+				 "key" : "tutti",
+				 "label" : "label.tutti",
+				 "defaultLabel" : "Tutti"
+				}
+			]'
+			default="attivi"
+			widget="ui.radio"
+			class="btn-small" />
+		<formFieldProperty name="filters-codice"
+			property="jconon_call:codice"
+			label="label.jconon_call_codice"
+			placeholder="placeholder.filter.like"
+			class="criteria-like input-small"
+			inputType="TEXT"/>
+		<formFieldProperty name="numero_posti" 
+			property="jconon_call:numero_posti"
+			label="label.jconon_call_numero_posti" 
+			placeholder=">="
+			class="criteria-gte input-mini"
+			inputType="TEXT" 
+			jsonvalidator='{"digits":true}' />
+		<formFieldProperty name="filters-da_data"
+			property="jconon_call:data_fine_invio_domande"
+			label="label.jconon_call_da_data"
+			placeholder="placeholder.jconon_call_da_data"
+			widget="ui.datepicker"
+			class="criteria-gte"/>
+		<formFieldProperty name="filters-a_data"
+			property="jconon_call:data_fine_invio_domande"
+			placeholder="placeholder.jconon_call_a_data"
+			widget="ui.datepicker"
+			class="criteria-lte"/>
+	</form>
+	<form name="all-filters">
+		<formFieldProperty
+			name="call-type"
+			property="cmis:objectTypeId"
+			label="label.column.jconon_call_type"
+			default="attivi"
+			widget="ui.select"
+			class="criteria-equals input-large" />
+
+		<formFieldProperty
+			name="filters-attivi_scaduti"
+			property="filters-attivi_scaduti"
+			jsonlist='[
+				{
+				 "key" : "attivi",
+				 "label" : "label.attivi",
+				 "defaultLabel" : "Attivi"
+				},
+				{
+				 "key" : "scaduti",
+				 "label" : "label.scaduti",
+				 "defaultLabel" : "Scaduti"
+				},
+				{
+				 "key" : "tutti",
+				 "label" : "label.tutti",
+				 "defaultLabel" : "Tutti"
+				}
+			]'
+			default="tutti"
+			widget="ui.radio"
+			class="btn-small" />
+		<formFieldProperty name="filters-codice"
+			property="jconon_call:codice"
+			label="label.jconon_call_codice"
+			placeholder="placeholder.filter.like"
+			class="criteria-like input-small"
+			inputType="TEXT"/>
+		<formFieldProperty name="numero_posti" 
+			property="jconon_call:numero_posti"
+			label="label.jconon_call_numero_posti" 
+			placeholder=">="
+			class="criteria-gte input-mini"
+			inputType="TEXT" 
+			jsonvalidator='{"digits":true}' />
+			
+		<formFieldProperty name="filters-da_data"
+			property="jconon_call:data_fine_invio_domande"
+			label="label.jconon_call_da_data"
+			placeholder="placeholder.jconon_call_da_data"
+			widget="ui.datepicker"
+			class="criteria-gte"/>
+		<formFieldProperty name="filters-a_data"
+			property="jconon_call:data_fine_invio_domande"
+			placeholder="placeholder.jconon_call_a_data"
+			widget="ui.datepicker"
+			class="criteria-lte"/>
+		<formFieldProperty name="sede" 
+			class="criteria-like input-large"/>
+		<formFieldProperty name="struttura_destinataria" 
+			class="criteria-like input-large"/>			
+	</form>
+
+
+	<columnFieldProperty name="editCall"
+		label="label.column.jconon_call_edit" isExportColumn="false" />
+	<columnFieldProperty name="objectTypeId" property="cmis:objectTypeId"
+		i18nMessage="true" i18nExportMessage="true" class="sort"
+		label="label.column.jconon_call_type" />
+	<columnFieldProperty name="codice"
+		label="label.column.jconon_call_codice" class="sort" />
+	<columnFieldProperty name="descrizione"
+		label="label.column.jconon_call_descrizione" class="sort" />
+	<columnFieldProperty name="data_inizio_invio_domande"
+		label="label.column.jconon_call_data_inizio_invio_domande" class="sort" />
+	<columnFieldProperty name="data_fine_invio_domande"
+		label="label.column.jconon_call_data_fine_invio_domande" class="sort" />
+	<columnFieldProperty name="sede"
+		label="label.column.jconon_call_sede" class="sort" />
+	<columnFieldProperty name="struttura_destinataria"
+		label="label.column.jconon_call_struttura_destinataria" class="sort" />
+	<columnFieldProperty name="numero_posti"
+		label="label.column.jconon_call_numero_posti" class="sort" />
+	<columnFieldProperty name="area_scientifica"
+		label="label.column.jconon_call_area_scientifica" />
+	<columnFieldProperty name="settore_scientifico_tecnologico"
+		label="label.column.jconon_call_settore_scientifico_tecnologico" />
+
+	<columnSet name="home">
+		<columnFieldProperty name="codice"
+			class="sort" />
+		<columnFieldProperty name="descrizione"
+			class="sort" />
+		<columnFieldProperty name="descrizione_en" />
+		<columnFieldProperty name="data_inizio_invio_domande"
+			class="sort" />
+		<columnFieldProperty name="data_fine_invio_domande"
+			class="sort" />
+		<columnFieldProperty name="sede"
+			class="sort" />
+		<columnFieldProperty name="struttura_destinataria"
+			class="sort" />
+		<columnFieldProperty name="numero_posti"
+			class="sort" />
+		<columnFieldProperty name="area_scientifica"/>
+		<columnFieldProperty name="requisiti_link" />
+		<columnFieldProperty name="requisiti" />
+		<columnFieldProperty name="requisiti_link_en" />
+		<columnFieldProperty name="requisiti_en" />
+		<columnFieldProperty name="numero_gu"
+			property="jconon_call:numero_gu"
+			inSelect="false"/>
+		<columnFieldProperty name="data_gu"
+			property="jconon_call:data_gu"
+			inSelect="false"/>
+		<columnFieldProperty
+			name="profilo"
+			property="jconon_call:profilo"
+			inSelect="false"/>
+		<columnFieldProperty
+			name="elenco_macroaree"
+			property="jconon_call:elenco_macroaree"
+			inSelect="false"/>
+		<columnFieldProperty
+			name="elenco_settori_tecnologici"
+			property="jconon_call:elenco_settori_tecnologici"
+			inSelect="false"/>
+		<columnFieldProperty
+			name="numero_max_domande"
+			property="jconon_call:numero_max_domande"
+			inSelect="false"/>
+	</columnSet>
+
+	<findFieldProperty name="codice"
+		label="label.find.jconon_call_codice" />
+	<findFieldProperty name="descrizione"
+		label="label.find.jconon_call_descrizione" />
+	<findFieldProperty name="sede" label="label.find.jconon_call_sede" />
+	<findFieldProperty name="struttura_destinataria"
+		label="label.find.jconon_call_struttura_destinataria" />
+	<findFieldProperty name="numero_posti"
+		label="label.find.jconon_call_numero_posti" />
+	<findFieldProperty name="area_scientifica"
+		label="label.find.jconon_call_area_scientifica" />
+	<findFieldProperty name="requisiti"
+		label="label.find.jconon_call_requisiti" />
+	<findFieldProperty name="data_inizio_invio_domande"
+		label="label.find.jconon_call_data_inizio_invio_domande" />
+	<findFieldProperty name="data_fine_invio_domande"
+		label="label.find.jconon_call_data_fine_invio_domande" />
+</bulkInfo>

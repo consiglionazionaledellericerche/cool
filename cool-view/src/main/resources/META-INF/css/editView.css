@@ -1,0 +1,30 @@
+
+.bulkinfoEdit {
+	width: 95%;
+}
+
+#bulkinfoEditArea{
+	border: 1px solid #DDDDDD;
+	border-radius: 4px 4px 0;
+}
+
+#bulkinfoEditArea ul{
+	margin-left: 0;
+	list-style: none;
+}
+
+.bulkinfo {
+	width: 95%;
+	margin: 15px auto 0 auto;
+}
+
+.edittextarea {
+	width: 95%;
+	//height: 400px;
+	margin: 15px auto 5px auto;
+}
+
+.spinner-container {
+	margin-left: 10%;
+	width: 20%;
+}
