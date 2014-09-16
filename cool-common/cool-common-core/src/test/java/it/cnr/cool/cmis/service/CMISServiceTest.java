@@ -232,9 +232,6 @@ public class CMISServiceTest {
 		SessionImpl bindingSession = cmisService.getAdminSession();
 		String ticket = bindingSession.get(TICKET).toString();
 		LOGGER.info(ticket);
-		// TODO: usare
-		// org.springframework.extensions.surf.mvc.LoginController.handleRequestInternal(HttpServletRequest,
-		// HttpServletResponse)
 		assertTrue(cmisService.validateTicket(ticket, bindingSession));
 	}
 

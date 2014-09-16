@@ -14,7 +14,6 @@ import org.junit.runner.RunWith;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.extensions.surf.UserFactory;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpSession;
 import org.springframework.test.annotation.DirtiesContext;
@@ -56,7 +55,7 @@ public class WorkflowDefinitionsTest {
         user.setGroups(new ArrayList<CMISGroup>());
 
         MockHttpSession session = new MockHttpSession();
-        session.setAttribute(UserFactory.SESSION_ATTRIBUTE_KEY_USER_OBJECT, user);
+		session.setAttribute(CMISUser.SESSION_ATTRIBUTE_KEY_USER_OBJECT, user);
 
         MockHttpServletRequest req = new MockHttpServletRequest();
         req.setSession(session);

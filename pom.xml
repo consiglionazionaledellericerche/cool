@@ -8,7 +8,6 @@
   <packaging>pom</packaging>
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <spring.surf.version>1.0.0</spring.surf.version>
     <opencmis.version>0.10.0</opencmis.version>
     <aspectj.version>1.6.6.RELEASE</aspectj.version>
     <!-- <spring.version>3.0.3.RELEASE</spring.version>-->
@@ -151,6 +150,7 @@
                     <exclude>**/src/test/**</exclude>
                     <!-- cool-dashboard validato con jshint -->
                     <exclude>**/angular/**</exclude>
+                    <exclude>**/permissions/permissions.*</exclude>
                   </excludes>
                 </configuration>
               </execution>

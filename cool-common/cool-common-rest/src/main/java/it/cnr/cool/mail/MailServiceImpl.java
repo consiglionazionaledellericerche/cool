@@ -1,20 +1,27 @@
 package it.cnr.cool.mail;
 
+import freemarker.template.Template;
 import freemarker.template.TemplateDateModel;
+import freemarker.template.TemplateException;
 import freemarker.template.TemplateMethodModelEx;
 import freemarker.template.TemplateModelException;
 import freemarker.template.TemplateNumberModel;
 import freemarker.template.TemplateScalarModel;
 import it.cnr.cool.mail.model.AttachmentBean;
 import it.cnr.cool.mail.model.EmailMessage;
-import it.cnr.cool.web.scripts.processor.LocaleFTLTemplateProcessor;
+import it.cnr.cool.rest.util.Util;
+import it.cnr.cool.service.I18nService;
 
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.StringTokenizer;
 
@@ -23,6 +30,7 @@ import javax.activation.MailcapCommandMap;
 import javax.mail.internet.MimeMessage;
 
 import org.apache.chemistry.opencmis.commons.exceptions.CmisBaseException;
+import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeansException;
@@ -31,7 +39,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.core.io.ByteArrayResource;
-import org.springframework.extensions.surf.util.I18NUtil;
 import org.springframework.mail.MailException;
 import org.springframework.mail.MailSendException;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -45,6 +52,9 @@ public class MailServiceImpl implements MailService, InitializingBean, Applicati
 
     @Autowired
     private JavaMailSender mailSender;
+
+	@Autowired
+	private I18nService i18nService;
 
 	private String mailFromDefault;
 
@@ -151,6 +161,7 @@ public class MailServiceImpl implements MailService, InitializingBean, Applicati
 	    send(message);
 	}
 
+	@Override
 	public void sendErrorMessage(final String currentUser, String subject, String body) throws MailException{
 		if (!mailErrorEnabled || mailToErrorMessage == null || mailToErrorMessage.isEmpty())
 			return;
@@ -220,10 +231,6 @@ public class MailServiceImpl implements MailService, InitializingBean, Applicati
 		this.applicationContext = applicationContext;
 	}
 
-	// TODO sostituire con un util migiore
-	public LocaleFTLTemplateProcessor getFreemarkerTemplateProcessor() {
-		return applicationContext.getBean("webframework.webscripts.templateprocessor.locale.freemarker", LocaleFTLTemplateProcessor.class);
-	}
 	protected Map<String, Object> addToTemplateModel(Map<String, Object> templateModel){
 		if (templateModel==null) templateModel=new HashMap<String, Object>();
 		templateModel.put("message", new EmailMessageMethod());
@@ -254,7 +261,8 @@ public class MailServiceImpl implements MailService, InitializingBean, Applicati
 	                if (argSize == 1)
 	                {
 	                    // shortcut for no additional msg params
-	                    result = I18NUtil.getMessage(id);
+						LOGGER.warn("uso default locale ENGLISH");
+						result = i18nService.getLabel(id, Locale.ENGLISH);
 	                }
 	                else
 	                {
@@ -282,7 +290,9 @@ public class MailServiceImpl implements MailService, InitializingBean, Applicati
 	                        }
 	                    }
 
-	                    result = I18NUtil.getMessage(id, params);
+						LOGGER.warn("ignoro parametri " + params);
+						LOGGER.warn("uso default locale ENGLISH");
+						result = i18nService.getLabel(id, Locale.ENGLISH);
 	                }
 	            }
 	        }
@@ -293,8 +303,24 @@ public class MailServiceImpl implements MailService, InitializingBean, Applicati
 
 	private StringBuffer getBodyFromTemplate(EmailMessage message) {
 		final StringWriter htmlWriter = new StringWriter();
-		if (message!=null && message.getTemplateBody()!=null)
-			getFreemarkerTemplateProcessor().process(message.getTemplateBody().toString(), addToTemplateModel(message.getTemplateModel()), htmlWriter);
+		if (message != null && message.getTemplateBody() != null) {
+			String templateBody = message.getTemplateBody().toString();
+			Map<String, Object> model = addToTemplateModel(message.getTemplateModel());
+
+			InputStream is = new ByteArrayInputStream(templateBody.getBytes());
+
+			try {
+				Template t = Util.getTemplate("mailTemplate", is);
+				String content = Util.processTemplate(model, t);
+				InputStream contentStream = IOUtils.toInputStream(content);
+				IOUtils.copy(contentStream, htmlWriter);
+			} catch (TemplateException e) {
+				LOGGER.error("unable to process template", e);
+			} catch (IOException e) {
+				LOGGER.error("unable to process template", e);
+			}
+
+		}
 		return htmlWriter.getBuffer();
 	}
 }

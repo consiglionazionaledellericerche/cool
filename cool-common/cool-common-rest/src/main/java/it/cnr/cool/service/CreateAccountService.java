@@ -27,9 +27,6 @@ import org.apache.chemistry.opencmis.client.bindings.spi.BindingSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.extensions.surf.UserFactory;
-import org.springframework.extensions.surf.exception.UserFactoryException;
-import org.springframework.extensions.webscripts.connector.User;
 
 public class CreateAccountService {
 
@@ -106,7 +103,7 @@ public class CreateAccountService {
 				Map<String, Object> data = new HashMap<String, Object>();
 				Map<String, Object> userData = new HashMap<String, Object>();
 
-				User myUser = (User) model.get("account");
+				CMISUser myUser = (CMISUser) model.get("account");
 
 				LOGGER.info("operation successfull: " + myUser.toString());
 
@@ -143,13 +140,13 @@ public class CreateAccountService {
 		Map<String, Object> model = new HashMap<String, Object>();
 		CMISUser tempUser;
 		try {
-			tempUser = (CMISUser) userService.loadUserForConfirm(user.getUserName());
+			tempUser = userService.loadUserForConfirm(user.getUserName());
 			if (tempUser.getEmail() != null && !tempUser.getEmail().equals(user.getEmail())){
-				User emailuser = userService.findUserByEmail(user.getEmail(), cmisService.getAdminSession());
+				CMISUser emailuser = userService.findUserByEmail(user.getEmail(), cmisService.getAdminSession());
 				if(emailuser != null && !emailuser.getId().equals(tempUser.getId()))
 					model.put("error", "message.email.alredy.exists");
 			} else if (tempUser.getCodicefiscale() != null && !tempUser.getCodicefiscale().equals(user.getCodicefiscale())){
-				CMISUser userCodfis = (CMISUser) userService.findUserByCodiceFiscale(
+				CMISUser userCodfis = userService.findUserByCodiceFiscale(
 						user.getCodicefiscale(), cmisService.getAdminSession());
 				if(userCodfis != null && !userCodfis.getId().equals(tempUser.getId()))
 					model.put("error", "message.taxcode.alredy.exists");
@@ -169,11 +166,11 @@ public class CreateAccountService {
 		CMISUser user;
 		try {
 			BindingSession bindingSession = cmisService.getCurrentBindingSession(request);
-			user = (CMISUser) userService.loadUser(oldUser.getId(), bindingSession);
+			user = userService.loadUser(oldUser.getId(), bindingSession);
 		} catch (CoolUserFactoryException e) {
 			throw new UserFactoryException("Error loading user: " + oldUser.getId(), e);
 		}
-		request.getSession(false).setAttribute(UserFactory.SESSION_ATTRIBUTE_KEY_USER_OBJECT, user);
+		request.getSession(false).setAttribute(CMISUser.SESSION_ATTRIBUTE_KEY_USER_OBJECT, user);
 	}
 
 	/*
@@ -194,7 +191,7 @@ public class CreateAccountService {
 							cmisService.getAdminSession()) != null)
 				model.put("error", "message.taxcode.alredy.exists");
 			else {
-				User newUser = userService.createUser(user);
+				CMISUser newUser = userService.createUser(user);
 				model.put("account", newUser);
 				if (LOGGER.isDebugEnabled())
 					LOGGER.debug("User created " + newUser.getFullName());

@@ -32,7 +32,6 @@ import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.extensions.surf.util.URLEncoder;
 import org.springframework.stereotype.Component;
 import org.springframework.util.FileCopyUtils;
 
@@ -185,9 +184,10 @@ public class Proxy {
 
 		String urlParam = null;
 		if (req.getParameter("url") != null)
-			urlParam = URLEncoder.encodeUri(req.getParameter("url"));
+			urlParam = it.cnr.cool.util.UriUtils.encode(req.getParameter("url"));
 		else
-			urlParam = URLEncoder.encodeUri(req.getPathInfo().replaceFirst(
+			urlParam = it.cnr.cool.util.UriUtils.encode(req.getPathInfo()
+					.replaceFirst(
 					"/[a-zA-Z\\-]*/", ""));
 
 		return urlParam;

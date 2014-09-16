@@ -6,6 +6,7 @@ import it.cnr.cool.exception.CoolUserFactoryException;
 import it.cnr.cool.security.service.UserService;
 import it.cnr.cool.util.MimeTypes;
 import it.cnr.cool.util.StringUtil;
+import it.cnr.cool.util.UriUtils;
 import it.cnr.cool.util.format.GsonParser;
 
 import java.io.IOException;
@@ -13,7 +14,6 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.StringReader;
-import java.net.URLEncoder;
 
 import org.apache.chemistry.opencmis.client.bindings.impl.CmisBindingsHelper;
 import org.apache.chemistry.opencmis.client.bindings.spi.BindingSession;
@@ -21,8 +21,6 @@ import org.apache.chemistry.opencmis.client.bindings.spi.http.Output;
 import org.apache.chemistry.opencmis.client.bindings.spi.http.Response;
 import org.apache.chemistry.opencmis.commons.impl.UrlBuilder;
 import org.apache.commons.httpclient.HttpStatus;
-import org.apache.commons.httpclient.URIException;
-import org.apache.commons.httpclient.util.URIUtil;
 import org.apache.commons.io.IOUtils;
 import org.codehaus.jackson.JsonParseException;
 import org.codehaus.jackson.map.DeserializationConfig;
@@ -34,7 +32,6 @@ import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.extensions.webscripts.connector.User;
 
 public class UserServiceImpl implements UserService{
 	@Autowired
@@ -45,13 +42,15 @@ public class UserServiceImpl implements UserService{
 	private static final Logger LOGGER = LoggerFactory.getLogger(UserServiceImpl.class);
 
 	@Override
-	public User loadUserForConfirm(String userId) throws CoolUserFactoryException {
+	public CMISUser loadUserForConfirm(String userId)
+			throws CoolUserFactoryException {
 		return loadUser(userId, cmisService.getAdminSession());
 	}
 	
 	@Override
-	public User loadUser(String userId, BindingSession cmisSession) throws CoolUserFactoryException {
-		String link = cmisService.getBaseURL().concat("service/cnr/person/").concat(encode(userId));
+	public CMISUser loadUser(String userId, BindingSession cmisSession)
+			throws CoolUserFactoryException {
+		String link = cmisService.getBaseURL().concat("service/cnr/person/").concat(UriUtils.encode(userId));
         UrlBuilder url = new UrlBuilder(link);
         url.addParameter("groups", true);
 		Response resp = CmisBindingsHelper.getHttpInvoker(cmisSession).invokeGET(url, cmisSession);
@@ -94,7 +93,8 @@ public class UserServiceImpl implements UserService{
 	}
 
 	@Override
-	public User findUserByEmail(String email, BindingSession cmisSession) throws CoolUserFactoryException {
+	public CMISUser findUserByEmail(String email, BindingSession cmisSession)
+			throws CoolUserFactoryException {
 		String link = cmisService.getBaseURL().concat("service/cnr/people").concat("?filter=email:"+email);
         UrlBuilder url = new UrlBuilder(link);
 		Response resp = CmisBindingsHelper.getHttpInvoker(cmisSession).invokeGET(url, cmisSession);
@@ -117,7 +117,7 @@ public class UserServiceImpl implements UserService{
 	}
 
 	@Override
-	public User findUserByCodiceFiscale(String codicefiscale, BindingSession cmisSession) throws CoolUserFactoryException {
+	public CMISUser findUserByCodiceFiscale(String codicefiscale, BindingSession cmisSession) throws CoolUserFactoryException {
 		String link = cmisService.getBaseURL().concat("service/cnr/people").concat("?filter=codicefiscale:"+codicefiscale);
         UrlBuilder url = new UrlBuilder(link);
 		Response resp = CmisBindingsHelper.getHttpInvoker(cmisSession).invokeGET(url, cmisSession);
@@ -143,9 +143,9 @@ public class UserServiceImpl implements UserService{
 	}
 	
 	@Override
-	public User createUser(final User user) throws CoolUserFactoryException {
+	public CMISUser createUser(final CMISUser user) throws CoolUserFactoryException {
 		String link = cmisService.getBaseURL().concat("service/cnr/person");
-		((CMISUser)user).setDisableAccount(true);
+		user.setDisableAccount(true);
         UrlBuilder url = new UrlBuilder(link);
         BindingSession cmisSession = cmisService.getAdminSession();        
 		Response resp = CmisBindingsHelper.getHttpInvoker(cmisSession).invokePOST(url, MimeTypes.JSON.mimetype(), 
@@ -165,8 +165,8 @@ public class UserServiceImpl implements UserService{
 	}
 
 	@Override
-	public User updateUser(final User user) throws CoolUserFactoryException {
-		String link = cmisService.getBaseURL().concat("service/cnr/person/").concat(encode(user.getId()));
+	public CMISUser updateUser(final CMISUser user) throws CoolUserFactoryException {
+		String link = cmisService.getBaseURL().concat("service/cnr/person/").concat(UriUtils.encode(user.getId()));
         UrlBuilder url = new UrlBuilder(link);
         BindingSession cmisSession = cmisService.getAdminSession();
 		Response resp = CmisBindingsHelper.getHttpInvoker(cmisSession).invokePUT(url, MimeTypes.JSON.mimetype(), null,
@@ -184,8 +184,8 @@ public class UserServiceImpl implements UserService{
 	}
 
 	@Override
-	public User changeUserPassword(final User user, final String newPassword) throws CoolUserFactoryException {
-		String link = cmisService.getBaseURL().concat("service/api/person/changepassword/").concat(encode(user.getId()));
+	public CMISUser changeUserPassword(final CMISUser user, final String newPassword) throws CoolUserFactoryException {
+		String link = cmisService.getBaseURL().concat("service/api/person/changepassword/").concat(UriUtils.encode(user.getId()));
         UrlBuilder url = new UrlBuilder(link);
         BindingSession cmisSession = cmisService.getAdminSession();
         final String respJson = "{\"newpw\":\""+newPassword+"\"}";
@@ -239,17 +239,5 @@ public class UserServiceImpl implements UserService{
 
 	}
 
-	@SuppressWarnings("deprecation")
-	private static String encode(String s) {
-		String encoded;
-		try {
-			encoded = URIUtil.encodePath(s);
-		} catch (URIException e) {
-			LOGGER.warn("unable to encode string " + s, e);
-			encoded = URLEncoder.encode(s);
-		}
-
-		return encoded;
-	}
 
 }

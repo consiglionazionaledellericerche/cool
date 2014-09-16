@@ -4,6 +4,8 @@ import freemarker.template.TemplateException;
 import it.cnr.cool.rest.util.Util;
 import it.cnr.cool.service.QueryService;
 import it.cnr.cool.util.CalendarUtil;
+import it.cnr.mock.ISO8601DateFormatMethod;
+import it.cnr.mock.JSONUtils;
 
 import java.io.IOException;
 import java.util.Map;
@@ -21,8 +23,6 @@ import javax.ws.rs.core.Response.Status;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.extensions.webscripts.ISO8601DateFormatMethod;
-import org.springframework.extensions.webscripts.json.JSONUtils;
 import org.springframework.stereotype.Component;
 
 @Path("search")

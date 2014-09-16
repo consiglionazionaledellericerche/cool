@@ -1,15 +1,14 @@
 package it.cnr.cool.security.service.impl.alfresco;
 
+import java.io.Serializable;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.springframework.extensions.webscripts.connector.User;
-
 import com.google.gson.annotations.SerializedName;
 
-public class CMISUser extends User{
+public class CMISUser implements java.security.Principal {
 	
 	public static final long serialVersionUID = 1L;
 	private Map<String, Boolean> immutability;
@@ -22,6 +21,22 @@ public class CMISUser extends User{
 	private String mobile;
 	private Boolean enabled;
 	
+	public static final String CAPABILITY_ADMIN = "isAdmin";
+	public static final String CAPABILITY_GUEST = "isGuest";
+	public static final String CAPABILITY_MUTABLE = "isMutable";
+
+	protected String fullName = null;
+
+	public static String PROP_MIDDLE_NAME = "middleName";
+
+	protected final Map<String, Serializable> map = new HashMap<String, Serializable>(
+			32);
+
+	/** User object key in the session */
+	public static String SESSION_ATTRIBUTE_KEY_USER_OBJECT = "_alf_USER_OBJECT";
+
+	protected final Map<String, Boolean> capabilities = new HashMap<String, Boolean>();
+
 	/** Attributi CNR */
 	@SerializedName("cnrperson:matricola")
 	private Integer matricola;
@@ -46,13 +61,11 @@ public class CMISUser extends User{
 		
 	private Boolean disableAccount;
 	private List<CMISGroup> groups;
-	
+
 	public CMISUser() {
-		super(null, new HashMap<String, Boolean>());
 	}
 
 	public CMISUser(String userName) {
-		super(userName, new HashMap<String, Boolean>());
 		this.userName = userName;
 	}
 	
@@ -61,7 +74,7 @@ public class CMISUser extends User{
 	}
 
 	public void setCapabilities(Map<String, Boolean> capabilities) {
-		getCapabilities().putAll(capabilities);
+		capabilities.putAll(capabilities);
 	}
 	
 	public Map<String, Boolean> getImmutability() {
@@ -72,7 +85,6 @@ public class CMISUser extends User{
 		this.immutability = immutability;
 	}
 		
-	@Override
 	public String getId() {
 		return userName;
 	}
@@ -236,5 +248,95 @@ public class CMISUser extends User{
 
 	public void setPin(String pin) {
 		this.pin = pin;
+	}
+
+	@Override
+	public String getName() {
+		return userName;
+	}
+
+	/**
+	 * Returns <code>true</code> if this user is a guest user
+	 * 
+	 * @return <code>true</code> if this user is a guest user
+	 */
+	public boolean isGuest() {
+		Boolean value = this.capabilities.get(CAPABILITY_GUEST);
+		return value == null ? false : value;
+	}
+
+	/**
+	 * Provides the full name for the user. This makes a best attempt at
+	 * building the full name based on what it knows about the user.
+	 * 
+	 * If a first name is not known, the returned name will be the user id of
+	 * the user.
+	 * 
+	 * If a first name is known, then the first name will be returned. If a
+	 * first and middle name are known, then the first and middle name will be
+	 * returned.
+	 * 
+	 * Valid full names are therefore:
+	 * 
+	 * jsmith Joe Joe D Joe Smith Joe D Smith
+	 * 
+	 * @return A valid full name
+	 */
+	public String getFullName() {
+		if (this.fullName == null) {
+			boolean hasFirstName = (getFirstName() != null && getFirstName()
+					.length() != 0);
+			boolean hasMiddleName = (getMiddleName() != null && getMiddleName()
+					.length() != 0);
+			boolean hasLastName = (getLastName() != null && getLastName()
+					.length() != 0);
+
+			// if they don't have a first name, then use their user id
+			this.fullName = getId();
+			if (hasFirstName) {
+				this.fullName = getFirstName();
+
+				if (hasMiddleName) {
+					this.fullName += " " + getMiddleName();
+				}
+
+				if (hasLastName) {
+					this.fullName += " " + getLastName();
+				}
+			}
+		}
+
+		return this.fullName;
+	}
+
+	/**
+	 * Gets the middle name.
+	 * 
+	 * @return the middle name
+	 */
+	public String getMiddleName() {
+		return getStringProperty(PROP_MIDDLE_NAME);
+	}
+
+	/**
+	 * Gets the string property.
+	 * 
+	 * @param key
+	 *            the key
+	 * 
+	 * @return the string property
+	 */
+	public String getStringProperty(String key) {
+		return (String) map.get(key);
+	}
+
+	/**
+	 * Checks if is admin.
+	 * 
+	 * @return the isAdmin
+	 */
+	public boolean isAdmin() {
+		Boolean value = this.capabilities.get(CAPABILITY_ADMIN);
+		return value == null ? false : value;
 	}
 }

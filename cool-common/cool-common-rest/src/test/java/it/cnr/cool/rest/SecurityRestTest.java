@@ -20,7 +20,6 @@ import org.junit.runner.RunWith;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.extensions.webscripts.connector.User;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.annotation.DirtiesContext.ClassMode;
@@ -105,11 +104,11 @@ public class SecurityRestTest {
 		HttpSession session = req.getSession();
 		session.setAttribute("_alf_USER_OBJECT", new CMISUser("someone"));
 
-		User user = userService.loadUserForConfirm(USERNAME);
+		CMISUser user = userService.loadUserForConfirm(USERNAME);
 
 		String pin = "123456";
 
-		((CMISUser)user).setPin(pin);
+		user.setPin(pin);
 		userService.updateUser(user);
 
 		LOGGER.debug("pin: " + pin);
@@ -155,7 +154,7 @@ public class SecurityRestTest {
 	}
 
 	private void setDisableAccount(boolean disable) throws CoolUserFactoryException {
-		CMISUser user = (CMISUser) userService.loadUserForConfirm(USERNAME);
+		CMISUser user = userService.loadUserForConfirm(USERNAME);
 		
 		if (disable) {
 			userService.disableAccount(USERNAME);

@@ -35,7 +35,6 @@ import javax.ws.rs.core.Response.Status;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.extensions.webscripts.connector.User;
 import org.springframework.stereotype.Component;
 
 import com.google.gson.JsonObject;
@@ -95,7 +94,7 @@ public class SecurityRest {
 			error = "message.user.not.found";
 		} else {
 
-			User user;
+			CMISUser user;
 
 			try {
 				user = userService.loadUserForConfirm(userId);
@@ -116,16 +115,16 @@ public class SecurityRest {
 						LOGGER.info("user is guest");
 					}
 
-					LOGGER.debug(((CMISUser)user).getPin());
+					LOGGER.debug(user.getPin());
 
 					if (!user.getId().equals(currentUserId)) {
-						if (pin.isEmpty() || !((CMISUser)user).getPin().equalsIgnoreCase(pin)) {
+						if (pin.isEmpty() || !user.getPin().equalsIgnoreCase(pin)) {
 
 							LOGGER.warn("pin is not valid");
 
 							error = "message.pin.not.valid";
 						} else {
-							((CMISUser)user).setPin("");
+							user.setPin("");
 							userService.updateUser(user);
 							userService.changeUserPassword(user, password);
 
@@ -172,10 +171,10 @@ public class SecurityRest {
 		LOGGER.info("user " + userName + " forgot password");
 
 		try {
-			User user = userService.loadUserForConfirm(userName);
+			CMISUser user = userService.loadUserForConfirm(userName);
 			if (user != null) {
 
-				CMISUser cmisUser = (CMISUser) user;
+				CMISUser cmisUser = user;
 
 				LOGGER.debug("user retrieved" + user.getId());
 
@@ -248,11 +247,11 @@ public class SecurityRest {
 		ResponseBuilder rb;
 
 		try {
-			CMISUser user = (CMISUser) userService.loadUserForConfirm(userId);
+			CMISUser user = userService.loadUserForConfirm(userId);
 			if (pin.equals(user.getPin())) {
 				user.setDisableAccount(false);
 				user.setPin("");
-				user = (CMISUser) userService.updateUser(user);
+				user = userService.updateUser(user);
 				LOGGER.info("user enabled");
 				rb = Response.seeOther(new URI(getUrl(req) + "/login"));
 				LOGGER.debug("User created " + user.getFullName());
@@ -285,7 +284,7 @@ public class SecurityRest {
 		return json.toString();
 	}
 
-	private String getJson(User result) {
+	private String getJson(CMISUser result) {
 		JsonObject json = new JsonObject();
 		json.addProperty("fullName", result.getFullName());
 		json.addProperty("email", result.getEmail());

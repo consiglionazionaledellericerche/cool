@@ -4,6 +4,8 @@ import it.cnr.cool.cmis.service.CMISService;
 import it.cnr.cool.cmis.service.NodeMetadataService;
 import it.cnr.cool.rest.util.Util;
 import it.cnr.cool.service.NodeService;
+import it.cnr.mock.ISO8601DateFormatMethod;
+import it.cnr.mock.JSONUtils;
 
 import java.util.HashMap;
 import java.util.List;
@@ -33,8 +35,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.extensions.webscripts.ISO8601DateFormatMethod;
-import org.springframework.extensions.webscripts.json.JSONUtils;
 import org.springframework.stereotype.Component;
 
 import com.google.gson.GsonBuilder;

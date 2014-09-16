@@ -14,7 +14,6 @@ import org.apache.chemistry.opencmis.client.bindings.spi.BindingSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
-import org.springframework.extensions.webscripts.connector.User;
 
 public class CacheServiceImpl implements CacheService, InitializingBean{
 
@@ -30,24 +29,29 @@ public class CacheServiceImpl implements CacheService, InitializingBean{
 		userCaches = new ArrayList<UserCache>();
 	}
 
+	@Override
 	public void register(GlobalCache globalCache){
 		globalCaches.add(globalCache);
 	}
 
+	@Override
 	public void register(UserCache userCache){
 		userCaches.add(userCache);
 	}
 
-	public List<Pair<String, String>> getCaches(User user, BindingSession session) {
+	@Override
+	public List<Pair<String, String>> getCaches(CMISUser user,
+			BindingSession session) {
 		List<Pair<String, String>> caches = new ArrayList<Pair<String, String>>();
-		if (user != null && !user.isGuest() && user instanceof CMISUser) {
+		if (user != null && !user.isGuest()) {
 			for (UserCache userCache : userCaches) {
-				caches.add(new Pair<String, String>(userCache.name(), userCache.get((CMISUser)user, session)));
+				caches.add(new Pair<String, String>(userCache.name(), userCache.get(user, session)));
 			}
 		}
 		return caches;
 	}
 
+	@Override
 	public List<Pair<String, String>> getPublicCaches() {
 		List<Pair<String, String>> caches = new ArrayList<Pair<String, String>>();
 		for (GlobalCache globalCache : globalCaches) {
@@ -57,6 +61,7 @@ public class CacheServiceImpl implements CacheService, InitializingBean{
 		return caches;
 	}
 
+	@Override
 	public void clearCache(){
 		LOGGER.debug("Reset cache service");
 		for (Cache cache : globalCaches) {

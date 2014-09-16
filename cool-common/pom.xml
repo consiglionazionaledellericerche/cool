@@ -17,7 +17,6 @@
 
   <modules>
     <module>cool-common-api</module>
-    <module>cool-common-mock-surf</module>
     <module>cool-common-core</module>
     <module>cool-common-rest</module>
     <module>cool-common-web</module>

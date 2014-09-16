@@ -8,12 +8,6 @@
 
 	<import resource="classpath*:META-INF/cool-common-rest-context.xml" />
 
-	<!-- Import Web Scripts Framework -->
-	<import resource="classpath*:org/springframework/extensions/webscripts/*-context.xml" />
-
-	<!-- Import Surf Framework -->
-	<import resource="classpath*:org/springframework/extensions/surf/*-context.xml" />
-
 	<bean class="org.springframework.mock.web.MockServletContext"></bean>
 
 	 <bean class="it.cnr.cool.rest.SecurityRest"></bean>
