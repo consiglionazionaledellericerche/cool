@@ -74,7 +74,7 @@ public class CMISUser implements java.security.Principal {
 	}
 
 	public void setCapabilities(Map<String, Boolean> capabilities) {
-		capabilities.putAll(capabilities);
+		this.capabilities.putAll(capabilities);
 	}
 	
 	public Map<String, Boolean> getImmutability() {
@@ -339,4 +339,10 @@ public class CMISUser implements java.security.Principal {
 		Boolean value = this.capabilities.get(CAPABILITY_ADMIN);
 		return value == null ? false : value;
 	}
+
+	@Override
+	public String toString() {
+		return userName;
+	}
+
 }
