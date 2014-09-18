@@ -40,9 +40,9 @@
           </#list>
           <#if !context.user.isGuest>
           <li class="hide dropdown page<#if context.page.id = "workflow" > active</#if>" id="workflow">
-            <a href="#" class="dropdown-toggle" data-toggle="dropdown">${msg("workflow")} <b class="caret"></b></a>
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown">${message("workflow")} <b class="caret"></b></a>
             <ul class="dropdown-menu">
-              <li class="nav-header">${msg("workflows")}</li>
+              <li class="nav-header">${message("workflows")}</li>
             </ul>
           </li>
           <li class="divider-vertical"></li>
@@ -50,7 +50,7 @@
             <form id="search" method="POST" action="${url.context}/search" class="form-search">
               <div class="input-append">
                 <input type="text" name="query" class="search-query input-small">
-                <button type="submit" class="btn"><i class="icon-search"></i> ${msg("button.freesearch.find")}</button>
+                <button type="submit" class="btn"><i class="icon-search"></i> ${message("button.freesearch.find")}</button>
               </div>
             </form>
           </li>

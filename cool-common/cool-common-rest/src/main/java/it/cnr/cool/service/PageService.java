@@ -1,10 +1,11 @@
 package it.cnr.cool.service;
 
+import freemarker.template.SimpleScalar;
+import freemarker.template.TemplateMethodModelEx;
+import freemarker.template.TemplateModelException;
 import it.cnr.cool.dto.CoolPage;
 import it.cnr.cool.util.StringUtil;
 import it.cnr.cool.web.PermissionService;
-import it.cnr.mock.CnrMessageMethod;
-import it.cnr.mock.CnrMsgMethod;
 import it.cnr.mock.CnrRegion;
 
 import java.util.ArrayList;
@@ -95,10 +96,22 @@ public class PageService {
 	 * @return
 	 */
 	public Map<String, Object> getModel(String pageId, String contextS,
-			Locale locale) {
+			final Locale locale) {
 		Map<String, Object> model = new HashMap<String, Object>();
-		model.put("msg", new CnrMsgMethod());
-		model.put("message", new CnrMessageMethod(locale, i18nService));
+
+		model.put("message", new TemplateMethodModelEx() {
+
+			@Override
+			public Object exec(List arguments) throws TemplateModelException {
+				LOGGER.debug(arguments.size() + " arguments: "
+						+ arguments.toString());
+				String key = ((SimpleScalar) arguments.get(0)).getAsString();
+				String label = i18nService.getLabel(key, locale);
+				LOGGER.debug(key + ": " + label);
+				return label != null ? label : key;
+			}
+		});
+
 		HashMap<String, String> pagex = new HashMap<String, String>();
 		pagex.put("id", pageId);
 		model.put("page", pagex);

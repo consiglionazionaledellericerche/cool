@@ -4,13 +4,13 @@
     <meta charset="utf-8">
 
   <title>
-    ${msg("main.title")}
-    <#if msg("page."+page.id)??>
-      - ${msg("page."+page.id)}
+    ${message("main.title")}
+    <#if message("page."+page.id)??>
+      - ${message("page."+page.id)}
     </#if>
   </title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="${msg("main.title")}">
+    <meta name="description" content="${message("main.title")}">
     <meta name="author" content="">
 
     <!-- custom style -->
