@@ -76,12 +76,6 @@
 			<scope>provided</scope>
 		</dependency>
 
-		<dependency>
-			<groupId>org.aspectj</groupId>
-			<artifactId>com.springsource.org.aspectj.runtime</artifactId>
-			<version>${aspectj.version}</version>
-			<scope>test</scope>
-		</dependency>
 
 		<!-- TODO: usare jackson -->
 		<dependency>
