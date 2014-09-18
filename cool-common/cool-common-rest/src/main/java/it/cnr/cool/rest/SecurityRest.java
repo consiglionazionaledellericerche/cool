@@ -4,6 +4,7 @@ import it.cnr.cool.cmis.service.CMISService;
 import it.cnr.cool.exception.CoolUserFactoryException;
 import it.cnr.cool.mail.MailService;
 import it.cnr.cool.rest.util.Util;
+import it.cnr.cool.security.CMISAuthenticatorFactory;
 import it.cnr.cool.security.service.UserService;
 import it.cnr.cool.security.service.impl.alfresco.CMISUser;
 import it.cnr.cool.service.CreateAccountService;
@@ -44,6 +45,8 @@ import com.google.gson.JsonObject;
 @Produces(MediaType.APPLICATION_JSON)
 public class SecurityRest {
 
+	public static final String LOGIN_URL = "login";
+
 	private static final String TEMPLATE = "/surf/webscripts/security/create/account.change_password.html";
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(SecurityRest.class);
@@ -62,6 +65,9 @@ public class SecurityRest {
 
 	@Autowired
 	private CreateAccountService createAccountService;
+
+	@Autowired
+	private CMISAuthenticatorFactory cmisAuthenticatorFactory;
 
 	@POST
 	@Path("create-account")
@@ -231,6 +237,28 @@ public class SecurityRest {
 
 		return builder.build();
 
+	}
+
+	@POST
+	@Path(LOGIN_URL)
+	public Response login(@Context HttpServletRequest req,
+			@FormParam("username") String username,
+			@FormParam("password") String password,
+			@FormParam("redirect") String redirect) {
+
+		boolean authenticated = cmisAuthenticatorFactory.authenticate(req,
+				username, password);
+		
+		URI uri;
+
+		if (authenticated) {
+			uri = URI.create(redirect);
+		} else {
+			uri = URI.create("../" + LOGIN_URL);
+		}
+
+		return Response.seeOther(uri).build();
+		
 	}
 
 	static String getUrl(HttpServletRequest req) {

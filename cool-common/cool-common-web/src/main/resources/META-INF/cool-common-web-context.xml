@@ -23,65 +23,12 @@
 		injection into entities. -->
 	<context:spring-configured />
 
-
-	<!-- Set up to auto-resolve to url based views -->
-	<bean id="handlerMappings" parent="webframeworkHandlerMappings">
-		<property name="order" value="0" />
-
-		<!-- Remove the default handler for interoperability with other handlers -->
-		<property name="defaultHandler">
-			<bean class="it.cnr.cool.controller.WebScriptController" />
-		</property>
-	</bean>
-
-	<bean id="webframeworkHandlerMappings"
-		class="org.springframework.web.servlet.handler.SimpleUrlHandlerMapping"
-		abstract="true">
-		<property name="interceptors">
-			<list>
-				<ref bean="requestContextInterceptor" />
-				<ref bean="themeInterceptor" />
-			</list>
-		</property>
-		<property name="mappings">
-			<value>
-				/system/**=remoteController
-				/resource/**=jcononResourceController
-				/dologin/**=loginController
-				/dologout/**=logoutController
-			</value>
-		</property>
-	</bean>
-	<!-- Maps requests to @Controllers based on @RequestMapping("path") annotation
-		values If no annotation-based path mapping is found, Spring MVC sends a 404
-		response and logs a pageNotFound warning. -->
-	<bean
-		class="org.springframework.web.servlet.mvc.annotation.DefaultAnnotationHandlerMapping">
-		<property name="order" value="1" />
-
-		<!-- SURF: required interceptors -->
-		<property name="interceptors">
-			<list>
-				<ref bean="requestContextInterceptor" />
-				<ref bean="themeInterceptor" />
-				<ref bean="previewContextInterceptor" />
-			</list>
-		</property>
-	</bean>
-
-
-	<!-- SURF: interoperability with annotated controllers -->
-	<!-- Enables annotated @Controllers; responsible for invoking an annotated
-		POJO @Controller when one is mapped. -->
-	<bean id="annotationMethodHandlerAdapter"
-		class="org.springframework.web.servlet.mvc.annotation.AnnotationMethodHandlerAdapter" />
-
-	<!-- SURF: interoperability with simple controllers -->
-	<!-- Support for Default Surf Controllers -->
-	<bean id="simpleControllerHandlerAdapter"
-		class="org.springframework.web.servlet.mvc.SimpleControllerHandlerAdapter" />
-
-	<!-- End User Factory Bean -->
+  <context:component-scan base-package="org.app.surf">
+    <context:exclude-filter expression=".*_Roo_.*"
+      type="regex" />
+    <context:exclude-filter expression="org.springframework.stereotype.Controller"
+      type="annotation" />
+  </context:component-scan>
 
 	<bean id="baseProxyInterceptor" abstract="true" init-method="register">
 		<property name="interceptor">
@@ -89,22 +36,5 @@
 		</property>
 		<property name="cmisService" ref="cmisService" />
 	</bean>
-
-  <bean class="it.cnr.cool.web.servlet.handler.MappingExceptionResolver">
-    <property name="interceptors">
-      <list>
-        <ref bean="requestContextInterceptor" />
-        <ref bean="themeInterceptor" />
-      </list>
-    </property>
-    <property name="exceptionMappings">
-      <map>
-        <entry
-          key="org.springframework.web.multipart.MaxUploadSizeExceededException"
-          value="error-generic" />
-      </map>
-    </property>
-    <property name="defaultErrorViewAjax" value="error/generic" />
-  </bean>
 
 </beans>

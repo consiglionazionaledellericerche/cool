@@ -1,6 +1,7 @@
 package it.cnr.cool.security;
 
 import it.cnr.cool.cmis.service.CMISService;
+import it.cnr.cool.cmis.service.CustomAuthenticationProvider;
 import it.cnr.cool.exception.CoolUserFactoryException;
 import it.cnr.cool.security.service.UserService;
 import it.cnr.cool.security.service.impl.alfresco.CMISUser;
@@ -10,6 +11,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.apache.chemistry.opencmis.client.api.Session;
+import org.apache.chemistry.opencmis.client.bindings.impl.SessionImpl;
 import org.apache.chemistry.opencmis.client.bindings.spi.BindingSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -44,13 +46,20 @@ public class CMISAuthenticatorFactory {
         boolean authorized = false;
 		try{
 			String ticket = cmisService.getTicket(username, password);
+			SessionImpl bindingSession = cmisService.createBindingSession("", ticket);
+			
             Session cmisSession = cmisService.createSession("", ticket);
             HttpSession session = request.getSession(true);
 			session.setAttribute(CMISService.ALFRESCO_TICKET, ticket);
 			session.setAttribute(CMISService.SESSION_ID, cmisService.getSessionId(ticket));
             session.setAttribute(CMISService.DEFAULT_SERVER, cmisSession);
-            session.setAttribute(CMISService.BINDING_SESSION,cmisService.createBindingSession("", ticket));
+			session.setAttribute(CMISService.BINDING_SESSION,bindingSession);
             session.setAttribute(CMISService.SIPER_BINDING_SESSION,cmisService.createBindingSession(username, password));
+            session.setAttribute(CustomAuthenticationProvider.SESSION_ATTRIBUTE_KEY_USER_ID, username);
+
+			CMISUser user = userService.loadUser(username, bindingSession);
+			LOGGER.debug("loaded user: " + user.toString());
+			session.setAttribute(CMISUser.SESSION_ATTRIBUTE_KEY_USER_OBJECT, user);
 
             authorized = true;
         }

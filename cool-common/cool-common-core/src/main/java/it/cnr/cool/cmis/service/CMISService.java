@@ -534,14 +534,18 @@ public class CMISService implements InitializingBean, CMISSessionManager {
 
 	public CMISUser getCMISUserFromSession(HttpSession session) {
 
-		final String key = "_alf_USER_OBJECT";
+		CMISUser user = null;
 
-		CMISUser user = ((CMISUser) session.getAttribute(key));
-
-		LOGGER.debug("Retrieved from session user " + (user == null ? "guest" : user.getId()));
+		if (session != null) {
+			user = ((CMISUser) session
+					.getAttribute(CMISUser.SESSION_ATTRIBUTE_KEY_USER_OBJECT));
+			LOGGER.debug("Retrieved from session user "
+					+ (user == null ? "guest" : user.getId()));
+		} else {
+			LOGGER.info("session is null, return CMISUser null");
+		}
 
 		return user;
-
 	}
 
 	/**

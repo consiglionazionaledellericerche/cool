@@ -66,10 +66,10 @@
         bootstrap: 'thirdparty/bootstrap-cnr',
         'bootstrap-fileupload': 'thirdparty/bootstrap-fileupload-cnr',
         bootstrapTemplate: 'ws/templates/bootstrap',
-        cache: '../../cache',
+        cache: '../../rest/cache',
         ckeditor: 'thirdparty/ckeditor/ckeditor',
         'ckeditor-jquery': 'thirdparty/ckeditor/adapters/jquery',
-        common: '../../common',
+        common: '../../rest/common',
         datepicker: 'thirdparty/datepicker/bootstrap-datepicker-cnr',
         'datepicker-i18n': 'thirdparty/datepicker/locales/bootstrap-datepicker.${locale_suffix}',
         datetimepicker: 'thirdparty/datetimepicker/bootstrap-datetimepicker',
@@ -119,7 +119,7 @@
         list: {
           exports: 'list',
           deps: ['jquery']
-        },        
+        },
         'validate': {
           exports: 'validate',
           deps: ['jquery']
@@ -181,7 +181,7 @@
         }
       }
     };
-    
+
     var params = {
       <#list RequestParameters?keys as key>
         "${key}": "${RequestParameters[key]}"

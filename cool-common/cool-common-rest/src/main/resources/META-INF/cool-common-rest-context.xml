@@ -116,5 +116,9 @@
 	<bean id="queryService" class="it.cnr.cool.service.QueryService"></bean>
 
 	<bean class="it.cnr.cool.service.NodeService"></bean>
+	
+	<bean class="it.cnr.cool.rest.Page"></bean>
+	
+	<bean class="it.cnr.cool.service.PageService" init-method="init"></bean>
 
 </beans>
