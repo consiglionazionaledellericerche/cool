@@ -3,8 +3,8 @@ package it.cnr.cool.service;
 import freemarker.template.SimpleScalar;
 import freemarker.template.TemplateMethodModelEx;
 import freemarker.template.TemplateModelException;
+import it.cnr.cool.cmis.service.VersionService;
 import it.cnr.cool.dto.CoolPage;
-import it.cnr.cool.util.StringUtil;
 import it.cnr.cool.web.PermissionService;
 import it.cnr.mock.CnrRegion;
 
@@ -35,6 +35,8 @@ public class PageService {
 	@Autowired
 	private CnrRegion cnrRegion;
 
+	@Autowired
+	private VersionService versionService;
 
 	public Map<String, CoolPage> loadPages() {
 		return pages;
@@ -127,7 +129,6 @@ public class PageService {
 		context.put("properties", new HashMap<String, Object>());
 		model.put("context", context);
 
-		model.put("artifact_version", "0.0");
 		model.put("locale", "en_US");
 
 		List<Object> pagess = new ArrayList<Object>();
@@ -137,6 +138,8 @@ public class PageService {
 		model.put("pages", pagess);
 
 		model.put("permission", permissionService);
+
+		model.put("artifact_version", versionService.getVersion());
 
 		Map<String, Object> request = new HashMap<String, Object>();
 		Map<String, Object> requestContext = new HashMap<String, Object>();
@@ -149,7 +152,6 @@ public class PageService {
 
 		model.put("region", cnrRegion);
 
-		model.put("cmisDateFormat", StringUtil.CMIS_DATEFORMAT);
 
 		Map<String, Object> args = new HashMap<String, Object>();
 		args.put("failure", "");

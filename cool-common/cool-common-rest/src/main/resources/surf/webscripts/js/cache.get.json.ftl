@@ -5,7 +5,7 @@
 		</#list>
 	</#if>
 	"baseUrl": "${url.context}",
-	"redirectUrl": "<#if context.properties["alfRedirectUrl"]??>${context.properties["alfRedirectUrl"]}<#else>${url.context}</#if>",
+	"redirectUrl": "${url.context}",
 	<#if dataDictionary??>
 	"dataDictionary": "${dataDictionary}",
 	</#if>

@@ -1,10 +1,11 @@
 package it.cnr.cool.rest;
 
 import it.cnr.cool.cmis.service.CacheService;
+import it.cnr.cool.cmis.service.FolderService;
 import it.cnr.cool.cmis.service.VersionService;
 import it.cnr.cool.rest.util.Util;
-import it.cnr.cool.service.PageService;
 
+import java.util.HashMap;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -33,10 +34,10 @@ public class CacheRest {
 	private CacheService cacheService;
 
 	@Autowired
-	private PageService pageService;
+	private VersionService versionService;
 
 	@Autowired
-	private VersionService versionService;
+	protected FolderService folderService;
 
 	private static final Logger LOGGER = LoggerFactory
 			.getLogger(CacheRest.class);
@@ -46,11 +47,14 @@ public class CacheRest {
 
 		ResponseBuilder rb;
 		try {
-			// TODO: forse non serve tutto getModel...
-			Map<String, Object> model = pageService.getModel(null,
-					req.getContextPath(), req.getLocale());
+			Map<String, Object> model = new HashMap<String, Object>();
+
+			HashMap<String, Object> url = new HashMap<String, Object>();
+			url.put("context", req.getContextPath());
+			model.put("url", url);
 			model.put("publicCaches", cacheService.getPublicCaches());
 			model.put("isProduction", versionService.isProduction());
+			model.put("dataDictionary", folderService.getDataDictionaryId());
 
 			String json = Util.processTemplate(model, FTL);
 			rb = Response.ok(json);
@@ -62,6 +66,5 @@ public class CacheRest {
 		return rb.build();
 
 	}
-
 
 }

@@ -39,3 +39,5 @@ alleggerire WEB-INF lib - librerie sospette doccnr:
 creare artefatto doccnr "pure", senza artefatti superflui (e.g. contabili, accounting...) [o usare profili...]
 
 usare solo plugin tomcat7
+
+rivedere tutti gli header di caching

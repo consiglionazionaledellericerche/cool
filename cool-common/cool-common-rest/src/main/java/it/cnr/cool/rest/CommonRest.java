@@ -1,8 +1,14 @@
 package it.cnr.cool.rest;
 
+import it.cnr.cool.cmis.service.CMISService;
+import it.cnr.cool.cmis.service.CacheService;
+import it.cnr.cool.cmis.service.VersionService;
 import it.cnr.cool.rest.util.Util;
+import it.cnr.cool.security.service.impl.alfresco.CMISUser;
 import it.cnr.cool.service.PageService;
+import it.cnr.cool.util.StringUtil;
 
+import java.util.HashMap;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -15,6 +21,7 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.ResponseBuilder;
 import javax.ws.rs.core.Response.Status;
 
+import org.apache.chemistry.opencmis.client.bindings.spi.BindingSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,6 +37,15 @@ public class CommonRest {
 	@Autowired
 	private PageService pageService;
 
+	@Autowired
+	private VersionService versionService;
+
+	@Autowired
+	private CacheService cacheService;
+
+	@Autowired
+	private CMISService cmisService;
+
 	private static final Logger LOGGER = LoggerFactory
 			.getLogger(CommonRest.class);
 
@@ -39,9 +55,29 @@ public class CommonRest {
 		ResponseBuilder rb;
 		try {
 
-			// TODO: forse non serve tutto getModel...
-			Map<String, Object> model = pageService.getModel(null,
-					req.getContextPath(), req.getLocale());
+			Map<String, Object> model = new HashMap<String, Object>();
+
+			model.put("artifact_version", versionService.getVersion());
+
+			CMISUser user = cmisService.getCMISUserFromSession(req
+					.getSession(false));
+
+			BindingSession bindingSession = cmisService
+					.getCurrentBindingSession(req);
+
+			model.put("caches", cacheService.getCaches(user, bindingSession));
+
+			model.put("cmisDateFormat", StringUtil.CMIS_DATEFORMAT);
+
+			Map<String, Object> context = new HashMap<String, Object>();
+
+			// context.put("user", user);
+			LOGGER.error("FIXME: user is always guest");
+			Map<String, Object> emptyUser = new HashMap<String, Object>();
+			emptyUser.put("isGuest", true);
+			context.put("user", emptyUser);
+
+			model.put("context", context);
 
 			String json = Util.processTemplate(model, FTL);
 			LOGGER.debug(json);
