@@ -1,6 +1,7 @@
 package it.cnr.cool.rest;
 
 import it.cnr.cool.cmis.service.CacheService;
+import it.cnr.cool.cmis.service.VersionService;
 import it.cnr.cool.rest.util.Util;
 import it.cnr.cool.service.PageService;
 
@@ -34,6 +35,9 @@ public class CacheRest {
 	@Autowired
 	private PageService pageService;
 
+	@Autowired
+	private VersionService versionService;
+
 	private static final Logger LOGGER = LoggerFactory
 			.getLogger(CacheRest.class);
 
@@ -42,8 +46,11 @@ public class CacheRest {
 
 		ResponseBuilder rb;
 		try {
-			Map<String, Object> model = pageService.getModel(null, req.getContextPath());
+			// TODO: forse non serve tutto getModel...
+			Map<String, Object> model = pageService.getModel(null,
+					req.getContextPath(), req.getLocale());
 			model.put("publicCaches", cacheService.getPublicCaches());
+			model.put("isProduction", versionService.isProduction());
 
 			String json = Util.processTemplate(model, FTL);
 			rb = Response.ok(json);

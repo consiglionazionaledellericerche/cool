@@ -34,6 +34,8 @@ import org.springframework.stereotype.Component;
 @Produces(MediaType.TEXT_HTML)
 public class Page {
 
+	public static final String LOGIN_URL = "login";
+
 	private static final String TEMPLATE = "/surf/templates/bootstrap.ftl";
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(Page.class);
@@ -61,12 +63,12 @@ public class Page {
 					.entity("page not found: " + id);
 		} else if (!isAuthorized(page, id, req.getSession(false))) {
 			URI uri = URI.create(req.getContextPath() + "/"
-					+ SecurityRest.LOGIN_URL);
+					+ LOGIN_URL);
 			rb = Response.seeOther(uri);
 		} else {
 
 			Map<String, Object> model = pageService.getModel(id,
-					req.getContextPath());
+					req.getContextPath(), req.getLocale());
 
 			try {
 				// process HEAD html content

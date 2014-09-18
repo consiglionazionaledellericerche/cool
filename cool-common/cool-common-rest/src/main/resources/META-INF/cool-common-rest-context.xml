@@ -117,8 +117,8 @@
 
 	<bean class="it.cnr.cool.service.NodeService"></bean>
 	
-	<bean class="it.cnr.cool.rest.Page"></bean>
-	
 	<bean class="it.cnr.cool.service.PageService" init-method="init"></bean>
+	
+	<bean class="it.cnr.mock.CnrRegion"></bean>
 
 </beans>

@@ -45,8 +45,6 @@ import com.google.gson.JsonObject;
 @Produces(MediaType.APPLICATION_JSON)
 public class SecurityRest {
 
-	public static final String LOGIN_URL = "login";
-
 	private static final String TEMPLATE = "/surf/webscripts/security/create/account.change_password.html";
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(SecurityRest.class);
@@ -240,7 +238,7 @@ public class SecurityRest {
 	}
 
 	@POST
-	@Path(LOGIN_URL)
+	@Path(Page.LOGIN_URL)
 	public Response login(@Context HttpServletRequest req,
 			@FormParam("username") String username,
 			@FormParam("password") String password,
@@ -254,7 +252,7 @@ public class SecurityRest {
 		if (authenticated) {
 			uri = URI.create(redirect);
 		} else {
-			uri = URI.create("../" + LOGIN_URL);
+			uri = URI.create("../" + Page.LOGIN_URL);
 		}
 
 		return Response.seeOther(uri).build();

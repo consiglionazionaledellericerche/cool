@@ -38,8 +38,10 @@ public class CommonRest {
 
 		ResponseBuilder rb;
 		try {
+
+			// TODO: forse non serve tutto getModel...
 			Map<String, Object> model = pageService.getModel(null,
-					req.getContextPath());
+					req.getContextPath(), req.getLocale());
 
 			String json = Util.processTemplate(model, FTL);
 			LOGGER.debug(json);

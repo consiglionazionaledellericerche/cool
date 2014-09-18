@@ -26,6 +26,5 @@
 	</bean>
 
 	<bean class="it.cnr.cool.rest.Node"></bean>
-	<bean class="it.cnr.cool.rest.Page"></bean>
 
 </beans>
