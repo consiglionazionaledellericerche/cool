@@ -26,6 +26,8 @@ MEMO ZipperService:
   spostare la dipendenza di quartz in variazioni da cool-webapp
   test (e.g. ZipperServiceTest) da spostare nel nuovo artefatto
 
+a che serve spring web ???? lo usiamo solo per gli allegati!
+
 alleggerire WEB-INF lib - librerie sospette doccnr:
   X spring aop ???
   X aspectj

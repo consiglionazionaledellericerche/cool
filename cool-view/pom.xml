@@ -19,26 +19,6 @@
 			<version>${spring.version}</version>
 			<scope>test</scope>
 		</dependency>
-		<dependency>
-			<artifactId>spring-beans</artifactId>
-			<groupId>org.springframework</groupId>
-			<version>${spring.version}</version>
-		</dependency>
-		<dependency>
-			<artifactId>spring-core</artifactId>
-			<groupId>org.springframework</groupId>
-			<version>${spring.version}</version>
-		</dependency>
-		<dependency>
-			<artifactId>spring-web</artifactId>
-			<groupId>org.springframework</groupId>
-			<version>${spring.version}</version>
-		</dependency>
-		<dependency>
-			<artifactId>spring-context</artifactId>
-			<groupId>org.springframework</groupId>
-			<version>${spring.version}</version>
-		</dependency>
 
 		<dependency>
 			<groupId>dom4j</groupId>
