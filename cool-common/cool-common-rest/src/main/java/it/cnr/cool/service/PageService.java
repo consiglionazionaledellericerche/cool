@@ -3,8 +3,10 @@ package it.cnr.cool.service;
 import freemarker.template.SimpleScalar;
 import freemarker.template.TemplateMethodModelEx;
 import freemarker.template.TemplateModelException;
+import it.cnr.cool.cmis.service.CMISService;
 import it.cnr.cool.cmis.service.VersionService;
 import it.cnr.cool.dto.CoolPage;
+import it.cnr.cool.security.service.impl.alfresco.CMISUser;
 import it.cnr.cool.web.PermissionService;
 import it.cnr.mock.CnrRegion;
 
@@ -13,6 +15,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -38,6 +42,9 @@ public class PageService {
 	@Autowired
 	private VersionService versionService;
 
+	@Autowired
+	private CMISService cmisService;
+
 	public Map<String, CoolPage> loadPages() {
 		return pages;
 	}
@@ -55,15 +62,15 @@ public class PageService {
 		Map<String, CoolPage> pages = new HashMap<String, CoolPage>();
 
 		CoolPage home = new CoolPage("/pages/home/main.get.html.ftl");
-		home.setNavbar(true);
+		home.setFormatId("navbar");
 		home.setAuthentication(CoolPage.Authentication.USER);
 		home.setOrderId(0);
 		pages.put("home", home);
 
 		CoolPage jsConsole = new CoolPage(
 				"/surf/webscripts/jsConsole/console.get.html.ftl");
-		jsConsole.setNavbar(true);
-		jsConsole.setOrderId(20);
+		jsConsole.setFormatId("navbar/admin");
+		jsConsole.setOrderId(3);
 		jsConsole.setAuthentication(CoolPage.Authentication.ADMIN);
 		pages.put("jsConsole", jsConsole);
 
@@ -82,6 +89,119 @@ public class PageService {
 		header.setAuthentication(CoolPage.Authentication.GUEST);
 		pages.put("header", header);
 
+		CoolPage accounting = new CoolPage(
+				"/surf/webscripts/accounting.get.html.ftl");
+		accounting.setAuthentication(CoolPage.Authentication.USER);
+		accounting.setOrderId(100);
+		accounting.setFormatId("navbar");
+		pages.put("accounting", accounting);
+
+		CoolPage frontOffice = new CoolPage(
+				"/surf/webscripts/frontOffice/reader.get.html.ftl");
+		frontOffice.setAuthentication(CoolPage.Authentication.USER);
+		frontOffice.setOrderId(9);
+		frontOffice.setFormatId("navbar/admin");
+		pages.put("frontOffice", frontOffice);
+
+		CoolPage frontOfficeCreateModify = new CoolPage(
+				"/surf/webscripts/frontOfficeCreateModify/createModify.get.html.ftl");
+		frontOfficeCreateModify.setAuthentication(CoolPage.Authentication.USER);
+		frontOfficeCreateModify.setOrderId(9);
+		frontOfficeCreateModify.setFormatId("navbar/admin");
+		pages.put("frontOfficeCreateModify", frontOfficeCreateModify);
+
+		CoolPage gestioneUtenti = new CoolPage(
+				"/surf/webscripts/gestioneUtenti/gestione-utenti.get.html.ftl");
+		gestioneUtenti.setAuthentication(CoolPage.Authentication.USER);
+		gestioneUtenti.setOrderId(11);
+		gestioneUtenti.setFormatId("navbar/admin");
+		pages.put("gestione-utenti", gestioneUtenti);
+
+		CoolPage groups = new CoolPage(
+				"/surf/webscripts/groups/main.get.html.ftl");
+		groups.setAuthentication(CoolPage.Authentication.USER);
+		groups.setOrderId(2);
+		groups.setFormatId("navbar/admin");
+		pages.put("groups", groups);
+
+
+		CoolPage rbacAdmin = new CoolPage(
+				"/surf/webscripts/rbac-admin/rbac-admin.get.html.ftl");
+		rbacAdmin.setAuthentication(CoolPage.Authentication.USER);
+		rbacAdmin.setOrderId(10);
+		rbacAdmin.setFormatId("navbar/admin");
+		pages.put("rbac-admin", rbacAdmin);
+
+		CoolPage ricerca = new CoolPage(
+				"/surf/webscripts/ricerca/ricerca.get.html.ftl");
+		ricerca.setAuthentication(CoolPage.Authentication.USER);
+		ricerca.setOrderId(11);
+		ricerca.setFormatId("navbar/admin");
+		pages.put("ricerca", ricerca);
+
+		CoolPage createAccount = new CoolPage(
+				"/surf/webscripts/security/create/account.get.html.ftl");
+		createAccount.setAuthentication(CoolPage.Authentication.GUEST);
+		createAccount.setOrderId(1);
+		createAccount.setFormatId("navbar/admin");
+		pages.put("create-account", createAccount);
+
+
+		CoolPage dashboard = new CoolPage(
+				"/surf/webscripts/dashboard/dashboard.get.html.ftl");
+		dashboard.setAuthentication(CoolPage.Authentication.USER);
+		dashboard.setOrderId(50);
+		dashboard.setFormatId("navbar/workflow");
+		pages.put("dashboard", dashboard);
+
+		CoolPage updateModel = new CoolPage(
+				"/surf/webscripts/modelDesigner/createModify.get.html.ftl");
+		updateModel.setAuthentication(CoolPage.Authentication.USER);
+		updateModel.setOrderId(101);
+		updateModel.setFormatId("navbar/workflow");
+		pages.put("updateModel", updateModel);
+
+		CoolPage modelDesigner = new CoolPage(
+				"/surf/webscripts/modelDesigner/modelDesigner.get.html.ftl");
+		modelDesigner.setAuthentication(CoolPage.Authentication.USER);
+		modelDesigner.setOrderId(99);
+		modelDesigner.setFormatId("navbar/admin");
+		pages.put("modelDesigner", modelDesigner);
+
+		CoolPage editView = new CoolPage(
+				"/surf/webscripts/editView/editView.get.html.ftl");
+		editView.setAuthentication(CoolPage.Authentication.USER);
+		editView.setOrderId(123);
+		editView.setFormatId("navbar/admin");
+		pages.put("editView", editView);
+
+
+		CoolPage workflow = new CoolPage("/pages/workflow/main.get.html.ftl");
+		workflow.setAuthentication(CoolPage.Authentication.USER);
+		workflow.setOrderId(0);
+		pages.put("workflow", workflow);
+
+		CoolPage zipperReader = new CoolPage(
+				"/pages/zipper/zipper.get.html.ftl");
+		zipperReader.setAuthentication(CoolPage.Authentication.USER);
+		zipperReader.setOrderId(1);
+		editView.setFormatId("navbar");
+		pages.put("zipperReader", zipperReader);
+
+		CoolPage workflowHistory = new CoolPage(
+				"/pages/workflow/history.get.html.ftl");
+		workflowHistory.setAuthentication(CoolPage.Authentication.USER);
+		workflowHistory.setOrderId(3);
+		editView.setFormatId("navbar/workflow");
+		pages.put("workflowHistory", workflowHistory);
+
+		CoolPage workflowManagement = new CoolPage(
+				"/pages/workflow/management.get.html.ftl");
+		workflowManagement.setAuthentication(CoolPage.Authentication.USER);
+		workflowManagement.setOrderId(4);
+		editView.setFormatId("navbar/workflow");
+		pages.put("workflowManagement", workflowManagement);
+
 		LOGGER.debug("available pages: " + pages.keySet().toString());
 
 		this.pages = pages;
@@ -94,10 +214,11 @@ public class PageService {
 	 * 
 	 * @param pageId
 	 *            CoolPage identifier
-	 * @param contextS
+	 * @param urlContext
 	 * @return
 	 */
-	public Map<String, Object> getModel(String pageId, String contextS,
+	public Map<String, Object> getModel(HttpServletRequest req, String pageId,
+			String urlContext,
 			final Locale locale) {
 		Map<String, Object> model = new HashMap<String, Object>();
 
@@ -119,23 +240,25 @@ public class PageService {
 		model.put("page", pagex);
 
 		HashMap<String, Object> url = new HashMap<String, Object>();
-		url.put("context", contextS);
+		url.put("context", urlContext);
 		model.put("url", url);
 
-		Map<String, Object> context = new HashMap<String, Object>();
-		Map<String, Object> user = new HashMap<String, Object>();
-		user.put("isGuest", true);
-		context.put("user", user);
+		CMISUser user = cmisService.getCMISUserFromSession(req
+				.getSession(false));
+		Map<String, Object> context = getContext(user);
+
 		context.put("properties", new HashMap<String, Object>());
+		Map<String, Object> currentPage = new HashMap<String, Object>();
+		currentPage.put("id", "home");
+		Map<String, Object> pageProps = new HashMap<String, Object>();
+		pageProps.put("main-page", "home");
+		currentPage.put("properties", pageProps);
+		context.put("page", currentPage ); // FIXME: pagina corrente
 		model.put("context", context);
 
 		model.put("locale", "en_US");
 
-		List<Object> pagess = new ArrayList<Object>();
-		Map<String, Object> myPage = new HashMap<String, Object>();
-		myPage.put("id", "qualcosa");
-		pagess.add(myPage);
-		model.put("pages", pagess);
+		model.put("pages", getPages());
 
 		model.put("permission", permissionService);
 
@@ -158,6 +281,43 @@ public class PageService {
 		model.put("args", args);
 
 		return model;
+	}
+
+	private List<Map<String, Object>> getPages() {
+
+		// TODO: ordinare per order-id
+
+		List<Map<String, Object>> l = new ArrayList<Map<String, Object>>();
+
+		for (Map.Entry<String, CoolPage> c : pages.entrySet()) {
+
+			CoolPage page = c.getValue();
+
+			if (page.getFormatId() != null) {
+
+				Map<String, Object> item = new HashMap<String, Object>();
+				item.put("id", c.getKey());
+				item.put("format-id", page.getFormatId());
+				l.add(item);
+
+			}
+
+		}
+
+		return l;
+	}
+
+	public Map<String, Object> getContext(CMISUser user) {
+		Map<String, Object> context = new HashMap<String, Object>();
+
+		if (user == null) {
+			user = new CMISUser("guest");
+			Map<String, Boolean> capabilities = new HashMap<String, Boolean>();
+			capabilities.put(CMISUser.CAPABILITY_GUEST, true);
+			user.setCapabilities(capabilities);
+		}
+		context.put("user", user);
+		return context;
 	}
 
 }
