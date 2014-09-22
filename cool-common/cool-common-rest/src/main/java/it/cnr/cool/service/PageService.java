@@ -11,6 +11,8 @@ import it.cnr.cool.web.PermissionService;
 import it.cnr.mock.CnrRegion;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -23,6 +25,12 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 public class PageService {
+
+	private static final String ORDER_ID = "order-id";
+
+
+	private static final String FORMAT_ID = "format-id";
+
 
 	private static final Logger LOGGER = LoggerFactory
 			.getLogger(PageService.class);
@@ -202,6 +210,10 @@ public class PageService {
 		editView.setFormatId("navbar/workflow");
 		pages.put("workflowManagement", workflowManagement);
 
+		CoolPage search = new CoolPage("/pages/search/main.post.html.ftl");
+		search.setAuthentication(CoolPage.Authentication.GUEST);
+		pages.put("search", search);
+
 		LOGGER.debug("available pages: " + pages.keySet().toString());
 
 		this.pages = pages;
@@ -249,11 +261,8 @@ public class PageService {
 
 		context.put("properties", new HashMap<String, Object>());
 		Map<String, Object> currentPage = new HashMap<String, Object>();
-		currentPage.put("id", "home");
-		Map<String, Object> pageProps = new HashMap<String, Object>();
-		pageProps.put("main-page", "home");
-		currentPage.put("properties", pageProps);
-		context.put("page", currentPage ); // FIXME: pagina corrente
+		currentPage.put("id", pageId);
+		context.put("page", currentPage);
 		model.put("context", context);
 
 		model.put("locale", "en_US");
@@ -277,15 +286,22 @@ public class PageService {
 
 
 		Map<String, Object> args = new HashMap<String, Object>();
-		args.put("failure", "");
+
+		Map paramz = req.getParameterMap();
+		for (Object key : paramz.keySet()) {
+			String [] valuez =  (String[]) paramz.get(key);
+			if (valuez.length > 0) {
+				args.put((String) key, valuez[0]);
+			}
+
+		}
+
 		model.put("args", args);
 
 		return model;
 	}
 
 	private List<Map<String, Object>> getPages() {
-
-		// TODO: ordinare per order-id
 
 		List<Map<String, Object>> l = new ArrayList<Map<String, Object>>();
 
@@ -297,12 +313,40 @@ public class PageService {
 
 				Map<String, Object> item = new HashMap<String, Object>();
 				item.put("id", c.getKey());
-				item.put("format-id", page.getFormatId());
+				item.put(FORMAT_ID, page.getFormatId());
+				item.put(ORDER_ID, page.getOrderId());
 				l.add(item);
 
 			}
 
 		}
+
+		Collections.sort(l, new Comparator<Map<String, Object>>() {
+
+			@Override
+			public int compare(Map<String, Object> page1,
+					Map<String, Object> page2) {
+				return normalizeFormatId(page1.get(ORDER_ID)).compareTo(
+						normalizeFormatId(page2.get(ORDER_ID)));
+			}
+
+			private Integer normalizeFormatId(Object formatId) {
+
+				Integer n;
+				try {
+					if (formatId != null) {
+						n = Integer.parseInt(formatId.toString());
+					} else {
+						n = Integer.MAX_VALUE;
+					}
+				} catch (NumberFormatException e) {
+					n = Integer.MAX_VALUE;
+				}
+
+				return n;
+
+			}
+		});
 
 		return l;
 	}

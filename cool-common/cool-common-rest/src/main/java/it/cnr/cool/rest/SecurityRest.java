@@ -252,7 +252,7 @@ public class SecurityRest {
 		if (authenticated) {
 			uri = URI.create(redirect);
 		} else {
-			uri = URI.create("../" + Page.LOGIN_URL);
+			uri = URI.create("../" + Page.LOGIN_URL + "?failure=yes");
 		}
 
 		return Response.seeOther(uri).build();

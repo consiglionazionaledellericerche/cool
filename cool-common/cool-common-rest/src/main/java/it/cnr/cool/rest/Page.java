@@ -10,16 +10,20 @@ import it.cnr.cool.web.PermissionService;
 
 import java.io.IOException;
 import java.net.URI;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.ws.rs.GET;
+import javax.ws.rs.POST;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
-import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.ResponseBuilder;
 import javax.ws.rs.core.Response.Status;
@@ -52,9 +56,23 @@ public class Page {
 	private CMISService cmisService;
 
 	@GET
+	@Path("{id}")
 	public Response html(@Context HttpServletRequest req,
-			@QueryParam("id") String id) {
+			@PathParam("id") String id) {
+		return processRequest(req, id, null);
+	}
 
+	@POST
+	@Path("{id}")
+	public Response post(@Context HttpServletRequest req,
+			@PathParam("id") String id,
+			MultivaluedMap<String, String> formParams) {
+		return processRequest(req, id, formParams);
+
+	}
+
+	private Response processRequest(HttpServletRequest req, String id,
+			MultivaluedMap<String, String> formParams) {
 		ResponseBuilder rb;
 		
 		CoolPage page = pageService.loadPages().get(id);
@@ -65,7 +83,7 @@ public class Page {
 					.entity("page not found: " + id);
 		} else if (!isAuthorized(page, id, req.getSession(false))) {
 			URI uri = URI.create(req.getContextPath() + "/"
-					+ LOGIN_URL);
+					+ LOGIN_URL + "?redirect=" + id);
 			rb = Response.seeOther(uri);
 		} else {
 
@@ -73,6 +91,34 @@ public class Page {
 					req.getContextPath(), req.getLocale());
 
 			try {
+
+				if (formParams != null) {
+					Map<String, String> requestParameters = new HashMap<String, String>();
+
+					for (String key : formParams.keySet()) {
+						LOGGER.debug(key.toString());
+						List<String> values = formParams.get(key);
+
+						if (values != null && values.size() > 0) {
+
+							String value = values.get(0);
+
+							if (values.size() > 1) {
+								LOGGER.warn("more than one value for key "
+										+ key
+										+ ", will be used only first entry");
+							}
+
+							requestParameters.put(key, value);
+						} else {
+							LOGGER.debug(key + " is null");
+						}
+
+					}
+
+					model.put("RequestParameters", requestParameters);
+				}
+
 				// process HEAD html content
 				String headUrl = page.getUrl().replaceAll("\\.html\\.ftl$",
 						".head.ftl");
