@@ -75,53 +75,6 @@
   </dependencies>
 
   <build>
-    <pluginManagement>
-      <plugins>
-        <plugin>
-          <groupId>org.codehaus.mojo</groupId>
-          <artifactId>tomcat-maven-plugin</artifactId>
-          <version>1.1</version>
-          <dependencies>
-            <dependency>
-              <groupId>dom4j</groupId>
-              <artifactId>dom4j</artifactId>
-              <version>${dom4j.version}</version>
-            </dependency>
-            <dependency>
-              <groupId>jaxen</groupId>
-              <artifactId>jaxen</artifactId>
-              <version>${jaxen.version}</version>
-            </dependency>
-            <dependency>
-              <groupId>javax.mail</groupId>
-              <artifactId>mail</artifactId>
-              <version>${mail.version}</version>
-            </dependency>
-            <dependency>
-              <groupId>javax.jms</groupId>
-              <artifactId>jms</artifactId>
-              <version>${jms.version}</version>
-            </dependency>
-            <dependency>
-              <groupId>opensymphony</groupId>
-              <artifactId>quartz-all</artifactId>
-              <version>1.6.3</version>
-            </dependency>
-            <dependency>
-              <groupId>commons-collections</groupId>
-              <artifactId>commons-collections</artifactId>
-              <version>3.1</version>
-            </dependency>
-            <dependency>
-              <groupId>commons-logging</groupId>
-              <artifactId>commons-logging</artifactId>
-              <version>1.1.1</version>
-            </dependency>
-          </dependencies>
-        </plugin>
-      </plugins>
-    </pluginManagement>
-
     <plugins>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
@@ -248,6 +201,9 @@
     </profile>
     <profile>
       <id>tomcat</id>
+      <activation>
+        <activeByDefault>true</activeByDefault>
+      </activation>
       <dependencies>
       <dependency>
         <groupId>org.apache.activemq</groupId>
