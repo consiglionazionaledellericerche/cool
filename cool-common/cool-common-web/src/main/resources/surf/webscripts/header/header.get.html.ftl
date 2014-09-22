@@ -16,20 +16,20 @@
       <a class="logo" href="${url.context}"></a>
       <div class="nav-collapse collapse">
         <p id="userInfo" class="navbar-form pull-right">
-          <#if !context.user.isGuest>
-          <a href="#" class="navbar-link">${user.fullName}</a>
-          <a href="${url.context}/dologout" class="btn btn-inverse btn-mini" id="logout">logout</a>
+          <#if !context.user.guest!>
+          <a href="#" class="navbar-link">${context.user.fullName}</a>
+          <a href="${url.context}/rest/security/logout" class="btn btn-inverse btn-mini" id="logout">logout</a>
           <#else>
           anonymous
           </#if>
         </p>
         <ul class="nav hidden-important">
           <#list pages as page>
-            <#if ! context.user.isGuest >
-              <#assign currentUser = context.user.nativeUser>
+            <#if ! context.user.guest! >
+              <#assign currentUser = context.user>
             </#if>
             <#if permission.isAuthorized(page.id, "GET", currentUser) >
-              <#assign submenu = page.properties['format-id']?string?split("/")>
+              <#assign submenu = page['format-id']?string?split("/")>
               <li class="page<#if (context.page.id = page.id||mainPage(context.page) = page.id)> active</#if>" <#if (submenu?size > 1)>data-submenu="${submenu[1]}"</#if>>
 
 
@@ -38,7 +38,7 @@
               </li>
             </#if>
           </#list>
-          <#if !context.user.isGuest>
+          <#if !context.user.guest!>
           <li class="hide dropdown page<#if context.page.id = "workflow" > active</#if>" id="workflow">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown">${message("workflow")} <b class="caret"></b></a>
             <ul class="dropdown-menu">

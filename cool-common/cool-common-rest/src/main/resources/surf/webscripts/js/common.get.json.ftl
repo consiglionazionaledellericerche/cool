@@ -2,33 +2,33 @@
 	<#-- bridge SpringSurf - javascript -->
 	<#-- si puo' integrare in bootstrap.ftl ? -->
 	"User": {
-	  <#if !context.user.isGuest>
+	  <#if !context.user.guest!>
 	  "id": "${context.user.id}",
 	  "lastName": "${context.user.lastName}",
 	  "firstName": "${context.user.firstName}",
-	  <#if context.user.nativeUser??>
+	  <#if context.user??>
 	  "groups":[
-	  <#list context.user.nativeUser.groups as group>
+	  <#list context.user.groups as group>
 	   "${group.itemName}"
 	   <#if group_has_next>,</#if>
 	  </#list>
 	  ],
-	  <#if context.user.nativeUser.matricola??>
-	  "matricola": "${context.user.nativeUser.matricola}",
+	  <#if context.user.matricola??>
+	  "matricola": "${context.user.matricola}",
 	  </#if>
-	  <#if context.user.nativeUser.sesso??>
-	  "sesso": "${context.user.nativeUser.sesso}",
+	  <#if context.user.sesso??>
+	  "sesso": "${context.user.sesso}",
 	  </#if>
 	  </#if>
-	  <#if context.user.nativeUser.email??>
+	  <#if context.user.email??>
 	  "email": "${context.user.email}",
 	  </#if>
-	  <#if context.user.nativeUser.codicefiscale??>
-	  "codiceFiscale": "${context.user.nativeUser.codicefiscale}",
+	  <#if context.user.codicefiscale??>
+	  "codiceFiscale": "${context.user.codicefiscale}",
 	  </#if>
-	  "isAdmin": ${context.user.isAdmin?string},
+	  "isAdmin": ${context.user.admin?string("true", "false")},
 	  </#if>
-	  "isGuest": ${context.user.isGuest?string}
+	  "isGuest": ${context.user.guest?string("true", "false")}
 	},
 	"now": "${cmisDateFormat.format(.now)}",
 	<#if caches??>

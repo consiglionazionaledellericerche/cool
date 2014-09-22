@@ -10,8 +10,9 @@ public class CoolPage {
 
 	private Authentication authentication;
 
-	private boolean navbar = false;
 	private int orderId = Integer.MAX_VALUE;
+
+	private String formatId = null;
 
 	public CoolPage(String url) {
 		this.url = url;
@@ -29,14 +30,6 @@ public class CoolPage {
 		this.authentication = authentication;
 	}
 
-	public boolean isNavbar() {
-		return navbar;
-	}
-
-	public void setNavbar(boolean navbar) {
-		this.navbar = navbar;
-	}
-
 	public int getOrderId() {
 		return orderId;
 	}
@@ -45,11 +38,19 @@ public class CoolPage {
 		this.orderId = orderId;
 	}
 
+	public String getFormatId() {
+		return formatId;
+	}
+
+	public void setFormatId(String formatId) {
+		this.formatId = formatId;
+	}
+
 	@Override
 	public String toString() {
 		return "[COOLPAGE url: " + url + ", " + "authentication: "
 				+ authentication + "," + "order-id: " + orderId + ", navbar: "
-				+ navbar + "]";
+				+ formatId + "]";
 
 	}
 }

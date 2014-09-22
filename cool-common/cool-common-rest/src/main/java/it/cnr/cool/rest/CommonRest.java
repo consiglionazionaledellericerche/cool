@@ -69,13 +69,7 @@ public class CommonRest {
 
 			model.put("cmisDateFormat", StringUtil.CMIS_DATEFORMAT);
 
-			Map<String, Object> context = new HashMap<String, Object>();
-
-			// context.put("user", user);
-			LOGGER.error("FIXME: user is always guest");
-			Map<String, Object> emptyUser = new HashMap<String, Object>();
-			emptyUser.put("isGuest", true);
-			context.put("user", emptyUser);
+			Map<String, Object> context = pageService.getContext(user);
 
 			model.put("context", context);
 
@@ -90,6 +84,7 @@ public class CommonRest {
 		return rb.build();
 
 	}
+
 
 
 }

@@ -36,6 +36,8 @@ public class Page {
 
 	public static final String LOGIN_URL = "login";
 
+	public static final String LOGOUT_URL = "logout";
+
 	private static final String TEMPLATE = "/surf/templates/bootstrap.ftl";
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(Page.class);
@@ -67,7 +69,7 @@ public class Page {
 			rb = Response.seeOther(uri);
 		} else {
 
-			Map<String, Object> model = pageService.getModel(id,
+			Map<String, Object> model = pageService.getModel(req, id,
 					req.getContextPath(), req.getLocale());
 
 			try {

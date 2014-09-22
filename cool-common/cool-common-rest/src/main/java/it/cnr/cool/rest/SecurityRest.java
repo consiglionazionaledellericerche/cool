@@ -259,6 +259,15 @@ public class SecurityRest {
 		
 	}
 
+	@GET
+	@Path(Page.LOGOUT_URL)
+	public Response logout(@Context HttpServletRequest req) {
+		req.getSession(false).invalidate();
+		URI uri = URI.create("../" + Page.LOGIN_URL);
+		return Response.seeOther(uri).build();
+
+	}
+
 	static String getUrl(HttpServletRequest req) {
 		StringBuffer url = req.getRequestURL();
 		int l = url.indexOf(req.getServletPath());
