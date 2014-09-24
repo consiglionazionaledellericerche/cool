@@ -13,9 +13,6 @@ pageservice da verificare riga per riga
 
 cambiare url webscript, uniformare URL webscript remote
 
-TOGLIERE OGNI RIFERIMENTO JBOSS...
-togliere profili jboss ?
-
 alleggerire WEB-INF lib - librerie sospette doccnr:
   X spring aop ???
   X aspectj
@@ -28,6 +25,8 @@ creare nuovo artefatto cnr-flows "pure", senza artefatti superflui (e.g. contabi
 
 rivedere tutti gli header di caching
 - <bean id="jcononResourceController" class="it.cnr.cool.extensions.surf.mvc.CMISResourceController">
+
+buttare via risorse obsolete Surf etc.
 
 
 ---- JCONON

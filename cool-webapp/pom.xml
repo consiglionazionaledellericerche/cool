@@ -11,12 +11,10 @@
   <packaging>pom</packaging>
 
   <properties>
-    <jboss.hostName>test15.si.cnr.it</jboss.hostName>
-    <jboss.port>8580</jboss.port>
     <cool.build.number>${maven.build.timestamp}</cool.build.number>
     <cool.mode>development</cool.mode>
     <jenkins.url>http://bandt.si.cnr.it:8180/jenkins</jenkins.url>
-    <log.dir>${jboss.server.log.dir}</log.dir>
+    <log.dir>${catalina.base}</log.dir>
   </properties>
 
   <artifactId>cool-webapp</artifactId>
@@ -169,25 +167,6 @@
             <artifactId>yuicompressor-maven-plugin</artifactId>
             <configuration>
               <nocompress>false</nocompress>
-            </configuration>
-          </plugin>
-        </plugins>
-      </build>
-    </profile>
-    <profile>
-      <id>jboss</id>
-      <build>
-        <plugins>
-          <plugin>
-            <groupId>org.codehaus.mojo</groupId>
-            <artifactId>jboss-maven-plugin</artifactId>
-            <configuration>
-              <hostName>${jboss.hostName}</hostName>
-              <port>${jboss.port}</port>
-              <fileNames>
-                <!--<fileName>${nexus.url}/content/groups/public/it/cnr/si/cool/${project.artifactId}/${project.version}/${project.artifactId}-${project.version}.${project.packaging}</fileName>-->
-                <fileName>${jenkins.url}/job/${project.artifactId}-development/ws/${project.parent.artifactId}/${project.artifactId}/target/${project.artifactId}-${project.version}.${project.packaging}</fileName>
-              </fileNames>
             </configuration>
           </plugin>
         </plugins>
