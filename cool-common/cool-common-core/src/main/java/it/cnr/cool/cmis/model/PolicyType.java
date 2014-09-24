@@ -3,8 +3,6 @@ package it.cnr.cool.cmis.model;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.alfresco.cmis.client.AlfrescoAspects;
-
 public enum PolicyType {
 	INCOMPLETE_ASPECT("P:sys:incomplete", "sys:incomplete");
 
@@ -57,7 +55,4 @@ public enum PolicyType {
     	return results;
     }
 
-    public static boolean isIncomplete(AlfrescoAspects alfrescoAspects){
-    	return alfrescoAspects.hasAspect(INCOMPLETE_ASPECT.value);
-    }
 }
