@@ -43,6 +43,9 @@ rivedere tutti gli header di caching
 
 nota x jconon: cool-common-web-context e' stato fortemente smembrato
 
+verificare aggiornamento aspect in NodeMetadataService.updateObjectProperties()
+
+
 --- fatto
 
 puntamento a cmis 1.1

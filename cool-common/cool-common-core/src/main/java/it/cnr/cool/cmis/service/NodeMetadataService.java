@@ -20,10 +20,9 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.alfresco.cmis.client.AlfrescoDocument;
-import org.alfresco.cmis.client.AlfrescoFolder;
 import org.apache.chemistry.opencmis.client.api.CmisObject;
 import org.apache.chemistry.opencmis.client.api.ObjectType;
+import org.apache.chemistry.opencmis.client.api.SecondaryType;
 import org.apache.chemistry.opencmis.client.api.Session;
 import org.apache.chemistry.opencmis.commons.PropertyIds;
 import org.apache.chemistry.opencmis.commons.definitions.PropertyBooleanDefinition;
@@ -33,7 +32,6 @@ import org.apache.chemistry.opencmis.commons.definitions.PropertyDefinition;
 import org.apache.chemistry.opencmis.commons.definitions.PropertyIdDefinition;
 import org.apache.chemistry.opencmis.commons.definitions.PropertyIntegerDefinition;
 import org.apache.chemistry.opencmis.commons.definitions.PropertyStringDefinition;
-import org.apache.chemistry.opencmis.commons.enums.BaseTypeId;
 import org.apache.chemistry.opencmis.commons.enums.Cardinality;
 import org.apache.chemistry.opencmis.commons.exceptions.CmisContentAlreadyExistsException;
 import org.slf4j.Logger;
@@ -302,17 +300,13 @@ public class NodeMetadataService {
 				CmisObject cmisObject = cmisSession.getObject(objectId);
 				if (aspectNames != null) {
 					for (String aspectName : aspectNames) {
-						if (cmisObject.getBaseTypeId().equals(
-								BaseTypeId.CMIS_DOCUMENT)) {
-							if (!((AlfrescoDocument) cmisObject)
-									.hasAspect(aspectName))
-								((AlfrescoDocument) cmisObject)
-										.addAspect(aspectName);
-						} else {
-							if (!((AlfrescoFolder) cmisObject)
-									.hasAspect(aspectName))
-								((AlfrescoFolder) cmisObject)
-										.addAspect(aspectName);
+
+						SecondaryType aspect = (SecondaryType) cmisSession
+								.getTypeDefinition(aspectName);
+						if (!cmisObject.getSecondaryTypes().contains(aspect)) {
+							// TODO: check
+							LOGGER.error("VERIFICARE AGGIORNAMENTO ASPECT");
+							cmisObject.getSecondaryTypes().add(aspect);
 						}
 					}
 				}
