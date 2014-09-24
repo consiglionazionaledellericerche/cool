@@ -344,7 +344,11 @@ public class PermissionServiceImpl implements PermissionService {
 		// se l'utente non è loggato => user = null
 		boolean authorized = isAuthorized(id, method, user);
 		String message = String.format(MESSAGE_TEMPLATE, user == null ? "guest" : user.getId(), authorized ? "authorized" : "unauthorized", method, id);
-		LOGGER.info(message);
+		if (authorized) {
+			LOGGER.debug(message);
+		} else {
+			LOGGER.info(message);
+		}
 		return authorized;
 	}
 

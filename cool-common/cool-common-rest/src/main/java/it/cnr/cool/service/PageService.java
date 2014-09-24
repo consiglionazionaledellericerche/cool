@@ -43,7 +43,7 @@ public class PageService {
 
 	private static final String ORDER_ID = "order-id";
 
-	private static final String XML_PATH = "/pages.xml";
+	private static final String XML_PATH = "/pages/pages.xml";
 
 	private static final Logger LOGGER = LoggerFactory
 			.getLogger(PageService.class);
@@ -112,6 +112,7 @@ public class PageService {
 		CoolPage page = new CoolPage(pageElement.elementText(PATH));
 		page.setFormatId(pageElement.elementText(FORMAT_ID));
 
+		// TODO: rifare con enum
 		Authentication auth = null;
 
 		if (pageElement.elementText(AUTHENTICATION).equalsIgnoreCase("admin")) {
@@ -121,6 +122,8 @@ public class PageService {
 			auth = Authentication.USER;
 		} else if (pageElement.elementText(AUTHENTICATION).equalsIgnoreCase(
 				"guest")) {
+			auth = Authentication.GUEST;
+		} else {
 			LOGGER.warn("error with page " + pageElement.elementText(ID));
 		}
 

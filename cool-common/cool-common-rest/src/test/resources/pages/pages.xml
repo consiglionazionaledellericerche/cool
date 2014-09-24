@@ -1,0 +1,17 @@
+<pages>
+  <page>
+    <id>home</id>
+    <path>/pages/home/main.get.html.ftl</path>
+    <format-id>navbar</format-id>
+    <order-id>0</order-id>
+    <authentication>user</authentication>
+  </page>
+  <page>
+    <id>jsConsole</id>
+    <path>/surf/webscripts/jsConsole/console.get.html.ftl</path>
+    <format-id>navbar/admin</format-id>
+    <order-id>3</order-id>
+    <authentication>admin</authentication>
+  </page>
+ 
+</pages>
