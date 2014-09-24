@@ -1,32 +1,29 @@
 RRDService disattivato
 - Cool Classpath Store
-CmisBindingListener
 
 CoolConsoleUpdate
-
-ResourceBundleBootstrapComponent ???
-
-<bean id="jcononResourceController" class="it.cnr.cool.extensions.surf.mvc.CMISResourceController">
+- cache java (guava)
+- cache it.cnr.cool.cmis.service.impl.CacheServiceImpl
 
 verificare il versionService
 
-nota x jconon: cool-common-web-context e' stato fortemente smembrato
-
----
-
 pageservice da verificare riga per riga
 
-togliere getModel da common e cache...
+avanzamento versione chemistry 0.12.0
+-TypeDefinitionCache - gia stata implementata!!
 
-avanzamento versione chemistry, opencmis extensions ???
-puntamento a cmis 1.1
+opencmis extensions ???
+
+cambiare url webscript
+uniformare URL webscript remote
+
+TOGLIERE OGNI RIFERIMENTO JBOSS...
+togliere profili jboss ?
 
 MEMO ZipperService:
   creare artefatto variazioni (jar)
   spostare la dipendenza di quartz in variazioni da cool-webapp
   test (e.g. ZipperServiceTest) da spostare nel nuovo artefatto
-
-a che serve spring web ???? lo usiamo solo per gli allegati!
 
 alleggerire WEB-INF lib - librerie sospette doccnr:
   X spring aop ???
@@ -36,8 +33,19 @@ alleggerire WEB-INF lib - librerie sospette doccnr:
   X quartz ?
   org.springframework.*
 
-creare artefatto doccnr "pure", senza artefatti superflui (e.g. contabili, accounting...) [o usare profili...]
-
-usare solo plugin tomcat7
+creare nuovo artefatto cnr-flows "pure", senza artefatti superflui (e.g. contabili, accounting...)
 
 rivedere tutti gli header di caching
+- <bean id="jcononResourceController" class="it.cnr.cool.extensions.surf.mvc.CMISResourceController">
+
+
+---- JCONON
+
+nota x jconon: cool-common-web-context e' stato fortemente smembrato
+
+--- fatto
+
+puntamento a cmis 1.1
+
+--- later
+a che serve spring web ???? lo usiamo solo per gli allegati!

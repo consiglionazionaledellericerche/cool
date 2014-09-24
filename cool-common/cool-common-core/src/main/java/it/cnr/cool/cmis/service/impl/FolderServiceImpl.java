@@ -16,7 +16,6 @@ import java.util.regex.Pattern;
 
 import org.apache.chemistry.opencmis.client.api.Folder;
 import org.apache.chemistry.opencmis.client.api.ItemIterable;
-import org.apache.chemistry.opencmis.client.api.ObjectType;
 import org.apache.chemistry.opencmis.client.api.OperationContext;
 import org.apache.chemistry.opencmis.client.api.QueryResult;
 import org.apache.chemistry.opencmis.client.api.Session;
@@ -137,7 +136,7 @@ public class FolderServiceImpl implements FolderService {
 			return cacheFolder.get(path.concat("/").concat(name));
 		Map<String, Object> properties = new HashMap<String, Object>();
 		properties.put(PropertyIds.OBJECT_TYPE_ID,
-				ObjectType.FOLDER_BASETYPE_ID);
+				BaseTypeId.CMIS_FOLDER.value());
 		properties.put(PropertyIds.NAME, name);
 		Folder sourceFolder = (Folder) session.getObjectByPath(path);
 		Folder newFolder;

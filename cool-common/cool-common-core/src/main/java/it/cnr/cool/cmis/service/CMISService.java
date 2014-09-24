@@ -15,7 +15,6 @@ import java.util.regex.Pattern;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
-import org.alfresco.cmis.client.impl.AlfrescoObjectFactoryImpl;
 import org.apache.chemistry.opencmis.client.api.Document;
 import org.apache.chemistry.opencmis.client.api.OperationContext;
 import org.apache.chemistry.opencmis.client.api.Repository;
@@ -233,7 +232,6 @@ public class CMISService implements InitializingBean, CMISSessionManager {
         sessionParameters.put(SessionParameter.PASSWORD, password);
         sessionParameters.put(SessionParameter.REPOSITORY_ID, repositoryId);
         sessionParameters.put(SessionParameter.AUTHENTICATION_PROVIDER_CLASS, CustomAuthenticationProvider.class.getName());
-        sessionParameters.put(SessionParameter.OBJECT_FACTORY_CLASS, AlfrescoObjectFactoryImpl.class.getName());
         sessionParameters.put(SessionParameter.CACHE_SIZE_TYPES, "1000");
         sessionParameters.put(SessionParameter.LOCALE_ISO3166_COUNTRY, DEFAULT_LOCALE.getCountry());
         sessionParameters.put(SessionParameter.LOCALE_ISO639_LANGUAGE, DEFAULT_LOCALE.getLanguage());
@@ -331,7 +329,6 @@ public class CMISService implements InitializingBean, CMISSessionManager {
         if (!sessionParameters.containsKey(SessionParameter.AUTHENTICATION_PROVIDER_CLASS)) {
             sessionParameters.put(SessionParameter.AUTHENTICATION_PROVIDER_CLASS, CmisBindingFactory.STANDARD_AUTHENTICATION_PROVIDER);
         }
-        sessionParameters.put(SessionParameter.OBJECT_FACTORY_CLASS, AlfrescoObjectFactoryImpl.class.getName());
         sessionParameters.put(SessionParameter.AUTH_HTTP_BASIC, "true");
         sessionParameters.put(SessionParameter.AUTH_SOAP_USERNAMETOKEN, "false");
         sessionParameters.put(SessionParameter.CACHE_SIZE_TYPES, "1000");
