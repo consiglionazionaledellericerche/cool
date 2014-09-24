@@ -556,7 +556,10 @@ public class CMISService implements InitializingBean, CMISSessionManager {
 	public String getBaseURL() {
         if (baseURL != null)
             return baseURL;
-		return atompubURL.replace("cmisatom", "").replace("service/cmis", "");
+		else {
+			throw new RuntimeException(
+					"you must set a repository.base.url properyt");
+		}
 	}
 
     public void setBaseURL(String baseURL) {
