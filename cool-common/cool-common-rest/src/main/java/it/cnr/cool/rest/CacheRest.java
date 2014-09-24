@@ -28,6 +28,8 @@ import org.springframework.stereotype.Component;
 @Produces(MediaType.APPLICATION_JSON)
 public class CacheRest {
 
+	private static final int CACHE_CONTROL = 1800;
+
 	private static final String FTL = "/surf/webscripts/js/cache.get.json.ftl";
 
 	@Autowired
@@ -58,6 +60,7 @@ public class CacheRest {
 
 			String json = Util.processTemplate(model, FTL);
 			rb = Response.ok(json);
+			rb.cacheControl(Util.getCache(CACHE_CONTROL));
 		} catch (Exception e) {
 			LOGGER.error("unable to process cache json", e);
 			rb = Response.status(Status.INTERNAL_SERVER_ERROR);

@@ -1,6 +1,7 @@
 package it.cnr.cool.rest;
 
 
+import it.cnr.cool.rest.util.Util;
 import it.cnr.cool.service.I18nService;
 
 import java.util.Locale;
@@ -14,6 +15,7 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.ResponseBuilder;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,6 +26,8 @@ import org.springframework.stereotype.Component;
 @Component
 @Produces(MediaType.APPLICATION_JSON)
 public class I18n {
+
+	private static final int CACHE_CONTROL = 86400;
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(I18n.class);
 
@@ -44,7 +48,10 @@ public class I18n {
 		LOGGER.debug("loaded " + labels.keySet().size() + " "
 				+ locale.getLanguage() + " labels " + " uri " + uri);
 
-		return Response.ok(labels).build();
+		ResponseBuilder rb = Response.ok(labels);
+		rb.cacheControl(Util.getCache(CACHE_CONTROL));
+
+		return rb.build();
 	}
 
 }
