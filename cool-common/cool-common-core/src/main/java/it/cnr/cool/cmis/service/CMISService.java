@@ -558,7 +558,7 @@ public class CMISService implements InitializingBean, CMISSessionManager {
             return baseURL;
 		else {
 			throw new RuntimeException(
-					"you must set a repository.base.url properyt");
+					"you must set a repository.base.url property");
 		}
 	}
 

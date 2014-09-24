@@ -8,10 +8,6 @@ verificare il versionService
 
 pageservice da verificare riga per riga
 
-rivedere tutti gli header di caching
-- i18n, cache, common
-- <bean id="jcononResourceController" class="it.cnr.cool.extensions.surf.mvc.CMISResourceController">
-
 buttare via risorse obsolete Surf etc.
 
 alleggerire WEB-INF lib - librerie sospette doccnr:
@@ -57,3 +53,6 @@ rimozione alfresco-opencmis-extension
 --- later
 a che serve spring web ???? lo usiamo solo per gli allegati!
 verificare con la configurazione di produzione apache che il caching funziona (cache pubbliche/private...)
+rivedere tutti gli header di caching
+- i18n, cache, common
+- <bean id="jcononResourceController" class="it.cnr.cool.extensions.surf.mvc.CMISResourceController">

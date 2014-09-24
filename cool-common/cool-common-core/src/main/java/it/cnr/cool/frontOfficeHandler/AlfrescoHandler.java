@@ -148,7 +148,8 @@ public class AlfrescoHandler implements ILoggerHandler {
 				doc.applyAcl(newAces, null, null);
 			}
 		} catch (Exception e) {
-			throw new CoolClientException("errore nella scrittura del documento");
+			throw new CoolClientException(
+					"errore nella scrittura del documento", e);
 		}
 		return doc.getId();
 	}
