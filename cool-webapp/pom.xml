@@ -126,12 +126,6 @@
       </modules>
     </profile>
     <profile>
-      <id>sviluppo</id>
-      <activation>
-        <activeByDefault>true</activeByDefault>
-      </activation>
-    </profile>
-    <profile>
       <id>nexus</id>
       <build>
         <plugins>
