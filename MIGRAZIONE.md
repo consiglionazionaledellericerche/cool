@@ -1,5 +1,4 @@
-RRDService disattivato
-- Cool Classpath Store
+cambiare url webscript, uniformare URL webscript remote
 
 CoolConsoleUpdate
 - cache java (guava)
@@ -9,9 +8,11 @@ verificare il versionService
 
 pageservice da verificare riga per riga
 
--TypeDefinitionCache - gia stata implementata!!
+rivedere tutti gli header di caching
+- i18n, cache, common
+- <bean id="jcononResourceController" class="it.cnr.cool.extensions.surf.mvc.CMISResourceController">
 
-cambiare url webscript, uniformare URL webscript remote
+buttare via risorse obsolete Surf etc.
 
 alleggerire WEB-INF lib - librerie sospette doccnr:
   X spring aop ???
@@ -20,18 +21,20 @@ alleggerire WEB-INF lib - librerie sospette doccnr:
   X jfreechart
   X quartz ?
   org.springframework.*
+  isolare dipendenza Guava (si puo' evitare ???)
 
-creare nuovo artefatto cnr-flows "pure", senza artefatti superflui (e.g. contabili, accounting...)
+fixare test
 
-rivedere tutti gli header di caching
-- <bean id="jcononResourceController" class="it.cnr.cool.extensions.surf.mvc.CMISResourceController">
 
-buttare via risorse obsolete Surf etc.
+---- Marco
+TypeDefinitionCache - gia stata implementata!!
 
+RRDService disattivato
+- Cool Classpath Store
 
 ---- JCONON
 
-nota x jconon: cool-common-web-context e' stato fortemente smembrato
+nota x jconon: dal context cool-common-web-context sono stati eliminate molte definizioni di bean per Spring Surf/Spring MVC
 
 verificare aggiornamento aspect in NodeMetadataService.updateObjectProperties()
 
@@ -53,3 +56,4 @@ rimozione alfresco-opencmis-extension
 
 --- later
 a che serve spring web ???? lo usiamo solo per gli allegati!
+verificare con la configurazione di produzione apache che il caching funziona (cache pubbliche/private...)
