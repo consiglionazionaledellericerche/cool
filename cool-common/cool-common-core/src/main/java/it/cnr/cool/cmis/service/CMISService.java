@@ -4,6 +4,8 @@ import it.cnr.cool.security.service.impl.alfresco.CMISUser;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.Reader;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -378,8 +380,10 @@ public class CMISService implements InitializingBean, CMISSessionManager {
 				throw new LoginException("Login failed for user " + username
 						+ " with HTTP status code: " + method.getStatusLine());
 			} else {
-				String json = new String(method.getResponseBody());
-				JsonObject response = new JsonParser().parse(json)
+				InputStream is = method.getResponseBodyAsStream();
+				Reader isr = new InputStreamReader(is);
+
+				JsonObject response = new JsonParser().parse(isr)
 						.getAsJsonObject();
 
 				return response.getAsJsonObject().get("data")

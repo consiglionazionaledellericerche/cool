@@ -40,23 +40,10 @@
       <scope>provided</scope>
     </dependency>
 
-    <!-- dipendenze per consentire gli unit test di web scripts -->
-    <dependency>
-      <groupId>dom4j</groupId>
-      <artifactId>dom4j</artifactId>
-      <version>${dom4j.version}</version>
-      <scope>test</scope>
-    </dependency>
     <dependency>
       <groupId>jaxen</groupId>
       <artifactId>jaxen</artifactId>
       <version>${jaxen.version}</version>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>javax.mail</groupId>
-      <artifactId>mail</artifactId>
-      <version>${mail.version}</version>
       <scope>test</scope>
     </dependency>
     <dependency>
@@ -69,16 +56,6 @@
       <groupId>opensymphony</groupId>
       <artifactId>quartz-all</artifactId>
       <version>1.6.3</version>
-    </dependency>
-    <dependency>
-      <groupId>javax.mail</groupId>
-      <artifactId>mail</artifactId>
-      <version>${mail.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>dom4j</groupId>
-      <artifactId>dom4j</artifactId>
-      <version>${dom4j.version}</version>
     </dependency>
   </dependencies>
 
