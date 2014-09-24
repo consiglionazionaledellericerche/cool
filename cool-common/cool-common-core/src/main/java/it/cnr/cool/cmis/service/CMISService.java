@@ -168,7 +168,7 @@ public class CMISService implements InitializingBean, CMISSessionManager {
 				username = "";
 				password = ticket;
 			} catch (Exception e) {
-				LOGGER.error("unable to get ticket for user: " + username);
+				LOGGER.error("unable to get ticket for user: " + username, e);
 			}
 
 			cmisAdminSession = createSession(DEFAULT_SERVER, username, password);
