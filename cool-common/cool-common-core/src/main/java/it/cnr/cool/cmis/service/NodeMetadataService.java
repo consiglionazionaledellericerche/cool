@@ -22,7 +22,6 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.apache.chemistry.opencmis.client.api.CmisObject;
 import org.apache.chemistry.opencmis.client.api.ObjectType;
-import org.apache.chemistry.opencmis.client.api.SecondaryType;
 import org.apache.chemistry.opencmis.client.api.Session;
 import org.apache.chemistry.opencmis.commons.PropertyIds;
 import org.apache.chemistry.opencmis.commons.definitions.PropertyBooleanDefinition;
@@ -285,41 +284,21 @@ public class NodeMetadataService {
 			Map<String, Object> properties) {
 
 		try {
-
-			if (aspectNames != null && !aspectNames.isEmpty()) {
-				for (String aspectName : aspectNames) {
-					objectTypeId = objectTypeId.concat(",").concat(aspectName);
-				}
-			}
+			CmisObject cmisObject = null;
 			properties.put(PropertyIds.OBJECT_TYPE_ID, objectTypeId);
-			if (objectId == null) {
-				objectId = cmisSession.createDocument(properties,
-						cmisSession.createObjectId(objectParentId), null, null)
-						.getId();
-			} else {
-				CmisObject cmisObject = cmisSession.getObject(objectId);
-				if (aspectNames != null) {
-					for (String aspectName : aspectNames) {
-
-						SecondaryType aspect = (SecondaryType) cmisSession
-								.getTypeDefinition(aspectName);
-						if (!cmisObject.getSecondaryTypes().contains(aspect)) {
-							// TODO: check
-							LOGGER.error("VERIFICARE AGGIORNAMENTO ASPECT");
-							cmisObject.getSecondaryTypes().add(aspect);
-						}
-					}
-				}
-			}
-			CmisObject cmisObject = cmisSession.getObject(objectId);
+			properties.put(PropertyIds.SECONDARY_OBJECT_TYPE_IDS, aspectNames);
 			properties.putAll(aspectProperties);
-			cmisObject.updateProperties(properties);
+			if (objectId == null) {
+				cmisObject = cmisSession.getObject(cmisSession.createDocument(properties,
+						cmisSession.createObjectId(objectParentId), null, null));
+			} else {
+				cmisObject = cmisSession.getObject(objectId);
+				cmisObject.updateProperties(properties);
+			}
 			return cmisObject;
-
 		} catch (CmisContentAlreadyExistsException _ex) {
 			throw new CoolClientException("message.file.alredy.exists", _ex);
 		}
-
 	}
 
 

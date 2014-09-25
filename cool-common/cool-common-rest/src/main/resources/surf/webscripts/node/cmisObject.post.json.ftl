@@ -43,5 +43,5 @@
 	<#list cmisObject.properties as property>
 		"${property.id}":<@generatePropertyCMISValue cmisObject property/><#if property_has_next>,</#if>
 	</#list>
-	,"aspects":[<#list cmisObject.aspects as aspect>"${aspect.id}"<#if aspect_has_next>,</#if></#list>]
+	,"secondaryTypes":[<#list cmisObject.secondaryTypes as secondaryType>"${secondaryType.id}"<#if secondaryType_has_next>,</#if></#list>]
 }
