@@ -55,7 +55,7 @@ define(['jquery', 'cnr/cnr.ui', 'json!common', 'i18n', 'json!cache'], function (
       },
       model: {
         models: 'rest/models',
-        modelNodeRef: 'rest/models/$store_type/$store_id/$id',
+        modelNodeRef: 'rest/models/$store_type/$store_id/$id/$version',
         activate: 'rest/models/activate/$store_type/$store_id/$id/$version',
         docsByPath: 'rest/models/docsByPath/$store_type/$store_id/$id',
         docsByTypeName: 'rest/models/docsByTypeName',
@@ -77,7 +77,7 @@ define(['jquery', 'cnr/cnr.ui', 'json!common', 'i18n', 'json!cache'], function (
         metadata: "rest/node/metadata",
         node: "rest/node",
         copy: "rest/copy",
-        move: "rest/move"
+        cut: "rest/cut"
       },
       folder: "rest/folder",
       workflow: "workflow",

@@ -86,14 +86,13 @@ define(['jquery', 'json!common', 'cnr/cnr', 'cnr/cnr.node', 'cnr/cnr.ui', 'cnr/c
                   nodeRefDest: selectedFolder,
                   newName: $('#nameOfCopy').val()
                 },
-                success: function () {
+                success: function (response) {
                   close();
-                  UI.info(i18n['message.copy.success']);
-                  refresh();
-                },
-                error: function () {
-                  close();
-                  UI.error(i18n['message.copy.failed']);
+                  if (response.status === 'ok') {
+                    UI.info(i18n['message.copy.success']);
+                  } else {
+                    UI.error(i18n['message.copy.failed'] + ': ' + response.message);
+                  }
                   refresh();
                 }
               });
@@ -103,20 +102,19 @@ define(['jquery', 'json!common', 'cnr/cnr', 'cnr/cnr.node', 'cnr/cnr.ui', 'cnr/c
         });
       } else if (nodeRefToCut) {
         close = UI.progress();
-        URL.Data.node.move({
+        URL.Data.node.cut({
           type: 'POST',
           data: {
             nodeRefToCopy: nodeRefToCut,
             nodeRefDest: selectedFolder
           },
-          success: function () {
-            UI.info(i18n['message.cut.success']);
+          success: function (response) {
             close();
-            refresh();
-          },
-          error: function () {
-            UI.error(i18n['message.cut.failed']);
-            close();
+            if (response.status === 'ok') {
+              UI.info(i18n['message.cut.success']);
+            } else {
+              UI.error(i18n['message.cut.failed'] + ': ' + response.message);
+            }
             refresh();
           }
         });
@@ -134,7 +132,7 @@ define(['jquery', 'json!common', 'cnr/cnr', 'cnr/cnr.node', 'cnr/cnr.ui', 'cnr/c
     }
 
     if (settings.dom.buttons.paste) {
-      initCreationButton(settings.dom.buttons.paste, allowableactions, 'CAN_UPDATE_PROPERTIES', paste);
+      initCreationButton(settings.dom.buttons.paste, 'CAN_UPDATE_PROPERTIES', allowableactions, paste);
     }
 
 
