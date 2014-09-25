@@ -1,14 +1,5 @@
-<bulkInfo xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xmlns="http://www.cnr.it/schema/BulkInfo" xsi:schemaLocation="http://www.cnr.it/schema/BulkInfo BulkInfo.xsd"
-	shortDescription="CMIS Document" longDescription="CMIS Document"
-	cmisTypeName="cmis:document" cmisQueryName="cmis:document">
-	<cmisImplementsName name="P:cm:titled" join="true"/>
-	<fieldProperty 
-		name="name" 
-		property="cmis:name" 
-		label="cmis.name"
-		inputType="TEXT" 
-		labelClass="control-label"
-		class="input-xlarge"  />
-	<formFieldProperty name="name" />
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><bulkInfo xmlns="http://www.cnr.it/schema/BulkInfo_v2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" cmisQueryName="cmis:document" cmisTypeName="cmis:document" longDescription="CMIS Document" shortDescription="CMIS Document" xsi:schemaLocation="http://www.cnr.it/schema/BulkInfo_v2 BulkInfo_v2">
+	<cmisImplementsName join="true" name="P:cm:titled"/>
+	<fieldProperty class="input-xlarge" inputType="TEXT" label="cmis.name" labelClass="control-label" name="name" property="cmis:name"/>
+	<formFieldProperty name="name"/>
 </bulkInfo>

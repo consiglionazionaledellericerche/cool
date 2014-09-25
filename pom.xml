@@ -133,6 +133,7 @@
                     <exclude>**/src/main/config/**</exclude>
                     <exclude>**/src/main/js/**</exclude>
                     <exclude>**/src/test/**</exclude>
+                    <exclude>**/cnr/cool/permissions/**</exclude>
                     <!-- cool-dashboard validato con jshint -->
                     <exclude>**/angular/**</exclude>
                     <exclude>**/permissions/permissions.*</exclude>
@@ -157,28 +158,31 @@
               <validationSets>
                 <!-- Questo validator valida i BulkInfo, SOLO quando si builda cool-parent -->
                 <!-- Altrimenti dice che la cartella base non esiste (Vogliamo validarli tutti una sola volta dal parent) -->
+<!--                 <validationSet> -->
+<!--                   <dir>.</dir> -->
+<!--                   <systemId>cool-view/src/main/resources/META-INF/model/BulkInfo.xsd</systemId> -->
+<!--                   <includes> -->
+<!--                     <include>cool-bulkinfo/**/bulkInfo/*.xml</include> -->
+<!--                     <include>cool-common/**/bulkInfo/*.xml</include> -->
+<!--                     <include>cool-model/**/bulkInfo/*.xml</include> -->
+<!--                     <include>cool-view/**/bulkInfo/*.xml</include> -->
+<!--                     <include>cool-webapp/**/bulkInfo/*.xml</include> -->
+<!--                   </includes> -->
+<!--                   <excludes> -->
+<!--                     <exclude>**/target/**</exclude> -->
+<!--                     <exclude>**/cool-jconon/**</exclude> -->
+<!--                   </excludes> -->
+<!--                 </validationSet> -->
                 <validationSet>
-                  <dir>.</dir>
-                  <systemId>cool-view/src/main/resources/META-INF/model/BulkInfo.xsd</systemId>
+                  <dir>./cool-webapp/</dir>
+                  <systemId>cool-view/src/main/resources/META-INF/model/BulkInfo_v2.xsd</systemId>
                   <includes>
-                    <include>cool-accounting/**/bulkInfo/*.xml</include>
-                    <include>cool-bpm/**/bulkInfo/*.xml</include>
+                    <include>**/bulkInfo/*.xml</include>
                     <include>cool-bulkinfo/**/bulkInfo/*.xml</include>
                     <include>cool-common/**/bulkInfo/*.xml</include>
                     <include>cool-model/**/bulkInfo/*.xml</include>
                     <include>cool-view/**/bulkInfo/*.xml</include>
                     <include>cool-webapp/**/bulkInfo/*.xml</include>
-                  </includes>
-                  <excludes>
-                    <exclude>**/target/**</exclude>
-                    <exclude>**/cool-jconon/**</exclude>
-                  </excludes>
-                </validationSet>
-                <validationSet>
-                  <dir>./cool-webapp/cool-jconon/</dir>
-                  <systemId>cool-view/src/main/resources/META-INF/model/BulkInfo_v2.xsd</systemId>
-                  <includes>
-                    <include>**/bulkInfo/*.xml</include>
                   </includes>
                   <excludes>
                     <exclude>**/target/**</exclude>

@@ -2,7 +2,7 @@
 <xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema"
 	targetNamespace="http://www.cnr.it/schema/BulkInfo_v2" xmlns="http://www.cnr.it/schema/BulkInfo_v2"
 	elementFormDefault="qualified" version="2.0">
-	
+
 	<xsd:element name="bulkInfo">
 		<xsd:annotation>
 			<xsd:documentation></xsd:documentation>
@@ -148,7 +148,7 @@
 	</xsd:element>
 
 	<xsd:complexType name="BaseFieldPropertyType">
-			
+
 		<!-- I seguenti attibuti usano stringhe JSON e andranno sostituiti con una gestione migliore -->
 
 
@@ -171,27 +171,27 @@
 				</xsd:documentation>
 			</xsd:annotation>
 		</xsd:attribute>
-		
-		
+
+
 		<xsd:attribute name="jsonvalidator" type="xsd:string" use="optional">
 			<xsd:annotation>
 				<xsd:documentation>
-					Validazione lato client con jquery.validate.js 
+					Validazione lato client con jquery.validate.js
 				</xsd:documentation>
 			</xsd:annotation>
 		</xsd:attribute>
 		<xsd:attribute name="jsonsettings" type="xsd:string" use="optional">
 			<xsd:annotation>
 				<xsd:documentation>
-					 
+
 				</xsd:documentation>
 			</xsd:annotation>
 		</xsd:attribute>
-		
+
 		-->
 		<!-- i seguenti attributi sono temporanei e andranno verificati (probabilmente rimossi/sostituiti con alternative migliori) -->
-		 
-		 
+
+
 		<xsd:all>
 			<xsd:element name="jsonlist" minOccurs="0" maxOccurs="1">
 		 		<xsd:complexType>
@@ -230,7 +230,7 @@
 		 			<xsd:attribute name="max" type="xsd:int" />
 		 		</xsd:complexType>
 		 	</xsd:element>
-		 	
+
 		 	<xsd:element name="jsonlabel" minOccurs="0" maxOccurs="1">
 		 		<xsd:complexType>
 		 			<xsd:attribute name="default" type="xsd:string" />
@@ -238,7 +238,7 @@
 		 			<xsd:attribute name="params" type="xsd:string" />
 		 		</xsd:complexType>
 		 	</xsd:element>
-		 	
+
 		 	<xsd:element name="jsonsettings" minOccurs="0" maxOccurs="1">
 		 		<xsd:complexType>
 		 			<xsd:attribute name="startDate" type="xsd:string" /> <!-- TODO quuesti due attributi dovrebbero essere date -->
@@ -246,10 +246,10 @@
 		 			<xsd:attribute name="usersOnly" type="xsd:boolean" />
 		 			<xsd:attribute name="groupsOnly" type="xsd:boolean" />
 		 		</xsd:complexType>
-		 	</xsd:element>		 	
+		 	</xsd:element>
 		</xsd:all>
-		
-		
+
+
 		<xsd:attribute name="property" type="xsd:string" use="optional">
 			<xsd:annotation>
 				<xsd:documentation>
@@ -777,6 +777,10 @@
 					<xsd:enumeration value="ui.radio" />
 					<xsd:enumeration value="ui.checkbox" />
 					<xsd:enumeration value="ui.authority" />
+					<xsd:enumeration value="ui.group" />
+					<xsd:enumeration value="ui.priority" />
+					<xsd:enumeration value="ui.duedate" />
+					<xsd:enumeration value="ui.tree" />
 				</xsd:restriction>
 			</xsd:simpleType>
 		</xsd:attribute>
@@ -849,7 +853,7 @@
 					Label da utilizzare per il tipo DIV.
 				</xsd:documentation>
 			</xsd:annotation>
-		</xsd:attribute>		
+		</xsd:attribute>
 		<xsd:attribute name="visible" type="xsd:boolean" use="optional" default="true">
 			<xsd:annotation>
 				<xsd:documentation>
@@ -861,21 +865,21 @@
 		<xsd:attribute name="type" type="xsd:string" use="optional">
 			<xsd:annotation>
 				<xsd:documentation>
-					 
+
 				</xsd:documentation>
 			</xsd:annotation>
 		</xsd:attribute>
 		<xsd:attribute name="validator" type="xsd:string" use="optional">
 			<xsd:annotation>
 				<xsd:documentation>
-					 
+
 				</xsd:documentation>
 			</xsd:annotation>
 		</xsd:attribute>
 		<xsd:attribute name="width" type="xsd:string" use="optional">
 			<xsd:annotation>
 				<xsd:documentation>
-					 
+
 				</xsd:documentation>
 			</xsd:annotation>
 		</xsd:attribute>
@@ -901,7 +905,7 @@
 	<xsd:complexType name="FieldPropertyType">
 		<xsd:complexContent>
 			<xsd:extension base="BaseFieldPropertyType">
-				<xsd:attribute name="name" type="xsd:ID" use="required">
+				<xsd:attribute name="name" type="xsd:token" use="required">
 					<xsd:annotation>
 						<xsd:documentation>
 							Nome logico del FieldProperty, l'attributo
@@ -929,14 +933,14 @@
 				<xsd:attribute name="same-line" type="xsd:boolean" >
 					<xsd:annotation>
 						<xsd:documentation>
-							True if field on the same line of previous 
+							True if field on the same line of previous
 						</xsd:documentation>
 					</xsd:annotation>
 				</xsd:attribute>
 				<xsd:attribute name="write-dinamic-form" type="xsd:boolean" >
 					<xsd:annotation>
 						<xsd:documentation>
-							True if dinamic form of checkbox or radiogroup must be write 
+							True if dinamic form of checkbox or radiogroup must be write
 						</xsd:documentation>
 					</xsd:annotation>
 				</xsd:attribute>
@@ -959,7 +963,7 @@
 				<xsd:attribute name="cmisQueryName" type="xsd:string" use="optional">
 					<xsd:annotation>
 						<xsd:documentation>
-							
+
 						</xsd:documentation>
 					</xsd:annotation>
 				</xsd:attribute>
@@ -1000,7 +1004,7 @@
 					use="optional" default="true">
 					<xsd:annotation>
 						<xsd:documentation>
-							boolean per indicare se la colonna va esportata oppure no 
+							boolean per indicare se la colonna va esportata oppure no
 						</xsd:documentation>
 					</xsd:annotation>
 				</xsd:attribute>
@@ -1028,7 +1032,7 @@
 							Booleano per indicare se il valore deve essere recupato dalla query
 						</xsd:documentation>
 					</xsd:annotation>
-				</xsd:attribute>				
+				</xsd:attribute>
 			</xsd:extension>
 		</xsd:complexContent>
 	</xsd:complexType>

@@ -1,28 +1,11 @@
-<bulkInfo xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xmlns="http://www.cnr.it/schema/BulkInfo" xsi:schemaLocation="http://www.cnr.it/schema/BulkInfo BulkInfo.xsd"
-	shortDescription="Aspect Title" longDescription="Aspect Title"
-	cmisTypeName="P:cm:titled" cmisQueryName="cm:titled">
-	<fieldProperty 
-		name="title" 
-		property="cm:title" 
-		label="cm.title"
-		inputType="TEXT" 
-		nullable="true" 
-		labelClass="control-label"
-		class="input-xlarge"/>
-	<fieldProperty 
-		name="description" 
-		property="cm:description" 
-		label="cm.description"
-		inputType="TEXTAREA" 
-		nullable="true"
-		labelClass="control-label"
-		class="input-xlarge" />
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><bulkInfo xmlns="http://www.cnr.it/schema/BulkInfo_v2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" cmisQueryName="cm:titled" cmisTypeName="P:cm:titled" longDescription="Aspect Title" shortDescription="Aspect Title" xsi:schemaLocation="http://www.cnr.it/schema/BulkInfo_v2 BulkInfo_v2">
+	<fieldProperty class="input-xlarge" inputType="TEXT" label="cm.title" labelClass="control-label" name="title" nullable="true" property="cm:title"/>
+	<fieldProperty class="input-xlarge" inputType="TEXTAREA" label="cm.description" labelClass="control-label" name="description" nullable="true" property="cm:description"/>
 
-	<formFieldProperty name="title" />
-	<formFieldProperty name="description" />
+	<formFieldProperty name="title"/>
+	<formFieldProperty name="description"/>
 
-	<columnFieldProperty name="title" />
-	<columnFieldProperty name="description" />
+	<columnFieldProperty name="title"/>
+	<columnFieldProperty name="description"/>
 
 </bulkInfo>
