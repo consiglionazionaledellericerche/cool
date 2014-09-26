@@ -45,7 +45,6 @@
       <#assign i18nUrl = "rest/i18n" />
     </#if>
 
-    <#assign locale_suffix = locale?substring(0,2) />
     <script>
     // you can register settings like this before require.js is loaded
     var require = {

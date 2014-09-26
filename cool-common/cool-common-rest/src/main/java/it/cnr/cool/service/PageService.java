@@ -181,7 +181,7 @@ public class PageService {
 		context.put("page", currentPage);
 		model.put("context", context);
 
-		model.put("locale", "en_US");
+		model.put("locale_suffix", req.getLocale().getLanguage());
 
 		model.put("pages", getPages());
 
@@ -191,7 +191,7 @@ public class PageService {
 
 		Map<String, Object> request = new HashMap<String, Object>();
 		Map<String, Object> requestContext = new HashMap<String, Object>();
-		requestContext.put("requestMethod", "GET");
+		requestContext.put("requestMethod", req.getMethod());
 		request.put("requestContext", requestContext);
 		model.put("Request", request);
 
