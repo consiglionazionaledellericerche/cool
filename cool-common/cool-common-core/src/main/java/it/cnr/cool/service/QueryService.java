@@ -22,6 +22,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.apache.chemistry.opencmis.client.api.CmisObject;
+import org.apache.chemistry.opencmis.client.api.Document;
 import org.apache.chemistry.opencmis.client.api.FileableCmisObject;
 import org.apache.chemistry.opencmis.client.api.Folder;
 import org.apache.chemistry.opencmis.client.api.ItemIterable;
@@ -90,6 +91,18 @@ public class QueryService {
 
 	}
 
+	public Map<String, Object> documentVersion(HttpServletRequest req, String nodeRef) {
+		Map<String, Object> model = new HashMap<String, Object>();
+		Session cmisSession = getSession(req);
+		List<Document> versions = ((Document)cmisSession.getObject(nodeRef)).getAllVersions();
+		model.put("models", versions);		
+		model.put("hasMoreItems", false);
+		model.put("totalNumItems",versions.size());
+		model.put("maxItemsPerPage", 1000);
+		model.put("activePage", 0);		
+		return model;
+	}	
+	
 	protected Session getSession(HttpServletRequest request) {
 		LOGGER.debug("retrieving CMIS session from HTTP Session");
 		HttpSession session = request.getSession(false);

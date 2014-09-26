@@ -14,6 +14,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.CacheControl;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
@@ -64,6 +65,31 @@ public class Search {
 
 	}
 
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	@Path("document/version")
+	public Response documentVersion(@Context HttpServletRequest request, @QueryParam("nodeRef") String nodeRef) {
+
+		ResponseBuilder rb;
+
+		Map<String, Object> model = queryService.documentVersion(request, nodeRef);
+		try {
+			String json = getJson(model);
+			rb = Response.ok(json);
+			CacheControl cacheControl = new CacheControl();
+			cacheControl.setNoCache(true);
+			rb.cacheControl(cacheControl);
+		} catch (TemplateException e) {
+			LOGGER.error(e.getMessage(), e);
+			rb = Response.status(Status.INTERNAL_SERVER_ERROR);
+		} catch (IOException e) {
+			LOGGER.error(e.getMessage(), e);
+			rb = Response.status(Status.INTERNAL_SERVER_ERROR);
+		}
+
+		return rb.build();
+
+	}
 
 	@GET
 	@Path("query.xls")
