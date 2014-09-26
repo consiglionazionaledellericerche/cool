@@ -492,7 +492,7 @@ public class CMISService implements InitializingBean, CMISSessionManager {
 
 
 			if (r == HttpStatus.SC_OK && method.getResponseHeader(SET_COOKIE) != null) {
-				
+
 				String setCookieHeader = method.getResponseHeader(SET_COOKIE)
 						.getValue();
 				Matcher matcher = pattern.matcher(setCookieHeader);
@@ -543,7 +543,7 @@ public class CMISService implements InitializingBean, CMISSessionManager {
 			LOGGER.debug("Retrieved from session user "
 					+ (user == null ? "guest" : user.getId()));
 		} else {
-			LOGGER.info("session is null, return CMISUser null");
+			LOGGER.debug("session is null, return CMISUser null");
 		}
 
 		return user;
