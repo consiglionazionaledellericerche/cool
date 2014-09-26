@@ -25,6 +25,7 @@ import org.apache.chemistry.opencmis.commons.enums.VersioningState;
 import org.apache.chemistry.opencmis.commons.exceptions.CmisObjectNotFoundException;
 import org.apache.chemistry.opencmis.commons.impl.UrlBuilder;
 import org.apache.chemistry.opencmis.commons.impl.dataobjects.ContentStreamImpl;
+import org.apache.commons.httpclient.util.URIUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
@@ -51,6 +52,9 @@ public class RRDService implements InitializingBean {
 	@Autowired
 	private MailService mailService;
 
+	@Autowired
+	private VersionService versionService;
+
 	private String dictionaryTypeId;
 
 	public void setDictionaryTypeId(String dictionaryTypeId) {
@@ -58,6 +62,10 @@ public class RRDService implements InitializingBean {
 	}
 	@Override
 	public void afterPropertiesSet() throws Exception {
+		if (!versionService.isProduction()) {
+			LOGGER.warn("development mode, avoid scan document paths");
+			return;
+		}
 		PathMatchingResourcePatternResolver resolver = new PathMatchingResourcePatternResolver();
 		Resource[] resources = resolver.getResources("classpath*:remote/**");
 		Session cmisSession = cmisService.createAdminSession();
@@ -68,8 +76,8 @@ public class RRDService implements InitializingBean {
 			if (resource.contentLength() == 0)
 				continue;
 			String urlPath = resource.getURL().toString();
-			String cmisPath = urlPath.substring(urlPath.indexOf("remote/") + 6);					
-			LOGGER.info(urlPath);
+			String cmisPath = URIUtil.decode(urlPath.substring(urlPath.indexOf("remote/") + 6));					
+			LOGGER.debug(urlPath);
 			try{
 				CmisObject doc = cmisSession.getObjectByPath(cmisPath);
 
