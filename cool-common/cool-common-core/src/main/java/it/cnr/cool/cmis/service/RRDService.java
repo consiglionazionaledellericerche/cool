@@ -6,9 +6,7 @@ import it.cnr.cool.util.StringUtil;
 import java.io.InputStream;
 import java.math.BigInteger;
 import java.net.InetAddress;
-import java.net.URLDecoder;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -31,6 +29,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 import org.springframework.mail.MailException;
 
 import com.google.common.base.Joiner;
@@ -51,9 +51,6 @@ public class RRDService implements InitializingBean {
 	@Autowired
 	private MailService mailService;
 
-	@Autowired
-	private CoolStore store;
-
 	private String dictionaryTypeId;
 
 	public void setDictionaryTypeId(String dictionaryTypeId) {
@@ -61,22 +58,24 @@ public class RRDService implements InitializingBean {
 	}
 	@Override
 	public void afterPropertiesSet() throws Exception {
-		List<String> documentsPath = Arrays.asList(store.getAllDocumentPaths());
+		PathMatchingResourcePatternResolver resolver = new PathMatchingResourcePatternResolver();
+		Resource[] resources = resolver.getResources("classpath*:remote/**");
 		Session cmisSession = cmisService.createAdminSession();
 		Boolean webscriptCreated = Boolean.FALSE;
 		List<Document> documentsToBeActive = new ArrayList<Document>();
 		List<String> differentFiles = new ArrayList<String>();
-		for (String documentPath : documentsPath) {
-			String cmisPath = URLDecoder.decode("/".concat(documentPath));
-			LOGGER.debug(cmisPath);
+		for (Resource resource : resources) {
+			if (resource.contentLength() == 0)
+				continue;
+			String urlPath = resource.getURL().toString();
+			String cmisPath = urlPath.substring(urlPath.indexOf("remote/") + 6);					
+			LOGGER.info(urlPath);
 			try{
 				CmisObject doc = cmisSession.getObjectByPath(cmisPath);
 
 				if (doc instanceof Document) {
 					InputStream remote = ((Document) doc).getContentStream().getStream();
-
-					InputStream local = this.getClass().getResource("/remote" + cmisPath).openStream();
-
+					InputStream local = resource.getInputStream();
 					if (!StringUtil.getMd5(remote).equals(StringUtil.getMd5(local))) {
 						LOGGER.error("different md5 for element " + cmisPath);
 						differentFiles.add(cmisPath);
@@ -107,7 +106,7 @@ public class RRDService implements InitializingBean {
 				} else {
 					webscriptCreated = Boolean.TRUE;
 				}
-				InputStream is = this.getClass().getResource("/remote"+cmisPath).openStream();
+				InputStream is = resource.getInputStream();
 				ContentStream contentStream = new ContentStreamImpl(
 						fileName,BigInteger.valueOf(is.available()), 
 						contentType, is);
