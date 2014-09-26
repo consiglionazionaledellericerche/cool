@@ -2,7 +2,9 @@
    <shortname>My Groups Descendants</shortname>
    <description>
    </description>
-   <url>/search/groups/descendant/{user}?zone={zone?}</url>
+   <url>/cnr/groups/my-groups-descendant/{user}?zone={zone?}</url>
    <format default="json">argument</format>
    <authentication>user</authentication>
+   <family>CNR</family>
+   <family>groups</family>
 </webscript>

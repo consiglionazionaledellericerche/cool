@@ -39,7 +39,7 @@ public class ACLService {
 	private void managePermission(BindingSession cmisSession, String objectId,
 			final Map<String, ACLType> permission, final boolean remove) {
 		String link = cmisService.getBaseURL()
-				.concat("service/cnr/permissions/")
+				.concat("service/cnr/nodes/permissions/")
 				.concat(objectId.replace(":/", ""));
 		UrlBuilder url = new UrlBuilder(link);
 		Response resp = cmisService.getHttpInvoker(cmisSession).invokePOST(url,
@@ -76,7 +76,7 @@ public class ACLService {
 			final String nodeRef, final String userId, final boolean children,
 			final List<String> excludedTypes) {
 		String link = cmisService.getBaseURL().concat(
-				"service/ownership/change");
+				"service/cnr/nodes/owner");
 		UrlBuilder url = new UrlBuilder(link);
 		Response resp = cmisService.getHttpInvoker(cmisSession).invokePOST(url,
 				MimeTypes.JSON.mimetype(), new Output() {
@@ -101,7 +101,7 @@ public class ACLService {
 	public void setInheritedPermission(BindingSession cmisSession,
 			String objectId, final Boolean inheritedPermission) {
 		String link = cmisService.getBaseURL()
-				.concat("service/cnr/permissions/")
+				.concat("service/cnr/nodes/permissions/")
 				.concat(objectId.replace(":/", ""));
 		UrlBuilder url = new UrlBuilder(link);
 		Response resp = cmisService.getHttpInvoker(cmisSession).invokePOST(url,

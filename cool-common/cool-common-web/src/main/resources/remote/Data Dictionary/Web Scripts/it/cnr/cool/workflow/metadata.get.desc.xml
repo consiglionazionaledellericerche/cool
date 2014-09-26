@@ -3,7 +3,9 @@
    <description>
       Retrieve custom workflow/task properties
    </description>
-   <url>/workflow/properties?properties={properties}</url>
+   <url>/cnr/workflow/metadata?properties={properties}</url>
    <format default="json">argument</format>
    <authentication>user</authentication>
+   <family>CNR</family>
+   <family>workflow</family>
 </webscript>

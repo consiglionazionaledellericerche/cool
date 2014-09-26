@@ -1,7 +1,9 @@
 <webscript>
    <shortname>Get Person</shortname>
    <description>Get the details of a person.</description>
-   <url>/cnr/person/{userName}</url>
+   <url>/cnr/person/person/{userName}</url>
    <format default="json">argument</format>
    <authentication>user</authentication>
+   <family>CNR</family>
+   <family>person</family>
 </webscript>

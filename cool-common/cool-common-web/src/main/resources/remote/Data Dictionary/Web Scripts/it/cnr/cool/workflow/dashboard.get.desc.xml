@@ -3,8 +3,10 @@
    <description>
       Workflow Dashboard
    </description>
-   <url>/workflow/dashboard</url>
+   <url>/cnr/workflow/dashboard</url>
    <format default="json">argument</format>
    <authentication>user</authentication>
    <transaction>requiresnew</transaction>
+   <family>CNR</family>
+   <family>workflow</family>
 </webscript>

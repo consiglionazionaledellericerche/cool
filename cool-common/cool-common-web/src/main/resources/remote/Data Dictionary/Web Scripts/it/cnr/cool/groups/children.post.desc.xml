@@ -9,9 +9,11 @@
     If the optional sortBy parameter is given, then the results may be sorted. Possible values are "authorityName" (default), "shortName" and "displayName"
    ]]>
    </description>
-   <url>/authority/groups/children?maxItems={maxItems?}&amp;skipCount={skipCount?}&amp;sortBy={sortBy?}&amp;authorityType={authorityType?}&amp;fullName={fullName?}</url>
+   <url>/cnr/groups/children?maxItems={maxItems?}&amp;skipCount={skipCount?}&amp;sortBy={sortBy?}&amp;authorityType={authorityType?}&amp;fullName={fullName?}</url>
    <format default="json">argument</format>
    <authentication>user</authentication>
    <transaction>required</transaction>
    <lifecycle>draft_public_api</lifecycle>
+   <family>CNR</family>
+   <family>groups</family>
 </webscript>

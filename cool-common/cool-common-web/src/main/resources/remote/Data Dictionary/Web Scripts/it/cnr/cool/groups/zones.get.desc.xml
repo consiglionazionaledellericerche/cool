@@ -4,9 +4,11 @@
    Get a list of the zones authorities.
    ]]>
    </description>
-   <url>/authority/zones</url>
+   <url>/cnr/groups/zones</url>
    <format default="json">argument</format>
    <authentication>user</authentication>
    <transaction>required</transaction>
    <lifecycle>draft_public_api</lifecycle>
+   <family>CNR</family>
+   <family>groups</family>
 </webscript>

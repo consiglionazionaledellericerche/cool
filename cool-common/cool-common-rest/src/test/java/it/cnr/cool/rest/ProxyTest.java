@@ -65,7 +65,7 @@ public class ProxyTest {
 	public void testPost() throws IOException {
 
 		MockHttpServletRequest req = new MockHttpServletRequest();
-		req.setParameter(URL, "service/jsRemote");
+		req.setParameter(URL, "service/cnr/utils/javascript-execution");
 		req.setContentType(MimeTypes.JSON.mimetype());
 		req.setContent("{\"command\":\"33*3\"}".getBytes());
 

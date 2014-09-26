@@ -39,7 +39,7 @@ function root() {
   "use strict";
   model.group = groupAuthority.getRootAuthorityPermission();
 }
-if (url.getMatch() === "/authority/groups/root") {
+if (url.getMatch() === "/cnr/groups/root") {
   root();
 } else {
   main();

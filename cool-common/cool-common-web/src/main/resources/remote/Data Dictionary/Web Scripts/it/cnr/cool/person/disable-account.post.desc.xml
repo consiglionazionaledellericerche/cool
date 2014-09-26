@@ -3,7 +3,9 @@
    <description>
       Disable (or enable) people stored in the repository.
    </description>
-   <url>/cnr/disableAccount</url>
+   <url>/cnr/person/disable-account</url>
    <format default="json">argument</format>
    <authentication>user</authentication>
+   <family>CNR</family>
+   <family>person</family>
 </webscript>

@@ -1,8 +1,10 @@
 <webscript>
    <shortname>Create Person</shortname>
    <description>Create the details of a person.</description>
-   <url>/cnr/person</url>
+   <url>/cnr/person/person</url>
    <format default="json">argument</format>
    <authentication>admin</authentication>
    <transaction>required</transaction>
+   <family>CNR</family>
+   <family>person</family>
 </webscript>

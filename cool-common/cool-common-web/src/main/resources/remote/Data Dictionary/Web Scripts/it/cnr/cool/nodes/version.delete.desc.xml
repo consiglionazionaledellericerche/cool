@@ -3,10 +3,11 @@
    <description><![CDATA[
    ]]>
    </description>
-   <url>/cnr/nodeversion</url>
+   <url>/cnr/nodes/version</url>
    <format default="json">argument</format>
-   <family>CNR</family>
    <authentication>user</authentication>
    <transaction>required</transaction>
    <lifecycle>draft_public_api</lifecycle>
+   <family>CNR</family>
+   <family>nodes</family>
 </webscript>

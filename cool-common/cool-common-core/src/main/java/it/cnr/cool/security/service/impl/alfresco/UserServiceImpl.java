@@ -46,11 +46,11 @@ public class UserServiceImpl implements UserService{
 			throws CoolUserFactoryException {
 		return loadUser(userId, cmisService.getAdminSession());
 	}
-	
+
 	@Override
 	public CMISUser loadUser(String userId, BindingSession cmisSession)
 			throws CoolUserFactoryException {
-		String link = cmisService.getBaseURL().concat("service/cnr/person/").concat(UriUtils.encode(userId));
+		String link = cmisService.getBaseURL().concat("service/cnr/person/person/").concat(UriUtils.encode(userId));
         UrlBuilder url = new UrlBuilder(link);
         url.addParameter("groups", true);
 		Response resp = CmisBindingsHelper.getHttpInvoker(cmisSession).invokeGET(url, cmisSession);
@@ -77,7 +77,7 @@ public class UserServiceImpl implements UserService{
 			throw new CoolUserFactoryException("Exception for user "+userId, e);
 		}
 	}
-	
+
 	@Override
 	public InputStream findUser(String term, BindingSession cmisSession) throws CoolUserFactoryException {
 		String link = cmisService.getBaseURL().concat("service/api/people").concat("?filter=*"+term+"*");
@@ -95,7 +95,7 @@ public class UserServiceImpl implements UserService{
 	@Override
 	public CMISUser findUserByEmail(String email, BindingSession cmisSession)
 			throws CoolUserFactoryException {
-		String link = cmisService.getBaseURL().concat("service/cnr/people").concat("?filter=email:"+email);
+		String link = cmisService.getBaseURL().concat("service/cnr/person/people").concat("?filter=email:"+email);
         UrlBuilder url = new UrlBuilder(link);
 		Response resp = CmisBindingsHelper.getHttpInvoker(cmisSession).invokeGET(url, cmisSession);
 		int status = resp.getResponseCode();
@@ -118,7 +118,7 @@ public class UserServiceImpl implements UserService{
 
 	@Override
 	public CMISUser findUserByCodiceFiscale(String codicefiscale, BindingSession cmisSession) throws CoolUserFactoryException {
-		String link = cmisService.getBaseURL().concat("service/cnr/people").concat("?filter=codicefiscale:"+codicefiscale);
+		String link = cmisService.getBaseURL().concat("service/cnr/person/people").concat("?filter=codicefiscale:"+codicefiscale);
         UrlBuilder url = new UrlBuilder(link);
 		Response resp = CmisBindingsHelper.getHttpInvoker(cmisSession).invokeGET(url, cmisSession);
 		int status = resp.getResponseCode();
@@ -135,20 +135,20 @@ public class UserServiceImpl implements UserService{
 			else if (jsonArray.length() == 1) {
 				return gsonParser.fromJson( new StringReader(jsonArray.getJSONObject(0).toString()), CMISUser.class);
 			}else {
-				throw new CoolUserFactoryException("For this tax code "+codicefiscale+" found user: "+ jsonArray.length());				
+				throw new CoolUserFactoryException("For this tax code "+codicefiscale+" found user: "+ jsonArray.length());
 			}
 		} catch (JSONException e) {
 			return null;
 		}
 	}
-	
+
 	@Override
 	public CMISUser createUser(final CMISUser user) throws CoolUserFactoryException {
-		String link = cmisService.getBaseURL().concat("service/cnr/person");
+		String link = cmisService.getBaseURL().concat("service/cnr/person/person");
 		user.setDisableAccount(true);
         UrlBuilder url = new UrlBuilder(link);
-        BindingSession cmisSession = cmisService.getAdminSession();        
-		Response resp = CmisBindingsHelper.getHttpInvoker(cmisSession).invokePOST(url, MimeTypes.JSON.mimetype(), 
+        BindingSession cmisSession = cmisService.getAdminSession();
+		Response resp = CmisBindingsHelper.getHttpInvoker(cmisSession).invokePOST(url, MimeTypes.JSON.mimetype(),
 				new Output() {
 					@Override
 					public void write(OutputStream out) throws Exception {
@@ -160,13 +160,13 @@ public class UserServiceImpl implements UserService{
 			throw new CoolUserFactoryException("Create user error. Exception: "+resp.getErrorContent());
 		if (status == HttpStatus.SC_CONFLICT)
 			throw new CoolUserFactoryException("User name already exists: "+user.getId());
-		
+
 		return loadUser(user.getId(), cmisSession);
 	}
 
 	@Override
 	public CMISUser updateUser(final CMISUser user) throws CoolUserFactoryException {
-		String link = cmisService.getBaseURL().concat("service/cnr/person/").concat(UriUtils.encode(user.getId()));
+		String link = cmisService.getBaseURL().concat("service/cnr/person/person/").concat(UriUtils.encode(user.getId()));
         UrlBuilder url = new UrlBuilder(link);
         BindingSession cmisSession = cmisService.getAdminSession();
 		Response resp = CmisBindingsHelper.getHttpInvoker(cmisSession).invokePUT(url, MimeTypes.JSON.mimetype(), null,
@@ -207,7 +207,7 @@ public class UserServiceImpl implements UserService{
 	public void disableAccount(String userName) throws CoolUserFactoryException {
 
 		String link = cmisService.getBaseURL().concat(
-				"service/cnr/disableAccount");
+				"service/cnr/person/disable-account");
 		UrlBuilder url = new UrlBuilder(link);
 
 		BindingSession cmisSession = cmisService.getAdminSession();

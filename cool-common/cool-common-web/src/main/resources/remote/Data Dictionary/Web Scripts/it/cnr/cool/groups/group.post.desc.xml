@@ -10,9 +10,11 @@
       }
    ]]>
    </description>
-   <url>/authority/group</url>
+   <url>/cnr/groups/group</url>
    <format default="json">argument</format>
    <authentication>user</authentication>
    <transaction>required</transaction>
    <lifecycle>draft_public_api</lifecycle>
+   <family>CNR</family>
+   <family>groups</family>
 </webscript>

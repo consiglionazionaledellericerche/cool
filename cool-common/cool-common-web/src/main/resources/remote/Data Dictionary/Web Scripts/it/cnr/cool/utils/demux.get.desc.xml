@@ -3,7 +3,7 @@
    <description><![CDATA[
    ]]>
    </description>
-   <url>/demux</url>
+   <url>/cnr/utils/demux</url>
    <format default="json">argument</format>
    <authentication>user</authentication>
    <transaction>required</transaction>
@@ -12,4 +12,6 @@
 	    <never>false</never>
 	    <mustrevalidate>false</mustrevalidate>
 	  </cache>
+   <family>CNR</family>
+   <family>utils</family>
 </webscript>

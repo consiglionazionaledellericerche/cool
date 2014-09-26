@@ -23,7 +23,7 @@ public class ZoneService implements GlobalCache, InitializingBean{
 	@Autowired
 	private CMISService cmisService;
 
-	private static final String ZONES_URL = "service/authority/zones";
+	private static final String ZONES_URL = "service/cnr/groups/zones";
 
 	private String zones;
 

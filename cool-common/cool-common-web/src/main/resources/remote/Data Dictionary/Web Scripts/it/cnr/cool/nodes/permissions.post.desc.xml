@@ -2,9 +2,11 @@
 <webscript>
     <shortname>cnr-set-permissions</shortname>
     <description>Document List Component - set permissions data webscript</description>
-   <url>/cnr/permissions/{store_type}/{store_id}/{id}</url>
+   <url>/cnr/nodes/permissions/{store_type}/{store_id}/{id}</url>
    <format default="json">argument</format>
    <authentication>user</authentication>
    <transaction>required</transaction>
-  <lifecycle>internal</lifecycle>
+   <lifecycle>internal</lifecycle>
+   <family>CNR</family>
+   <family>nodes</family>
 </webscript>

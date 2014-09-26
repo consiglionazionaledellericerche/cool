@@ -8,8 +8,8 @@
 			<#if authority.allowableActions??>
 				<#list authority.allowableActions as allowableAction>
 					"${allowableAction}"
-					<#if allowableAction_has_next>,</#if>	
-				</#list>		
+					<#if allowableAction_has_next>,</#if>
+				</#list>
 			</#if>
 		],
 		"id": "${authority.nodeRef.toString()}",
@@ -25,17 +25,17 @@
 </#escape>
 </#macro>
 <#import "../generic-paged-results.lib.ftl" as genericPaging />
-<#if url.match == "/authority/groups/root">
+<#if url.match == "/cnr/groups/root">
 {
 	"id": "${group.nodeRef.toString()}",
 	"allowableActions": [
 			<#if group.allowableActions??>
 				<#list group.allowableActions as allowableAction>
 					"${allowableAction}"
-					<#if allowableAction_has_next>,</#if>	
-				</#list>		
+					<#if allowableAction_has_next>,</#if>
+				</#list>
 			</#if>
-		]	
+		]
 }
 <#else>
 [

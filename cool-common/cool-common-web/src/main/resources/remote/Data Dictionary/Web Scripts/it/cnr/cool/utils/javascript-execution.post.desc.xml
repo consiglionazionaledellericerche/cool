@@ -3,7 +3,9 @@
    <description>
       Javascript remote execution
    </description>
-   <url>/jsRemote</url>
+   <url>/cnr/utils/javascript-execution</url>
    <format default="json">argument</format>
    <authentication>user</authentication>
+   <family>CNR</family>
+   <family>utils</family>
 </webscript>
