@@ -1,11 +1,13 @@
 RRDService disattivato
 - Cool Classpath Store
+- versionservice preoduction
+- hardening classpath://remote
 
 cambiare url webscript, uniformare URL webscript remote
 
 verificare il versionService
 
-pageservice da verificare riga per riga
+refactoring PageService
 
 buttare via risorse obsolete Surf etc.
 
@@ -21,6 +23,10 @@ alleggerire WEB-INF lib - librerie sospette doccnr:
 fixare test
 
 check messaggi warning nelle log durante avvio applicazioni
+
+require.js anche per doccnr
+
+
 
 ---- Marco
 TypeDefinitionCache - gia stata implementata!!
@@ -52,6 +58,8 @@ verificare con la configurazione di produzione apache che il caching funziona (c
 rivedere tutti gli header di caching
 - i18n, cache, common
 - <bean id="jcononResourceController" class="it.cnr.cool.extensions.surf.mvc.CMISResourceController">
+
+usare PathMatchingResourcePatternResolver per i18n
 
 CoolConsoleUpdate
 - cache java (guava)
