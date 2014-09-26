@@ -29,6 +29,7 @@
   <modules>
     <module>cool-common</module>
     <module>cool-webapp</module>
+    <module>cool-model</module>
     <module>cool-dashboard</module>
     <module>cool-bulkinfo</module>
     <module>cool-view</module>
