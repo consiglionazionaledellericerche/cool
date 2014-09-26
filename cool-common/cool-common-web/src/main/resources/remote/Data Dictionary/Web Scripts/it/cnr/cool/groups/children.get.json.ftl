@@ -24,7 +24,7 @@
 }
 </#escape>
 </#macro>
-<#import "../generic-paged-results.lib.ftl" as genericPaging />
+<#import "generic-paged-results.lib.ftl" as genericPaging />
 <#if url.match == "/cnr/groups/root">
 {
 	"id": "${group.nodeRef.toString()}",
