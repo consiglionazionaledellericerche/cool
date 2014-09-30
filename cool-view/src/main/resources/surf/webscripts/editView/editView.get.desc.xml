@@ -1,6 +1,0 @@
-<webscript>
-	<shortname>Edit View</shortname>
-	<description>Edit View</description>
-	<authentication>user</authentication>
-	<url>/editView/main</url>
-</webscript>

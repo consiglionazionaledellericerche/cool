@@ -1,6 +1,0 @@
-<webscript>
-	<shortname>Ricerca Avanzata</shortname>
-	<description>Ricerca Avanzata</description>
-	<authentication>user</authentication>
-	<url>/ricerca/main</url>
-</webscript>

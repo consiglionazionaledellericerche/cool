@@ -1,6 +1,0 @@
-<webscript>
-  <shortname>JS Console</shortname>
-  <description>JS Console</description>
-  <authentication>user</authentication>
-  <url>/jsConsole/main</url>
-</webscript>

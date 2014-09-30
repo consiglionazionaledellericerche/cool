@@ -1,6 +1,0 @@
-<webscript>
-  <shortname>Reader frontOffice</shortname>
-  <description>Reader frontOffice</description>
-  <authentication>user</authentication>
-  <url>/frontOffice/main</url>
-</webscript>

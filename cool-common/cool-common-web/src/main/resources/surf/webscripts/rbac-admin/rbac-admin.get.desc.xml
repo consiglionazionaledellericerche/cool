@@ -1,6 +1,0 @@
-<webscript>
-  <shortname>Rbac Admin</shortname>
-  <description>Rbac Admin</description>
-  <authentication>user</authentication>
-  <url>/rbac-admin/main</url>
-</webscript>

@@ -1,5 +1,0 @@
-<webscript>
-	<shortname>Company Header</shortname>
-	<description>Company Header</description>
-	<url>/company/header?failure={failure?}</url>
-</webscript>
