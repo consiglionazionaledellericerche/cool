@@ -5,8 +5,11 @@ import java.io.InputStream;
 import java.util.jar.Attributes;
 import java.util.jar.Manifest;
 
+import javax.servlet.ServletContext;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 
 public class VersionService {
 	private static final String PRODUCTION = "PRODUCTION";
@@ -19,11 +22,11 @@ public class VersionService {
 
 	private boolean production;
 
+	@Autowired
+	private ServletContext context;	
+
 	public void init() {
-
-		InputStream is = VersionService.class
-				.getResourceAsStream(MANIFEST_PATH);
-
+		InputStream is = context.getResourceAsStream(MANIFEST_PATH);
 		if (is != null) {
 			try {
 				Manifest manifest = new Manifest(is);
