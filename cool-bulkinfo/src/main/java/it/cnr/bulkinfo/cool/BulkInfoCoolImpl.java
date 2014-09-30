@@ -66,7 +66,7 @@ public class BulkInfoCoolImpl extends BulkInfoImpl implements BulkInfoCool {
 			if (propertyDefinition.getPropertyType().equals(PropertyType.DATETIME)) {
 				fieldProperty.addAttribute("widget", "ui.datepicker");
 			}
-			if (propertyDefinition.getDefaultValue() != null) {
+			if (propertyDefinition.getDefaultValue() != null && !propertyDefinition.getDefaultValue().isEmpty()) {
 				fieldProperty.addAttribute("default", String.valueOf(propertyDefinition.getDefaultValue().get(0)));
 			}
 			fieldProperty.addAttribute("labelClass", "control-label");

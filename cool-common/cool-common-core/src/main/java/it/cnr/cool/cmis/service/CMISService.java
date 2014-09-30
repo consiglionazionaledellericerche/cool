@@ -1,5 +1,6 @@
 package it.cnr.cool.cmis.service;
 
+import it.cnr.cool.cmis.service.impl.ObjectTypeCacheImpl;
 import it.cnr.cool.security.service.impl.alfresco.CMISUser;
 
 import java.io.IOException;
@@ -234,7 +235,7 @@ public class CMISService implements InitializingBean, CMISSessionManager {
         sessionParameters.put(SessionParameter.PASSWORD, password);
         sessionParameters.put(SessionParameter.REPOSITORY_ID, repositoryId);
         sessionParameters.put(SessionParameter.AUTHENTICATION_PROVIDER_CLASS, CustomAuthenticationProvider.class.getName());
-        sessionParameters.put(SessionParameter.CACHE_SIZE_TYPES, "1000");
+        sessionParameters.put(SessionParameter.TYPE_DEFINITION_CACHE_CLASS, ObjectTypeCacheImpl.class.getName());
         sessionParameters.put(SessionParameter.LOCALE_ISO3166_COUNTRY, DEFAULT_LOCALE.getCountry());
         sessionParameters.put(SessionParameter.LOCALE_ISO639_LANGUAGE, DEFAULT_LOCALE.getLanguage());
         sessionParameters.put(SessionParameter.LOCALE_VARIANT, DEFAULT_LOCALE.getVariant());
@@ -333,7 +334,7 @@ public class CMISService implements InitializingBean, CMISSessionManager {
         }
         sessionParameters.put(SessionParameter.AUTH_HTTP_BASIC, "true");
         sessionParameters.put(SessionParameter.AUTH_SOAP_USERNAMETOKEN, "false");
-        sessionParameters.put(SessionParameter.CACHE_SIZE_TYPES, "1000");
+        sessionParameters.put(SessionParameter.TYPE_DEFINITION_CACHE_CLASS, ObjectTypeCacheImpl.class.getName());
         for (Map.Entry<String, String> entry : sessionParameters.entrySet()) {
             session.put(entry.getKey(), entry.getValue());
         }

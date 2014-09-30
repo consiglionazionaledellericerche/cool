@@ -13,6 +13,13 @@
             }
         }
     },
+    "content": {
+        "GET": {
+            "whitelist": {
+                "all": true
+            }
+        }
+    },
     "document": {
         "POST": {
             "whitelist": {
@@ -63,7 +70,7 @@
             }
         }
     },
-    "loginPage": {
+    "login": {
         "GET": {
             "whitelist": {
                 "all": true
@@ -86,6 +93,11 @@
     },
     "search": {
         "POST": {
+            "whitelist": {
+                "all": true
+            }
+        },
+    "GET": {
             "whitelist": {
                 "all": true
             }
@@ -230,6 +242,25 @@
             }
         },
         "DELETE": {
+            "whitelist": {
+                "all": true
+            }
+        }
+    },
+    "zipperReader": {
+        "GET": {
+            "whitelist": {
+                "all": true
+            }
+        },
+        "POST": {
+            "whitelist": {
+                "all": true
+            }
+        }
+    },
+    "zipperReader/main": {
+        "GET": {
             "whitelist": {
                 "all": true
             }
