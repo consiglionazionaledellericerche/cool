@@ -1,14 +1,3 @@
-RRDService disattivato
-- Cool Classpath Store
-- versionservice preoduction
-- hardening classpath://remote
-
-cambiare url webscript, uniformare URL webscript remote
-
-verificare il versionService
-
-refactoring PageService
-
 buttare via risorse obsolete Surf etc.
 
 alleggerire WEB-INF lib - librerie sospette doccnr:
@@ -29,7 +18,8 @@ require.js anche per doccnr
 
 
 ---- Marco
-TypeDefinitionCache - gia stata implementata!!
+
+verificare il versionService
 
 ---- JCONON
 nota x jconon: dal context cool-common-web-context sono stati eliminate molte definizioni di bean per Spring Surf/Spring MVC
@@ -51,6 +41,17 @@ ZipperService: => VariazioniService
 puntamento a cmis 1.1
 avanzamento versione chemistry 0.12.0
 rimozione alfresco-opencmis-extension
+
+TypeDefinitionCache - gia stata implementata!!
+
+RRDService disattivato
+- Cool Classpath Store
+- versionservice preoduction
+- hardening classpath://remote
+
+cambiare url webscript, uniformare URL webscript remote
+
+refactoring PageService
 
 --- later
 a che serve spring web ???? lo usiamo solo per gli allegati!

@@ -1,8 +1,8 @@
 package it.cnr.cool.rest;
 
 import it.cnr.cool.cmis.service.CMISService;
-import it.cnr.cool.cmis.service.CustomAuthenticationProvider;
 import it.cnr.cool.cmis.service.FolderService;
+import it.cnr.cool.security.CMISAuthenticatorFactory;
 import it.cnr.cool.security.SecurityChecked;
 import it.cnr.cool.service.FolderChildrenService;
 import it.cnr.cool.service.util.AlfrescoFolder;
@@ -55,7 +55,7 @@ public class FolderChildren {
 
 		HttpSession session = req.getSession(false);
 		String username = (String) session
-				.getAttribute(CustomAuthenticationProvider.SESSION_ATTRIBUTE_KEY_USER_ID);
+				.getAttribute(CMISAuthenticatorFactory.SESSION_ATTRIBUTE_KEY_USER_ID);
 
 		ArrayList<AlfrescoFolder> model;
 		Response response;

@@ -2,7 +2,6 @@ package it.cnr.cool.cmis.service;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
 import it.cnr.cool.security.service.impl.alfresco.CMISUser;
 
 import javax.servlet.http.HttpServletRequest;
@@ -227,12 +226,5 @@ public class CMISServiceTest {
 		LOGGER.warn("Not yet implemented");
 	}
 
-	@Test
-	public void testValidateTicket() {
-		SessionImpl bindingSession = cmisService.getAdminSession();
-		String ticket = bindingSession.get(TICKET).toString();
-		LOGGER.info(ticket);
-		assertTrue(cmisService.validateTicket(ticket, bindingSession));
-	}
 
 }
