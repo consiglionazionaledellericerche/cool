@@ -60,9 +60,6 @@
 
 	<bean id="cmisBindingListener" class="it.cnr.cool.security.CmisBindingListener" />
 
-	<bean id="CoolClassPathStore" class="it.cnr.cool.cmis.service.CoolClassPathStore">
-	</bean>
-
 	<!-- End CMIS service Bean -->
 
 	<bean id="webframework.factory.user.cmis" class="it.cnr.cool.security.CMISAuthenticatorFactory" />
@@ -116,9 +113,9 @@
 	<bean id="queryService" class="it.cnr.cool.service.QueryService"></bean>
 
 	<bean class="it.cnr.cool.service.NodeService"></bean>
-	
+
 	<bean class="it.cnr.cool.service.PageService" init-method="init"></bean>
-	
+
 	<bean class="it.cnr.mock.CnrRegion"></bean>
 
 </beans>
