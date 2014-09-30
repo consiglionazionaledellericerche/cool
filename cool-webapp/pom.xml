@@ -103,6 +103,12 @@
       </modules>
     </profile>
     <profile>
+      <id>flows</id>
+      <modules>
+        <module>cool-flows</module>
+      </modules>
+    </profile>
+    <profile>
       <id>nexus</id>
       <build>
         <plugins>
