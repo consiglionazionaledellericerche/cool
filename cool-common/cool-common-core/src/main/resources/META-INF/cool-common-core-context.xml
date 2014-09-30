@@ -40,7 +40,6 @@
 	</bean>
 
 	<bean id="cmisService" class="it.cnr.cool.cmis.service.CMISService">
-		<property name="atompubURL" value="${org.apache.chemistry.opencmis.binding.atompub.url}" />
 		<property name="baseURL" value="${repository.base.url}" />
 	</bean>
 

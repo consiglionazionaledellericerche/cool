@@ -10,7 +10,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.apache.chemistry.opencmis.client.api.Session;
-import org.apache.chemistry.opencmis.client.bindings.impl.SessionImpl;
 import org.apache.chemistry.opencmis.client.bindings.spi.BindingSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -48,13 +47,16 @@ public class CMISAuthenticatorFactory {
 			String password) {
 		boolean authorized = false;
 		try {
-			SessionImpl bindingSession = cmisService.createBindingSession(
-					username, password);
+			String ticket = cmisService.getTicket(username, password);
 
-			Session cmisSession = cmisService.createSession(username, password);
+			org.apache.chemistry.opencmis.client.bindings.impl.SessionImpl bindingSession = cmisService
+					.createBindingSession("", ticket);
+
+			Session cmisSession = cmisService.createSession("", ticket);
 			HttpSession session = request.getSession(true);
 			session.setAttribute(CMISService.DEFAULT_SERVER, cmisSession);
-			session.setAttribute(CMISService.BINDING_SESSION, bindingSession);
+			session.setAttribute(CMISService.BINDING_SESSION,
+					cmisService.createBindingSession("", ticket));
 			session.setAttribute(CMISService.SIPER_BINDING_SESSION,
 					cmisService.createBindingSession(username, password));
 			session.setAttribute(SESSION_ATTRIBUTE_KEY_USER_ID, username);
@@ -63,6 +65,7 @@ public class CMISAuthenticatorFactory {
 			LOGGER.debug("loaded user: " + user.toString());
 			session.setAttribute(CMISUser.SESSION_ATTRIBUTE_KEY_USER_OBJECT,
 					user);
+
 
 			authorized = true;
 		} catch (Exception e) {

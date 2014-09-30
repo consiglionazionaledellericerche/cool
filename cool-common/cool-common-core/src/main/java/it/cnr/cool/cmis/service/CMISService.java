@@ -27,10 +27,19 @@ import org.apache.chemistry.opencmis.client.bindings.spi.http.HttpInvoker;
 import org.apache.chemistry.opencmis.client.runtime.SessionFactoryImpl;
 import org.apache.chemistry.opencmis.commons.SessionParameter;
 import org.apache.chemistry.opencmis.commons.impl.dataobjects.ContentStreamImpl;
+import org.apache.commons.httpclient.HttpClient;
+import org.apache.commons.httpclient.HttpStatus;
+import org.apache.commons.httpclient.methods.PostMethod;
+import org.apache.commons.httpclient.methods.RequestEntity;
+import org.apache.commons.httpclient.methods.StringRequestEntity;
+import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
+
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 
 public class CMISService implements InitializingBean, CMISSessionManager {
 
@@ -56,7 +65,6 @@ public class CMISService implements InitializingBean, CMISSessionManager {
 	private long cmisGuestSessionExpiration;
 	private long cmisAdminSessionExpiration;
 
-	private String atompubURL;
     private String baseURL;
 
 	private SessionImpl cmisGuestBindingSession;
@@ -291,11 +299,40 @@ public class CMISService implements InitializingBean, CMISSessionManager {
     	return session;
     }
 
+	public String getTicket(String username, String password)
+			throws LoginException {
 
-	public void setAtompubURL(String atompubURL) {
-		this.atompubURL = atompubURL;
+		String ticketURL = getBaseURL() + "service/api/login.json";
+
+		PostMethod method = new PostMethod(ticketURL);
+
+		JSONObject body = new JSONObject();
+		try {
+			body.put("username", username);
+			body.put("password", password);
+
+			RequestEntity requestEntity = new StringRequestEntity(
+					body.toString(), "text/plain", "UTF-8");
+			method.setRequestEntity(requestEntity);
+
+			if (new HttpClient().executeMethod(method) != HttpStatus.SC_OK) {
+				throw new LoginException("Login failed for user " + username
+						+ " with HTTP status code: " + method.getStatusLine());
+			} else {
+				String json = new String(method.getResponseBody());
+				JsonObject response = new JsonParser().parse(json)
+						.getAsJsonObject();
+
+				return response.getAsJsonObject().get("data").getAsJsonObject()
+						.get("ticket").getAsString();
+			}
+
+		} catch (Exception e) {
+			throw new LoginException("unable to create ticket for user "
+					+ username, e);
+		}
+
 	}
-
 
 	@Override
 	public Session getCurrentCMISSession(HttpSession se) {

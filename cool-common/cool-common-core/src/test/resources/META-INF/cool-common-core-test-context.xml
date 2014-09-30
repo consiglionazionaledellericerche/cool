@@ -22,12 +22,11 @@
   </bean>
 
   <bean class="it.cnr.cool.service.QueryService"></bean>
-  
+
   <bean id="cmisService" class="it.cnr.cool.mocks.MockCMISService">
-  	<property name="atompubURL" value="${org.apache.chemistry.opencmis.binding.atompub.url}" />
   	<property name="baseURL" value="${repository.base.url}" />
   </bean>
-  
+
 	<bean id="i18nService" class="it.cnr.cool.service.I18nService">
 		<property name="locations">
 			<list>
