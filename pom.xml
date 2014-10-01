@@ -133,11 +133,12 @@
                     <exclude>**/src/main/js/**</exclude>
                     <exclude>**/src/test/**</exclude>
                     <exclude>**/cnr/cool/permissions/**</exclude>
+                    <!-- webscript copiati da alfresco -->
+                    <exclude>**/nodes/permissions.*.js</exclude>
                     <!-- cool-dashboard validato con jshint -->
                     <exclude>**/angular/**</exclude>
                     <!-- cool-flows validato con jshint -->
                     <exclude>**/ng/**</exclude>
-                    <exclude>**/permissions/permissions.*</exclude>
                   </excludes>
                 </configuration>
               </execution>
