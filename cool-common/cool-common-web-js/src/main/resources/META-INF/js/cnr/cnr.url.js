@@ -24,7 +24,7 @@ define(['jquery', 'cnr/cnr.ui', 'json!common', 'i18n', 'json!cache'], function (
         workflowInstances: 'rest/proxy' + '?url=service/api/workflow-instances',
         workflowInstance: 'rest/proxy' + '?url=service/api/workflow-instances/$workflow_instance_id',
         jsRemote: 'rest/proxy' + '?url=service/cnr/utils/javascript-execution',
-        workflowProperties: 'rest/proxy' + '?url=service/cnr/workflow/properties',
+        workflowProperties: 'rest/proxy' + '?url=service/cnr/workflow/metadata',
         definitionDiagram: 'rest/proxy' + '?url=service/cnr/workflow/diagram.png&definitionId=$workflowDefinitionId',
         childrenGroup: 'rest/proxy' + '?url=service/cnr/groups/children',
         rootGroup: 'rest/proxy' + '?url=service/cnr/groups/root',
