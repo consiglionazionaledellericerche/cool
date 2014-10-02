@@ -91,6 +91,8 @@ public class StaticResouce {
 			mimeType = "font/ttf";
 		} else if (path.indexOf(".otf") > 0) {
 			mimeType = "font/opentype";
+		} else if (path.indexOf(".html") > 0) {
+			mimeType = "text/html";
 		} else {
 			mimeType = DEFAULT_MIME_TYPE;
 			LOGGER.warn("mimetype not found for path: " + path
