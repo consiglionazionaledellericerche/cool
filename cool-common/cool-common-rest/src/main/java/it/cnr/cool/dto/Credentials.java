@@ -5,12 +5,6 @@ public class Credentials {
 	public Credentials() {
 	}
 
-	public Credentials(String username, String password) {
-		super();
-		this.username = username;
-		this.password = password;
-	}
-
 	private String username;
 	private String password;
 

@@ -1,6 +1,7 @@
 package it.cnr.cool.rest;
 
 import it.cnr.cool.cmis.service.CMISService;
+import it.cnr.cool.dto.Credentials;
 import it.cnr.cool.exception.CoolUserFactoryException;
 import it.cnr.cool.mail.MailService;
 import it.cnr.cool.rest.util.Util;
@@ -19,6 +20,7 @@ import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import javax.ws.rs.Consumes;
 import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -239,6 +241,7 @@ public class SecurityRest {
 
 	@POST
 	@Path(Page.LOGIN_URL)
+	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
 	public Response login(@Context HttpServletRequest req,
 			@FormParam("username") String username,
 			@FormParam("password") String password,
@@ -246,7 +249,7 @@ public class SecurityRest {
 
 		boolean authenticated = cmisAuthenticatorFactory.authenticate(req,
 				username, password);
-		
+
 		URI uri;
 
 		if (authenticated) {
@@ -256,8 +259,31 @@ public class SecurityRest {
 		}
 
 		return Response.seeOther(uri).build();
-		
+
 	}
+
+	@POST
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Path(Page.LOGIN_URL)
+	public Response loginJson(@Context HttpServletRequest req,
+			Credentials credentials) {
+
+		String username = credentials.getUsername();
+		boolean authenticated = cmisAuthenticatorFactory.authenticate(req,
+				username, credentials.getPassword());
+
+		ResponseBuilder rb;
+		if (authenticated) {
+			rb = Response.ok();
+		} else {
+			rb = Response.status(Status.FORBIDDEN).entity(
+					"access denied to user " + username);
+		}
+
+		return rb.build();
+
+	}
+
 
 	@GET
 	@Path(Page.LOGOUT_URL)

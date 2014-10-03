@@ -1,13 +1,4 @@
-buttare via risorse obsolete Surf etc.
-
-alleggerire WEB-INF lib - librerie sospette doccnr:
-  X spring aop ???
-  X aspectj
-  X javase core - com.google.zxing
-  X jfreechart
-  X quartz ?
-  org.springframework.*
-  isolare dipendenza Guava (si puo' evitare ???)
+spostare cmisbindinglistener
 
 fixare test
 
@@ -15,11 +6,6 @@ check messaggi warning nelle log durante avvio applicazioni
 
 require.js anche per doccnr
 
-
-
----- Marco
-
-verificare il versionService
 
 ---- JCONON
 nota x jconon: dal context cool-common-web-context sono stati eliminate molte definizioni di bean per Spring Surf/Spring MVC
@@ -35,6 +21,8 @@ ZipperService: => VariazioniService
   pagina etc.
   spostare la dipendenza di quartz in variazioni da cool-webapp
   test (e.g. ZipperServiceTest) da spostare nel nuovo artefatto
+
+togliere dipendenza Quartz
 
 --- fatto
 
@@ -53,6 +41,8 @@ cambiare url webscript, uniformare URL webscript remote
 
 refactoring PageService
 
+buttare via risorse obsolete Surf etc.
+
 --- later
 a che serve spring web ???? lo usiamo solo per gli allegati!
 verificare con la configurazione di produzione apache che il caching funziona (cache pubbliche/private...)
@@ -63,5 +53,15 @@ rivedere tutti gli header di caching
 usare PathMatchingResourcePatternResolver per i18n
 
 CoolConsoleUpdate
-- cache java (guava)
+- cache java (guava) - isolare dipendenza Guava (si puo' evitare ???)
 - cache it.cnr.cool.cmis.service.impl.CacheServiceImpl
+
+verificare il versionService
+
+mod-cache e gzip su doccnr
+
+bloccare con 403 le url
+  /service/api/solr/*
+  /s/api/solr/*
+  /wcservice/api/solr/*
+  /wcs/api/solr/*
