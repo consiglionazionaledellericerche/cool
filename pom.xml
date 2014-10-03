@@ -43,6 +43,7 @@
       </activation>
       <modules>
         <module>cool-accounting</module>
+        <module>cool-variazioni</module>
       </modules>
     </profile>
     <profile>
