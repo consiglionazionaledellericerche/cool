@@ -1,11 +1,6 @@
 package it.cnr.cool.service;
 
-import static org.junit.Assert.assertTrue;
 import it.cnr.cool.cmis.service.CMISService;
-
-import java.util.List;
-import java.util.Map;
-
 import org.apache.chemistry.opencmis.client.api.Session;
 import org.apache.chemistry.opencmis.client.runtime.QueryResultImpl;
 import org.junit.Ignore;
@@ -19,6 +14,11 @@ import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.annotation.DirtiesContext.ClassMode;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+
+import java.util.List;
+import java.util.Map;
+
+import static org.junit.Assert.assertTrue;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = { "classpath:/META-INF/cool-common-core-test-context.xml" })
@@ -91,6 +91,8 @@ public class QueryServiceTest {
 
 		Session session = cmisService.createAdminSession();
 		String nodeRef = session.getObjectByPath(FOLDER_PATH).getId();
+
+        req.getSession().setAttribute(CMISService.DEFAULT_SERVER, session);
 
 		req.setParameter("f", nodeRef);
 
