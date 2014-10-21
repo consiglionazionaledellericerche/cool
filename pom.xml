@@ -6,14 +6,19 @@
   <version>0.9</version>
   <name>Cool Platform</name>
   <packaging>pom</packaging>
+
+  <parent>
+    <artifactId>archetype</artifactId>
+    <groupId>it.cnr.si</groupId>
+    <version>0.2</version>
+  </parent>
+
   <properties>
-    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <opencmis.version>0.12.0</opencmis.version>
     <aspectj.version>1.6.6.RELEASE</aspectj.version>
     <spring.version>3.1.2.RELEASE</spring.version>
 
     <jasperreports.version>5.5.0</jasperreports.version>
-    <java.version>1.7</java.version>
     <jslint4java.version>2.0.2</jslint4java.version>
     <junit.version>4.8.1</junit.version>
     <slf4j.version>1.7.7</slf4j.version>
@@ -22,7 +27,6 @@
     <mail.version>1.4.5</mail.version>
     <jms.version>1.1</jms.version>
     <servlet.version>2.5</servlet.version>
-    <nexus.url>http://bandt.si.cnr.it:8280/nexus</nexus.url>
   </properties>
 
   <modules>
@@ -209,49 +213,6 @@
     </profile>
   </profiles>
 
-  <repositories>
-    <repository>
-      <id>cnr</id>
-      <name>cnr public</name>
-      <url>${nexus.url}/content/groups/public</url>
-      <releases>
-        <enabled>true</enabled>
-      </releases>
-      <snapshots>
-        <enabled>false</enabled>
-      </snapshots>
-    </repository>
-    <repository>
-      <id>cnr-snapshots</id>
-      <name>cnr public</name>
-      <url>${nexus.url}/content/groups/public-snapshots</url>
-      <releases>
-        <enabled>false</enabled>
-      </releases>
-      <snapshots>
-        <enabled>true</enabled>
-      </snapshots>
-    </repository>
-  </repositories>
-
-  <pluginRepositories>
-    <pluginRepository>
-      <id>cnr</id>
-      <name>cnr public</name>
-      <url>${nexus.url}/content/groups/public</url>
-    </pluginRepository>
-    <pluginRepository>
-      <id>cnr-snapshots</id>
-      <name>cnr snapshots</name>
-      <url>${nexus.url}/content/groups/public-snapshots</url>
-      <releases>
-        <enabled>false</enabled>
-      </releases>
-      <snapshots>
-        <enabled>true</enabled>
-      </snapshots>
-    </pluginRepository>
-  </pluginRepositories>
 
   <dependencies>
     <dependency>
@@ -274,15 +235,6 @@
 
   <build>
     <plugins>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-compiler-plugin</artifactId>
-        <version>2.5.1</version>
-        <configuration>
-          <source>${java.version}</source>
-          <target>${java.version}</target>
-        </configuration>
-      </plugin>
       <plugin>
         <groupId>net.alchim31.maven</groupId>
         <artifactId>yuicompressor-maven-plugin</artifactId>
@@ -321,10 +273,6 @@
           <nodeExecutable>${node.path}</nodeExecutable>
         </configuration>
       </plugin>
-      <plugin>
-        <artifactId>maven-deploy-plugin</artifactId>
-        <version>2.7</version>
-      </plugin>
     </plugins>
     <pluginManagement>
     	<plugins>
@@ -348,22 +296,6 @@
     	</plugins>
     </pluginManagement>
   </build>
-
-  <distributionManagement>
-    <!-- Publish the versioned releases here -->
-    <repository>
-      <id>buildandtest</id>
-      <name>nexus</name>
-      <url>${nexus.url}/content/repositories/releases</url>
-    </repository>
-
-    <!-- Publish the versioned releases here -->
-    <snapshotRepository>
-      <id>buildandtest</id>
-      <name>nexus</name>
-      <url>${nexus.url}/content/repositories/snapshots</url>
-    </snapshotRepository>
-  </distributionManagement>
 
   <scm>
     <connection>scm:svn:svn+ssh://svnselezioni.si.cnr.it/DATA/svnroot/svn-documentale/branches/development/cool</connection>
