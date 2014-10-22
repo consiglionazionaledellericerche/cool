@@ -1,4 +1,4 @@
-define(["cnr/cnr", 'jstree', 'cnr/cnr.url', 'json!common'], function (CNR, jstree, URL, common) {
+define(['jquery', "cnr/cnr", 'jstree', 'cnr/cnr.url', 'json!common'], function ($, CNR, jstree, URL, common) {
   // Folders tree
   "use strict";
 

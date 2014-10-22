@@ -1,5 +1,4 @@
-define([
-  'cnr/cnr.ui.widgets', 'cnr/cnr', 'cnr/cnr.style', 'handlebars', 'i18n', 'cnr/cnr.ui', 'cnr/cnr.ui.priority', 'cnr/cnr.ui.duedate', 'cnr/cnr.validator', 'cnr/cnr.url', 'json!common', 'datepicker-i18n', 'datetimepicker-i18n'], function (Widgets, CNR, Style, Handlebars, i18n, UI, Priority, DueDate, Validator, URL, common) {
+define(['cnr/cnr.ui.widgets', 'jquery', 'cnr/cnr', 'cnr/cnr.style', 'handlebars', 'i18n', 'cnr/cnr.ui', 'cnr/cnr.ui.priority', 'cnr/cnr.ui.duedate', 'cnr/cnr.validator', 'cnr/cnr.url', 'json!common', 'datepicker-i18n', 'datetimepicker-i18n'], function (Widgets, $, CNR, Style, Handlebars, i18n, UI, Priority, DueDate, Validator, URL, common) {
   "use strict";
 
   /**
@@ -177,7 +176,7 @@ define([
       }
 
       // E' stato aggiunto nella versione 3, e per adesso funziona solo con la 3
-      if (item.visible === "false" || item.visible === false) {
+      if ((item.visible === "false" || item.visible === false) && options.version === 3) {
         obj.css("display", "none");
       }
 

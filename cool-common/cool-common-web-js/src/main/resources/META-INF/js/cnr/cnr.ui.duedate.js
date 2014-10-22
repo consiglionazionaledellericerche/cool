@@ -1,4 +1,4 @@
-define(['cnr/cnr'], function (CNR) {
+define(['jquery', 'cnr/cnr'], function ($, CNR) {
 	"use strict";
 	return {
 		Widget: function (id, labelText, value) {

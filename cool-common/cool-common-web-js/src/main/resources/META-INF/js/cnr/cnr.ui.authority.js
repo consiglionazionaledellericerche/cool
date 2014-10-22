@@ -1,5 +1,5 @@
 /* javascript closure providing all the authority functionalities */
-define(['cnr/cnr.url'], function (URL) {
+define(['jquery', 'cnr/cnr.url'], function ($, URL) {
   "use strict";
 
   var minLength = 3, maxItems = 10;
@@ -49,7 +49,6 @@ define(['cnr/cnr.url'], function (URL) {
   }
 
   function validateAssignee(assigneeType, query, controlGroup) {
-    query = query.replace(/\(.*\)/g, '').trim();
     getAssignee(assigneeType, query, function (data) {
       var errorClass = "error", successClass = "success", isValid = data.indexOf(query) >= 0;
       if (isValid) {
@@ -68,7 +67,6 @@ define(['cnr/cnr.url'], function (URL) {
     if (type) {
       type.find("button").on("click", function () {
         var query = input.val();
-        console.log(query);
         validateAssignee($(this).data("type"), query, controlGroup);
       });
     }
@@ -80,29 +78,16 @@ define(['cnr/cnr.url'], function (URL) {
       })
       .on("keyup change", function () {
         var query = input.val();
-        console.log(query);
         validateAssignee(type ? type.find(".active").data("type") : defaultType, query, controlGroup);
       })
       .typeahead({
-        minLength: 3,
-        hint: true,
-        highlight: true
-      }, {
         updater: function (item) {
           return item.replace(/\(.*\)/g, '').trim();
         },
-        name: 'authority',
         source: function (query, process) {
-          console.log(arguments);
           var assigneeType = type ? type.find(".active").data("type") : defaultType;
           getAssignee(assigneeType, query, function (map) {
-            //process([{value: "fracesco.uliana"}, {value: "francesco.totti"}]);
-            var xx = $.map(map, function (el) {
-              return {
-                value: el
-              };
-            })
-            process(xx);
+            process(map);
           });
         },
         items: maxItems
@@ -115,10 +100,10 @@ define(['cnr/cnr.url'], function (URL) {
 
     var assigneeType,
       value = bulkItem.val || bulkItem['default'],
-      assignee = $('<input type="text" class="form-control" data-provide="typeahead" />').addClass((bulkItem || {})['class'] || 'input-medium').attr('id', id).attr('name', id).val(value),
+      assignee = $('<input type="text" autocomplete="off" data-provide="typeahead" />').addClass((bulkItem || {})['class'] || 'input-medium').attr('id', id).attr('name', id).val(value),
       controls = $('<div class="controls"></div>').append(assignee).append(' '),
       label = $('<label class="control-label"></label>').attr('for', id).text(labelText || ''),
-      item = $('<div class="form-group authority widget"></div>'),
+      item = $('<div class="control-group authority widget"></div>'),
       buttonUsers = $('<button type="button" class="btn btn-mini" data-type="users">Utenti</button>'),
       buttonGroups = $('<button type="button" class="btn btn-mini" data-type="groups">Gruppi</button>'),
       settings = bulkItem.jsonsettings || {};

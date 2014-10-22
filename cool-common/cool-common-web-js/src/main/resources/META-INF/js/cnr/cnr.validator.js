@@ -1,11 +1,10 @@
-define(['i18n', 'validate', 'json!common'], function (i18n, jqvalidate, common) {
+define(['jquery', 'bootstrap', 'i18n', 'validate', 'json!common'], function ($, bootstrap, i18n, jqvalidate, common) {
 
   "use strict";
   var classes = {success: 'success', error: 'error'};
 
   function validate(target, settings) {
     $.validator.prototype.showLabel = function (element, message) {
-
       //var label = this.errorsFor( element );
       var el = $(element),
         valid = message === undefined || message.length === 0,
@@ -17,7 +16,7 @@ define(['i18n', 'validate', 'json!common'], function (i18n, jqvalidate, common) 
         .toggleClass(classes.error, !valid);
 
       if (!valid && el.is(":visible")) {
-        var x = el
+        el
           .closest('.control-group')
           .tooltip({
             animation: false,
@@ -26,8 +25,8 @@ define(['i18n', 'validate', 'json!common'], function (i18n, jqvalidate, common) 
             placement: "right",
             container: container.find('.controls')
           })
-          .tooltip('show');
-        //x.data('tooltip').$tip.addClass('relative');
+          .tooltip('show')
+          .data('tooltip').$tip.addClass('relative');
       }
     };
 

@@ -1,4 +1,4 @@
-define(['cnr/cnr.tree', 'cnr/cnr.url'], function (Tree, URL) {
+define(['jquery', 'cnr/cnr.tree', 'cnr/cnr.url'], function ($, Tree, URL) {
   "use strict";
 
   return {

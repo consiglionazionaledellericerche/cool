@@ -1,4 +1,4 @@
-define(['cnr/cnr.ui', 'json!common', 'i18n', 'json!cache'], function (UI, common, i18n, cache) {
+define(['jquery', 'cnr/cnr.ui', 'json!common', 'i18n', 'json!cache'], function ($, UI, common, i18n, cache) {
   "use strict";
 
   var xhrs = {},

@@ -1,4 +1,4 @@
-define(['i18n', 'select2', 'select2-i18n', 'cnr/cnr'], function (i18n, CNR) {
+define(['jquery', 'i18n', 'select2', 'select2-i18n', 'cnr/cnr'], function ($, i18n, CNR) {
   "use strict";
 
   function init(item, id, parent, controls) {
