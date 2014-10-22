@@ -1,15 +1,15 @@
-define(['jquery'], function ($) {
+define([], function () {
   "use strict";
 
   function widget(id, labelText, item) {
 
     var controls = $('<div class="controls"></div>'),
       label = $('<label/>').attr("class", item.labelClass || "control-label").append(labelText),
-      parent = $('<div class="control-group widget"></div>').append(label).append(controls),
+      parent = $('<div class="form-group widget"></div>').append(label).append(controls),
       isChecked = item.val || false,
       options = {
         y: {
-          label: '<i class="icon-ok icon-white"></i>'
+          label: '<i class="glyphicon glyphicon-ok"></i>'
         },
         n: {
           label: 'NO'
@@ -22,7 +22,7 @@ define(['jquery'], function ($) {
 
       var customClass = 'btn-success',
         selectedItem = options[on ? 'y' : 'n'].item,
-        wid = $('.' + item.name + '_true').parents('.control-group');
+        wid = $('.' + item.name + '_true').parents('.form-group');
 
       myWidget
         .removeClass("on off")
@@ -43,7 +43,7 @@ define(['jquery'], function ($) {
     // create the two buttons (on / off)
     $.each(options, function (key, value) {
 
-      var btn = $('<button type="button" data-value="' + key + '" class="btn">' + value.label + '</button>')
+      var btn = $('<button type="button" data-value="' + key + '" class="btn btn-default">' + value.label + '</button>')
         .addClass('cnr-checkbox-' + key)
         .click(function () {
           changeStatus(key === 'y');

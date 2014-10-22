@@ -1,4 +1,4 @@
-define(['jquery', 'i18n', 'moment', 'datepicker-i18n'], function ($, i18n, moment) {
+define(['moment', 'datepicker-i18n'], function (moment) {
   "use strict";
 
   function widget(id, labelText, item, label) {

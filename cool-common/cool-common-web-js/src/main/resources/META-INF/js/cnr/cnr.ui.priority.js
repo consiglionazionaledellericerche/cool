@@ -1,4 +1,4 @@
-define(['jquery'], function ($) {
+define([], function () {
 	"use strict";
 	return {
 		Widget: function (id, labelText, priority) {

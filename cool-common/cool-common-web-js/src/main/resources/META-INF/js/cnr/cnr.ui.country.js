@@ -1,4 +1,4 @@
-define(['jquery', 'cnr/cnr.url'], function ($, URL) {
+define(['cnr/cnr.url'], function (URL) {
   "use strict";
 
   var maxItems = 12;

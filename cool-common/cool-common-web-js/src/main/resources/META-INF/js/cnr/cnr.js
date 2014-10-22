@@ -1,6 +1,6 @@
 /* CNR main object, implements Revealing Module Pattern */
 
-define(['jquery', 'cnr/cnr.url', 'moment', 'json!cache', 'moment-i18n'], function ($, URL, moment, cache) {
+define(['cnr/cnr.url', 'moment', 'json!cache', 'moment-i18n'], function (URL, moment, cache) {
   "use strict";
   /* utility functions */
 

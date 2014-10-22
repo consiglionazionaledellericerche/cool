@@ -1,4 +1,4 @@
-define(['jquery', 'cnr/cnr.url', 'cnr/cnr.ui.select'], function ($, URL, Select) {
+define(['cnr/cnr.url', 'cnr/cnr.ui.select'], function (URL, Select) {
 
   "use strict";
 

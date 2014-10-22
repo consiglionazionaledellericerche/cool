@@ -1,4 +1,4 @@
-define(['jquery', 'i18n', 'cnr/cnr.url'], function ($, i18n, URL) {
+define(['i18n', 'cnr/cnr.url'], function (i18n, URL) {
   "use strict";
 
   // workflow definitions selector

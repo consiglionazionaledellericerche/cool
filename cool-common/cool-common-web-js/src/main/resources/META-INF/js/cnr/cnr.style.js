@@ -1,4 +1,4 @@
-define(['jquery', 'json!common'], function ($, common) {
+define(['json!common'], function (common) {
   "use strict";
 
   return function (v) {

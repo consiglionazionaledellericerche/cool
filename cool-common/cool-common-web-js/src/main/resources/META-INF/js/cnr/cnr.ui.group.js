@@ -1,22 +1,22 @@
-define(['jquery', 'json!common', 'i18n', 'cnr/cnr.url'], function ($, common, i18n, URL) {
+define(['json!common', 'i18n', 'cnr/cnr.url'], function (common, i18n, URL) {
   /* javascript closure providing all the group functionalities */
   "use strict";
 
   /* public methods */
   function widget(id, labelText, onSelect) {
     var btn = $('<div class="btn-group"></div>'),
-      a = $('<a class="btn btn-mini dropdown-toggle" data-toggle="dropdown" href="#"></a>').appendTo(btn),
+      a = $('<button class="btn btn-default dropdown-toggle" data-toggle="dropdown"></button>').appendTo(btn),
       ul = $('<ul class="dropdown-menu"></ul>').appendTo(btn),
       label = $('<label class="control-label">' + (labelText || '') + '</label>').attr('for', id),
       empty = {displayName: i18n.prop('label.empty.group.name', 'nessuno')},
       controls = $('<div class="controls"></div>'),
-      item = $('<div class="control-group widget"></div>');
+      item = $('<div class="form-group widget"></div>');
 
     function select(btn, el, init) {
       btn
         .data('name', el.displayName)
         .data('id', el.fullName)
-        .children('a')
+        .children('button')
         .text(i18n.prop(el.fullName, el.displayName))
         .append('<span class="caret"></span>');
       item.data('value', el.fullName || null);

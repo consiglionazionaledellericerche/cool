@@ -1,5 +1,5 @@
 // reusable user interface components
-define(['jquery', 'bootstrap'], function ($) {
+define([], function () {
   "use strict";
 
   function modal(title, content, callback, callbackClose, isBigModal) {
