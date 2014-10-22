@@ -364,6 +364,8 @@ public class BulkInfoCoolService {
 			ObjectType objectType, BulkInfoCool bulkInfo) {
 		List<PropertyDefinition<?>> properties = new ArrayList<PropertyDefinition<?>>();
 		for (PropertyDefinition<?> property : objectType.getPropertyDefinitions().values()) {
+			if (property.isInherited())
+				continue;
 			if (property.getChoices() != null && !property.getChoices().isEmpty()) {
 				List<FieldProperty> fields = bulkInfo.getFieldPropertyByProperty(property.getId());
 				if (fields != null && !fields.isEmpty()) {
