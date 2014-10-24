@@ -1,40 +1,25 @@
 package it.cnr.cool.frontOfficeHandler;
 
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import it.cnr.cool.cmis.model.ACLType;
 import it.cnr.cool.cmis.model.CoolPropertyIds;
 import it.cnr.cool.cmis.service.CMISService;
 import it.cnr.cool.exception.CoolClientException;
+import it.cnr.cool.security.PermissionEnum;
 import it.cnr.cool.service.frontOffice.TypeDocument;
 import it.cnr.cool.util.MimeTypes;
 import it.cnr.cool.util.StringUtil;
 import it.spasia.opencmis.criteria.Criteria;
 import it.spasia.opencmis.criteria.CriteriaFactory;
 import it.spasia.opencmis.criteria.Order;
-
-import java.io.ByteArrayInputStream;
-import java.io.InputStream;
-import java.math.BigInteger;
-import java.text.ParseException;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import org.apache.chemistry.opencmis.client.api.CmisObject;
-import org.apache.chemistry.opencmis.client.api.Document;
-import org.apache.chemistry.opencmis.client.api.Folder;
-import org.apache.chemistry.opencmis.client.api.ItemIterable;
-import org.apache.chemistry.opencmis.client.api.ObjectId;
-import org.apache.chemistry.opencmis.client.api.OperationContext;
-import org.apache.chemistry.opencmis.client.api.QueryResult;
-import org.apache.chemistry.opencmis.client.api.Session;
+import org.apache.chemistry.opencmis.client.api.*;
 import org.apache.chemistry.opencmis.client.runtime.OperationContextImpl;
 import org.apache.chemistry.opencmis.commons.PropertyIds;
 import org.apache.chemistry.opencmis.commons.data.Ace;
 import org.apache.chemistry.opencmis.commons.data.ContentStream;
 import org.apache.chemistry.opencmis.commons.data.Principal;
+import org.apache.chemistry.opencmis.commons.enums.AclPropagation;
 import org.apache.chemistry.opencmis.commons.enums.BaseTypeId;
 import org.apache.chemistry.opencmis.commons.enums.VersioningState;
 import org.apache.chemistry.opencmis.commons.exceptions.CmisObjectNotFoundException;
@@ -45,8 +30,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
+import java.math.BigInteger;
+import java.text.ParseException;
+import java.util.*;
 
 public class AlfrescoHandler implements ILoggerHandler {
 
@@ -63,7 +51,7 @@ public class AlfrescoHandler implements ILoggerHandler {
 
 	private String dataDictionaryPath;
 
-	public void init() {
+    public void init() {
 		maxOperationContext = new OperationContextImpl(
 				cmisCountOperationContext);
 		aclOperationContext = new OperationContextImpl(
@@ -164,11 +152,10 @@ public class AlfrescoHandler implements ILoggerHandler {
 				doc.applyAcl(newAces, removeAces, null);
 				doc.setContentStream(contentStream, true);
 			} else {
-				doc = parent.createDocument(properties, contentStream,
-						VersioningState.MAJOR);
+				doc = parent.createDocument(properties, contentStream, VersioningState.MAJOR);
 				// se la notice è stata creata, ovviamente non avrà gli acl
 				// vecchi
-				doc.applyAcl(newAces, null, null);
+                doc.applyAcl(newAces, null, AclPropagation.OBJECTONLY);
 			}
 		} catch (Exception e) {
 			throw new CoolClientException(
@@ -328,11 +315,12 @@ public class AlfrescoHandler implements ILoggerHandler {
 			// dalla folder)
 			List<String> permissionsConsumer = new ArrayList<String>();
 			permissionsConsumer.add(ACLType.Consumer.name());
+            permissionsConsumer.add(PermissionEnum.CMIS_READ.value());
 			Principal principal;
 			principal = new AccessControlPrincipalDataImpl(groupConsumer);
 			Ace aceContributor = new AccessControlEntryImpl(principal,
 					permissionsConsumer);
-			newAces.add(aceContributor);
+            newAces.add(aceContributor);
 		}
 		properties.put(PropertyIds.NAME, "Notice_" + new Date().getTime());
 		properties.put(PropertyIds.OBJECT_TYPE_ID,

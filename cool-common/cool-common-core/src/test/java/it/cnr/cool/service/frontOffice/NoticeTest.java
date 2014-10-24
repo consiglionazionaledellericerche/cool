@@ -1,17 +1,8 @@
 package it.cnr.cool.service.frontOffice;
 
-import static org.junit.Assert.assertTrue;
 import it.cnr.cool.cmis.model.CoolPropertyIds;
 import it.cnr.cool.cmis.service.CMISService;
 import it.cnr.cool.service.util.Notice;
-
-import java.io.IOException;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.Map;
-
 import org.apache.chemistry.opencmis.client.api.CmisObject;
 import org.apache.chemistry.opencmis.client.api.Session;
 import org.junit.After;
@@ -23,6 +14,15 @@ import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.annotation.DirtiesContext.ClassMode;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+
+import java.io.IOException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.Map;
+
+import static org.junit.Assert.assertTrue;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = { "classpath:/META-INF/cool-common-core-test-context.xml" })
@@ -44,7 +44,7 @@ public class NoticeTest {
 
 
 	@Before
-	public void createNotice() throws ParseException {
+	public void createNotice() throws ParseException{
 		SimpleDateFormat formatterEN = new SimpleDateFormat("yyyy-MM-dd");
         after = formatterEN.parse(afterString);
 		before = formatterEN.parse(beforeString);
