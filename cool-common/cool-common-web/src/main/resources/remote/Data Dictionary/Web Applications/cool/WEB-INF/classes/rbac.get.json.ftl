@@ -1,70 +1,16 @@
 {
-    "i18n": {
+    "jsConsole": {
         "GET": {
             "whitelist": {
-                "all": true
-            }
-        }
-    },
-    "common": {
-        "GET": {
-            "whitelist": {
-                "all": true
-            }
-        }
-    },
-    "content": {
-        "GET": {
-            "whitelist": {
-                "all": true
-            }
-        }
-    },
-    "document": {
-        "POST": {
-            "whitelist": {
-                "all": true
-            }
-        },
-        "DELETE": {
-            "whitelist": {
-                  "user": [
-                    "spaclient"
+                "user": [
+                    "spaclient",
+                    "francesco.uliana"
                 ]
             }
-        },
-        "GET": {
-             "user": [
-                    "spaclient"
-                ]
         }
     },
-    "workflow/definitions": {
+    "workflow": {
         "GET": {
-            "whitelist": {
-                "all": true
-            }
-        }
-    },
-    "company/header": {
-        "GET": {
-            "whitelist": {
-                "all": true
-            }
-        },
-        "POST": {
-            "whitelist": {
-                "all": true
-            }
-        }        
-    },
-    "company/footer": {
-        "GET": {
-            "whitelist": {
-                "all": true
-            }
-        },
-        "POST": {
             "whitelist": {
                 "all": true
             }
@@ -77,74 +23,19 @@
             }
         }
     },
-    "home": {
+    "workflowManagement": {
         "GET": {
             "whitelist": {
                 "all": true
             }
         }
     },
-    "home/main": {
-        "GET": {
-            "whitelist": {
-                "all": true
-            }
-        }
-    },
-    "search": {
-        "POST": {
-            "whitelist": {
-                "all": true
-            }
-        },
-    "GET": {
-            "whitelist": {
-                "all": true
-            }
-        }
-    },
-    "search/main": {
-        "POST": {
-            "whitelist": {
-                "all": true
-            }
-        }
-    },
-    "search/folder/root": {
-        "GET": {
-            "whitelist": {
-                "all": true
-            }
-        }
-    },
-    "search/query": {
-        "GET": {
-            "whitelist": {
-                "all": true
-            }
-        }
-    },
-    "search/folder/children": {
-        "GET": {
-            "whitelist": {
-                "all": true
-            }
-        }
-    },
-    "jsConsole": {
+    "workflowHistory": {
         "GET": {
             "whitelist": {
                 "user": [
-                    "admin"
-                ]
-            }
-        }
-    },
-    "jsConsole/main": {
-        "GET": {
-            "whitelist": {
-                "user": [
-                    "admin"
+                    "spaclient",
+                    "francesco.uliana"
                 ]
             }
         }
@@ -153,116 +44,19 @@
         "GET": {
             "whitelist": {
                 "user": [
-                    "admin"
+                    "spaclient",
+                    "francesco.uliana"
                 ]
             }
         }
     },
-    "workflow/association": {
+    "rbac-admin": {
         "GET": {
             "whitelist": {
                 "user": [
-                    "admin"
+                    "spaclient",
+                    "francesco.uliana"
                 ]
-            }
-        }
-    },
-    "rbac": {
-        "POST": {
-            "whitelist": {
-                "user": [
-                    "admin"
-                ]
-            }
-        },
-        "DELETE": {
-            "whitelist": {
-                "user": [
-                    "admin"
-                ]
-            }
-        }
-    },
-    "workflow": {
-        "GET": {
-            "whitelist": {
-                "all": true
-            }
-        }
-    },
-    "workflow/main": {
-        "GET": {
-            "whitelist": {
-                "all": true
-            }
-        }
-    },
-    "folder": {
-        "POST": {
-            "whitelist": {
-                "all": true
-            }
-        }
-    },
-    "node": {
-        "POST": {
-            "whitelist": {
-                "all": true
-            }
-        },
-        "DELETE": {
-            "whitelist": {
-                "all": true
-            }
-        }
-    },
-    "view/": {
-        "GET": {
-            "whitelist": {
-                "all": true
-            }
-        }
-    },
-    "crud/cmis/object": {
-        "POST": {
-            "whitelist": {
-                "all": true
-            }
-        }
-    },
-    "acl": {
-        "GET": {
-            "whitelist": {
-                "all": true
-            }
-        },
-        "POST": {
-            "whitelist": {
-                "all": true
-            }
-        },
-        "DELETE": {
-            "whitelist": {
-                "all": true
-            }
-        }
-    },
-    "zipperReader": {
-        "GET": {
-            "whitelist": {
-                "all": true
-            }
-        },
-        "POST": {
-            "whitelist": {
-                "all": true
-            }
-        }
-    },
-    "zipperReader/main": {
-        "GET": {
-            "whitelist": {
-                "all": true
             }
         }
     }

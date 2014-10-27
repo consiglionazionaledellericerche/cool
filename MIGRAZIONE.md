@@ -6,6 +6,9 @@ check messaggi warning nelle log durante avvio applicazioni
 
 require.js anche per doccnr
 
+ripulire i rbac.get.json.ftl e spostarli in /Data Dictionary/Web Applications
+spostare rbac di doccnr in cool-doccnr/
+
 
 ---- JCONON
 nota x jconon: dal context cool-common-web-context sono stati eliminate molte definizioni di bean per Spring Surf/Spring MVC
