@@ -21,6 +21,7 @@ import java.util.UUID;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.ws.rs.Consumes;
+import javax.ws.rs.CookieParam;
 import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -133,8 +134,8 @@ public class SecurityRest {
 							user.setPin("");
 							userService.updateUser(user);
 							userService.changeUserPassword(user, password);
-
-							session.invalidate();
+							if (session != null)
+								session.invalidate();
 							LOGGER.info("updated password for user " + userId);
 							String json = getJson(user);
 							response = Response.ok(json);
@@ -168,7 +169,7 @@ public class SecurityRest {
 	@POST
 	@Path("forgotPassword")
 	public Response forgotPassword(@Context HttpServletRequest req,
-			@FormParam("userName") String userName) {
+			@FormParam("userName") String userName, @CookieParam("__lang") String __lang) {
 
 		ResponseBuilder builder = null;
 
@@ -203,7 +204,7 @@ public class SecurityRest {
 					model.put("url", getUrl(req));
 
 					try {
-						Locale locale = req.getLocale();
+						Locale locale = I18nService.getLocale(req, __lang);
 
 						String path = i18nService.getTemplate(
 								TEMPLATE, locale);
@@ -245,7 +246,8 @@ public class SecurityRest {
 	public Response login(@Context HttpServletRequest req,
 			@FormParam("username") String username,
 			@FormParam("password") String password,
-			@FormParam("redirect") String redirect) {
+			@FormParam("redirect") String redirect,
+			@FormParam("queryString") String queryString) {
 
 		boolean authenticated = cmisAuthenticatorFactory.authenticate(req,
 				username, password);
@@ -253,7 +255,7 @@ public class SecurityRest {
 		URI uri;
 
 		if (authenticated) {
-			uri = URI.create(redirect);
+			uri = URI.create(redirect + "?" + queryString);
 		} else {
 			uri = URI.create("../" + Page.LOGIN_URL + "?failure=yes");
 		}

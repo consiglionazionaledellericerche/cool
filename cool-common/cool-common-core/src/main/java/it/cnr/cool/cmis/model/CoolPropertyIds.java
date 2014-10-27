@@ -2,6 +2,8 @@ package it.cnr.cool.cmis.model;
 
 public enum CoolPropertyIds {
 
+	
+	ALFCMIS_NODEREF("alfcmis:nodeRef"),
 	/**
 	 * Property of Documents
 	 */

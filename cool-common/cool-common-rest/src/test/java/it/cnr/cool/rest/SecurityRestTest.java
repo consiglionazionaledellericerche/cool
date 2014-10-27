@@ -51,7 +51,7 @@ public class SecurityRestTest {
 	public void testForgotPassword() {
 		MockHttpServletRequest req = new MockHttpServletRequest();
 		req.addPreferredLocale(Locale.ITALIAN);
-		Response outcome = security.forgotPassword(req, USERNAME);
+		Response outcome = security.forgotPassword(req, USERNAME, Locale.getDefault().getLanguage());
 		assertEquals(Status.OK.getStatusCode(), outcome.getStatus());
 
 		String content = outcome.getEntity().toString();
@@ -66,7 +66,7 @@ public class SecurityRestTest {
 	@Test
 	public void testForgotPasswordFail() {
 		HttpServletRequest req = new MockHttpServletRequest();
-		Response outcome = security.forgotPassword(req, "doesNotExist");
+		Response outcome = security.forgotPassword(req, "doesNotExist", Locale.getDefault().getLanguage());
 		assertEquals(Status.INTERNAL_SERVER_ERROR.getStatusCode(), outcome.getStatus());
 
 		String content = outcome.getEntity().toString();

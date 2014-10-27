@@ -1,5 +1,6 @@
 package it.cnr.cool.cmis.service;
 
+import it.cnr.cool.cmis.model.CoolPropertyIds;
 import it.cnr.cool.exception.CoolException;
 import it.cnr.cool.util.MimeTypes;
 
@@ -28,7 +29,7 @@ public class NodeVersionService {
 			final boolean autoVersionOnUpdateProps) {
 		String link = cmisService.getBaseURL().concat(
 				"service/api/metadata/node/");
-		link = link.concat(doc.getVersionSeriesId().replace(":/", ""));
+		link = link.concat(doc.getProperty(CoolPropertyIds.ALFCMIS_NODEREF.value()).getValueAsString().replace(":/", ""));
 		UrlBuilder url = new UrlBuilder(link);
 		BindingSession cmisSession = cmisService.getAdminSession();
 		Response resp = cmisService.getHttpInvoker(cmisSession).invokePOST(url,
@@ -48,7 +49,7 @@ public class NodeVersionService {
 		if (status == HttpStatus.SC_NOT_FOUND
 				|| status == HttpStatus.SC_BAD_REQUEST
 				|| status == HttpStatus.SC_INTERNAL_SERVER_ERROR)
-			throw new CoolException("Create user error. Exception: "
+			throw new CoolException("Add Auto Version. Exception: "
 					+ resp.getErrorContent());
 	}
 

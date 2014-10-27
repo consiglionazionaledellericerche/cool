@@ -2,6 +2,7 @@ package it.cnr.cool.service;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.HashMap;
@@ -30,8 +31,11 @@ public class I18nService {
 
 
 
-	public static Locale getLocale(HttpServletRequest request) {
-		return request.getLocale();
+	public static Locale getLocale(HttpServletRequest request, String lang) {
+		if (lang == null)
+			return request.getLocale();
+		else
+			return new Locale(lang);
 	}
 
 	public String getTemplate(String path, Locale locale) {
@@ -55,25 +59,37 @@ public class I18nService {
 
 		return templateId;
 	}
-
-	public String getLabel(String id, Locale locale) {
+	
+	public String getLabel(String id, String uri, Locale locale, Object ... params) {
+		LOGGER.debug("looking for label + " + id);
+		Properties props = getLabels(locale, uri);
+		return getLabel(props, id, locale, params);		
+	}
+	public String getLabel(String id, Locale locale, Object ... params) {
 		LOGGER.debug("looking for label + " + id);
 		Properties props = loadLabels(locale);
+		return getLabel(props, id, locale, params);
+	}
+
+	private String getLabel(Properties props, String id, Locale locale, Object ... params) {
 		if (props == null) {
 			LOGGER.warn("locale " + locale.getLanguage()
 					+ " not found, switching to default locale: "
 					+ DEFAULT_LOCALE.getLanguage());
 			props = loadLabels(DEFAULT_LOCALE);
 		}
-		return props.getProperty(id);
+		if (params != null && params.length > 0)
+			return MessageFormat.format(props.getProperty(id), params);
+		return props.getProperty(id);		
 	}
-
+	
+	
 	private InputStream getStream(String path) {
 		return I18nService.class.getResourceAsStream(path);
 	}
 
 
-	private Properties loadLabels(Locale locale) {
+	public Properties loadLabels(Locale locale) {
 
 		String language = locale.getLanguage();
 
@@ -137,8 +153,6 @@ public class I18nService {
 		LOGGER.debug("loaded " + p.keySet().size() + " default "
 				+ locale.getLanguage() + " labels");
 
-		LOGGER.warn("restano da caricare le label per " + uri);
-
 		String path = "/i18n/" + uri + "_" + locale.getLanguage()
 				+ ".properties";
 		InputStream is = getStream(path);
@@ -147,7 +161,7 @@ public class I18nService {
 			if (is != null) {
 				p.load(is);
 			} else {
-				LOGGER.warn("lang file " + path + " doesnt exist");
+				LOGGER.debug("lang file " + path + " doesnt exist");
 			}
 		} catch (IOException e) {
 			LOGGER.error("unable to load lang file " + path, e);

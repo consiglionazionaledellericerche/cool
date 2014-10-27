@@ -6,6 +6,7 @@ import it.cnr.cool.rest.util.Util;
 import it.cnr.cool.service.NodeService;
 import it.cnr.mock.ISO8601DateFormatMethod;
 import it.cnr.mock.JSONUtils;
+import it.cnr.mock.RequestUtils;
 
 import java.util.HashMap;
 import java.util.List;
@@ -173,7 +174,7 @@ public class Node {
 					.getSession(false));
 
 			CmisObject cmisObject = nodeMetedataService.updateObjectProperties(
-					extractFormParams(formParams), session, req);
+					RequestUtils.extractFormParams(formParams), session, req);
 
 			model = buildModel(cmisObject);
 			String content = Util.processTemplate(model, PATH_POST_FTL);
@@ -186,21 +187,6 @@ public class Node {
 					model);
 		}
 		return builder.build();
-	}
-
-	private Map<String, Object> extractFormParams(
-			MultivaluedMap<String, String> formParams) {
-		Map<String, Object> properties = new HashMap<String, Object>();
-		for (Entry<String, List<String>> appo : formParams.entrySet()) {
-			List<String> value = appo.getValue();
-			String key = appo.getKey();
-			if (value.size() == 1) {
-				properties.put(key, value.get(0));
-			} else {
-				properties.put(key, value.toArray(new String[value.size()]));
-			}
-		}
-		return properties;
 	}
 
 

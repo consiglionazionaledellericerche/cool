@@ -202,6 +202,12 @@ public class NodeMetadataService {
 	}
 
 	public Map<String, Object> populateMetadataAspectFromRequest(
+			Session cmisSession, Map<String, ?> reqProperties, HttpServletRequest request)
+			throws ParseException {
+		return populateMetadataAspect(cmisSession, reqProperties, request);
+	}
+	
+	public Map<String, Object> populateMetadataAspectFromRequest(
 			Session cmisSession, HttpServletRequest request)
 			throws ParseException {
 		return populateMetadataAspect(cmisSession, null, request);
@@ -225,8 +231,8 @@ public class NodeMetadataService {
 					PolicyType.ASPECT_REQ_PARAMETER_NAME, reqProperties,
 					request)));
 
-			String[] aspects = request
-					.getParameterValues(PolicyType.ADD_REMOVE_ASPECT_REQ_PARAMETER_NAME);
+			String[] aspects = getParameterValues(PolicyType.ADD_REMOVE_ASPECT_REQ_PARAMETER_NAME, reqProperties,
+					request);
 
 			aspectNames.addAll(PolicyType.getAspectToBeAdd(aspects));
 			if (aspectNames != null && !aspectNames.isEmpty()) {
@@ -236,9 +242,12 @@ public class NodeMetadataService {
 							.getPropertyDefinitions().values());
 				}
 			}
+			
 		}
-		return internalPopulateMetadataFromRequest(reqProperties,
+		Map<String, Object> result = internalPopulateMetadataFromRequest(reqProperties,
 				propertyDefinitions, request);
+		result.put(PropertyIds.SECONDARY_OBJECT_TYPE_IDS, aspectNames);
+		return result;
 	}
 
 	public Map<String, Object> populateMetadataFromRequest(Session cmisSession,

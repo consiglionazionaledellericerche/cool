@@ -38,13 +38,6 @@
     <script src="${url.context}/res/js/thirdparty/fallback/form_data.js"></script>
     <![endif]-->
 
-    <#-- mantenuto i18n webscript per compatibilita' jconon -->
-    <#if (url.context?index_of("jconon") > 0) >
-      <#assign i18nUrl = "i18n" />
-    <#else>
-      <#assign i18nUrl = "rest/i18n" />
-    </#if>
-
     <script>
     // you can register settings like this before require.js is loaded
     var require = {
@@ -76,7 +69,7 @@
         fileupload: 'thirdparty/jquery.fileupload',
         handlebars: 'thirdparty/handlebars',
         header: 'ws/header',
-        'i18n-data': '../../${i18nUrl}?method=${Request.requestContext.requestMethod}&uri=${page.id}&lang=${locale_suffix}',
+        'i18n-data': '../../rest/i18n?method=${Request.requestContext.requestMethod}&uri=${page.id}&lang=${locale_suffix}',
         jquery: 'thirdparty/jquery',
         'jquery.ui.widget': 'thirdparty/jquery.ui.widget',
         json: 'thirdparty/require/json-cnr',

@@ -8,6 +8,7 @@ import java.util.Locale;
 import java.util.Properties;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.ws.rs.CookieParam;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
@@ -37,15 +38,16 @@ public class I18n {
 	@GET
 	public Response i18n(@Context HttpServletRequest request,
 			@QueryParam("method") String method,
-			@QueryParam("uri") String uri) {
+			@QueryParam("uri") String uri,
+			@CookieParam("__lang") String __lang) {
 
-		LOGGER.debug(method + " " + uri);
+		LOGGER.info(method + " " + uri);
 
-		Locale locale = I18nService.getLocale(request);
+		Locale locale = I18nService.getLocale(request, __lang);
 
 		Properties labels = i18nService.getLabels(locale, uri);
-
-		LOGGER.debug("loaded " + labels.keySet().size() + " "
+		labels.put("locale", locale.getLanguage());
+		LOGGER.info("loaded " + labels.keySet().size() + " "
 				+ locale.getLanguage() + " labels " + " uri " + uri);
 
 		ResponseBuilder rb = Response.ok(labels);

@@ -148,11 +148,12 @@ public class UserServiceImpl implements UserService{
 		user.setDisableAccount(true);
         UrlBuilder url = new UrlBuilder(link);
         BindingSession cmisSession = cmisService.getAdminSession();
+        final byte[] userJson = gsonParser.toJson(user).getBytes();
 		Response resp = CmisBindingsHelper.getHttpInvoker(cmisSession).invokePOST(url, MimeTypes.JSON.mimetype(),
 				new Output() {
 					@Override
 					public void write(OutputStream out) throws Exception {
-            			out.write(gsonParser.toJson(user).getBytes());
+            			out.write(userJson);
             		}
         		}, cmisSession);
 		int status = resp.getResponseCode();

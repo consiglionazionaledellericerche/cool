@@ -73,7 +73,7 @@ public class RRDService implements InitializingBean {
 		List<Document> documentsToBeActive = new ArrayList<Document>();
 		List<String> differentFiles = new ArrayList<String>();
 		for (Resource resource : resources) {
-			if (resource.contentLength() == 0)
+			if (!resource.isReadable())
 				continue;
 			String urlPath = resource.getURL().toString();
 			String cmisPath = URIUtil.decode(urlPath.substring(urlPath.indexOf("remote/") + 6));					
@@ -194,6 +194,8 @@ public class RRDService implements InitializingBean {
 				Map<String, Object> properties = new HashMap<String, Object>();
 				properties.put(PropertyIds.NAME, folderName);
 				properties.put(PropertyIds.OBJECT_TYPE_ID, BaseTypeId.CMIS_FOLDER.value());
+				if (cmisObject == null)
+					cmisObject = cmisSession.getRootFolder();
 				cmisObject = cmisSession.getObject(cmisSession.createFolder(properties, cmisObject));
 			}
 		}

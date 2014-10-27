@@ -5,6 +5,7 @@ import it.cnr.cool.cmis.service.CMISService;
 import it.cnr.cool.dto.CoolPage;
 import it.cnr.cool.rest.util.Util;
 import it.cnr.cool.security.service.impl.alfresco.CMISUser;
+import it.cnr.cool.service.I18nService;
 import it.cnr.cool.service.PageService;
 import it.cnr.cool.web.PermissionService;
 
@@ -14,13 +15,17 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import javax.ws.rs.CookieParam;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.MultivaluedMap;
@@ -32,6 +37,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @Path("page")
 @Component
@@ -57,38 +63,56 @@ public class Page {
 
 	@GET
 	@Path("{id}")
-	public Response html(@Context HttpServletRequest req,
-			@PathParam("id") String id) {
-		return processRequest(req, id, null);
+	public Response html(@Context HttpServletRequest req, @Context HttpServletResponse res,
+			@PathParam("id") String id, @CookieParam("__lang") String cookieLang, @QueryParam("lang") String reqLang) {
+		return processRequest(req, res, id, null, cookieLang, reqLang);
 	}
 
 	@POST
 	@Path("{id}")
-	public Response post(@Context HttpServletRequest req,
-			@PathParam("id") String id,
-			MultivaluedMap<String, String> formParams) {
-		return processRequest(req, id, formParams);
-
+	public Response post(@Context HttpServletRequest req, @PathParam("id") String id,
+			MultivaluedMap<String, String> formParams, @CookieParam("__lang") String cookieLang) {
+		return processRequest(req, null, id, formParams, cookieLang, null);
 	}
 
-	private Response processRequest(HttpServletRequest req, String id,
-			MultivaluedMap<String, String> formParams) {
+	private String i18nCookie(HttpServletResponse res, String lang, String reqLang) {
+		if (reqLang != null && reqLang.length() > 0 && res != null) {
+	        Cookie cookie = new Cookie("__lang", reqLang);
+	        cookie.setPath("/");
+            cookie.setComment("Language user session");
+            cookie.setMaxAge(-1);
+            res.addCookie(cookie);
+            return reqLang;
+		}		
+		return lang;
+	}
+
+	private Response processRequest(HttpServletRequest req, HttpServletResponse res, String id,
+			MultivaluedMap<String, String> formParams, String cookieLang, String reqLang) {
 		ResponseBuilder rb;
-		
+		String lang = i18nCookie(res, cookieLang, reqLang);		
 		CoolPage page = pageService.loadPages().get(id);
 		
 		if (page == null) {
 			rb = Response
 					.status(Status.NOT_FOUND)
 					.entity("page not found: " + id);
-		} else if (!isAuthorized(page, id, req.getSession(false))) {
-			URI uri = URI.create(req.getContextPath() + "/"
-					+ LOGIN_URL + "?redirect=" + id);
+		} else if (!isAuthorized(page, id, req.getSession(false), formParams != null)) {
+			String baseURI = req.getContextPath() + "/"
+					+ LOGIN_URL + "?redirect=" + id;
+			Map paramz = req.getParameterMap();
+			for (Object key : paramz.keySet()) {
+				String [] valuez =  (String[]) paramz.get(key);
+				if (valuez.length > 0) {
+					baseURI = baseURI.concat("&"+(String) key + "=" + valuez[0]);
+				}
+			}			
+			URI uri = URI.create(baseURI);
 			rb = Response.seeOther(uri);
 		} else {
 
 			Map<String, Object> model = pageService.getModel(req, id,
-					req.getContextPath(), req.getLocale());
+					req.getContextPath(), I18nService.getLocale(req, lang));
 
 			try {
 
@@ -144,7 +168,7 @@ public class Page {
 		return rb.build();
 	}
 
-	private boolean isAuthorized(CoolPage page, String id, HttpSession session) {
+	private boolean isAuthorized(CoolPage page, String id, HttpSession session, boolean isPost) {
 		
 		CMISUser user = session == null ? null : cmisService
 				.getCMISUserFromSession(session);
@@ -166,7 +190,7 @@ public class Page {
 				+ " to view page, now checking RBAC");
 		
 		return authorizedToViewPage
-				&& permissionService.isAuthorizedSession(id, "GET", session);
+				&& permissionService.isAuthorizedSession(id, isPost?"POST":"GET", session);
 	}
 
 }

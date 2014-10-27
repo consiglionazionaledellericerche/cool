@@ -4,6 +4,7 @@ import it.cnr.cool.cmis.service.impl.ObjectTypeCacheImpl;
 import it.cnr.cool.security.service.impl.alfresco.CMISUser;
 
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -13,9 +14,12 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import org.apache.chemistry.opencmis.client.api.CmisObject;
 import org.apache.chemistry.opencmis.client.api.Document;
+import org.apache.chemistry.opencmis.client.api.ObjectType;
 import org.apache.chemistry.opencmis.client.api.OperationContext;
 import org.apache.chemistry.opencmis.client.api.Repository;
+import org.apache.chemistry.opencmis.client.api.SecondaryType;
 import org.apache.chemistry.opencmis.client.api.Session;
 import org.apache.chemistry.opencmis.client.api.SessionFactory;
 import org.apache.chemistry.opencmis.client.bindings.CmisBindingFactory;
@@ -26,6 +30,7 @@ import org.apache.chemistry.opencmis.client.bindings.spi.BindingSession;
 import org.apache.chemistry.opencmis.client.bindings.spi.http.HttpInvoker;
 import org.apache.chemistry.opencmis.client.runtime.SessionFactoryImpl;
 import org.apache.chemistry.opencmis.commons.SessionParameter;
+import org.apache.chemistry.opencmis.commons.data.CmisExtensionElement;
 import org.apache.chemistry.opencmis.commons.impl.dataobjects.ContentStreamImpl;
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.HttpStatus;
@@ -457,5 +462,27 @@ public class CMISService implements InitializingBean, CMISSessionManager {
 		return (Document) session.getObjectByPath(path);
 	}
 
+	public boolean hasSecondaryType(CmisObject cmisObject, String secondaryTypeId){
+		for (SecondaryType st : cmisObject.getSecondaryTypes()) {
+			if (st.getId().equals(secondaryTypeId)) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	public List<String> getMandatoryAspects(ObjectType objectType) {
+		List<String> result = new ArrayList<>();
+		if (objectType.getExtensions() != null) {
+			for (CmisExtensionElement cmisExtensionElement : objectType.getExtensions()) {
+				if (cmisExtensionElement.getName().equalsIgnoreCase("mandatoryAspects")) {
+					for (CmisExtensionElement child : cmisExtensionElement.getChildren()) {
+						result.add(child.getValue());
+					}
+				}
+			}
+		}
+		return result;
+	}
 
 }

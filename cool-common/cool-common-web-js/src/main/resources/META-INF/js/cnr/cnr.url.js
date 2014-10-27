@@ -41,8 +41,8 @@ define(['jquery', 'cnr/cnr.ui', 'json!common', 'i18n', 'json!cache'], function (
         changePassword: 'rest/security/change-password',
         createAccount: 'rest/security/create-account'
       },
-      countries: 'search/paesi',
-      cities: 'search/comuni',
+      countries: 'rest/static/json/paesi.json',
+      cities: 'rest/static/json/comuni.json',
       rbac: 'rest/rbac',
       bulkInfo: "rest/bulkInfo/view/$path/$kind/$name?v=" + common.version,
       bulkInfoForms: "rest/bulkInfo/structure/$path?v=" + common.version,

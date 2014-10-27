@@ -33,18 +33,23 @@ public class SecurityCheckInterceptor implements ContainerRequestFilter{
 
 	@Override
 	public void filter(ContainerRequestContext requestContext) throws IOException {
-		HttpSession session = request.getSession();
-
-
-		String url = removePathParameter(request.getPathInfo(), uriInfo
-				.getPathParameters() );
-		LOGGER.debug(url);
-		if (!permission.isAuthorizedSession(url, request.getMethod(),
-				session)) {
-			requestContext.abortWith(Response.status(Response.Status.FORBIDDEN)
-					.entity("User cannot access the resource.").build());
+		HttpSession session = request.getSession(false);
+		Object obj = uriInfo.getMatchedResources().get(0);
+		SecurityChecked sc = obj.getClass().getAnnotation(SecurityChecked.class);
+		if (sc.needExistingSession() && session == null){
+			requestContext.abortWith(Response.status(Response.Status.UNAUTHORIZED)
+					.entity("Session exipred.").build());
 		}
-
+		if (sc.checkrbac()) {
+			String url = removePathParameter(request.getPathInfo(), uriInfo
+					.getPathParameters() );
+			LOGGER.debug(url);
+			if (!permission.isAuthorizedSession(url, request.getMethod(),
+					session)) {
+				requestContext.abortWith(Response.status(Response.Status.FORBIDDEN)
+						.entity("User cannot access the resource.").build());
+			}			
+		}
 	}
 
 	/**

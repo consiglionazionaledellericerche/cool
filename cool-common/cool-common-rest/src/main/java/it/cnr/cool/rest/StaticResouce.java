@@ -10,6 +10,7 @@ import javax.ws.rs.InternalServerErrorException;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.core.Context;
+import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
 import org.apache.commons.io.IOUtils;
@@ -31,7 +32,7 @@ public class StaticResouce {
 
 	@GET
 	@Path("{path:.*}")
-	public void getStaticResouce(@PathParam("path") String path,
+	public Response getStaticResouce(@PathParam("path") String path,
 			@Context HttpServletResponse res) {
 
 		InputStream input = StaticResouce.class.getResourceAsStream("/META-INF/"
@@ -43,25 +44,21 @@ public class StaticResouce {
 			res.setStatus(Status.OK.getStatusCode());
 			res.setContentType(getMimeType(path));
 			res.setHeader(HTTP_HEADER_CACHE_CONTROL, getCacheControl());
-
 			try {
 				ServletOutputStream output = res.getOutputStream();
 				IOUtils.copy(input, output);
 				output.close();
 			} catch (IOException e) {
-
 				LOGGER.error("error serving resource: " + path, e);
 				throw new InternalServerErrorException(
 						"error processing resourde " + path);
-
 			}
 
 		} else {
 			LOGGER.warn("resouce not found: " + path);
 			res.setStatus(Status.NOT_FOUND.getStatusCode());
 		}
-
-
+		return Response.status(Status.OK).build();
 	}
 
 	private String getCacheControl() {
@@ -75,6 +72,8 @@ public class StaticResouce {
 
 		if (path.indexOf(".css") > 0) {
 			mimeType = "text/css";
+		} else if (path.indexOf(".json") > 0) {
+			mimeType = "application/json";
 		} else if (path.indexOf(".js") > 0) {
 			mimeType = "application/javascript";
 		} else if (path.indexOf(".png") > 0) {

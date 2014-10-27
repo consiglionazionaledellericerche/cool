@@ -32,6 +32,8 @@ public class CacheServiceImpl implements CacheService, InitializingBean{
 	@Override
 	public void register(GlobalCache globalCache){
 		globalCaches.add(globalCache);
+		LOGGER.info("Loading global cache " + globalCache.name());
+		globalCache.get();
 	}
 
 	@Override

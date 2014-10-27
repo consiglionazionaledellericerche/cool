@@ -33,7 +33,7 @@
 	"now": "${cmisDateFormat.format(.now)}",
 	<#if caches??>
 		<#list caches as cache>
-			"${cache.first}": ${cache.second},
+			"${cache.first}": <#if cache.second??>${cache.second}<#else>""</#if>,
 		</#list>
 	</#if>
 	"version": "${artifact_version}",

@@ -1,5 +1,6 @@
 package it.cnr.cool.service;
 
+import it.cnr.cool.cmis.model.CoolPropertyIds;
 import it.cnr.cool.cmis.service.CMISService;
 import it.cnr.cool.exception.CoolUserFactoryException;
 import it.cnr.cool.security.service.UserService;
@@ -167,7 +168,7 @@ public class QueryService {
 					columns.add(PropertyIds.LAST_MODIFIED_BY);
 					columns.add(PropertyIds.CONTENT_STREAM_LENGTH);
 					columns.add(PropertyIds.CONTENT_STREAM_MIME_TYPE);
-					columns.add("alfcmis:nodeRef");
+					columns.add(CoolPropertyIds.ALFCMIS_NODEREF.value());
 					operationContext.setFilter(columns);
 
 					operationContext.setIncludeAllowableActions(true);

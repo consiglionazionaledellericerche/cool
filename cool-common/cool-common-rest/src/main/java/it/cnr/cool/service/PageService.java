@@ -1,8 +1,5 @@
 package it.cnr.cool.service;
 
-import freemarker.template.SimpleScalar;
-import freemarker.template.TemplateMethodModelEx;
-import freemarker.template.TemplateModelException;
 import it.cnr.cool.cmis.service.CMISService;
 import it.cnr.cool.cmis.service.VersionService;
 import it.cnr.cool.dto.CoolPage;
@@ -30,6 +27,7 @@ import org.dom4j.tree.DefaultElement;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
 
 public class PageService {
 
@@ -65,6 +63,9 @@ public class PageService {
 	@Autowired
 	private CMISService cmisService;
 
+	@Autowired
+	private ApplicationContext context;
+
 	public Map<String, CoolPage> loadPages() {
 		return pages;
 	}
@@ -93,7 +94,7 @@ public class PageService {
 			for (DefaultElement pageElement : pageElements) {
 				LOGGER.debug(pageElement.element(ID).getText());
 				CoolPage page = getPage(pageElement);
-			    pages.put(pageElement.elementText(ID), page);
+				pages.put(pageElement.elementText(ID), page);
 			}
 
 		} catch (IOException e) {
@@ -146,22 +147,9 @@ public class PageService {
 	 * @return
 	 */
 	public Map<String, Object> getModel(HttpServletRequest req, String pageId,
-			String urlContext,
-			final Locale locale) {
+			String urlContext, final Locale locale) {
 		Map<String, Object> model = new HashMap<String, Object>();
-
-		model.put("message", new TemplateMethodModelEx() {
-
-			@Override
-			public Object exec(List arguments) throws TemplateModelException {
-				LOGGER.debug(arguments.size() + " arguments: "
-						+ arguments.toString());
-				String key = ((SimpleScalar) arguments.get(0)).getAsString();
-				String label = i18nService.getLabel(key, locale);
-				LOGGER.debug(key + ": " + label);
-				return label != null ? label : key;
-			}
-		});
+		model.put("message", context.getBean("messageMethod", locale, pageId));
 
 		HashMap<String, String> pagex = new HashMap<String, String>();
 		pagex.put(ID, pageId);
@@ -181,7 +169,7 @@ public class PageService {
 		context.put("page", currentPage);
 		model.put("context", context);
 
-		model.put("locale_suffix", req.getLocale().getLanguage());
+		model.put("locale_suffix", locale.getLanguage());
 
 		model.put("pages", getPages());
 
@@ -194,25 +182,22 @@ public class PageService {
 		requestContext.put("requestMethod", req.getMethod());
 		request.put("requestContext", requestContext);
 		model.put("Request", request);
-
-		Map<String, Object> requestParameters = new HashMap<String, Object>();
-		model.put("RequestParameters", requestParameters);
+		model.put("queryString", req.getQueryString());
 
 		model.put("region", cnrRegion);
-
 
 		Map<String, Object> args = new HashMap<String, Object>();
 
 		Map paramz = req.getParameterMap();
 		for (Object key : paramz.keySet()) {
-			String [] valuez =  (String[]) paramz.get(key);
+			String[] valuez = (String[]) paramz.get(key);
 			if (valuez.length > 0) {
 				args.put((String) key, valuez[0]);
 			}
-
 		}
 
 		model.put("args", args);
+		model.put("RequestParameters", args);
 
 		return model;
 	}

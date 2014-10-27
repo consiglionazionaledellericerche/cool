@@ -50,12 +50,14 @@ public class ZoneService implements GlobalCache, InitializingBean{
 			String link = cmisService.getBaseURL().concat(ZONES_URL);
 			Response response = CmisBindingsHelper.getHttpInvoker(cmisService.getAdminSession()).invokeGET(new UrlBuilder(link),
 					cmisService.getAdminSession());
-			InputStreamReader responseReader = new InputStreamReader(response.getStream());
-			JsonObject jsonZones = new JsonParser().parse(responseReader)
-					.getAsJsonObject();
-			if (LOGGER.isDebugEnabled())
-				LOGGER.debug("zones " + jsonZones);
-			zones = jsonZones.toString();
+			if (response.getStream() != null) {
+				InputStreamReader responseReader = new InputStreamReader(response.getStream());
+				JsonObject jsonZones = new JsonParser().parse(responseReader)
+						.getAsJsonObject();
+				if (LOGGER.isDebugEnabled())
+					LOGGER.debug("zones " + jsonZones);
+				zones = jsonZones.toString();				
+			}
 		}
 		return zones;
 	}

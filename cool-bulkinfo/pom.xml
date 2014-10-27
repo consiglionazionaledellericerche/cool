@@ -41,7 +41,7 @@
 		<dependency>
 			<groupId>it.cnr.si</groupId>
 			<artifactId>rest</artifactId>
-			<version>0.7</version>
+			<version>0.11.0</version>
 		</dependency>
 
 		<dependency>
