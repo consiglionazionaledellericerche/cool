@@ -255,7 +255,10 @@ public class SecurityRest {
 		URI uri;
 
 		if (authenticated) {
-			uri = URI.create(redirect + "?" + queryString);
+			if (queryString != null && queryString.length() > 0)
+				uri = URI.create(redirect + "?" + queryString);
+			else
+				uri = URI.create(redirect);
 		} else {
 			uri = URI.create("../" + Page.LOGIN_URL + "?failure=yes");
 		}
