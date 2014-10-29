@@ -1,3 +1,7 @@
+WebDAV - verificare configurazione FrontEnd (metodi PROPFIND & co.)
+
+Single Sign On
+
 spostare cmisbindinglistener
 
 fixare test

@@ -37,6 +37,7 @@
         <configuration>
           <includes>
             <include>cool/cool.less</include>
+            <include>cool/mimetype.less</include>
           </includes>
         </configuration>
         <executions>
