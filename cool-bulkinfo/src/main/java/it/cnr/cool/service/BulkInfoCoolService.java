@@ -382,4 +382,8 @@ public class BulkInfoCoolService {
 		return properties;
 	}
 
+	public void clearCache() {
+	  bulkInfoCache.invalidateAll();
+	}
+
 }

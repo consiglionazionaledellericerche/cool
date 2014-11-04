@@ -3,6 +3,7 @@ package it.cnr.cool.rest;
 import it.cnr.bulkinfo.cool.BulkInfoCool;
 import it.cnr.bulkinfo.exception.BulkInfoException;
 import it.cnr.cool.cmis.service.CMISService;
+import it.cnr.cool.cmis.service.VersionService;
 import it.cnr.cool.rest.util.Util;
 import it.cnr.cool.service.BulkInfoCoolSerializer;
 import it.cnr.cool.service.BulkInfoCoolService;
@@ -11,6 +12,7 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.GET;
+import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
@@ -42,6 +44,8 @@ public class BulkInfoRest {
 	private BulkInfoCoolSerializer bulkInfoCoolSerializer;
 	@Autowired
 	private CMISService cmisService;
+	@Autowired
+	private VersionService versionService;
 
 	@GET
 	@Path("view/{type}/{kind}/{name}")
@@ -64,7 +68,7 @@ public class BulkInfoRest {
 			String json = bulkInfoCoolSerializer.serialize(model).toString();
 
 			builder = Response.ok(json);
-			
+
 			if(objectId == null || objectId.isEmpty()) {
 			  builder.cacheControl(Util.getCache(1800));
 			}
@@ -111,4 +115,17 @@ public class BulkInfoRest {
 
 		return builder.build();
 	}
+
+	@POST
+	@Path("clearcache")
+	public Response getView(@Context HttpServletRequest req) {
+	  if(versionService.isProduction()) {
+	    LOGGER.warn("Attenzione: tentativo di svuotare la cache dei BulkInfo in produzione");
+	    return Response.status(Response.Status.BAD_REQUEST).build();
+	  }  else {
+	    bulkInfoCoolService.clearCache();
+	    return Response.ok().build();
+	  }
+	}
 }
+
