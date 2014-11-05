@@ -204,6 +204,7 @@
                   </includes>
                   <excludes>
                     <exclude>**/target/**</exclude>
+                    <exclude>**/node_modules/**</exclude>
                   </excludes>
                 </validationSet>
               </validationSets>
