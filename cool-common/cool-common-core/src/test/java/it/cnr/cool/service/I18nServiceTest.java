@@ -52,15 +52,28 @@ public class I18nServiceTest {
 
 	}
 
-	@Test
-	public void testGetLabel() {
-		String label = i18nService.getLabel("welcome",
-				Locale.ITALIAN);
-		LOGGER.info(label);
-		assertEquals("Benvenuto", label);
-	}
+    @Test
+    public void testGetLabel() {
+        String label = i18nService.getLabel("welcome",
+                Locale.ITALIAN);
+        LOGGER.info(label);
+        assertEquals("Benvenuto", label);
+    }
 
-	@Test
+
+
+
+    @Test
+    public void testGetLabelUTF8() {
+        String label = i18nService.getLabel("label.bpm.workflowPriority",
+                Locale.ITALIAN);
+        LOGGER.info(label);
+        assertEquals("Priorità:", label);
+    }
+
+
+
+    @Test
 	public void testGetLabelUnimplementedLocale() {
 		String label = i18nService.getLabel("welcome",
 				Locale.GERMAN);

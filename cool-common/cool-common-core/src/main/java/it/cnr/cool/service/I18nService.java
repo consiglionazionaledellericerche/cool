@@ -2,6 +2,7 @@ package it.cnr.cool.service;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.UnsupportedEncodingException;
 import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Enumeration;
@@ -128,7 +129,16 @@ public class I18nService {
 				Enumeration<String> enumKeys = resourcebundle.getKeys();
 				while (enumKeys.hasMoreElements() == true) {
 					String key = enumKeys.nextElement();
-					labels.put(key, resourcebundle.getString(key));
+                    String val = resourcebundle.getString(key);
+                    String utf8val;
+                    try {
+                        byte[] bytes = val.getBytes("ISO-8859-1");
+                         utf8val = new String(bytes, "UTF-8");
+                    } catch(UnsupportedEncodingException e) {
+                        LOGGER.info("error for string " + key + " = " + val, e);
+                        utf8val = val;
+                    }
+					labels.put(key, utf8val);
 				}
 			} catch (MissingResourceException e) {
 				LOGGER.warn("resource bundle not found: " + location + " "
