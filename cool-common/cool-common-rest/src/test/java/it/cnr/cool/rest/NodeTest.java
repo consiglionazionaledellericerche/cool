@@ -1,32 +1,10 @@
 package it.cnr.cool.rest;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonParser;
 import it.cnr.cool.cmis.service.CMISService;
-
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.Serializable;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
-import javax.ws.rs.core.MultivaluedHashMap;
-import javax.ws.rs.core.MultivaluedMap;
-import javax.ws.rs.core.Response;
-import javax.ws.rs.core.Response.Status;
-
-import org.apache.chemistry.opencmis.client.api.CmisObject;
+import org.apache.chemistry.opencmis.client.api.*;
 import org.apache.chemistry.opencmis.client.api.Folder;
-import org.apache.chemistry.opencmis.client.api.ItemIterable;
-import org.apache.chemistry.opencmis.client.api.ObjectId;
-import org.apache.chemistry.opencmis.client.api.Session;
 import org.apache.chemistry.opencmis.commons.PropertyIds;
 import org.apache.chemistry.opencmis.commons.exceptions.CmisObjectNotFoundException;
 import org.apache.commons.io.IOUtils;
@@ -44,8 +22,20 @@ import org.springframework.test.annotation.DirtiesContext.ClassMode;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import com.google.gson.JsonElement;
-import com.google.gson.JsonParser;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+import javax.ws.rs.core.MultivaluedHashMap;
+import javax.ws.rs.core.MultivaluedMap;
+import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.Status;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.Serializable;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
+
+import static org.junit.Assert.*;
 
 
 
@@ -120,12 +110,9 @@ public class NodeTest {
 		String html = response.getEntity().toString();
 		LOGGER.debug(html);
 
-		// extract nodeRef from HTML
-		String patternStr = "(workspace.*)\"";
-		Pattern p = Pattern.compile(patternStr);
-		Matcher m = p.matcher(html);
-		assertTrue(m.find());
-		String nodeRef = m.group(1);
+		// extract nodeRef from HTML (il noderef è la chiave del un campo contenuto dentro "attachments" del json)
+        JSONObject json = new JSONObject(html.substring(html.indexOf("attachments") -2, html.indexOf("</") ));
+        String nodeRef = (String) json.getJSONObject("attachments").keys().next();
 
 		LOGGER.debug("created node " + nodeRef);
 		assertNotNull(nodeRef);
@@ -156,7 +143,8 @@ public class NodeTest {
 
 		LOGGER.debug("updated node " + nodeRef);
 		assertNotNull(nodeRefUpdate);
-		assertEquals(nodeRef, nodeRefUpdate);
+        //controllo il noderef escludendo la version che sarà ovviamente diversa
+		assertEquals(nodeRef.substring(0, nodeRef.indexOf(";")), nodeRefUpdate.substring(0, nodeRefUpdate.indexOf(";")));
 
 		// test cleanup
 		deleteDocument(nodeRef);
@@ -189,7 +177,8 @@ public class NodeTest {
 		assertEquals(jsonObj.getString("jconon_call:requisiti"),
 				STRINGA);
 		assertEquals(jsonObj.getString("cmis:parentId"), parentObject.getId());
-		assertNotNull(jsonObj.getJSONArray("aspects"));
+        //gli "aspect" sono diventati "secondaryTypes"
+		assertNotNull(jsonObj.getJSONArray("secondaryTypes"));
 		assertNotNull(jsonObj.getString("cmis:objectId"));
 		assertFalse(jsonObj.getBoolean("jconon_call:pubblicato"));
 
@@ -211,7 +200,7 @@ public class NodeTest {
 		assertEquals(jsonObj.getString("jconon_call:requisiti"),
 				STRINGA);
 		assertEquals(jsonObj.getString("cmis:parentId"), parentObject.getId());
-		assertNotNull(jsonObj.getJSONArray("aspects"));
+		assertNotNull(jsonObj.getJSONArray("secondaryTypes"));
 		assertNotNull(jsonObj.getString("cmis:objectId"));
 		assertFalse(jsonObj.getBoolean("jconon_call:pubblicato"));
 	}

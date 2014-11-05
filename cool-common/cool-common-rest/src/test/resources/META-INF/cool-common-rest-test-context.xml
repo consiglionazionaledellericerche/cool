@@ -10,14 +10,7 @@
 
 	<bean class="org.springframework.mock.web.MockServletContext"></bean>
 
-	 <bean class="it.cnr.cool.rest.SecurityRest"></bean>
-
-
 	 <bean id="mailService" class="it.cnr.cool.mocks.MockMailService"></bean>
-
-	<bean class="it.cnr.cool.rest.Search">
-		<property name="queryService" ref="queryService"></property>
-	</bean>
 
 	<bean id="queryService" class="it.cnr.cool.service.QueryService"></bean>
 
@@ -25,6 +18,6 @@
 		<property name="baseURL" value="${repository.base.url}" />
 	</bean>
 
-	<bean class="it.cnr.cool.rest.Node"></bean>
+    <bean class="it.cnr.cool.service.PageService" init-method="init"></bean>
 
 </beans>

@@ -1,19 +1,9 @@
 package it.cnr.cool.rest;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
 import it.cnr.cool.cmis.service.CMISService;
 import it.cnr.cool.exception.CoolUserFactoryException;
 import it.cnr.cool.security.service.UserService;
 import it.cnr.cool.security.service.impl.alfresco.CMISUser;
-
-import java.util.Locale;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
-import javax.ws.rs.core.Response;
-import javax.ws.rs.core.Response.Status;
-
 import org.json.JSONObject;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -26,6 +16,15 @@ import org.springframework.test.annotation.DirtiesContext.ClassMode;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.Status;
+import java.util.Locale;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = { "classpath:/META-INF/cool-common-rest-test-context.xml" })
 @DirtiesContext(classMode = ClassMode.AFTER_CLASS)
@@ -34,7 +33,7 @@ public class SecurityRestTest {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(SecurityRestTest.class);
 
-	private final static String USERNAME = "Francesco-uliana";
+	private final static String USERNAME = "francesco.uliana";
 
 	private static final String PIN = "abcde";
 
@@ -155,7 +154,7 @@ public class SecurityRestTest {
 
 	private void setDisableAccount(boolean disable) throws CoolUserFactoryException {
 		CMISUser user = userService.loadUserForConfirm(USERNAME);
-		
+
 		if (disable) {
 			userService.disableAccount(USERNAME);
 			user.setPin(PIN);
