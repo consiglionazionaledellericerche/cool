@@ -30,6 +30,10 @@ public class BulkInfoCoolImpl extends BulkInfoImpl implements BulkInfoCool {
 		super(bulkInfoName, doc);
 	}
 
+	public BulkInfoCoolImpl(String bulkInfoName, Document doc, boolean isProduction) {
+	  super(bulkInfoName, doc, isProduction);
+	}
+
 	public BulkInfoCoolImpl() {
 		super();
 	}

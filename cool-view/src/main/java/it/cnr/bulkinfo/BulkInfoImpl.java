@@ -31,6 +31,9 @@ public class BulkInfoImpl implements BulkInfo {
 	protected String cmisQueryName;
 	protected String cmisExtendsName;
 
+	// for tracing fieldProperties
+	protected boolean debug = false;
+
 	private Map<String, FieldPropertySet> forms;
 	private Map<String, FieldPropertySet> columnSets;
 	private Map<String, FieldPropertySet> freeSearchSets;
@@ -64,6 +67,11 @@ public class BulkInfoImpl implements BulkInfo {
 
 	public BulkInfoImpl(String id, Document document) {
 		setup(id, document);
+	}
+
+	public BulkInfoImpl(String id, Document document, boolean isProduction) {
+	  this.debug = !isProduction;
+	  setup(id, document);
 	}
 
 	private void setup(String id, Document document) {
@@ -360,30 +368,41 @@ public class BulkInfoImpl implements BulkInfo {
 	public Map<String, Object> getFieldPropertiesByProperty() {
 		return fieldPropertiesByProperty;
 	}
-	
+
 	private void completeFieldProperty(FieldProperty fieldproperty, boolean fromParent) {
-		FieldProperty fieldproperty1 = getFieldProperty(fieldproperty.getName());
-		if (fieldproperty1 == null) {
+		FieldProperty localFieldproperty = getFieldProperty(fieldproperty.getName());
+		if (localFieldproperty == null) {
 			addFieldProperty(fieldproperty);
 		}
 		else {
 			if (fromParent) {
-				fieldproperty1.addAllAttribute(fieldproperty.attributes);
-				fieldproperty1.addAllSubProperties(fieldproperty.subProperties);								
+			  if (debug) {
+			    String trace = localFieldproperty.getAttribute("trace");
+			    if(trace == null) {
+			      trace = fieldproperty.getAttribute("trace");
+			    } else {
+			      trace = fieldproperty.getAttribute("trace") + ":::" + trace;
+			    }
+			    localFieldproperty.addAttribute("trace", trace);
+			  }
+				localFieldproperty.addAllAttribute(fieldproperty.attributes);
+				localFieldproperty.addAllSubProperties(fieldproperty.subProperties);
 			} else {
-				fieldproperty.addAllAttribute(fieldproperty1.attributes);
-				fieldproperty.addAllSubProperties(fieldproperty1.subProperties);				
+				fieldproperty.addAllAttribute(localFieldproperty.attributes);
+				fieldproperty.addAllSubProperties(localFieldproperty.subProperties);
+				// TODO if aspect?
 			}
-			for(FieldProperty listElement : fieldproperty1.getListElements()) {
+			for(FieldProperty listElement : localFieldproperty.getListElements()) {
 				fieldproperty.addListElement(listElement);
 			}
 			if (fieldPropertiesByProperty.get(fieldproperty.getProperty()) == null) {
 				fieldPropertiesByProperty.put(fieldproperty.getProperty(), fieldproperty);
 			}
+
 		}
-		fieldproperty.setBulkInfo(this);		
+		fieldproperty.setBulkInfo(this);
 	}
-	
+
 	@Override
 	public void completeFieldProperty(FieldProperty fieldproperty) {
 		completeFieldProperty(fieldproperty, false);
@@ -455,6 +474,14 @@ public class BulkInfoImpl implements BulkInfo {
 			constructFieldProperty(elementFormFieldProperty, fieldProperty);
 		}
 		completeFieldProperty(fieldProperty);
+		if(debug) {
+		  String trace = fieldProperty.getAttribute("trace");
+		  if (trace == null) {
+		    fieldProperty.addAttribute("trace", this.id + "/" + fieldpropertyset.name);
+		  } else {
+		    fieldProperty.addAttribute("trace", trace + ":::" + this.id + "/" + fieldpropertyset.name);
+		  }
+		}
 		fieldpropertyset.addFormFieldProperty(fieldProperty);
 	}
 
@@ -492,6 +519,9 @@ public class BulkInfoImpl implements BulkInfo {
 
 			addDefaultAttribute(fieldProperty);
 			constructFieldProperty(element, fieldProperty);
+			if(debug) {
+			  addTraceInfo(fieldProperty);
+			}
 
 			addFieldProperty(fieldProperty);
 		}
@@ -507,6 +537,15 @@ public class BulkInfoImpl implements BulkInfo {
 		} else {
 			addListProperty(element, fieldProperty);
 		}
+	}
+
+	private void addTraceInfo(FieldProperty fieldProperty) {
+	  String trace = fieldProperty.getAttribute("trace");
+	  if(trace == null) {
+	    fieldProperty.addAttribute("trace", id);
+	  } else {
+	    fieldProperty.addAttribute("trace", id + ":::" + trace);
+	  }
 	}
 
 	/**

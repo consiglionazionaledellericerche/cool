@@ -8,6 +8,7 @@ import it.cnr.bulkinfo.exception.BulkInfoException;
 import it.cnr.bulkinfo.exception.BulkinfoKindException;
 import it.cnr.bulkinfo.exception.BulkinfoNameException;
 import it.cnr.cool.cmis.service.CMISService;
+import it.cnr.cool.cmis.service.VersionService;
 import it.cnr.cool.rest.util.Util;
 
 import java.io.IOException;
@@ -41,6 +42,8 @@ public class BulkInfoCoolService {
 
 	@Autowired
 	private CMISService cmisService;
+    @Autowired
+    private VersionService versionService;
 
 	private static final long CACHE_MAXIMUM_SIZE = 1000;
 	private static final String RESOURCE_PATH = "/bulkInfo/";
@@ -223,7 +226,7 @@ public class BulkInfoCoolService {
 			if (is != null) {
 				String xml = IOUtils.toString(is);
 				Document doc = DocumentHelper.parseText(xml);
-				bi = new BulkInfoCoolImpl(bulkInfoName, doc);
+				bi = new BulkInfoCoolImpl(bulkInfoName, doc, versionService.isProduction());
 			}
 		} catch (DocumentException exp) { // log error, return null
 			LOGGER.error("DocumentExcpetion with bulkInfo :" + bulkInfoName,
