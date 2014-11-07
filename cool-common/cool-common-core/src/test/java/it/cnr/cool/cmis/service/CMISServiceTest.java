@@ -1,12 +1,6 @@
 package it.cnr.cool.cmis.service;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
 import it.cnr.cool.security.service.impl.alfresco.CMISUser;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
-
 import org.apache.chemistry.opencmis.client.api.Session;
 import org.apache.chemistry.opencmis.client.bindings.impl.SessionImpl;
 import org.apache.chemistry.opencmis.client.bindings.spi.BindingSession;
@@ -23,6 +17,12 @@ import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.annotation.DirtiesContext.ClassMode;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = { "classpath:/META-INF/cool-common-core-test-context.xml" })
@@ -71,7 +71,7 @@ public class CMISServiceTest {
 		Session session = cmisService.createSession();
 		RepositoryInfo info = session.getRepositoryInfo();
 		LOGGER.info(info.getCmisVersion().toString());
-		assertEquals(CmisVersion.CMIS_1_0, info.getCmisVersion());
+		assertEquals(CmisVersion.CMIS_1_1, info.getCmisVersion());
 	}
 
 	@Test
