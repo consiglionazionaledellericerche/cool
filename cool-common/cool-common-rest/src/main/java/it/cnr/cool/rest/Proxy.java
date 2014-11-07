@@ -3,26 +3,6 @@ package it.cnr.cool.rest;
 
 import it.cnr.cool.cmis.service.CMISService;
 import it.cnr.cool.interceptor.ProxyInterceptor;
-
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.net.SocketException;
-import java.util.Arrays;
-
-import javax.servlet.ServletOutputStream;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.ws.rs.DELETE;
-import javax.ws.rs.GET;
-import javax.ws.rs.POST;
-import javax.ws.rs.PUT;
-import javax.ws.rs.Path;
-import javax.ws.rs.core.Context;
-import javax.ws.rs.core.Response.Status;
-
 import org.apache.chemistry.opencmis.client.bindings.impl.CmisBindingsHelper;
 import org.apache.chemistry.opencmis.client.bindings.spi.BindingSession;
 import org.apache.chemistry.opencmis.client.bindings.spi.http.Output;
@@ -34,6 +14,16 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.FileCopyUtils;
+
+import javax.servlet.ServletOutputStream;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.ws.rs.*;
+import javax.ws.rs.core.Context;
+import javax.ws.rs.core.Response.Status;
+import java.io.*;
+import java.net.SocketException;
+import java.util.Arrays;
 
 
 @Path("proxy")
@@ -183,8 +173,10 @@ public class Proxy {
 	private String getUrlParam(HttpServletRequest req) {
 
 		String urlParam = null;
-		if (req.getParameter("url") != null)
-			urlParam = it.cnr.cool.util.UriUtils.encode(req.getParameter("url"));
+		if (req.getParameter("url") != null) {
+			//urlParam = it.cnr.cool.util.UriUtils.encode(req.getParameter("url"));
+			urlParam = req.getParameter("url");
+		}
 		else
 			urlParam = it.cnr.cool.util.UriUtils.encode(req.getPathInfo()
 					.replaceFirst(
