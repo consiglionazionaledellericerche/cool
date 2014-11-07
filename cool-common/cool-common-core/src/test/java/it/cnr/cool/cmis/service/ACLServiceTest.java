@@ -1,12 +1,6 @@
 package it.cnr.cool.cmis.service;
 
-import static org.junit.Assert.assertTrue;
 import it.cnr.cool.cmis.model.ACLType;
-
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
-
 import org.apache.chemistry.opencmis.client.api.Session;
 import org.apache.chemistry.opencmis.client.bindings.spi.BindingSession;
 import org.junit.Test;
@@ -19,12 +13,19 @@ import org.springframework.test.annotation.DirtiesContext.ClassMode;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
+
+import static org.junit.Assert.assertTrue;
+
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = { "classpath:/META-INF/cool-common-core-test-context.xml" })
 @DirtiesContext(classMode = ClassMode.AFTER_CLASS)
 public class ACLServiceTest {
 
 	private static final String OBJECT_PATH = "/Data Dictionary/RSS Templates/RSS_2.0_recent_docs.ftl";
+	public static final String WORKSPACE_SPACES_STORE = "workspace://SpacesStore/";
 
 	@Autowired
 	private ACLService aclService;
@@ -73,7 +74,7 @@ public class ACLServiceTest {
 
 	private String getNodeRef() {
 		Session session = cmisService.createAdminSession();
-		String nodeRef = session.getObjectByPath(OBJECT_PATH).getId()
+		String nodeRef = WORKSPACE_SPACES_STORE + session.getObjectByPath(OBJECT_PATH).getId()
 				.split(";")[0];
 		return nodeRef;
 	}
