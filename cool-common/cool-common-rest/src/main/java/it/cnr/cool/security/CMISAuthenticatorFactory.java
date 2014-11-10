@@ -69,7 +69,7 @@ public class CMISAuthenticatorFactory {
 
 			authorized = true;
 		} catch (Exception e) {
-			LOGGER.debug("Can't retrieve info, assume not authorized", e);
+			LOGGER.error("Can't retrieve info, assume not authorized", e);
 		}
 		return authorized;
 	}

@@ -36,6 +36,7 @@ import org.apache.chemistry.opencmis.client.api.Session;
 import org.apache.chemistry.opencmis.client.runtime.ObjectIdImpl;
 import org.apache.chemistry.opencmis.client.runtime.OperationContextImpl;
 import org.apache.chemistry.opencmis.commons.PropertyIds;
+import org.apache.chemistry.opencmis.commons.exceptions.CmisUnauthorizedException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -83,19 +84,22 @@ public class FrontOfficeService{
 
 	public Map<String, Object> getNotice(Session cmisSession, Session adminSession, String after, String before, boolean editor, String typeBando){
 		Map<String, Object> model = new HashMap<String, Object>();
-		ItemIterable<QueryResult> queryResult;
-		queryResult = executeQueryNotice(cmisSession, typeBando, after, before, editor);
+		try{
+			ItemIterable<QueryResult> queryResult;
+			queryResult = executeQueryNotice(cmisSession, typeBando, after, before, editor);
 
-		List<AlfrescoDocument> result = new ArrayList<AlfrescoDocument>();
-		for (QueryResult qr : queryResult.getPage()) {
-			ObjectId objId = new ObjectIdImpl(
-					(String) qr.getPropertyValueById(PropertyIds.OBJECT_ID));
-			result.add(new Notice(qr, adminSession.getAcl(objId, false).getAces().get(0).getPrincipal().getId()));
+			List<AlfrescoDocument> result = new ArrayList<AlfrescoDocument>();
+			for (QueryResult qr : queryResult.getPage()) {
+				ObjectId objId = new ObjectIdImpl(
+						(String) qr.getPropertyValueById(PropertyIds.OBJECT_ID));
+				result.add(new Notice(qr, adminSession.getAcl(objId, false).getAces().get(0).getPrincipal().getId()));
+			}
+			model.put("docs", result);
+			if(editor)
+				model.put("maxNotice", alfrescoHandler.getMax(CoolPropertyIds.NOTICE_QUERY_NAME.value(), CoolPropertyIds.NOTICE_NUMBER.value()));
+		} catch (CmisUnauthorizedException e) {
+			LOGGER.error("cmis exception", e);
 		}
-		model.put("docs", result);
-		if(editor)
-			model.put("maxNotice", alfrescoHandler.getMax(CoolPropertyIds.NOTICE_QUERY_NAME.value(), CoolPropertyIds.NOTICE_NUMBER.value()));
-
 		return model;
 	}
 

@@ -21,7 +21,7 @@
     <jasperreports.version>5.5.0</jasperreports.version>
     <jslint4java.version>2.0.2</jslint4java.version>
     <junit.version>4.8.1</junit.version>
-    <slf4j.version>1.7.7</slf4j.version>
+    <slf4j.version>1.7.5</slf4j.version>
     <dom4j.version>1.6</dom4j.version>
     <jaxen.version>1.1.4</jaxen.version>
     <mail.version>1.4.5</mail.version>

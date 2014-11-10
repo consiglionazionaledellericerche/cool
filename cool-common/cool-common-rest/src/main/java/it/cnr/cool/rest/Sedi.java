@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -34,11 +35,25 @@ public class Sedi {
 
 		ResponseBuilder rb;
 		try {
-			rb = Response.ok(siperService.getSedi().toString());
+			rb = Response.ok(String.valueOf(siperService.getSedi()));
 		} catch (ExecutionException e) {
 			LOGGER.error(e.getMessage(), e);
 			rb = Response.status(Status.INTERNAL_SERVER_ERROR);
 		}
 		return rb.build();
 	}
+
+	@GET
+	@Path("gestori")
+	public Response getSede(@Context HttpServletRequest req, @QueryParam("sedeId") String sedeId) throws URISyntaxException {
+		ResponseBuilder rb;
+		try {
+			rb = Response.ok(String.valueOf(siperService.getSede(sedeId)));
+		} catch (ExecutionException e) {
+			LOGGER.error(e.getMessage(), e);
+			rb = Response.status(Status.INTERNAL_SERVER_ERROR);
+		}
+		return rb.build();
+	}
+
 }

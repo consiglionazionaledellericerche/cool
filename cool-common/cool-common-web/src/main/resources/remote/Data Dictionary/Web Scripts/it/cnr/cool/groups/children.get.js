@@ -6,6 +6,7 @@ function main() {
   "use strict";
   var fullName = args.fullName,
     authorityType = args.authorityType,
+    zones = args.zones,
     sortBy = args.sortBy || "fullName",
     paging = utils.createPaging(args),
     regex = /^((GROUP)|(USER))$/g,
@@ -28,10 +29,10 @@ function main() {
       status.setCode(status.STATUS_BAD_REQUEST, "The authorityType argument has does not have a correct value.");
       return;
     }
-    model.children = groupAuthority.getChildAuthorities(fullName, authorityType, paging, sortBy);
+    model.children = groupAuthority.getChildAuthorities(fullName, authorityType, paging, sortBy, zones);
   } else {
     model.group = rootAuthority;
-    model.children = groupAuthority.getChildAuthorities(paging, sortBy);
+    model.children = groupAuthority.getChildAuthorities(null, null, paging, sortBy, zones);
   }
   model.paging = paging;
 }

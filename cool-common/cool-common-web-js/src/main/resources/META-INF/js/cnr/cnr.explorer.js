@@ -7,6 +7,7 @@ define(['jquery', 'json!common', 'cnr/cnr', 'cnr/cnr.node', 'cnr/cnr.ui', 'cnr/c
     settings, // current Explorer settings
     path = [], // breadcrumb path
     selectedFolder = null, //current selected folder
+    rootNodeRef = null, //root folder
     nameOfCopyDiv = $('<div><div class="control-group"><div class="controls"><input type="text" id="nameOfCopy" name="cmis:name"></div></div></div>');
 
   /* utility functions */
@@ -336,23 +337,16 @@ define(['jquery', 'json!common', 'cnr/cnr', 'cnr/cnr.node', 'cnr/cnr.ui', 'cnr/c
 
       settings = $.extend(true, {}, defaults, opts, true);
 
-      // inizializzazione del pannello di ricerca
-      search = new Search({
-        dataSource: settings.search.dataSource, //TODO: valutare se e' il caso di uniformare searchFunction
-        elements: settings.dom.search,
-        display: settings.search.display
-      });
-
       // inizializzazione dell'albero di navigazione per folder
       settings.tree.rootFn({}).done(function (data) {
-        var nodeRef = data.id;
+        rootNodeRef = data.id;
 
-        // make first query
-        folderChange({
-          name: 'Root',
-          nodeRef: nodeRef,
-          allowableActions: data.allowableActions
-        }, true);
+        // inizializzazione del pannello di ricerca
+        search = new Search({
+          dataSource: settings.search.dataSource, //TODO: valutare se e' il caso di uniformare searchFunction
+          elements: settings.dom.search,
+          display: settings.search.display
+        });
 
         // init Tree only if it's defined
         if (settings.dom.tree) {
@@ -360,17 +354,31 @@ define(['jquery', 'json!common', 'cnr/cnr', 'cnr/cnr.node', 'cnr/cnr.ui', 'cnr/c
             customClass: settings.tree.customClass,
             paramName: settings.tree.paramName,
             childrenFn: settings.tree.childrenFn,
-            folderId: nodeRef,
+            childrenFnPlaceholder: settings.tree.childrenFnPlaceholder,
+            folderId: rootNodeRef,
             elements: {
               target: settings.dom.tree
             },
             selectNode: treeNodeSelect
           });
         }
+
+        // make first query
+        folderChange({
+          name: 'Root',
+          nodeRef: rootNodeRef,
+          allowableActions: data.allowableActions
+        }, true);
       });
 
     },
     refresh: refresh,
-    folderChange: folderChange
+    folderChange: folderChange,
+    getSelectedFolder : function () {
+      return selectedFolder;
+    },
+    getRootFolder : function () {
+      return rootNodeRef;
+    }
   };
 });

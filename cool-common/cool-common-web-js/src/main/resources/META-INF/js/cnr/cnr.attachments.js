@@ -155,7 +155,7 @@ define(['jquery', 'cnr/cnr.node', 'cnr/cnr.ui.select', 'i18n', 'cnr/cnr.search',
           });
         }
         if (value) {
-          var objectType = value[0].substring(2),
+          var objectType = value.substring(2),
             type = objectType + ' AS ' + objectType;
           if (settings.search.isAspect) {
             type += ' join ' + settings.search.type + ' AS ' + settings.search.type + ' on ' +
@@ -198,7 +198,7 @@ define(['jquery', 'cnr/cnr.node', 'cnr/cnr.ui.select', 'i18n', 'cnr/cnr.search',
           UI.alert('Prima di iniziare la compilazione della sezione è necessario effettuare il salvataggio della domanda');
           return;
         }
-        var type = selectObjectType.data('value')[0];
+        var type = selectObjectType.data('value');
         Node.submission({
           nodeRef: settings.cmisObjectId,
           objectType: type,

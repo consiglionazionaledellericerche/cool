@@ -53,7 +53,7 @@ public abstract class JMSService implements InitializingBean {
 			if (versionService.isProduction()) {
 				LOGGER.error("Errore nel recupero JNDI della coda.", _ex);
 			} else {
-				LOGGER.warn("development mode - error initializing queue " + queueName);
+				LOGGER.warn("development mode - error initializing queue " + queueName, _ex);
 			}
 		}
 	}

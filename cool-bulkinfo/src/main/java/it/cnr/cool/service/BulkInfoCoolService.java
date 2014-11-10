@@ -30,7 +30,9 @@ import org.slf4j.LoggerFactory;
 import org.dom4j.Document;
 import org.dom4j.DocumentException;
 import org.dom4j.DocumentHelper;
+import org.springframework.beans.factory.NoSuchBeanDefinitionException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
 
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
@@ -40,6 +42,9 @@ public class BulkInfoCoolService {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(BulkInfoCoolService.class);
 
+	@Autowired
+	private ApplicationContext context;
+	
 	@Autowired
 	private CMISService cmisService;
     @Autowired
@@ -163,6 +168,13 @@ public class BulkInfoCoolService {
 
 		List<PropertyDefinition<?>> properties = new ArrayList<PropertyDefinition<?>>();
 		BulkInfoCool bulkInfo = getOrCreate(bulkInfoName, properties);
+
+		try {
+			BulkInfoInjection bulkInfoInjection = context.getBean("BulkInfo" + bulkInfo.getId(), BulkInfoInjection.class);
+			if (bulkInfoInjection != null)
+				bulkInfoInjection.complete(bulkInfo);			
+		} catch (NoSuchBeanDefinitionException _ex) {			
+		}
 
 		if (bulkInfo != null) {
 			ObjectType bulkObjectType = getObjectType(bulkInfoName, bulkInfo);

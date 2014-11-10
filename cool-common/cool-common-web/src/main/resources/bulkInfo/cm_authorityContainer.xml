@@ -5,6 +5,10 @@
 	<formFieldProperty name="authorityName"/>
 	<formFieldProperty name="authorityDisplayName"/>
 
+	<form name="create">
+		<formFieldProperty name="authorityName" inputType="TEXT"/>
+		<formFieldProperty name="authorityDisplayName"/>
+	</form>	
 	<columnFieldProperty name="authorityName"/>
 	<columnFieldProperty name="authorityDisplayName"/>
 

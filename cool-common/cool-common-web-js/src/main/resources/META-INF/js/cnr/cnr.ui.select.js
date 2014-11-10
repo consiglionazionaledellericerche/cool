@@ -49,7 +49,7 @@ define(['jquery', 'i18n', 'select2', 'select2-i18n', 'cnr/cnr'], function ($, i1
         return (el && el.text) ? el.text : undefined;
       }),
         parsedValue = value ? String(value).match(/[a-zA-Z0-9-_]+/, '') : value;
-      parent.data('value', value.length ? value : null);
+      parent.data('value', value.length ? (item.multiple ? value : value[0]) : null);
       if (item.ghostName) {
         $('#' + item.ghostName).parents('.control-group').data('value', textValue.length ? textValue : null);
       }

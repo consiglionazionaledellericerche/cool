@@ -171,7 +171,7 @@ define(['jquery', 'header', 'cnr/cnr.bulkinfo', 'i18n', 'cnr/cnr', 'cnr/cnr.ui.a
         btnGroup = $('<div class="btn-group"></div>'),
         btnDelete = $('<button class="delete btn btn-mini btn-danger"><i class="icon-trash icon-white"></i> Cancella</button>').data('nodeRef', el.nodeRef),
         btnShow = $('<button class="showLog btn btn-mini"><i class="icon-upload"></i> Visualizza</a>').data('el', el),
-        btnEdit = $('<a href="' + URL.urls.root + 'page/frontOfficeCreateModify?nodeRef=' + el.nodeRef + '" class="edit btn btn-mini"><i class="icon-edit icon-white"></i> Edit</a>'),
+        btnEdit = $('<a href="' + URL.urls.root + 'frontOfficeCreateModify?nodeRef=' + el.nodeRef + '" class="edit btn btn-mini"><i class="icon-edit icon-white"></i> Edit</a>'),
         tipologiaBando = $('<h5>Tipologia Bando: </h5>'),
         line = $('<hr color="red" size="4" >');//linea di separazione tra i documenti recuperati
 
@@ -264,8 +264,8 @@ define(['jquery', 'header', 'cnr/cnr.bulkinfo', 'i18n', 'cnr/cnr', 'cnr/cnr.ui.a
         'nodeRef': el.nodeRef
       },
       success: function (data) {
-        var label = $('<pre class="json"></pre>').html(syntaxHighlight(JSON.stringify(data, undefined, 4)));
-        UI.modal('Visualizzazione di ' + el.name, label);
+        var label = $('<pre class="json"></pre>').addClass('modal-inner-fix').html(syntaxHighlight(JSON.stringify(data, undefined, 4)));
+        UI.bigmodal('Visualizzazione di ' + el.name, label);
       },
       error: function () {
         UI.error('Errore nella visualizzazione del Documento');

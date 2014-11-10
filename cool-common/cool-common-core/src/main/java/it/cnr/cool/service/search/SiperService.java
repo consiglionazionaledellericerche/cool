@@ -19,6 +19,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
+import com.google.common.collect.ImmutableMap;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -107,13 +108,16 @@ public class SiperService implements InitializingBean {
 				JsonArray results = new JsonArray();
 				JsonArray sedi = (JsonArray) new JsonParser().parse(jsonString);
 				for (JsonElement sede : sedi) {
+					String sedeId = sede.getAsJsonObject().get("sedeId").getAsString();
 					JsonObject obj = new JsonObject();
 					String UO = "";
 					String titCa = getAttribute(sede.getAsJsonObject(), "titCa");					
 					if (titCa.length() > 0) {
 						UO = titCa.substring(0, 3).concat(".").concat(titCa.substring(3));
 					}
-					obj.addProperty("key", sede.getAsJsonObject().get("sedeId").getAsString());
+					obj.addProperty("key", sedeId);
+					obj.addProperty("descrizione", getAttribute(sede.getAsJsonObject(), "descrizione"));
+					obj.addProperty("citta", getAttribute(sede.getAsJsonObject(), "citta"));
 					obj.addProperty("label", 							
 							getAttribute(sede.getAsJsonObject(), "descrizione").concat(" ").
 							concat(getAttribute(sede.getAsJsonObject(), "indirizzo").concat(" ")).
@@ -124,6 +128,7 @@ public class SiperService implements InitializingBean {
 							);
 					
 					results.add(obj);
+					sediCache.put(sedeId, obj);
 				}
 				json.add("results", results);
 			}
@@ -148,8 +153,21 @@ public class SiperService implements InitializingBean {
 	}
 
 	public JsonElement getSedi() throws ExecutionException {
-		return sediCache.get("main");
+		return sediCache.get("all");
 	}
+
+	public ImmutableMap<String, JsonElement> getSedi(Iterable<String> sedi) throws ExecutionException {
+		if (sediCache.getAllPresent(sedi).isEmpty()) 
+			sediCache.get("all");
+		return sediCache.getAll(sedi);
+	}	
+	
+	public JsonElement getSede(String sedeId) throws ExecutionException {
+		if (sediCache.getIfPresent(sedeId) == null)
+			sediCache.get("all");
+		return sediCache.get(sedeId);
+	}
+
 	@Override
 	public void afterPropertiesSet() throws Exception {
 		sediCache = CacheBuilder.newBuilder()

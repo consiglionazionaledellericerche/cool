@@ -21,7 +21,7 @@
 			</#if>
 			<#assign propertyName = shortQName(property)>
 			<#assign startIndex = (propertyName?index_of(":") + 1)>					
-			"${propertyName?substring(startIndex)}" : <#if propertyName == "cm:homeFolder">"${propertyValue.nodeRef}"<#else><@displayValue propertyValue/></#if>
+			"${propertyName?substring(startIndex)}" : <#if propertyName == "cm:homeFolder" && propertyValue??>"${propertyValue.nodeRef}"<#else><@displayValue propertyValue/></#if>
 			<#if property_has_next>,</#if>
 	</#list>
 	<#if groups??>

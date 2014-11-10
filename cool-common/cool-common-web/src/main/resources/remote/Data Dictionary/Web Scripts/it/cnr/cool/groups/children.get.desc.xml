@@ -9,7 +9,7 @@
     If the optional sortBy parameter is given, then the results may be sorted. Possible values are "authorityName" (default), "shortName" and "displayName"
    ]]>
    </description>
-   <url>/cnr/groups/children?maxItems={maxItems?}&amp;skipCount={skipCount?}&amp;sortBy={sortBy?}&amp;authorityType={authorityType?}&amp;fullName={fullName?}</url>
+   <url>/cnr/groups/children?maxItems={maxItems?}&amp;skipCount={skipCount?}&amp;sortBy={sortBy?}&amp;authorityType={authorityType?}&amp;fullName={fullName?}&amp;zones={zones?}</url>
    <url>/cnr/groups/root</url>
    <format default="json">argument</format>
    <authentication>user</authentication>

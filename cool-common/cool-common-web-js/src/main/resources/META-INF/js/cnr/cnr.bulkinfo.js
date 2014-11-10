@@ -95,7 +95,7 @@ define(['cnr/cnr.ui.widgets', 'jquery', 'cnr/cnr', 'cnr/cnr.style', 'handlebars'
       } else if (item.inputType === "PASSWORD") {
         input = $('<input type="password" />');
       } else if (item.inputType === "ROTEXT") {
-        input = $('<span class="uneditable-input">' + item.val + '</span>');
+        input = $('<input type="text" disabled />');
       } else if (item.inputType === "BUTTON") {
         input = $('<button class="btn" type="button">' + i18n.prop(item.label, item.label) + '</button>');
       } else if (item.inputType === "SUBMIT") {

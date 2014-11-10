@@ -4,6 +4,7 @@ import it.cnr.cool.cmis.service.Cache;
 import it.cnr.cool.cmis.service.CacheService;
 import it.cnr.cool.cmis.service.GlobalCache;
 import it.cnr.cool.cmis.service.UserCache;
+import it.cnr.cool.cmis.service.VersionService;
 import it.cnr.cool.security.service.impl.alfresco.CMISUser;
 import it.cnr.cool.util.Pair;
 
@@ -14,11 +15,14 @@ import org.apache.chemistry.opencmis.client.bindings.spi.BindingSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
+import org.springframework.beans.factory.annotation.Autowired;
 
 public class CacheServiceImpl implements CacheService, InitializingBean{
 
 	private List<GlobalCache> globalCaches;
 	private List<UserCache> userCaches;
+	@Autowired
+	private VersionService versionService;
 
 	private static final Logger LOGGER = LoggerFactory
 			.getLogger(CacheServiceImpl.class);
@@ -32,8 +36,10 @@ public class CacheServiceImpl implements CacheService, InitializingBean{
 	@Override
 	public void register(GlobalCache globalCache){
 		globalCaches.add(globalCache);
-		LOGGER.info("Loading global cache " + globalCache.name());
-		globalCache.get();
+		if (versionService.isProduction()) {
+			LOGGER.debug("Loading global cache " + globalCache.name());
+			globalCache.get();			
+		}
 	}
 
 	@Override

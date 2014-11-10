@@ -9,6 +9,7 @@ define(['jquery', "cnr/cnr", 'jstree', 'cnr/cnr.url', 'json!common'], function (
     defaults = {
       paramName: 'parentFolderId',
       childrenFn: URL.Data.search.children,
+      childrenFnPlaceholder : {},
       selectNode: function (data) {
         CNR.log("selected: " + data.id);
       }
@@ -20,9 +21,8 @@ define(['jquery', "cnr/cnr", 'jstree', 'cnr/cnr.url', 'json!common'], function (
       data = {authorityType: 'GROUP'};
     data[settings.paramName] = value;
     data.user = common.User.id;
-
     settings.childrenFn({
-      data: data
+      data: $.extend(data, settings.childrenFnPlaceholder)
     }).done(callback);
   }
 
