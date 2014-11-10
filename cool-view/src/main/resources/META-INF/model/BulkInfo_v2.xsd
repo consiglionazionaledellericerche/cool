@@ -773,6 +773,7 @@
 					<xsd:enumeration value="ui.city" />
 					<xsd:enumeration value="ui.wysiwyg" />
 					<xsd:enumeration value="ui.sedi" />
+					<xsd:enumeration value="ui.gestorisedi" />
 					<xsd:enumeration value="ui.select" />
 					<xsd:enumeration value="ui.radio" />
 					<xsd:enumeration value="ui.checkbox" />
