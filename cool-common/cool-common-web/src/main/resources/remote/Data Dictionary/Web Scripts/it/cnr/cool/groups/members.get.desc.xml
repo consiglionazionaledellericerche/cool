@@ -1,0 +1,10 @@
+<webscript>
+   <shortname>My Groups Descendants</shortname>
+   <description>
+   </description>
+   <url>/cnr/groups/{group_name}/members</url>
+   <format default="json">argument</format>
+   <authentication>user</authentication>
+   <family>CNR</family>
+   <family>groups</family>
+</webscript>

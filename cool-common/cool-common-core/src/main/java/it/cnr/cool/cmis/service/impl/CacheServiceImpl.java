@@ -5,6 +5,8 @@ import it.cnr.cool.cmis.service.CacheService;
 import it.cnr.cool.cmis.service.GlobalCache;
 import it.cnr.cool.cmis.service.UserCache;
 import it.cnr.cool.cmis.service.VersionService;
+import it.cnr.cool.exception.CoolUserFactoryException;
+import it.cnr.cool.security.service.UserService;
 import it.cnr.cool.security.service.impl.alfresco.CMISUser;
 import it.cnr.cool.util.Pair;
 
@@ -23,6 +25,8 @@ public class CacheServiceImpl implements CacheService, InitializingBean{
 	private List<UserCache> userCaches;
 	@Autowired
 	private VersionService versionService;
+	@Autowired
+	private UserService userService;
 
 	private static final Logger LOGGER = LoggerFactory
 			.getLogger(CacheServiceImpl.class);
@@ -60,15 +64,29 @@ public class CacheServiceImpl implements CacheService, InitializingBean{
 	}
 
 	@Override
-	public List<Pair<String, String>> getPublicCaches() {
-		List<Pair<String, String>> caches = new ArrayList<Pair<String, String>>();
+	public List<Pair<String, Object>> getPublicCaches() {
+		List<Pair<String, Object>> caches = new ArrayList<Pair<String, Object>>();
 		for (GlobalCache globalCache : globalCaches) {
-			caches.add(new Pair<String, String>(globalCache.name(), globalCache
+			caches.add(new Pair<String, Object>(globalCache.name(), globalCache
 					.get()));
 		}
 		return caches;
 	}
 
+	@Override
+	public void clearCacheWithName(String name){
+		LOGGER.debug("Reset cache service with name: " + name);
+		for (Cache cache : globalCaches) {
+			if (cache.name().equals(name))
+				cache.clear();
+		}
+		for (Cache cache : userCaches) {
+			if (cache.name().equals(name))
+				cache.clear();
+		}
+	}
+
+	
 	@Override
 	public void clearCache(){
 		LOGGER.debug("Reset cache service");
@@ -77,6 +95,24 @@ public class CacheServiceImpl implements CacheService, InitializingBean{
 		}
 		for (Cache cache : userCaches) {
 			cache.clear();
+		}
+	}
+
+	@Override
+	public void clearCache(String username) {
+		for (UserCache cache : userCaches) {
+			cache.clear(username);
+		}		
+	}
+
+	@Override
+	public void clearGroupCache(String groupName, BindingSession cmisSession) {
+		try {
+			for (String username : userService.findMembers(groupName, cmisSession)) {
+				clearCache(username);
+			}
+		} catch (CoolUserFactoryException e) {
+			LOGGER.error("Cannot clear cache for group:" + groupName, e);
 		}
 	}
 }

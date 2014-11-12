@@ -14,6 +14,8 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.StringReader;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.apache.chemistry.opencmis.client.bindings.impl.CmisBindingsHelper;
 import org.apache.chemistry.opencmis.client.bindings.spi.BindingSession;
@@ -92,6 +94,30 @@ public class UserServiceImpl implements UserService{
 		return resp.getStream();
 	}
 
+	@Override
+	public List<String> findMembers(String groupName, BindingSession cmisSession) throws CoolUserFactoryException{
+		List<String> result = new ArrayList<String>();
+		String link = cmisService.getBaseURL().concat("service/cnr/groups/").concat(UriUtils.encode(groupName)).concat("/members");
+        UrlBuilder url = new UrlBuilder(link);
+		Response resp = CmisBindingsHelper.getHttpInvoker(cmisSession).invokeGET(url, cmisSession);
+		int status = resp.getResponseCode();
+		if (status == HttpStatus.SC_NOT_FOUND
+				|| status == HttpStatus.SC_BAD_REQUEST
+				|| status == HttpStatus.SC_INTERNAL_SERVER_ERROR) {
+			throw new CoolUserFactoryException("Members not found "+groupName+" Exception: "+resp.getErrorContent());
+		}
+		try {
+			JSONObject jsonObject = new JSONObject(StringUtil.convertStreamToString(resp.getStream()));
+			JSONArray jsonArray = jsonObject.getJSONArray("people");
+			for (int i = 0; i < jsonArray.length(); i++) {
+				result.add(jsonArray.getString(i));
+			}
+		} catch (JSONException e) {
+			return result;
+		}
+		return result;
+	}
+	
 	@Override
 	public CMISUser findUserByEmail(String email, BindingSession cmisSession)
 			throws CoolUserFactoryException {

@@ -5,6 +5,7 @@ import it.cnr.cool.exception.CoolUserFactoryException;
 import it.cnr.cool.security.service.impl.alfresco.CMISUser;
 
 import java.io.InputStream;
+import java.util.List;
 
 import org.apache.chemistry.opencmis.client.bindings.spi.BindingSession;
 
@@ -18,4 +19,5 @@ public interface UserService {
 	InputStream findUser(String term, BindingSession cmisSession) throws CoolUserFactoryException;
 	CMISUser changeUserPassword(final CMISUser user, String newPassword) throws CoolUserFactoryException;
 	void disableAccount(String userName) throws CoolUserFactoryException;
+	List<String> findMembers(String groupName, BindingSession cmisSession) throws CoolUserFactoryException;
 }

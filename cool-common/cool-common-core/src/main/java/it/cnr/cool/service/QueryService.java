@@ -2,6 +2,8 @@ package it.cnr.cool.service;
 
 import it.cnr.cool.cmis.model.CoolPropertyIds;
 import it.cnr.cool.cmis.service.CMISService;
+import it.cnr.cool.cmis.service.CacheService;
+import it.cnr.cool.cmis.service.GlobalCache;
 import it.cnr.cool.exception.CoolUserFactoryException;
 import it.cnr.cool.security.service.UserService;
 import it.cnr.cool.security.service.impl.alfresco.CMISUser;
@@ -38,11 +40,13 @@ import org.apache.chemistry.opencmis.commons.enums.IncludeRelationships;
 import org.apache.chemistry.opencmis.commons.exceptions.CmisPermissionDeniedException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.google.common.cache.CacheBuilder;
+import com.google.gson.Gson;
 
-public class QueryService {
+public class QueryService implements GlobalCache, InitializingBean{
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(QueryService.class);
 
@@ -57,6 +61,9 @@ public class QueryService {
 
 	@Autowired
 	private UserService userService;
+
+	@Autowired
+	private CacheService cacheService;
 
 	// cache nodes parents
 	private final com.google.common.cache.Cache<String, List<Folder>> nodeParentsCache = CacheBuilder
@@ -448,6 +455,26 @@ public class QueryService {
 		} catch (ExecutionException e) {
 			LOGGER.warn("Cache Exception", e);
 		}
+	}
+
+	@Override
+	public String name() {
+		return "nodeParentsCache";
+	}
+
+	@Override
+	public void clear() {
+		nodeParentsCache.invalidateAll();
+	}
+
+	@Override
+	public String get() {
+		return new Gson().toJson(nodeParentsCache.asMap().keySet());
+	}
+
+	@Override
+	public void afterPropertiesSet() throws Exception {
+		cacheService.register(this);
 	}
 
 }

@@ -12,9 +12,11 @@ import java.util.HashMap;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -85,6 +87,15 @@ public class CommonRest {
 
 	}
 
-
-
+	@DELETE
+	public void delete(@Context HttpServletRequest req, @QueryParam("authortiyName") String authortiyName) {
+		BindingSession bindingSession = cmisService
+				.getCurrentBindingSession(req);
+		if (authortiyName != null) {
+			if (authortiyName.startsWith("GROUP_"))
+				cacheService.clearGroupCache(authortiyName, bindingSession);
+			else
+				cacheService.clearCache(authortiyName);
+		}
+	}
 }

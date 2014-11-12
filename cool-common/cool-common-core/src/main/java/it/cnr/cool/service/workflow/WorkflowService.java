@@ -85,6 +85,11 @@ public class WorkflowService implements UserCache, InitializingBean{
 		cacheService.register(this);
 	}
 
+	@Override
+	public void clear(String username) {
+		clearWorkflowDefinitions(username);
+	}
+
 	public void clearWorkflowDefinitions(String authority) {
 		cache.remove(authority);
 	}

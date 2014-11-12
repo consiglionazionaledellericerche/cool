@@ -11,6 +11,9 @@ public interface CacheService {
 	public void register(GlobalCache globalCache);
 	public void register(UserCache userCache);
 	public List<Pair<String, String>> getCaches(CMISUser user, BindingSession session);
-	public List<Pair<String, String>> getPublicCaches();
+	public List<Pair<String, Object>> getPublicCaches();
 	public void clearCache();
+	public void clearCache(String userId);
+	void clearGroupCache(String groupName, BindingSession cmisSession);
+	void clearCacheWithName(String name);
 }

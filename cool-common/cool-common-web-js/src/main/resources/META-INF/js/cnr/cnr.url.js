@@ -82,6 +82,7 @@ define(['jquery', 'cnr/cnr.ui', 'json!common', 'i18n', 'json!cache'], function (
       workflow: "workflow",
       root: "",
       login: "login",
+      common: "rest/common",
       handlebars: 'res/js/handlebars/$id',
       sedi: 'rest/sedi'
     };

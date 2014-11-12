@@ -6,4 +6,5 @@ import it.cnr.cool.security.service.impl.alfresco.CMISUser;
 
 public interface UserCache extends Cache{
 	public String get(CMISUser user, BindingSession session);
+	public void clear(String username);
 }

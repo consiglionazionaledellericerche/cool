@@ -156,11 +156,12 @@ public class I18nService {
 
 	public Properties getLabels(Locale locale, String uri) {
 
+		Properties result = new Properties();
 		LOGGER.debug("loading labels for " + uri + " " + locale.getLanguage());
 
-		Properties p = loadLabels(locale);
+		result.putAll(loadLabels(locale));
 
-		LOGGER.debug("loaded " + p.keySet().size() + " default "
+		LOGGER.debug("loaded " + result.keySet().size() + " default "
 				+ locale.getLanguage() + " labels");
 
 		String path = "/i18n/" + uri + "_" + locale.getLanguage()
@@ -169,7 +170,7 @@ public class I18nService {
 
 		try {
 			if (is != null) {
-				p.load(is);
+				result.load(is);
 			} else {
 				LOGGER.debug("lang file " + path + " doesnt exist");
 			}
@@ -177,7 +178,7 @@ public class I18nService {
 			LOGGER.error("unable to load lang file " + path, e);
 		}
 
-		return p;
+		return result;
 
 	}
 
