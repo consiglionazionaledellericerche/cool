@@ -293,7 +293,8 @@ public class SecurityRest {
 	@GET
 	@Path(Page.LOGOUT_URL)
 	public Response logout(@Context HttpServletRequest req) {
-		req.getSession(false).invalidate();
+		if (req.getSession(false) != null)
+			req.getSession(false).invalidate();
 		URI uri = URI.create("../" + Page.LOGIN_URL);
 		return Response.seeOther(uri).build();
 

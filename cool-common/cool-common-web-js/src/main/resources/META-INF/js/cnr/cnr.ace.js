@@ -1,4 +1,4 @@
-define(['jquery', 'cnr/cnr.ui', 'cnr/cnr.ui.authority', 'i18n', 'cnr/cnr.node', 'cnr/cnr.url'], function ($, UI, Authority, i18n, Node, URL) {
+define(['jquery', 'cnr/cnr', 'cnr/cnr.ui', 'cnr/cnr.ui.authority', 'i18n', 'cnr/cnr.node', 'cnr/cnr.url'], function ($, CNR, UI, Authority, i18n, Node, URL) {
   "use strict";
 
   var regex = /\{.*\}cmobject\.([a-zA-Z]+)/g,
@@ -107,6 +107,9 @@ define(['jquery', 'cnr/cnr.ui', 'cnr/cnr.ui.authority', 'i18n', 'cnr/cnr.node', 
           } else {
             UI.alert("No information found for: " + authority);
           }
+        },
+        errorFn: function () {
+          UI.alert("No information found for: " + authority);
         }
       };
       URL.Data.proxy.person($.extend({}, commonSettings, specificSettings));
@@ -114,10 +117,31 @@ define(['jquery', 'cnr/cnr.ui', 'cnr/cnr.ui.authority', 'i18n', 'cnr/cnr.node', 
       specificSettings = {
         success: function (groups) {
           if (groups.groups[0]) {
-            Node.displayMetadata('cm:authorityContainer', groups.groups[0].nodeRef);
+            Node.displayMetadata('cm:authorityContainer', groups.groups[0].nodeRef, false,
+              function (div) {
+                var tr = $('<tr></tr>'), tdAuthority = $('<td name="tdAuthority"></td>');
+                URL.Data.proxy.members({
+                  placeholder: {
+                    group_name: authority
+                  },
+                  success: function (data) {
+                    $.each(data.people, function (index, authority) {
+                      $('<a href="#tdAuthority">' + authority + '</a><span> </span>').off('click').on('click', function () {
+                        showMetadata(authority);
+                      }).appendTo(tdAuthority);
+                    });
+                  }
+                });
+                tr.append('<td><strong>Members</strong></td>');
+                tr.append(tdAuthority);
+                div.find('table > tbody').append(tr);
+              });
           } else {
             UI.alert("No information found for: " + authority);
           }
+        },
+        errorFn: function () {
+          UI.alert("No information found for: " + authority);
         }
       };
       URL.Data.proxy.groups($.extend({}, commonSettings, specificSettings));

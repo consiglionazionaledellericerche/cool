@@ -174,8 +174,8 @@ public class Proxy {
 
 		String urlParam = null;
 		if (req.getParameter("url") != null) {
-			//urlParam = it.cnr.cool.util.UriUtils.encode(req.getParameter("url"));
-			urlParam = req.getParameter("url");
+			urlParam = it.cnr.cool.util.UriUtils.encode(req.getParameter("url"));
+			//urlParam = req.getParameter("url");
 		}
 		else
 			urlParam = it.cnr.cool.util.UriUtils.encode(req.getPathInfo()

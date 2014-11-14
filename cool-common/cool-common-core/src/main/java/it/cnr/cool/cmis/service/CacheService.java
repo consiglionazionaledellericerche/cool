@@ -14,6 +14,6 @@ public interface CacheService {
 	public List<Pair<String, Object>> getPublicCaches();
 	public void clearCache();
 	public void clearCache(String userId);
-	void clearGroupCache(String groupName, BindingSession cmisSession);
-	void clearCacheWithName(String name);
+	public void clearGroupCache(String groupName, BindingSession cmisSession);
+	public void clearCacheWithName(String name);
 }

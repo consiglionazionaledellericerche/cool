@@ -21,6 +21,7 @@ define(['jquery', 'cnr/cnr.ui', 'json!common', 'i18n', 'json!cache'], function (
         peopleSearch: 'rest/proxy' + '?url=service/cnr/person/people',
         disableAccount: 'rest/proxy' + '?url=service/cnr/person/disable-account',
         changePassword: 'rest/proxy' + '?url=service/api/person/changepassword/$userid',
+        members: 'rest/proxy' + '?url=service/cnr/groups/$group_name/members',
         workflowInstances: 'rest/proxy' + '?url=service/api/workflow-instances',
         workflowInstance: 'rest/proxy' + '?url=service/api/workflow-instances/$workflow_instance_id',
         jsRemote: 'rest/proxy' + '?url=service/cnr/utils/javascript-execution',

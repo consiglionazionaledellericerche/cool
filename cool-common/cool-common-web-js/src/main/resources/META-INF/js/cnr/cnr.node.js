@@ -405,24 +405,31 @@ define(['jquery', 'cnr/cnr', 'cnr/cnr.ui', 'cnr/cnr.bulkinfo', 'i18n', 'cnr/cnr.
     updateMetadata: updateMetadata,
     updateMetadataNode: updateMetadataNode,
     // display object metadata using bulkinfo
-    displayMetadata : function (bulkInfo, nodeRef, isCmis) {
-      var f = isCmis ? URL.Data.node.node : URL.Data.proxy.metadata;
-      f({
-        data: {
-          "nodeRef" : nodeRef,
-          "shortQNames" : true
-        }
-      }).done(function (metadata) {
-        new BulkInfo({
-          handlebarsId: 'zebra',
-          path: bulkInfo,
-          metadata: isCmis ? metadata : metadata.properties
-        }).handlebars().done(function (html) {
-          var content = $('<div></div>').addClass('modal-inner-fix').append(html),
-            title = i18n.prop("modal.title.view." + bulkInfo, 'Propriet&agrave;');
-          UI.modal(title, content);
+    displayMetadata : function (bulkInfo, nodeRef, isCmis, callback) {
+      if (!nodeRef) {
+        UI.alert("No information found");
+      } else {
+        var f = isCmis ? URL.Data.node.node : URL.Data.proxy.metadata;
+        f({
+          data: {
+            "nodeRef" : nodeRef,
+            "shortQNames" : true
+          }
+        }).done(function (metadata) {
+          new BulkInfo({
+            handlebarsId: 'zebra',
+            path: bulkInfo,
+            metadata: isCmis ? metadata : metadata.properties
+          }).handlebars().done(function (html) {
+            var content = $('<div></div>').addClass('modal-inner-fix').append(html),
+              title = i18n.prop("modal.title.view." + bulkInfo, 'Propriet&agrave;');
+            if (callback) {
+              callback(content);
+            }
+            UI.modal(title, content);
+          });
         });
-      });
+      }
     },
     updateContentEditor: updateContentEditor,
     submission: submission,

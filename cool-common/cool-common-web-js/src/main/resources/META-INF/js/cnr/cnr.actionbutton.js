@@ -355,7 +355,25 @@ define(['jquery', 'json!common', 'cnr/cnr', 'cnr/cnr.ui', 'cnr/cnr.node', 'cnr/c
     if (baseTypeId === "GROUP") {
       addActions({
         select: function () {
-          Node.displayMetadata('cm:authorityContainer', nodeRef);
+          Node.displayMetadata('cm:authorityContainer', nodeRef, false,
+            function (div) {
+              var tr = $('<tr></tr>'), tdAuthority = $('<td name="tdAuthority"></td>');
+              URL.Data.proxy.members({
+                placeholder: {
+                  group_name: obj.authorityId
+                },
+                success: function (data) {
+                  $.each(data.people, function (index, authority) {
+                    $('<a href="#tdAuthority">' + authority + '</a><span> </span>').off('click').on('click', function () {
+                      Ace.showMetadata(authority);
+                    }).appendTo(tdAuthority);
+                  });
+                }
+              });
+              tr.append('<td><strong>Members</strong></td>');
+              tr.append(tdAuthority);
+              div.find('table > tbody').append(tr);
+            });
         },
         edit: function () {
           editGroup(nodeRef);
