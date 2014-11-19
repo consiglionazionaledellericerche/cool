@@ -3,7 +3,7 @@
   <modelVersion>4.0.0</modelVersion>
   <artifactId>cool-parent</artifactId>
   <groupId>it.cnr.si.cool</groupId>
-  <version>0.9</version>
+  <version>2.0.0-SNAPSHOT</version>
   <name>Cool Platform</name>
   <packaging>pom</packaging>
 
@@ -27,6 +27,7 @@
     <mail.version>1.4.5</mail.version>
     <jms.version>1.1</jms.version>
     <servlet.version>2.5</servlet.version>
+    <cnr.rest.version>0.11.0</cnr.rest.version>
   </properties>
 
   <modules>
