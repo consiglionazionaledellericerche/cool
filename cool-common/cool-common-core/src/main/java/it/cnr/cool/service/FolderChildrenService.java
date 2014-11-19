@@ -6,7 +6,6 @@ import it.cnr.cool.service.util.AlfrescoFolder;
 import java.util.ArrayList;
 
 import org.apache.chemistry.opencmis.client.api.ItemIterable;
-import org.apache.chemistry.opencmis.client.api.OperationContext;
 import org.apache.chemistry.opencmis.client.api.QueryResult;
 import org.apache.chemistry.opencmis.client.api.Session;
 import org.apache.chemistry.opencmis.commons.PropertyIds;
@@ -15,8 +14,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 public class FolderChildrenService {
 
-	@Autowired
-	private OperationContext cmisDefaultOperationContext;
 	@Autowired
 	private FolderService folderService;
 	private static Long MAX_FEATCH_LEAF = Long.valueOf(10000);
