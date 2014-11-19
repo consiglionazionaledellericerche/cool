@@ -52,9 +52,6 @@ public class PageService {
 	private PermissionService permissionService;
 
 	@Autowired
-	private I18nService i18nService;
-
-	@Autowired
 	private CnrRegion cnrRegion;
 
 	@Autowired

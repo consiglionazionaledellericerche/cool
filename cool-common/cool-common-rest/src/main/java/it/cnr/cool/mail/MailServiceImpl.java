@@ -45,10 +45,8 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.mail.javamail.MimeMessagePreparator;
 
-public class MailServiceImpl implements MailService, InitializingBean, ApplicationContextAware{
+public class MailServiceImpl implements MailService, InitializingBean {
     private static final Logger LOGGER = LoggerFactory.getLogger(MailServiceImpl.class);
-
-	private ApplicationContext applicationContext;
 
     @Autowired
     private JavaMailSender mailSender;
@@ -224,11 +222,6 @@ public class MailServiceImpl implements MailService, InitializingBean, Applicati
 		mc.addMailcap("multipart/*;; x-java-content-handler=com.sun.mail.handlers.multipart_mixed");
 		mc.addMailcap("multipart/mixed;; x-java-content-handler=com.sun.mail.handlers.multipart_mixed");
 		mc.addMailcap("application/pdf;; x-java-content-handler=com.sun.mail.handlers.text_html");
-	}
-
-	@Override
-	public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
-		this.applicationContext = applicationContext;
 	}
 
 	protected Map<String, Object> addToTemplateModel(Map<String, Object> templateModel){
