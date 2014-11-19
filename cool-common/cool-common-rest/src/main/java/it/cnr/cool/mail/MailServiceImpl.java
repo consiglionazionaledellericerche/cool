@@ -29,7 +29,7 @@ import javax.activation.CommandMap;
 import javax.activation.MailcapCommandMap;
 import javax.mail.internet.MimeMessage;
 
-import org.apache.chemistry.opencmis.commons.exceptions.CmissBaseException;
+import org.apache.chemistry.opencmis.commons.exceptions.CmisBaseException;
 import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
