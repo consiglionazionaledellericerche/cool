@@ -173,7 +173,8 @@ public class BulkInfoCoolService {
 			BulkInfoInjection bulkInfoInjection = context.getBean("BulkInfo" + bulkInfo.getId(), BulkInfoInjection.class);
 			if (bulkInfoInjection != null)
 				bulkInfoInjection.complete(bulkInfo);			
-		} catch (NoSuchBeanDefinitionException _ex) {			
+		} catch (NoSuchBeanDefinitionException _ex) {
+            LOGGER.error("unable to find bean " + bulkInfo.getId(), _ex);
 		}
 
 		if (bulkInfo != null) {
