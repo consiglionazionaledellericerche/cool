@@ -61,7 +61,7 @@ public class PageService {
 	private CMISService cmisService;
 
 	@Autowired
-	private ApplicationContext context;
+	private ApplicationContext applicationContext;
 
 	public Map<String, CoolPage> loadPages() {
 		return pages;
@@ -146,7 +146,7 @@ public class PageService {
 	public Map<String, Object> getModel(HttpServletRequest req, String pageId,
 			String urlContext, final Locale locale) {
 		Map<String, Object> model = new HashMap<String, Object>();
-		model.put("message", context.getBean("messageMethod", locale, pageId));
+		model.put("message", applicationContext.getBean("messageMethod", locale, pageId));
 
 		HashMap<String, String> pagex = new HashMap<String, String>();
 		pagex.put(ID, pageId);
