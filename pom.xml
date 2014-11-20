@@ -301,8 +301,7 @@
   </build>
 
   <scm>
-    <connection>scm:svn:svn+ssh://svnselezioni.si.cnr.it/DATA/svnroot/svn-documentale/branches/development/cool</connection>
-    <developerConnection>scm:svn:svn+ssh://svnselezioni.si.cnr.it/DATA/svnroot/svn-documentale/branches/development/cool</developerConnection>
-    <url>scm:svn:svn+ssh://svnselezioni.si.cnr.it/DATA/svnroot/svn-documentale/branches/development/cool</url>
+    <connection>scm:svn:svn+ssh://svnselezioni.si.cnr.it/DATA/svnroot/svn-documentale/branches/development/cool-no-surf</connection>
+    <developerConnection>scm:svn:svn+ssh://svnselezioni.si.cnr.it/DATA/svnroot/svn-documentale/branches/development/cool-no-surf</developerConnection>
   </scm>
 </project>
