@@ -9,7 +9,7 @@
 	  <#if context.user??>
 	  "groups":[
 	  <#list context.user.groups as group>
-	   "${group.itemName}"
+	   "${group.group_name}"
 	   <#if group_has_next>,</#if>
 	  </#list>
 	  ],
