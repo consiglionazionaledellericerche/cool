@@ -295,7 +295,7 @@ public class PermissionTest {
 			for (String s : groups) {
 				CMISGroup g = new CMISGroup();
 				g.setDisplayName(s);
-				g.setItemName(s);
+				g.setGroupName(s);
 				l.add(g);
 			}
 		}

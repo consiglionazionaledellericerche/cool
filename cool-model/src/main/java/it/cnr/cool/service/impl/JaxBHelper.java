@@ -1,4 +1,4 @@
-package it.cnr.cool.cmis.service.impl;
+package it.cnr.cool.service.impl;
 
 
 import java.io.OutputStream;

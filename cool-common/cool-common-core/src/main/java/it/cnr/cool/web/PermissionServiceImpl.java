@@ -374,7 +374,7 @@ public class PermissionServiceImpl implements PermissionService {
 
 		if (user.getGroups() != null) {
 			for (CMISGroup g : user.getGroups()) {
-				groups.add(g.getItemName());
+				groups.add(g.getGroup_name());
 			}
 		}
 		if (!username.equals("guest") )

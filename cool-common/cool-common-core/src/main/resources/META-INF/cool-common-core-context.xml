@@ -7,7 +7,7 @@
     http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-3.0.xsd">
 
 
-	<bean id="RRDService" class="it.cnr.cool.cmis.service.RRDService">
+	<bean id="RRDService" class="it.cnr.cool.cmis.service.RRDService"  depends-on="mailService,application.version">
 		<property name="dictionaryTypeId" value="D:cm:dictionaryModel" />
 	</bean>
 
@@ -88,7 +88,10 @@
 	<bean id="userService"
 		class="it.cnr.cool.security.service.impl.alfresco.UserServiceImpl">
 	</bean>
-
+	<bean id="groupService"
+		class="it.cnr.cool.security.service.impl.alfresco.GroupServiceImpl">
+	</bean>
+	
 	<bean id="siperService" class="it.cnr.cool.service.search.SiperService">
 		<property name="urlAnadip" value="${siper.anadip.url}" />
 		<property name="urlSedi" value="${siper.sedi.url}" />

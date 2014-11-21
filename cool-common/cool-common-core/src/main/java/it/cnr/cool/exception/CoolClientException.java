@@ -1,6 +1,7 @@
 package it.cnr.cool.exception;
 
-public class CoolClientException extends RuntimeException {
+public class CoolClientException extends CoolException {
+	private static final long serialVersionUID = 1L;
 
 	public CoolClientException() {
 	}

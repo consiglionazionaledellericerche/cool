@@ -107,9 +107,6 @@ define(['jquery', 'cnr/cnr', 'cnr/cnr.ui', 'cnr/cnr.ui.authority', 'i18n', 'cnr/
           } else {
             UI.alert("No information found for: " + authority);
           }
-        },
-        errorFn: function () {
-          UI.alert("No information found for: " + authority);
         }
       };
       URL.Data.proxy.person($.extend({}, commonSettings, specificSettings));
@@ -139,9 +136,6 @@ define(['jquery', 'cnr/cnr', 'cnr/cnr.ui', 'cnr/cnr.ui.authority', 'i18n', 'cnr/
           } else {
             UI.alert("No information found for: " + authority);
           }
-        },
-        errorFn: function () {
-          UI.alert("No information found for: " + authority);
         }
       };
       URL.Data.proxy.groups($.extend({}, commonSettings, specificSettings));

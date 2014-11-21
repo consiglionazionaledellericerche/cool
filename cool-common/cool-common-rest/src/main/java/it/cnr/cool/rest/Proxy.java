@@ -96,7 +96,6 @@ public class Proxy {
 	private void processRequest(HttpServletRequest req,
 			HttpServletResponse res, boolean isPost) throws IOException {
 
-
 		BindingSession currentBindingSession = cmisService
 				.getCurrentBindingSession(req);
 		UrlBuilder url = getUrl(req);

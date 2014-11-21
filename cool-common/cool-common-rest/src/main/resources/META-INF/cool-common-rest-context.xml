@@ -49,7 +49,7 @@
 		</property>
 	</bean>
 
-	<bean id="mailService" class="it.cnr.cool.mail.MailServiceImpl">
+	<bean id="mailService" class="it.cnr.cool.mail.MailServiceImpl" depends-on="mailSender">
 		<property name="mailFromDefault" value="${mail.from.default}" />
 		<property name="mailToAdmin" value="${mail.admin}" />
 		<property name="mailToProtocollo" value="${mail.protocollo}" />
