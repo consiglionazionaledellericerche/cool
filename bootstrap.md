@@ -19,54 +19,108 @@
 	  
 # javascript per la creazione dei gruppi DSFTM per I FLUSSI DOCUMENTALI
 /*global execution, people, logger */
-var newGroup, model, parentGroup, ElencoGruppi, GruppoDSFTM, nomeGruppoDSFTM, i;
 
-GruppoDSFTM = 'DSFTM';
-nomeGruppoDSFTM = 'Dipartimento di Scienze Fisiche';
+// ********* PARAMETRI ********
+var newGroup, model, parentGroup, ElencoGruppi, GruppoPADRE, nomeGruppoPADRE, i, authorityService, cnrutils, nomeGruppo, zonaLdap, zonaFlussi, zonaAlfresco, zonaDefault, authorityService, gruppo;
+// CREAZIONI GRUPPI
+GruppoPADRE = 'MISSIONI';
+nomeGruppoPADRE = 'Gruppo per il flusso MISSIONI';
 ElencoGruppi = [];
 ElencoGruppi.push({});
-ElencoGruppi[0].nome = 'REDATTORI_DSFTM';
-ElencoGruppi[0].titolo = 'REDATTORI DSFTM';
+ElencoGruppi[0].nome = 'RESPONSABILI_MISSIONI';
+ElencoGruppi[0].titolo = 'RESPONSABILI MISSIONI';
 ElencoGruppi.push({});
-ElencoGruppi[1].nome = 'REDATTORI_IPR_DSFTM';
-ElencoGruppi[1].titolo = 'REDATTORI IPR DSFTM';
+ElencoGruppi[1].nome = 'RESPONSABILI_MODULO';
+ElencoGruppi[1].titolo = 'RESPONSABILI MODULO';
 ElencoGruppi.push({});
-ElencoGruppi[2].nome = 'VALIDATORI_DSFTM';
-ElencoGruppi[2].titolo = 'VALIDATORI DSFTM';
+ElencoGruppi[2].nome = 'DIRETTORI_ISTITUTO';
+ElencoGruppi[2].titolo = 'DIRETTORI ISTITUTO';
 ElencoGruppi.push({});
-ElencoGruppi[3].nome = 'DIRETTORE_DSFTM';
-ElencoGruppi[3].titolo = 'DIRETTORE DSFTM';
-ElencoGruppi.push({});
-ElencoGruppi[4].nome = 'RESPONSABILI_FLUSSO_DSFTM';
-ElencoGruppi[4].titolo = 'RESPONSABILI FLUSSO DSFTM';
-ElencoGruppi.push({});
-ElencoGruppi[5].nome = 'PROTOCOLLO_DSFTM';
-ElencoGruppi[5].titolo = 'PROTOCOLLO DSFTM';
+ElencoGruppi[3].nome = 'DIRETTORI_SPESA';
+ElencoGruppi[3].titolo = 'DIRETTORI SPESA';
 
-for (i = 0; i < ElencoGruppi.length; i++) {
-  logger.info("parentGroup: " + ElencoGruppi[i].nome);
-  logger.info("parentGroup: " + ElencoGruppi[i].titolo);
-}
+// VERIFICA/CREAZIONI ZONA FLUSSI
+zonaLdap = 'AUTH.EXT.ldap1';
+zonaFlussi = 'AUTH.EXT.flussi';
+zonaAlfresco = 'AUTH.ALF';
+zonaDefault = 'APP.DEFAULT';
+authorityService = cnrutils.getBean("AuthorityService");
 
-parentGroup = people.getGroup("GROUP_" + GruppoDSFTM);
-if (!parentGroup) {
-  parentGroup = people.createGroup(GruppoDSFTM);
-  parentGroup.properties["cm:authorityDisplayName"] = nomeGruppoDSFTM;
-  parentGroup.save();
-  logger.info("parentGroup: " + parentGroup.authorityDisplayName);
-} else {
-  logger.info("gruppo esistente: " + parentGroup.properties["cm:authorityDisplayName"]);
-}
+// ********* FUNCTIONS ********
+//SETTA IL GRUPPO NELLA ZONA FLUSSI E LA RIMUOVE DAL GRUPPO ALFRESCO
+function settaGruppoInZoneFlussi(nomeGruppo) {
+  'use strict';
+  var ListaAppo, listaZone;
+  listaZone = authorityService.getAuthorityZones(nomeGruppo);
+  logger.error("listaZone: " + listaZone);
+  if (listaZone.contains(zonaDefault)) {
+    logger.error("listaZone: contiene zona: " + zonaDefault + "? " + listaZone.contains(zonaDefault));
+  }
+  if (listaZone.contains(zonaAlfresco)) {
 
-for (i = 0; i < ElencoGruppi.length; i++) {
-  newGroup = people.getGroup("GROUP_" + ElencoGruppi[i].nome);
-  if (!newGroup) {
-    newGroup = people.createGroup(parentGroup, ElencoGruppi[i].nome);
-    newGroup.properties["cm:authorityDisplayName"] = ElencoGruppi[i].titolo;
-    model.newGroup = newGroup;
-    newGroup.save();
-  } else {
-    logger.info("gruppo esistente: " + newGroup.properties["cm:authorityDisplayName"]);
+    logger.error("listaZone: contiene zona: " + zonaAlfresco + "? " + listaZone.contains(zonaAlfresco));
+    ListaAppo = cnrutils.getClass('java.util.HashSet').newInstance();
+    ListaAppo.add(zonaAlfresco);
+    authorityService.removeAuthorityFromZones(nomeGruppo, ListaAppo);
+    logger.error("Rimosso zona: " + zonaAlfresco);
+  }
+  if (!listaZone.contains(zonaFlussi)) {
+    logger.error("listaZone: contiene zona: " + zonaFlussi + "? " + listaZone.contains(zonaFlussi));
+    ListaAppo = cnrutils.getClass('java.util.HashSet').newInstance();
+    ListaAppo.add(zonaFlussi);
+    authorityService.addAuthorityToZones(nomeGruppo, ListaAppo);
+    logger.error("Aggiunto zona: " + zonaFlussi);
   }
 }
 
+function creaAlberoGruppi() {
+  'use strict';
+  for (i = 0; i < ElencoGruppi.length; i++) {
+    logger.error("parentGroup: " + ElencoGruppi[i].nome);
+    logger.error("parentGroup: " + ElencoGruppi[i].titolo);
+  }
+
+  parentGroup = people.getGroup("GROUP_" + GruppoPADRE);
+  if (!parentGroup) {
+    parentGroup = people.createGroup(GruppoPADRE);
+    parentGroup.properties["cm:authorityDisplayName"] = nomeGruppoPADRE;
+    parentGroup.save();
+    logger.error("parentGroup: " + parentGroup.authorityDisplayName);
+  } else {
+    logger.error("gruppo esistente: " + parentGroup.properties["cm:authorityDisplayName"]);
+  }
+
+  settaGruppoInZoneFlussi("GROUP_" + GruppoPADRE);
+
+  for (i = 0; i < ElencoGruppi.length; i++) {
+    newGroup = people.getGroup("GROUP_" + ElencoGruppi[i].nome);
+    if (!newGroup) {
+      newGroup = people.createGroup(parentGroup, ElencoGruppi[i].nome);
+      newGroup.properties["cm:authorityDisplayName"] = ElencoGruppi[i].titolo;
+      model.newGroup = newGroup;
+      newGroup.save();
+    } else {
+      logger.error("gruppo esistente: " + newGroup.properties["cm:authorityDisplayName"]);
+    }
+    settaGruppoInZoneFlussi("GROUP_" +  ElencoGruppi[i].nome);
+  }
+}
+
+//VERIFICO ESISTENZA ZONA FLUSSI ALTRIMENTI LA CREO
+function verificaZonaFlussi() {
+  'use strict';
+  if (authorityService.getZone(zonaFlussi)) {
+    logger.error("zona: " + zonaFlussi + " ESISTENTE: " + authorityService.getZone(zonaFlussi));
+  } else {
+    var nodeRefZonaFlussi =  authorityService.getOrCreateZone(zonaFlussi);
+    logger.error("zona: " + zonaFlussi + " CREATA: " + nodeRefZonaFlussi);
+  }
+}
+
+// ********* MAIN ********
+
+//logger.error("authorityName: " + gruppo.properties.authorityName + " -- authorityDisplayName: " + gruppo.properties.authorityDisplayName + " -noderef: " + gruppo.nodeRef);
+//logger.error("zona LDAP: " + authorityService.getZone(zonaLdap));
+
+verificaZonaFlussi();
+creaAlberoGruppi();
