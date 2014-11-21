@@ -17,27 +17,69 @@
 	  -H "Content-type: application/json"
 
 	  
-# javascript per la creazione dei gruppi DSFTM per I FLUSSI DOCUMENTALI
+# javascript per la creazione dei gruppi per I FLUSSI DOCUMENTALI
 /*global execution, people, logger */
 
 // ********* PARAMETRI ********
-var newGroup, model, parentGroup, ElencoGruppi, GruppoPADRE, nomeGruppoPADRE, i, authorityService, cnrutils, nomeGruppo, zonaLdap, zonaFlussi, zonaAlfresco, zonaDefault, authorityService, gruppo;
-// CREAZIONI GRUPPI
-GruppoPADRE = 'MISSIONI';
-nomeGruppoPADRE = 'Gruppo per il flusso MISSIONI';
-ElencoGruppi = [];
-ElencoGruppi.push({});
-ElencoGruppi[0].nome = 'RESPONSABILI_MISSIONI';
-ElencoGruppi[0].titolo = 'RESPONSABILI MISSIONI';
-ElencoGruppi.push({});
-ElencoGruppi[1].nome = 'RESPONSABILI_MODULO';
-ElencoGruppi[1].titolo = 'RESPONSABILI MODULO';
-ElencoGruppi.push({});
-ElencoGruppi[2].nome = 'DIRETTORI_ISTITUTO';
-ElencoGruppi[2].titolo = 'DIRETTORI ISTITUTO';
-ElencoGruppi.push({});
-ElencoGruppi[3].nome = 'DIRETTORI_SPESA';
-ElencoGruppi[3].titolo = 'DIRETTORI SPESA';
+var newGroup, model, parentGroup, ElencoGruppi, GruppoPADRE, nomeGruppoPADRE, i, j, authorityService, cnrutils, nomeGruppo, zonaLdap, zonaFlussi, zonaAlfresco, zonaDefault, authorityService, gruppo, ElencoGruppoDSFTM, ElencoGruppoMISSIONI, ElencoGruppoATTESTATI;
+// CREAZIONE GRUPPI
+
+// CREAZIONE GRUPPO DSFTM
+ElencoGruppoDSFTM = [];
+ElencoGruppoDSFTM.push({});
+ElencoGruppoDSFTM[0].nome = 'REDATTORI_DSFTM';
+ElencoGruppoDSFTM[0].titolo = 'REDATTORI DSFTM';
+ElencoGruppoDSFTM.push({});
+ElencoGruppoDSFTM[1].nome = 'REDATTORI_IPR_DSFTM';
+ElencoGruppoDSFTM[1].titolo = 'REDATTORI IPR DSFTM';
+ElencoGruppoDSFTM.push({});
+ElencoGruppoDSFTM[2].nome = 'VALIDATORI_DSFTM';
+ElencoGruppoDSFTM[2].titolo = 'VALIDATORI DSFTM';
+ElencoGruppoDSFTM.push({});
+ElencoGruppoDSFTM[3].nome = 'DIRETTORE_DSFTM';
+ElencoGruppoDSFTM[3].titolo = 'DIRETTORE DSFTM';
+ElencoGruppoDSFTM.push({});
+ElencoGruppoDSFTM[4].nome = 'PROTOCOLLO_DSFTM';
+ElencoGruppoDSFTM[4].titolo = 'PROTOCOLLO DSFTM';
+ElencoGruppoDSFTM.push({});
+ElencoGruppoDSFTM[5].nome = 'RESPONSABILI_FLUSSO_DSFTM';
+ElencoGruppoDSFTM[5].titolo = 'RESPONSABILI FLUSSO DSFTM';
+
+// CREAZIONE GRUPPO MISSIONI
+ElencoGruppoMISSIONI = [];
+ElencoGruppoMISSIONI.push({});
+ElencoGruppoMISSIONI[0].nome = 'RESPONSABILI_MISSIONI';
+ElencoGruppoMISSIONI[0].titolo = 'RESPONSABILI MISSIONI';
+ElencoGruppoMISSIONI.push({});
+ElencoGruppoMISSIONI[1].nome = 'RESPONSABILI_MODULO';
+ElencoGruppoMISSIONI[1].titolo = 'RESPONSABILI MODULO';
+ElencoGruppoMISSIONI.push({});
+ElencoGruppoMISSIONI[2].nome = 'DIRETTORI_ISTITUTO';
+ElencoGruppoMISSIONI[2].titolo = 'DIRETTORI ISTITUTO';
+ElencoGruppoMISSIONI.push({});
+ElencoGruppoMISSIONI[3].nome = 'DIRETTORI_SPESA';
+ElencoGruppoMISSIONI[3].titolo = 'DIRETTORI SPESA';
+
+// CREAZIONE GRUPPO ATTESTATI
+ElencoGruppoATTESTATI = [];
+ElencoGruppoATTESTATI.push({});
+ElencoGruppoATTESTATI[0].nome = 'RESPONSABILI_ATTESTATI';
+ElencoGruppoATTESTATI[0].titolo = 'RESPONSABILI ATTESTATI';
+
+// CREAZIONE GRUPPO TOTALE
+var ElencoCompleto = [];
+ElencoCompleto.push({});
+ElencoCompleto[0].padre = 'DSFTM';
+ElencoCompleto[0].titolopadre = 'Dipartimento Scienze Fisiche e Tecnologie della Materia';
+ElencoCompleto[0].figli = ElencoGruppoDSFTM;
+ElencoCompleto.push({});
+ElencoCompleto[1].padre = 'MISSIONI';
+ElencoCompleto[1].titolopadre = 'Gruppo per il flusso MISSIONI';
+ElencoCompleto[1].figli = ElencoGruppoMISSIONI;
+ElencoCompleto.push({});
+ElencoCompleto[2].padre = 'ATTESTATI';
+ElencoCompleto[2].titolopadre = 'Gruppo per il flusso ATTESTATI';
+ElencoCompleto[2].figli = ElencoGruppoATTESTATI;
 
 // VERIFICA/CREAZIONI ZONA FLUSSI
 zonaLdap = 'AUTH.EXT.ldap1';
@@ -73,11 +115,11 @@ function settaGruppoInZoneFlussi(nomeGruppo) {
   }
 }
 
-function creaAlberoGruppi() {
+function creaAlberoGruppi(GruppoPADRE, nomeGruppoPADRE, ElencoGruppo) {
   'use strict';
-  for (i = 0; i < ElencoGruppi.length; i++) {
-    logger.error("parentGroup: " + ElencoGruppi[i].nome);
-    logger.error("parentGroup: " + ElencoGruppi[i].titolo);
+  for (i = 0; i < ElencoGruppo.length; i++) {
+    logger.error("parentGroup: " + ElencoGruppo[i].nome);
+    logger.error("parentGroup: " + ElencoGruppo[i].titolo);
   }
 
   parentGroup = people.getGroup("GROUP_" + GruppoPADRE);
@@ -92,17 +134,17 @@ function creaAlberoGruppi() {
 
   settaGruppoInZoneFlussi("GROUP_" + GruppoPADRE);
 
-  for (i = 0; i < ElencoGruppi.length; i++) {
-    newGroup = people.getGroup("GROUP_" + ElencoGruppi[i].nome);
+  for (i = 0; i < ElencoGruppo.length; i++) {
+    newGroup = people.getGroup("GROUP_" + ElencoGruppo[i].nome);
     if (!newGroup) {
-      newGroup = people.createGroup(parentGroup, ElencoGruppi[i].nome);
-      newGroup.properties["cm:authorityDisplayName"] = ElencoGruppi[i].titolo;
+      newGroup = people.createGroup(parentGroup, ElencoGruppo[i].nome);
+      newGroup.properties["cm:authorityDisplayName"] = ElencoGruppo[i].titolo;
       model.newGroup = newGroup;
       newGroup.save();
     } else {
       logger.error("gruppo esistente: " + newGroup.properties["cm:authorityDisplayName"]);
     }
-    settaGruppoInZoneFlussi("GROUP_" +  ElencoGruppi[i].nome);
+    settaGruppoInZoneFlussi("GROUP_" +  ElencoGruppo[i].nome);
   }
 }
 
@@ -123,4 +165,6 @@ function verificaZonaFlussi() {
 //logger.error("zona LDAP: " + authorityService.getZone(zonaLdap));
 
 verificaZonaFlussi();
-creaAlberoGruppi();
+for (j = 0; j < ElencoCompleto.length; j++) {
+  creaAlberoGruppi(ElencoCompleto[j].padre, ElencoCompleto[j].titolopadre, ElencoCompleto[j].figli);
+}
