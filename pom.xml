@@ -270,7 +270,7 @@
       <plugin>
         <groupId>org.lesscss</groupId>
         <artifactId>lesscss-maven-plugin</artifactId>
-        <version>1.3.3</version>
+        <version>1.7.0.1.1</version>
         <configuration>
           <outputDirectory>${project.build.directory}/classes/META-INF/css</outputDirectory>
           <nodeExecutable>${node.path}</nodeExecutable>
