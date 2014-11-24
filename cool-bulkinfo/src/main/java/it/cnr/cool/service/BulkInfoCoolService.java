@@ -3,8 +3,8 @@ package it.cnr.cool.service;
 import it.cnr.bulkinfo.BulkInfoImpl.FieldProperty;
 import it.cnr.bulkinfo.cool.BulkInfoCool;
 import it.cnr.bulkinfo.cool.BulkInfoCoolImpl;
-import it.cnr.bulkinfo.exception.BulkInfoNotFoundException;
 import it.cnr.bulkinfo.exception.BulkInfoException;
+import it.cnr.bulkinfo.exception.BulkInfoNotFoundException;
 import it.cnr.bulkinfo.exception.BulkinfoKindException;
 import it.cnr.bulkinfo.exception.BulkinfoNameException;
 import it.cnr.cool.cmis.service.CMISService;
@@ -25,12 +25,11 @@ import org.apache.chemistry.opencmis.commons.data.CmisExtensionElement;
 import org.apache.chemistry.opencmis.commons.definitions.PropertyDefinition;
 import org.apache.chemistry.opencmis.commons.exceptions.CmisObjectNotFoundException;
 import org.apache.commons.io.IOUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.dom4j.Document;
 import org.dom4j.DocumentException;
 import org.dom4j.DocumentHelper;
-import org.springframework.beans.factory.NoSuchBeanDefinitionException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 
@@ -169,12 +168,11 @@ public class BulkInfoCoolService {
 		List<PropertyDefinition<?>> properties = new ArrayList<PropertyDefinition<?>>();
 		BulkInfoCool bulkInfo = getOrCreate(bulkInfoName, properties);
 
-		try {
-			BulkInfoInjection bulkInfoInjection = context.getBean("BulkInfo" + bulkInfo.getId(), BulkInfoInjection.class);
+		String name = "BulkInfo" + bulkInfo.getId();
+		if (context.containsBean(name)) {
+			BulkInfoInjection bulkInfoInjection = context.getBean(name, BulkInfoInjection.class);
 			if (bulkInfoInjection != null)
-				bulkInfoInjection.complete(bulkInfo);			
-		} catch (NoSuchBeanDefinitionException _ex) {
-            LOGGER.error("unable to find bean " + bulkInfo.getId(), _ex);
+				bulkInfoInjection.complete(bulkInfo);
 		}
 
 		if (bulkInfo != null) {
