@@ -26,6 +26,11 @@ public class CMISGroup {
 	public void setDisplayName(String displayName) {
 		this.display_name = displayName;
 	}
-	
-	
+	public String getItemName() {
+		return group_name;
+	}
+	public void setItemName(String itemName) {
+		this.group_name = itemName;
+	}
+
 }
