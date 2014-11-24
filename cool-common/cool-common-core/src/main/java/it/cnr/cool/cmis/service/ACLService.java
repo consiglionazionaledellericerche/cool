@@ -4,7 +4,6 @@ import it.cnr.cool.cmis.model.ACLType;
 import it.cnr.cool.exception.CoolException;
 import it.cnr.cool.util.MimeTypes;
 
-import java.io.IOException;
 import java.io.OutputStream;
 import java.util.List;
 import java.util.Map;
@@ -14,9 +13,6 @@ import org.apache.chemistry.opencmis.client.bindings.spi.http.Output;
 import org.apache.chemistry.opencmis.client.bindings.spi.http.Response;
 import org.apache.chemistry.opencmis.commons.impl.UrlBuilder;
 import org.apache.commons.httpclient.HttpStatus;
-import org.codehaus.jackson.map.ObjectMapper;
-import org.codehaus.jackson.node.ArrayNode;
-import org.codehaus.jackson.node.ObjectNode;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.slf4j.Logger;
