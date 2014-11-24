@@ -52,4 +52,8 @@ public class CMISAuthority {
 		return super.equals(obj);
 	}
 	
+	@Override
+	public int hashCode() {
+		return shortName.hashCode();
+	}
 }
