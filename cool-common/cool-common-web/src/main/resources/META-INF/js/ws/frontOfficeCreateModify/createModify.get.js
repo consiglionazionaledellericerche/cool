@@ -7,6 +7,7 @@ define(['jquery', 'header', 'cnr/cnr.bulkinfo', 'cnr/cnr', 'cnr/cnr.ui', 'cnr/cn
     noticeFAQ = {}, //array con i dati dell'avviso o della faq esistete (da modificare)
     bulkinfo;
 
+//widget per la risposta della FAQ
   Widgets['ui.wysiwyg'] = Wysiwyg;
 
   typeWriter = CNR.Storage.get('frontOffice', 'notice');

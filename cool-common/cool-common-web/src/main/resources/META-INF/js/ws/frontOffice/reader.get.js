@@ -349,7 +349,7 @@ define(['jquery', 'header', 'cnr/cnr.bulkinfo', 'i18n', 'cnr/cnr', 'cnr/cnr.ui.a
   });
 
   //carico il tipo di documento che stavo visualizzando l'ultima volta
-  defaultType = CNR.Storage.get('frontOffice', 'log');
+  defaultType = CNR.Storage.get('frontOffice') || 'log';
   $('#typeDocument button[data-state="' + defaultType + '"]').addClass('active');
   bulkinfoFunction();
 });
