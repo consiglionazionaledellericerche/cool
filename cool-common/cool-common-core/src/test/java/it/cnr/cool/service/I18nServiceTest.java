@@ -34,8 +34,7 @@ public class I18nServiceTest {
 		HttpServletRequest request = new MockHttpServletRequest();
 		Locale locale = I18nService.getLocale(request, Locale.getDefault().getLanguage());
 		LOGGER.info(locale.toString());
-		assertEquals("en", locale.getLanguage());
-
+		assertEquals("it", locale.getLanguage());
 	}
 
 	@Test

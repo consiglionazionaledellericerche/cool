@@ -42,7 +42,8 @@
 	<bean id="cmisService" class="it.cnr.cool.cmis.service.CMISService">
 		<property name="baseURL" value="${repository.base.url}" />
 	</bean>
-
+	<bean id="adminService" class="it.cnr.cool.cmis.service.AdminService"></bean>
+	
 	<bean id="nodeMetadataService" class="it.cnr.cool.cmis.service.NodeMetadataService">
 		<property name="datePattern" value="yyyy-MM-dd'T'HH:mm:ss.SSSZ" />
 	</bean>

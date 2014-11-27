@@ -10,10 +10,13 @@ import it.cnr.cool.security.service.UserService;
 import it.cnr.cool.security.service.impl.alfresco.CMISUser;
 import it.cnr.cool.service.CreateAccountService;
 import it.cnr.cool.service.I18nService;
+import it.cnr.cool.service.UserFactoryException;
 
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.UUID;
@@ -36,6 +39,7 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.ResponseBuilder;
 import javax.ws.rs.core.Response.Status;
 
+import org.apache.chemistry.opencmis.client.bindings.spi.BindingSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -73,18 +77,49 @@ public class SecurityRest {
 	@POST
 	@Path("create-account")
 	public Response doCreateUser(@Context HttpServletRequest request,
-			MultivaluedMap<String, String> form) {
-		return createAccountService.create(request, form, getUrl(request));
+			MultivaluedMap<String, String> form, @CookieParam("__lang") String cookieLang) {
+		Map<String, List<String>> values = new HashMap<String, List<String>>();
+		values.putAll(form);
+		try {
+			return Response.ok(createAccountService.create(values, I18nService.getLocale(request, cookieLang) ,getUrl(request))).build();
+		} catch (Exception e) {
+			return Response.serverError().entity(Collections.singletonMap("message", e.getMessage())).build();
+		}
 	}
 
 	@PUT
 	@Path("create-account")
 	public Response doUpdateUser(@Context HttpServletRequest request,
-			MultivaluedMap<String, String> form) {
-		return createAccountService.update(request, form);
+			MultivaluedMap<String, String> form, @CookieParam("__lang") String cookieLang) {
+		Map<String, List<String>> values = new HashMap<String, List<String>>();
+		values.putAll(form);
+		try {
+			Map<String, Object> data = createAccountService.update(values, I18nService.getLocale(request, cookieLang));	
+			HttpSession session = request.getSession(false);
+			CMISUser currentUser = cmisService.getCMISUserFromSession(session);
+			CMISUser user = (CMISUser) data.get("user");
+			boolean isLoggedUserData = user.getUserName().equalsIgnoreCase(currentUser.getId());
 
+			if (!data.containsKey("error") && isLoggedUserData) {
+				reloadUserInSession(user, request);
+			}
+			return Response.ok(data).build();
+			
+		} catch (Exception e) {
+			return Response.serverError().entity(Collections.singletonMap("message", e.getMessage())).build();
+		}
 	}
-
+	
+	private void reloadUserInSession(CMISUser oldUser, HttpServletRequest request) throws UserFactoryException {
+		CMISUser user;
+		try {
+			BindingSession bindingSession = cmisService.getCurrentBindingSession(request);
+			user = userService.loadUser(oldUser.getId(), bindingSession);
+		} catch (CoolUserFactoryException e) {
+			throw new UserFactoryException("Error loading user: " + oldUser.getId(), e);
+		}
+		request.getSession(false).setAttribute(CMISUser.SESSION_ATTRIBUTE_KEY_USER_OBJECT, user);
+	}
 	@POST
 	@Path("change-password")
 	public Response changePassword(@Context HttpServletRequest req,

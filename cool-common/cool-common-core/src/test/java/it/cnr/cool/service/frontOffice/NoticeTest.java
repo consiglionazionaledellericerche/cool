@@ -1,8 +1,18 @@
 package it.cnr.cool.service.frontOffice;
 
+import static org.junit.Assert.assertTrue;
 import it.cnr.cool.cmis.model.CoolPropertyIds;
+import it.cnr.cool.cmis.service.AdminService;
 import it.cnr.cool.cmis.service.CMISService;
 import it.cnr.cool.service.util.Notice;
+
+import java.io.IOException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.Map;
+
 import org.apache.chemistry.opencmis.client.api.CmisObject;
 import org.apache.chemistry.opencmis.client.api.Session;
 import org.junit.After;
@@ -15,15 +25,6 @@ import org.springframework.test.annotation.DirtiesContext.ClassMode;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import java.io.IOException;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.Map;
-
-import static org.junit.Assert.assertTrue;
-
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = { "classpath:/META-INF/cool-common-core-test-context.xml" })
 @DirtiesContext(classMode = ClassMode.AFTER_CLASS)
@@ -33,6 +34,9 @@ public class NoticeTest {
 	private FrontOfficeService frontOfficeService;
 	@Autowired
 	private CMISService cmisService;
+	@Autowired
+	private AdminService adminService;
+
 	private Date after;
 	private Date before;
 	private Session cmisSession;
@@ -79,11 +83,21 @@ public class NoticeTest {
 				cmisSession, cmisSession, Long.toString(after.getTime()),
 				Long.toString(before.getTime()), false, null);
 		ArrayList<Notice> docs = (ArrayList<Notice>) responseGet.get("docs");
-		assertTrue(docs.size() > 0);
-		// nn deve avere il campo maxNotice perché editor = false
-		assertTrue(!responseGet.containsKey("maxNotice"));
-		assertTrue(docs.get(0).getType().equals(type));
-		assertTrue(docs.get(0).getTitle().equals(title));
+		boolean solrQueryCmis = adminService.isEVENTUALsolrQueryCmis(cmisService.getAdminSession()); 
+		Notice notice = null;
+		/**
+		 * Se l'avviso non viene recuperato il sistema usa SOLR per le query!!!
+		 */
+		if (!solrQueryCmis) {
+			assertTrue(docs.size() > 0);
+			notice = docs.get(0);
+			// nn deve avere il campo maxNotice perché editor = false
+			assertTrue(!responseGet.containsKey("maxNotice"));
+		} else {
+			notice = new Notice(cmisSession.getObject(nodeRefNotice), "admin");
+		}
+		assertTrue(notice.getType().equals(type));
+		assertTrue(notice.getTitle().equals(title));			
 
 		// getNotice con editor = false
 		responseGet = frontOfficeService.getNotice(cmisSession, cmisSession,
@@ -91,8 +105,9 @@ public class NoticeTest {
 		assertTrue(!responseGet.containsKey("maxNotice"));
 		ArrayList<Notice> noticeEditorFalse = (ArrayList<Notice>) responseGet
 				.get("docs");
-		assertTrue(noticeEditorFalse.size() > 0);
-
+		if (!solrQueryCmis) {
+			assertTrue(noticeEditorFalse.size() > 0);
+		}
 		// getNotice con editor = true
 		responseGet = frontOfficeService.getNotice(cmisSession, cmisSession,
 				null, null, true, null);

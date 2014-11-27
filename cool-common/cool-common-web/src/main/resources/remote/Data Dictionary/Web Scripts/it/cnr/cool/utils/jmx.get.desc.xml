@@ -1,0 +1,11 @@
+<webscript>
+   <shortname>jmx remote execution</shortname>
+   <description>
+      jmx remote execution
+   </description>
+   <url>/cnr/utils/jmx?mBeansName={mBeansName?}</url>
+   <format default="json">argument</format>
+   <authentication>admin</authentication>
+   <family>CNR</family>
+   <family>utils</family>
+</webscript>

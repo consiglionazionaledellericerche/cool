@@ -3,12 +3,18 @@ package it.cnr.cool.rest;
 import static org.junit.Assert.assertTrue;
 import it.cnr.cool.security.service.impl.alfresco.CMISGroup;
 import it.cnr.cool.security.service.impl.alfresco.CMISUser;
+import it.cnr.cool.web.PermissionService;
+import it.cnr.cool.web.PermissionService.lists;
+import it.cnr.cool.web.PermissionService.methods;
+import it.cnr.cool.web.PermissionService.types;
 
 import java.util.ArrayList;
 
 import javax.ws.rs.core.Response;
 
 import org.json.JSONObject;
+import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
@@ -27,12 +33,19 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 public class WorkflowDefinitionsTest {
 
     private static final String USER_NAME = "spaclient";
-
+    private static final String ACTIVITIADHOC = "activiti$activitiAdhoc";
 	private static final Logger LOGGER = LoggerFactory
 			.getLogger(WorkflowDefinitionsTest.class);
 
 	@Autowired
 	private WorkflowDefinitions workflowDefinitions;
+	@Autowired
+	private PermissionService permissionService;
+
+	@Before
+	public void addPermissionToUser() {
+		permissionService.add(ACTIVITIADHOC, methods.GET, lists.whitelist, types.user, USER_NAME);
+	}
 
 	@Test
 	public void testGetDefinitionsUser() {
@@ -67,5 +80,10 @@ public class WorkflowDefinitionsTest {
 		assertTrue(jsonObj.getJSONArray("definitions").length() > 0);
 
     }
+
+    @After
+	public void deletePermissionToUser() {
+		permissionService.delete(ACTIVITIADHOC, methods.GET, lists.whitelist, types.user, USER_NAME);
+	}
 
 }

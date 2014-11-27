@@ -3,6 +3,7 @@ package it.cnr.cool.service.util;
 import java.text.SimpleDateFormat;
 import java.util.GregorianCalendar;
 
+import org.apache.chemistry.opencmis.client.api.CmisObject;
 import org.apache.chemistry.opencmis.client.api.QueryResult;
 import org.apache.chemistry.opencmis.commons.PropertyIds;
 
@@ -16,6 +17,13 @@ public class AlfrescoDocument {
 	private final String name;
 	private final String nodeRef;
 
+	public AlfrescoDocument(CmisObject doc) {	
+		createdBy = doc.getPropertyValue(PropertyIds.CREATED_BY);
+		dataCreazione = DATEFORMAT.format(((GregorianCalendar) doc.getPropertyValue(PropertyIds.CREATION_DATE)).getTime());
+		name = doc.getPropertyValue(PropertyIds.NAME);
+		nodeRef = doc.getPropertyValue(PropertyIds.OBJECT_ID);
+	}
+	
 	public AlfrescoDocument(QueryResult doc) {	
 		createdBy = doc.getPropertyValueById(PropertyIds.CREATED_BY);
 		dataCreazione = DATEFORMAT.format(((GregorianCalendar) doc.getPropertyValueById(PropertyIds.CREATION_DATE)).getTime());

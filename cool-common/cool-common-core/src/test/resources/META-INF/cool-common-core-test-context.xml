@@ -8,7 +8,7 @@
 
   <import resource="classpath*:META-INF/cool-common-core-context.xml" />
 
-  <bean class="it.cnr.cool.mocks.MockMailService"></bean>
+  <bean id="mailService" class="it.cnr.cool.mocks.MockMailService"></bean>
   <bean class="it.cnr.cool.mocks.MockCoolStore"></bean>
   <bean class="org.springframework.mock.web.MockServletContext"></bean>
 

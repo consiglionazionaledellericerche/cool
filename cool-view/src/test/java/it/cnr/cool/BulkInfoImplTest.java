@@ -36,7 +36,7 @@ public class BulkInfoImplTest {
   /**
    * Verifico che compila e che sono in grado di creare un oggetto vuote
    */
-  @Test
+  //@Test
   public void testCreateEmptyBulkInfoNew() {
 
     BulkInfo bi = new BulkInfoImpl();
@@ -49,7 +49,7 @@ public class BulkInfoImplTest {
    * @throws IOException
    * @throws DocumentException
    */
-  @Test
+  //@Test
   public void testCreateNonEmptyBulkInfoNew() throws IOException, DocumentException {
     BulkInfo bi = getExampleBulkInfoNew();
     assertTrue(bi != null);
@@ -66,7 +66,7 @@ public class BulkInfoImplTest {
    * @throws IOException
    * @throws DocumentException
    */
-  @Test
+  //@Test
   public void testCreateNonEmptyBulkInfoNewDetailed() throws IOException, DocumentException {
     BulkInfo bi = getExampleBulkInfoNew("F_jconon_call_folder_test.xml");
     assertTrue(bi != null);

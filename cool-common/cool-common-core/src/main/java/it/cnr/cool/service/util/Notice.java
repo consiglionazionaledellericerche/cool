@@ -1,8 +1,11 @@
 package it.cnr.cool.service.util;
 
 import it.cnr.cool.cmis.model.CoolPropertyIds;
+
 import java.math.BigInteger;
 import java.util.GregorianCalendar;
+
+import org.apache.chemistry.opencmis.client.api.CmisObject;
 import org.apache.chemistry.opencmis.client.api.QueryResult;
 
 
@@ -16,6 +19,17 @@ public class Notice extends AlfrescoDocument {
 	private String dataScadenza;
 	private String visibility;
 	
+	public Notice(CmisObject doc, String visibility) {
+		super(doc);
+		type = doc.getPropertyValue(CoolPropertyIds.NOTICE_TYPE.value());
+		dataPubblicazione = DATEFORMAT.format(( (GregorianCalendar) doc.getPropertyValue(CoolPropertyIds.NOTICE_DATA.value())).getTime());
+		number = doc.getPropertyValue(CoolPropertyIds.NOTICE_NUMBER.value());
+		title = doc.getPropertyValue(CoolPropertyIds.NOTICE_TITLE.value());
+		noticeStyle = doc.getPropertyValue(CoolPropertyIds.NOTICE_STYLE.value());
+		text = doc.getPropertyValue(CoolPropertyIds.NOTICE_TEXT.value());
+		dataScadenza = DATEFORMAT.format(( (GregorianCalendar)doc.getPropertyValue(CoolPropertyIds.NOTICE_SCADENZA.value())).getTime());
+		this.visibility = visibility;		
+	}
 	
 	public Notice(QueryResult doc, String visibility) {
 		super(doc);

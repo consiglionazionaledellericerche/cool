@@ -8,7 +8,6 @@
     <version>2.0.9-SNAPSHOT</version>
   </parent>
 
-  <groupId>it.cnr.si.cool</groupId>
   <artifactId>cool-common</artifactId>
 
   <name>Cool Platform - Common</name>

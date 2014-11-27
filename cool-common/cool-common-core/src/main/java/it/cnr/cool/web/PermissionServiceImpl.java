@@ -30,9 +30,6 @@ import com.google.gson.JsonPrimitive;
 
 public class PermissionServiceImpl implements PermissionService {
 
-	public static enum methods {GET, POST, PUT, DELETE};
-	public static enum lists {whitelist, blacklist};
-	public static enum types {all, group, user};
 
 	private String rbacPath;
 

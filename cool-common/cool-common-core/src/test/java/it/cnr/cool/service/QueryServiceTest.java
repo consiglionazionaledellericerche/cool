@@ -1,9 +1,13 @@
 package it.cnr.cool.service;
 
+import static org.junit.Assert.assertTrue;
 import it.cnr.cool.cmis.service.CMISService;
+
+import java.util.List;
+import java.util.Map;
+
 import org.apache.chemistry.opencmis.client.api.Session;
 import org.apache.chemistry.opencmis.client.runtime.QueryResultImpl;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
@@ -15,21 +19,14 @@ import org.springframework.test.annotation.DirtiesContext.ClassMode;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import java.util.List;
-import java.util.Map;
-
-import static org.junit.Assert.assertTrue;
-
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = { "classpath:/META-INF/cool-common-core-test-context.xml" })
 @DirtiesContext(classMode = ClassMode.AFTER_CLASS)
 public class QueryServiceTest {
 
-	private static final String DOMANDA = "/Selezioni on-line/2014/4/BANDO MOB 2014 - _/Domanda di D'URSO MATILDE - matilde.durso";
-
 	private static final Logger LOGGER = LoggerFactory.getLogger(QueryService.class);
 
-	private static final String QUERY = "select * from jconon_call:folder";
+	private static final String QUERY = "select * from cmis:folder";
 
 	private static final String FOLDER_PATH = "/Data Dictionary";
 
@@ -103,29 +100,6 @@ public class QueryServiceTest {
 		LOGGER.debug(resultSet.toString());
 
 	}
-
-	@Test
-	@Ignore
-	public void testQueryObjectRel() {
-
-		Session cmisSession = cmisService.createAdminSession();
-		String nodeRef = cmisSession.getObjectByPath(DOMANDA).getId();
-
-		MockHttpServletRequest req = new MockHttpServletRequest();
-
-		req.setParameter("objectRel", nodeRef);
-		req.setParameter("relationship.name", "R:jconon_attachment:in_prodotto");
-
-		req.getSession().setAttribute(CMISService.DEFAULT_SERVER, cmisSession);
-
-		List<QueryResultImpl> resultSet = getResultSet(req);
-
-		assertTrue(resultSet.size() > 0);
-
-		LOGGER.debug(resultSet.toString());
-	}
-
-
 
 	private List<QueryResultImpl> getResultSet(MockHttpServletRequest req) {
 		Map<String, Object> m = queryService.query(req);
