@@ -74,7 +74,8 @@ public class NodeMetadataService {
 										|| propertyValue[i].equals("true")));
 							} else if (propertyDefinition instanceof PropertyIntegerDefinition) {
 								value.add(Integer.valueOf(propertyValue[i]));
-							} else if (propertyDefinition instanceof PropertyStringDefinition) {
+							} else if (propertyDefinition instanceof PropertyStringDefinition || 
+									propertyDefinition instanceof PropertyIdDefinition) {
 								value.add(propertyValue[i].replaceAll(
 										RE_XML_PROP, " "));
 							} else if (propertyDefinition instanceof PropertyDecimalDefinition) {
