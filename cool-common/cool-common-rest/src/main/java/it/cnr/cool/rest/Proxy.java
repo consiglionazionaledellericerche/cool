@@ -24,6 +24,7 @@ import javax.ws.rs.core.Response.Status;
 import java.io.*;
 import java.net.SocketException;
 import java.util.Arrays;
+import java.util.Map;
 
 
 @Path("proxy")
@@ -35,17 +36,20 @@ public class Proxy {
 	@Autowired
 	private CMISService cmisService;
 
+
+    private Map<String, String> backends;
+
 	private ProxyInterceptor proxyInterceptor;
 
 	// TODO: try-catchare tutto
 
 	@GET
-	public void get(@Context HttpServletRequest req,
+	public void get(@Context HttpServletRequest req, @QueryParam("backend") String backend,
 			@Context HttpServletResponse res) throws IOException {
 
 		BindingSession currentBindingSession = cmisService
 				.getCurrentBindingSession(req);
-		UrlBuilder url = getUrl(req);
+		UrlBuilder url = getUrl(req, backend);
 
 		Response resp = CmisBindingsHelper
 				.getHttpInvoker(currentBindingSession).invokeGET(url,
@@ -160,10 +164,25 @@ public class Proxy {
 
 	// utility methods
 
-	private UrlBuilder getUrl(HttpServletRequest req) {
+    private UrlBuilder getUrl(HttpServletRequest req) {
+        return getUrl(req, null);
+    }
+
+	private UrlBuilder getUrl(HttpServletRequest req, String backend) {
 
 		String urlParam = getUrlParam(req);
-		String link = cmisService.getBaseURL().concat(urlParam);
+
+        String baseURL = null;
+        if (backend != null && backends.containsKey(backend)) {
+
+            baseURL = backends.get(backend);
+            LOGGER.debug("using custom backend: " + backend + " " + baseURL);
+
+        } else {
+            baseURL = cmisService.getBaseURL();
+        }
+
+        String link = baseURL.concat(urlParam);
 		if (req.getQueryString() != null)
 			link = link.concat("?").concat(req.getQueryString());
 		return new UrlBuilder(link);
@@ -230,4 +249,10 @@ public class Proxy {
 	public void setProxyInterceptor(ProxyInterceptor proxyInterceptor) {
 		this.proxyInterceptor = proxyInterceptor;
 	}
+
+
+    public void setBackends(Map<String, String> backends) {
+        this.backends = backends;
+    }
+
 }

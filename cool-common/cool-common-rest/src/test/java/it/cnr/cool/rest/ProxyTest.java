@@ -7,6 +7,7 @@ import it.cnr.cool.util.MimeTypes;
 
 import java.io.IOException;
 
+import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpSession;
 
 import org.json.JSONObject;
@@ -47,7 +48,7 @@ public class ProxyTest {
 
 		MockHttpServletResponse res = new MockHttpServletResponse();
 
-		proxy.get(req, res);
+		proxy.get(req, null, res);
 
 		String content = res.getContentAsString();
 
@@ -127,5 +128,21 @@ public class ProxyTest {
 		ProxyInterceptor pi = new ProxyInterceptor();
 		proxy.setProxyInterceptor(pi);
 	}
+
+    @Test
+    public void testMissioni () throws Exception {
+
+        MockHttpServletRequest req = new MockHttpServletRequest();
+        req.setParameter(URL, "_nodes");
+
+        MockHttpServletResponse res = new MockHttpServletResponse();
+        proxy.get(req, "missioni", res);
+
+        LOGGER.debug(res.getContentAsString());
+
+        assertEquals(HttpStatus.OK.value(), res.getStatus());
+
+
+    }
 
 }
