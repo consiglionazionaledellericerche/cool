@@ -108,7 +108,7 @@
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-war-plugin</artifactId>
             <configuration>
-              <classifier>${cool.mode}-${cool.build.number}</classifier>
+              <classifier>${cool.mode}</classifier>
             </configuration>
           </plugin>
         </plugins>
