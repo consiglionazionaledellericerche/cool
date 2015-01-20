@@ -11,6 +11,7 @@ import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpSession;
 
 import org.json.JSONObject;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
@@ -130,6 +131,7 @@ public class ProxyTest {
 	}
 
     @Test
+    @Ignore
     public void testMissioni () throws Exception {
 
         MockHttpServletRequest req = new MockHttpServletRequest();

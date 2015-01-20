@@ -31,15 +31,11 @@ public class VersionService {
 			try {
 				Manifest manifest = new Manifest(is);
 				Attributes attributes = manifest.getMainAttributes();
-
-				version = attributes.getValue("Implementation-Version");
-
 				String mode = attributes.getValue("mode");
-
 				if (mode != null) {
+					version = attributes.getValue("Implementation-Version");
 					production = mode.equalsIgnoreCase(PRODUCTION);
 				}
-
 			} catch (IOException e) {
 				LOGGER.warn("unable to retrieve implementation version", e);
 			}
