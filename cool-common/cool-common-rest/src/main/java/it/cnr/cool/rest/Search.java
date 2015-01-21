@@ -102,11 +102,15 @@ public class Search {
 			String xls = processTemplate(model, FTL_XLS_PATH);
 			rb = Response.ok((BOM_EXCEL_UTF_8 + xls).getBytes(ENCODING_UTF_8));
 			String fileName = "query";
-			if(model.containsKey("nameBando"))
-			 fileName = (String) model.get("nameBando");
-			
+			if(model.containsKey("nameBando")) {
+				fileName = ((String) model.get("nameBando"));
+				fileName = fileName.replace("“", "");
+				fileName = fileName.replace("”", "");
+				fileName = fileName.replace("\"", "");
+			}
+
 			rb.header("Content-Disposition",
-					"attachment; filename=" + fileName + ".xls");
+					"attachment; filename=\"" + fileName.concat(".xls\""));
 		} catch (Exception e) {
 			LOGGER.error(e.getMessage(), e);
 			rb = Response.status(Status.INTERNAL_SERVER_ERROR);
