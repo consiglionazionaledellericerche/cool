@@ -364,15 +364,23 @@ public class CMISService implements InitializingBean, CMISSessionManager {
 	}
 
 	public BindingSession getCurrentBindingSession(HttpServletRequest req) {
-		HttpSession se = req.getSession(false);
-        if (se == null) {
-            return createBindingSession();
+		HttpSession httpSession = req.getSession(false);
+        BindingSession bindingSession;
+
+        if (httpSession == null) {
+            bindingSession = createBindingSession();
         } else {
-    		if (se.getAttribute(CMISService.BINDING_SESSION) == null)
-    			se.setAttribute(CMISService.BINDING_SESSION,createBindingSession(cmisConfig.getServerParameters().get(CMISConfig.ADMIN_USERNAME),
-            		cmisConfig.getServerParameters().get(CMISConfig.ADMIN_PASSWORD)));
+            if (httpSession.getAttribute(CMISService.BINDING_SESSION) == null) {
+                bindingSession = createBindingSession();
+                httpSession.setAttribute(CMISService.BINDING_SESSION, bindingSession);
+            } else {
+                bindingSession = (BindingSession) httpSession.getAttribute(CMISService.BINDING_SESSION);
+            }
+
         }
-		return (BindingSession)se.getAttribute(CMISService.BINDING_SESSION);
+
+        return bindingSession;
+
 	}
 
 	@Override
