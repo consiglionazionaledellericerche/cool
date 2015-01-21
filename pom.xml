@@ -17,8 +17,7 @@
     <opencmis.version>0.12.0</opencmis.version>
     <aspectj.version>1.6.6.RELEASE</aspectj.version>
     <spring.version>3.1.2.RELEASE</spring.version>
-
-    <jasperreports.version>5.5.0</jasperreports.version>
+    <jasperreports.version>6.0.0</jasperreports.version>
     <jslint4java.version>2.0.2</jslint4java.version>
     <junit.version>4.11</junit.version>
     <slf4j.version>1.7.5</slf4j.version>
