@@ -104,9 +104,8 @@ public class Search {
 			String fileName = "query";
 			if(model.containsKey("nameBando")) {
 				fileName = ((String) model.get("nameBando"));
-				fileName = fileName.replace("“", "");
-				fileName = fileName.replace("”", "");
-				fileName = fileName.replace("\"", "");
+				//replace caratteri che non possono comparire nel nome del file in windows
+				fileName = fileName.replaceAll("[“”\"\\/:*<>|]", "").replace("\\", "");
 			}
 
 			rb.header("Content-Disposition",
