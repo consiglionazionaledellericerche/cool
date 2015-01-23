@@ -8,7 +8,7 @@ import java.util.Map;
 
 import com.google.gson.annotations.SerializedName;
 
-public class CMISUser implements java.security.Principal {
+public class CMISUser implements java.security.Principal, Serializable {
 	
 	public static final long serialVersionUID = 1L;
 	private Map<String, Boolean> immutability;
