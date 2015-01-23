@@ -1,6 +1,8 @@
 package it.cnr.cool.security.service.impl.alfresco;
 
-public class CMISGroup {
+import java.io.Serializable;
+
+public class CMISGroup implements Serializable {
 	private String group_name;
 	private String display_name;
 	
