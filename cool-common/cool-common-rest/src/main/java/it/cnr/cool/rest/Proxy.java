@@ -212,9 +212,14 @@ public class Proxy {
 		int status = outcome.getResponseCode();
 		if (status != Status.OK.getStatusCode()) {
 			res.setStatus(status);
-			IOUtils.copy(new ByteArrayInputStream(outcome.getErrorContent()
-					.getBytes()), outputStream);
-			outputStream.flush();
+
+            if (outcome != null && outcome.getErrorContent() != null) {
+                IOUtils.copy(new ByteArrayInputStream(outcome.getErrorContent()
+                        .getBytes()), outputStream);
+            }
+
+            outputStream.flush();
+
 			return;
 		}
 		InputStream result = outcome.getStream();

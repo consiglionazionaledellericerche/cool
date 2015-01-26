@@ -1,6 +1,7 @@
 package it.cnr.cool.rest;
 
 import freemarker.template.TemplateException;
+import it.cnr.cool.exception.UnauthorizedException;
 import it.cnr.cool.rest.util.Util;
 import it.cnr.cool.service.QueryService;
 import it.cnr.cool.util.CalendarUtil;
@@ -11,10 +12,7 @@ import java.io.IOException;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
-import javax.ws.rs.QueryParam;
+import javax.ws.rs.*;
 import javax.ws.rs.core.CacheControl;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
@@ -22,6 +20,7 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.ResponseBuilder;
 import javax.ws.rs.core.Response.Status;
 
+import org.apache.chemistry.opencmis.commons.exceptions.CmisUnauthorizedException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
@@ -46,7 +45,13 @@ public class Search {
 
 		ResponseBuilder rb;
 
-		Map<String, Object> model = queryService.query(request);
+        Map<String, Object> model = null;
+
+        try {
+            model = queryService.query(request);
+        } catch(CmisUnauthorizedException e) {
+            throw new UnauthorizedException("unauthorized search", e);
+        }
 		try {
 			String json = getJson(model);
 			rb = Response.ok(json);

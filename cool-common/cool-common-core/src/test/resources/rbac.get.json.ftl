@@ -63,13 +63,6 @@
                 ]
         }
     },
-    "workflow/definitions": {
-        "GET": {
-            "whitelist": {
-                "all": true
-            }
-        }
-    },
     "company/header": {
         "GET": {
             "whitelist": {

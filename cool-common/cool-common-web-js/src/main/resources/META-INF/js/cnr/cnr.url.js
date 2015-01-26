@@ -34,7 +34,6 @@ define(['jquery', 'cnr/cnr.ui', 'json!common', 'i18n', 'json!cache'], function (
         metadataNode: 'rest/proxy' + '?url=service/api/metadata/node/$store_type/$store_id/$id',
         version: 'rest/proxy' + '?url=service/cnr/nodes/version'
       },
-      filteredProcessDefinitions: "rest/workflow/definitions",
       security : {
         forgotPassword: 'rest/security/forgotPassword'
       },
