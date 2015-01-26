@@ -19,8 +19,6 @@
           <#if !context.user.guest!>
           <a href="#" class="navbar-link">${context.user.fullName}</a>
           <a href="${url.context}/rest/security/logout" class="btn btn-inverse btn-mini" id="logout">logout</a>
-          <#else>
-          anonymous
           </#if>
         </p>
         <ul class="nav hidden-important">
