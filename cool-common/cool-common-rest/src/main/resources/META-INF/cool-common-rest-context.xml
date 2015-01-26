@@ -66,7 +66,6 @@
 
 	<bean id="frontOffice" class="it.cnr.cool.rest.FrontOffice"></bean>
     <bean class="it.cnr.cool.rest.TypesTree"></bean>
-    <bean class="it.cnr.cool.rest.WorkflowDefinitions"></bean>
 
 	<bean id="folderChildren" class="it.cnr.cool.rest.FolderChildren"></bean>
 
