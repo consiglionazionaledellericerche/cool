@@ -87,7 +87,6 @@ define(['jquery', 'header', 'cnr/cnr.url', 'cnr/cnr.ui.checkbox', 'cnr/cnr.ui', 
           name: 'actionButton',
           allowableActions: ['CAN_UPDATE_PROPERTIES', 'CAN_DELETE_OBJECT']
         }, null, {
-          workflow: false,
           select: false,
           history: false,
           edit: function () {

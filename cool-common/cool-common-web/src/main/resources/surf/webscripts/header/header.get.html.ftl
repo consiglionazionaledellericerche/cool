@@ -37,13 +37,6 @@
             </#if>
           </#list>
           <#if !context.user.guest!>
-          <li class="hide dropdown page<#if context.page.id = "workflow" > active</#if>" id="workflow">
-            <a href="#" class="dropdown-toggle" data-toggle="dropdown">${message("workflow")} <b class="caret"></b></a>
-            <ul class="dropdown-menu">
-              <li class="nav-header">${message("workflows")}</li>
-            </ul>
-          </li>
-          <li class="divider-vertical"></li>
           <li>
             <form id="search" method="POST" action="${url.context}/search" class="form-search">
               <div class="input-append">

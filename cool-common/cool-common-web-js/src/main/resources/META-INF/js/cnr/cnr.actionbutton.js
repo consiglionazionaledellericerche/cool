@@ -69,24 +69,6 @@ define(['jquery', 'json!common', 'cnr/cnr', 'cnr/cnr.ui', 'cnr/cnr.node', 'cnr/c
     return dropdownElements;
   }
 
-  /**
-   * Get workflows available for the current user
-   *
-   * @return {object} workflows an hash (key: workflow name, value: the URL for the specified workflow) containing the workflows for the user
-   *
-   */
-  function getWorkflows(nodeRef, name) {
-    var workflows = {};
-    $.each(common.workflowDefinitions || [], function (index, el) {
-      var parameters = {
-        taskId: el.id,
-        nodeRef: nodeRef,
-        name: name
-      }, label = i18n.prop(el.title.replace(":", "_") + '.workflow.title', el.title);
-      workflows[label] = URL.template(URL.urls.workflow, parameters);
-    });
-    return workflows;
-  }
 
   // update document content
   function updateDocument(nodeRef, mimeType, refreshFn) {
@@ -269,7 +251,6 @@ define(['jquery', 'json!common', 'cnr/cnr', 'cnr/cnr.ui', 'cnr/cnr.node', 'cnr/c
         select: 'icon-eye-open',
         update: 'icon-upload',
         removeAssociation: 'icon-resize-full',
-        workflow: 'icon-tasks',
         history: 'icon-th-list',
         copy: 'icon-copy',
         cut: 'icon-cut'
@@ -395,8 +376,7 @@ define(['jquery', 'json!common', 'cnr/cnr', 'cnr/cnr.ui', 'cnr/cnr.node', 'cnr/c
       addActions({
         select: function () {
           $(this).parents('tr').find('.openFolder').click();
-        },
-        workflow: getWorkflows(nodeRef, name)
+        }
       });
     } else {
       mimeType = obj.mimeType;
@@ -409,8 +389,7 @@ define(['jquery', 'json!common', 'cnr/cnr', 'cnr/cnr.ui', 'cnr/cnr.node', 'cnr/c
         },
         history: function () {
           showHistory(nodeRef);
-        },
-        workflow: getWorkflows(nodeRef, name)
+        }
       });
     }
 

@@ -457,26 +457,6 @@ define(['cnr/cnr.ui.widgets', 'jquery', 'cnr/cnr', 'cnr/cnr.style', 'handlebars'
         return $('<div>').append(html).text();
       });
 
-      Handlebars.registerHelper('infos', function infoBtn(settings, data) {
-        var button = $('<button class="btn btn-mini taskButton">' + settings.label + '</button>')
-          .attr('data-properties', JSON.stringify(data));
-
-        if (settings.icon) {
-          button.prepend('<i class="' + settings.icon + '"></i> ');
-        }
-        return toHTML(button);
-      });
-
-      Handlebars.registerHelper('takeTask', function takeTaskBtn(settings, taskId, owner) {
-        var button = $('<button class="btn btn-mini takeTaskButton">' + (owner ? "restituisci al pool" : 'prendi in carico') + '</button>')
-          .addClass(owner ? 'btn-warning' : 'btn-info')
-          .attr({
-            'data-owner': owner ?  null : common.User.id,
-            'data-id': taskId
-          });
-        return toHTML(button);
-      });
-
       Handlebars.registerHelper('declare', function declare(key, value) {
         hm[key] = value;
       });
