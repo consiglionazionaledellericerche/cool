@@ -17,6 +17,7 @@ import javax.ws.rs.core.Context;
 
 import org.apache.chemistry.opencmis.client.api.Document;
 import org.apache.chemistry.opencmis.client.api.Session;
+import org.apache.chemistry.opencmis.commons.exceptions.CmisUnauthorizedException;
 import org.apache.commons.httpclient.HttpStatus;
 import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
@@ -76,6 +77,9 @@ public class Content {
 
 			inputStream.close();
 			outputStream.close();
+		} catch(CmisUnauthorizedException e) {
+            LOGGER.info("unauthorized to get " + nodeRef);
+			res.setStatus(HttpStatus.SC_UNAUTHORIZED);
 		} catch (IOException e) {
 			LOGGER.error("unable to get content for path " + path, e);
 			res.setStatus(HttpStatus.SC_INTERNAL_SERVER_ERROR);
