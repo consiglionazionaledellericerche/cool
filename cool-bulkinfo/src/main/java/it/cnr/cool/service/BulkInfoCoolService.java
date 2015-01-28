@@ -33,10 +33,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 
-import com.google.common.cache.CacheBuilder;
-import com.google.common.cache.CacheLoader;
-import com.google.common.cache.LoadingCache;
-
 public class BulkInfoCoolService {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(BulkInfoCoolService.class);
@@ -52,7 +48,7 @@ public class BulkInfoCoolService {
 	private static final long CACHE_MAXIMUM_SIZE = 1000;
 	private static final String RESOURCE_PATH = "/bulkInfo/";
 
-	LoadingCache<String, BulkInfoCool> bulkInfoCache;
+	Map<String, BulkInfoCool> bulkInfoCache = new HashMap();
 
 	//TODO BulkInfoNotFoundException e' stato temporaneamente sostituito con return null per mantenere la compatibilita' con ApplicationModel
 	/**
@@ -67,7 +63,7 @@ public class BulkInfoCoolService {
 	 * @param name
 	 * @param objectId
 	 * @return
-	 * @throws BulkiInfoException
+	 * @throws BulkInfoException
 	 * @throws BulkinfoKindException
 	 * @throws BulkinfoNameException
 	 */
@@ -107,27 +103,9 @@ public class BulkInfoCoolService {
 		return model;
 	}
 	public void invalidateAllCache() {
-		if(bulkInfoCache != null)
-			bulkInfoCache.invalidateAll();
-	}
-	/**
-	 * Chache guava, costruita in modo standard come da
-	 * https://code.google.com/p/guava-libraries/wiki/CachesExplained
-	 * @return
-	 */
-	private LoadingCache<String, BulkInfoCool> getBulkInfoCache() {
-		if(bulkInfoCache == null) {
-			bulkInfoCache = CacheBuilder.newBuilder()
-					.maximumSize(CACHE_MAXIMUM_SIZE)
-					.build(
-							new CacheLoader<String, BulkInfoCool>() {
-								@Override
-								public BulkInfoCool load(String bulkInfoName) throws BulkInfoNotFoundException {
-									return build(bulkInfoName);
-								}
-							});
-		}
-		return bulkInfoCache;
+		if(bulkInfoCache != null) {
+            bulkInfoCache.clear();
+        }
 	}
 
 	/**
@@ -138,12 +116,24 @@ public class BulkInfoCoolService {
 	 * @return
 	 */
 	public BulkInfoCool find(String bulkInfoName) {
-		try {
-			return getBulkInfoCache().get(bulkInfoName);
-		} catch (java.util.concurrent.ExecutionException exp) {
-		  LOGGER.error("Error finding Bulkinfo " + bulkInfoName, exp);
-			return null;
-		}
+
+        BulkInfoCool bi = null;
+
+        if (bulkInfoCache.containsKey(bulkInfoName)) {
+            bi = bulkInfoCache.get(bulkInfoName);
+        } else {
+
+            try {
+                bi = build(bulkInfoName);
+            } catch (BulkInfoNotFoundException e) {
+                LOGGER.error("Error finding Bulkinfo " + bulkInfoName, e);
+            }
+        }
+
+        return bi;
+
+
+
 	}
 
 	/**
@@ -158,7 +148,6 @@ public class BulkInfoCoolService {
 	 * costruirlo
 	 *
 	 * @param bulkInfoName
-	 * @throws nothing
 	 * @return BulkInfoNew or null
 	 * @throws BulkInfoNotFoundException
 	 */
@@ -397,7 +386,7 @@ public class BulkInfoCoolService {
 	}
 
 	public void clearCache() {
-	  bulkInfoCache.invalidateAll();
+	  bulkInfoCache.clear();
 	}
 
 }
