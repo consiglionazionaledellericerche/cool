@@ -51,12 +51,13 @@ public class PermissionServiceImpl implements PermissionService {
 
 
     public String getRbacAsString() {
+        LOGGER.debug("requested RBAC, could be already cached");
         return permissionRepository.getRbac();
     }
 
 
 	public JsonObject loadPermission() {
-        LOGGER.info("loading RBAC, maybe cached one...");
+
         String s = getRbacAsString();
         return new JsonParser().parse(s).getAsJsonObject();
 	}
@@ -326,7 +327,7 @@ public class PermissionServiceImpl implements PermissionService {
 		return authorized;
 	}
 
-    boolean isAuthorized(String id, String method, CMISUser user) {
+    public boolean isAuthorized(String id, String method, CMISUser user) {
 
         if (user == null) {
             user = new CMISUser("guest");

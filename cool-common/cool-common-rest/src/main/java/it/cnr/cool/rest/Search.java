@@ -23,6 +23,7 @@ import javax.ws.rs.core.Response.Status;
 import org.apache.chemistry.opencmis.commons.exceptions.CmisUnauthorizedException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Path("search")
@@ -37,6 +38,7 @@ public class Search {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(Search.class);
 
+    @Autowired
 	private QueryService queryService;
 
 	@GET

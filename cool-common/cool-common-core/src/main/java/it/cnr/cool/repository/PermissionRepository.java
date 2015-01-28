@@ -34,7 +34,7 @@ public class PermissionRepository {
     @Cacheable(RBAC)
     public String getRbac() {
 
-        LOGGER.info("loading RBAC from Alfresco");
+        LOGGER.debug("loading RBAC from Alfresco");
 
         try {
             Session session = cmisService.createAdminSession();
@@ -54,7 +54,7 @@ public class PermissionRepository {
     @CacheEvict(value= RBAC, allEntries=true)
     public boolean update(String json) {
 
-        LOGGER.info("evict!");
+        LOGGER.debug(RBAC + " cache eviction due to update");
 
         LOGGER.debug(json);
         try {

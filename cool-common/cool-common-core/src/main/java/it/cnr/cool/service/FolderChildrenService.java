@@ -10,6 +10,8 @@ import org.apache.chemistry.opencmis.client.api.QueryResult;
 import org.apache.chemistry.opencmis.client.api.Session;
 import org.apache.chemistry.opencmis.commons.PropertyIds;
 import org.apache.chemistry.opencmis.commons.exceptions.CmisRuntimeException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 public class FolderChildrenService {
@@ -17,6 +19,9 @@ public class FolderChildrenService {
 	@Autowired
 	private FolderService folderService;
 	private static Long MAX_FEATCH_LEAF = Long.valueOf(10000);
+
+    private static final Logger LOGGER = LoggerFactory
+            .getLogger(FolderChildrenService.class);
 
 	public ArrayList<AlfrescoFolder> get(Session cmisSession,
 			String parentFolderId,
@@ -40,6 +45,7 @@ public class FolderChildrenService {
 					continue;
 				}
 				if (totalNumItems < MAX_FEATCH_LEAF) {
+                    LOGGER.debug("asked if " + nodeRef + " is leaf. This information could be already cached.");
 					model.add(new AlfrescoFolder(result, folderService
 							.cachedIsLeaf(nodeRef, cmisSession)));
 				} else {

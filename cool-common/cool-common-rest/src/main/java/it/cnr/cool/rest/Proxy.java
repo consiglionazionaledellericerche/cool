@@ -39,6 +39,7 @@ public class Proxy {
 
     private Map<String, String> backends;
 
+    @Autowired
 	private ProxyInterceptor proxyInterceptor;
 
 	// TODO: try-catchare tutto

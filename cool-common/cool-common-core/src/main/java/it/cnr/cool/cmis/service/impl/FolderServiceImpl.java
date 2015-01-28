@@ -95,9 +95,9 @@ public class FolderServiceImpl implements FolderService {
 	 * @return true if node is leaf
 	 */
 	@Override
-    @Cacheable("isLeaf")
+	@Cacheable("isLeaf")
 	public Boolean cachedIsLeaf(final String nodeRef, final Session cmisSession) {
-        LOGGER.debug("cachable isLeaf " + nodeRef);
+		LOGGER.debug("retrieving from alfresco if " + nodeRef + " is Leaf ");
 		return isLeaf(cmisSession, nodeRef);
 	}
 
