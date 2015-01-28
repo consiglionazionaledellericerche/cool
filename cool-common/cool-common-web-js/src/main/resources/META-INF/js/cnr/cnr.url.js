@@ -43,11 +43,12 @@ define(['jquery', 'cnr/cnr.ui', 'json!common', 'i18n', 'json!cache'], function (
       },
       model: {
         models: 'rest/models',
-        modelNodeRef: 'rest/models/$store_type/$store_id/$id/$version',
-        activate: 'rest/models/activate/$store_type/$store_id/$id/$version',
-        docsByPath: 'rest/models/docsByPath/$store_type/$store_id/$id',
+        modelNodeRef: 'rest/models/$id/$version',
+        activate: 'rest/models/activate/$id/$version',
+        docsByPath: 'rest/models/docsByPath/$id/$version',
         docsByTypeName: 'rest/models/docsByTypeName',
-        property: 'rest/models/property/$store_type/$store_id/$id'
+        property: 'rest/models/property/$id/$version',
+        generateTemplate: 'rest/models/generateTemplate'
       },
       typesTree: 'rest/typesTree/tree',
       zipper: 'rest/zipper/',
