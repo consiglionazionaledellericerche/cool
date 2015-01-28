@@ -43,7 +43,7 @@
 		<property name="baseURL" value="${repository.base.url}" />
 	</bean>
 	<bean id="adminService" class="it.cnr.cool.cmis.service.AdminService"></bean>
-	
+
 	<bean id="nodeMetadataService" class="it.cnr.cool.cmis.service.NodeMetadataService">
 		<property name="datePattern" value="yyyy-MM-dd'T'HH:mm:ss.SSSZ" />
 	</bean>
@@ -92,11 +92,7 @@
 	<bean id="groupService"
 		class="it.cnr.cool.security.service.impl.alfresco.GroupServiceImpl">
 	</bean>
-	
-	<bean id="siperService" class="it.cnr.cool.service.search.SiperService">
-		<property name="urlAnadip" value="${siper.anadip.url}" />
-		<property name="urlSedi" value="${siper.sedi.url}" />
-	</bean>
+
 
 	<bean id="zoneService" class="it.cnr.cool.service.security.ZoneService" />
 

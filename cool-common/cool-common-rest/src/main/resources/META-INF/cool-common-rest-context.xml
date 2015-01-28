@@ -130,7 +130,7 @@
 	<bean class="it.cnr.cool.rest.RBACRest"></bean>
 	<bean class="it.cnr.cool.rest.SecurityRest"></bean>
 	<bean class="it.cnr.cool.rest.Content"></bean>
-	<bean class="it.cnr.cool.rest.Sedi"></bean>
+
 	<bean class="it.cnr.cool.rest.Node"></bean>
 
 	<bean class="it.cnr.cool.rest.Search">
