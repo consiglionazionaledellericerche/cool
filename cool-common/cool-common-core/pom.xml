@@ -110,12 +110,6 @@
     </dependency>
 
     <dependency>
-      <groupId>com.google.guava</groupId>
-      <artifactId>guava</artifactId>
-      <version>15.0</version>
-      <classifier>cdi1.0</classifier>
-    </dependency>
-    <dependency>
       <artifactId>cool-common-api</artifactId>
       <groupId>it.cnr.si.cool</groupId>
       <version>${project.version}</version>
