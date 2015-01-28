@@ -34,7 +34,6 @@ import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 import org.springframework.mail.MailException;
 
-import com.google.common.base.Joiner;
 /**
  * Remote Resource Deploy Service
  * @author mspasiano
@@ -167,7 +166,10 @@ public class RRDService implements InitializingBean {
 		if (!differentFiles.isEmpty()) {
 			String text = cmisSession.getRepositoryInfo().getProductName()
 					+ " " + cmisSession.getRepositoryInfo().getProductVersion();
-			text += "<br>" + Joiner.on("<br> ").join(differentFiles);
+
+            for (String s : differentFiles) {
+                text += "<br>" + s;
+            }
 			String address = InetAddress.getLocalHost().getHostAddress();
 			try {
 				mailService.send("md5 " + RRDService.class.getSimpleName()
