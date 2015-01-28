@@ -1,22 +1,18 @@
 package it.cnr.cool.cmis.service.impl;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 import org.apache.chemistry.opencmis.client.bindings.cache.TypeDefinitionCache;
 import org.apache.chemistry.opencmis.client.bindings.spi.BindingSession;
 import org.apache.chemistry.opencmis.commons.definitions.TypeDefinition;
 
-import com.google.common.cache.Cache;
-import com.google.common.cache.CacheBuilder;
 
 public class ObjectTypeCacheImpl implements TypeDefinitionCache {
 	private static final long serialVersionUID = 1L;
-	private static Cache<String, TypeDefinition> cache;
-	static {
-		cache = CacheBuilder.newBuilder()
-				.expireAfterWrite(1, TimeUnit.DAYS)
-				.build();
-	}
+
+    private Map<String, TypeDefinition> cache = new HashMap<String, TypeDefinition>();
 
 	@Override
 	public void initialize(BindingSession session) {
@@ -32,17 +28,17 @@ public class ObjectTypeCacheImpl implements TypeDefinitionCache {
 
 	@Override
 	public TypeDefinition get(String repositoryId, String typeId) {
-		return cache.getIfPresent(typeId);
+        return cache.get(typeId);
 	}
 
 	@Override
 	public void remove(String repositoryId, String typeId) {
-		cache.invalidate(typeId);
+        cache.remove(typeId);
 	}
 
 	@Override
 	public void remove(String repositoryId) {
-		cache.invalidateAll();
+        cache.clear();
 	}
 
 	@Override
