@@ -9,10 +9,6 @@ public interface FolderService {
 
 	Folder getRootNode(Session session);
 
-	boolean isLeaf(Session session, Folder parentFolder);
-
-	boolean isLeaf(Session session, String parentFolderId);
-
 	ItemIterable<QueryResult> getFolderTree(Session session,
 			Folder parentFolder, boolean communityRoot);
 
