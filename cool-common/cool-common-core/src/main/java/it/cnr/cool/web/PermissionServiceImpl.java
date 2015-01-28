@@ -2,20 +2,17 @@ package it.cnr.cool.web;
 
 import it.cnr.cool.cmis.service.CMISService;
 import it.cnr.cool.mail.MailService;
+import it.cnr.cool.repository.PermissionRepository;
 import it.cnr.cool.security.service.UserService;
 import it.cnr.cool.security.service.impl.alfresco.CMISGroup;
 import it.cnr.cool.security.service.impl.alfresco.CMISUser;
 
-import java.io.IOException;
-import java.io.InputStream;
+import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpSession;
 
-import org.apache.chemistry.opencmis.client.api.Session;
-import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,14 +21,16 @@ import org.springframework.mail.MailException;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import com.google.gson.JsonParseException;
 import com.google.gson.JsonParser;
 import com.google.gson.JsonPrimitive;
 
 public class PermissionServiceImpl implements PermissionService {
 
+    @Autowired
+    private CMISService cmisService;
 
-	private String rbacPath;
+    @Autowired
+    private PermissionRepository permissionRepository;
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(PermissionServiceImpl.class);
 
@@ -42,12 +41,7 @@ public class PermissionServiceImpl implements PermissionService {
 	private static final String MESSAGE_TEMPLATE = "%s is %s to %s %s";
 
 	@Autowired
-	private CMISService cmisService;
-
-	@Autowired
 	private MailService mailService;
-
-	private JsonObject json = null;
 
 	protected UserService userService;
 
@@ -55,19 +49,16 @@ public class PermissionServiceImpl implements PermissionService {
 		this.userService = userService;
 	}
 
-	@PostConstruct
-	public void loadPermission() {
-		try {
-			Session session = cmisService.createAdminSession();
-			InputStream is = cmisService.getDocumentInputStream(session,
-					rbacPath);
-			String s = IOUtils.toString(is);
-			json = new JsonParser().parse(s).getAsJsonObject();
-		} catch (IOException e) {
-			LOGGER.error("error retrieving permissions", e);
-		} catch (JsonParseException e) {
-			LOGGER.error("error retrieving permissions", e);
-		}
+
+    public String getRbacAsString() {
+        return permissionRepository.getRbac();
+    }
+
+
+	public JsonObject loadPermission() {
+        LOGGER.info("loading RBAC, maybe cached one...");
+        String s = getRbacAsString();
+        return new JsonParser().parse(s).getAsJsonObject();
 	}
 
 
@@ -89,14 +80,14 @@ public class PermissionServiceImpl implements PermissionService {
 	 */
 	public boolean delete(String id, methods method, lists list, types type,
 			String authority) {
-
-		loadPermission();
-
 		return doDelete(id, method, list, type, authority);
 	}
 
 	private boolean doDelete(String id, methods method, lists list, types type,
 			String authority) {
+
+        JsonObject json = loadPermission();
+        
 		if (json.has(id)){
 			JsonObject jsonId = json.get(id).getAsJsonObject();
 			if(jsonId.has(method.toString())){
@@ -112,7 +103,7 @@ public class PermissionServiceImpl implements PermissionService {
 						jsonList.remove(type.toString());
 
 						LOGGER.debug(jsonList.toString());
-						return update();
+						return update(json);
 
 					} else if (jsonList.has(type.toString())) {
 						JsonArray jsonPermission = jsonList.get(type.toString())
@@ -133,7 +124,7 @@ public class PermissionServiceImpl implements PermissionService {
 							jsonList.add(type.toString(), updatedAuthorities);
 
 							LOGGER.debug(jsonList.toString());
-							return update();
+							return update(json);
 						}
 					}
 				}
@@ -157,7 +148,7 @@ public class PermissionServiceImpl implements PermissionService {
 			throw new IllegalArgumentException();
 		}
 
-		loadPermission();
+        JsonObject json = loadPermission();
 
 		if (!json.has(id)) {
 			json.add(id, new JsonObject());
@@ -174,7 +165,6 @@ public class PermissionServiceImpl implements PermissionService {
 		// rimuovi dalla blackist, se presente
 		if(jsonMethod.has(lists.blacklist.toString())) {
 			doDelete(id, method, lists.blacklist, types.all, "true");
-//			loadPermission();
 //			jsonMethod = json.get(id).getAsJsonObject().get(method.toString()).getAsJsonObject();
 		}
 
@@ -188,7 +178,7 @@ public class PermissionServiceImpl implements PermissionService {
 		}
 
 		LOGGER.debug(jsonId.toString());
-		return update();
+		return update(json);
 	}
 
 	/**
@@ -206,7 +196,7 @@ public class PermissionServiceImpl implements PermissionService {
 			throw new IllegalArgumentException();
 		}
 
-		loadPermission();
+        JsonObject json = loadPermission();
 
 		if (!json.has(id)) {
 			json.add(id, new JsonObject());
@@ -238,7 +228,7 @@ public class PermissionServiceImpl implements PermissionService {
 		}
 
 		LOGGER.debug(jsonId.toString());
-		return update();
+		return update(json);
 	}
 
 	/**
@@ -281,7 +271,7 @@ public class PermissionServiceImpl implements PermissionService {
 			throw new IllegalArgumentException();
 		}
 
-		loadPermission();
+        JsonObject json = loadPermission();
 
 		if (!json.has(id)) {
 			json.add(id, new JsonObject());
@@ -314,22 +304,9 @@ public class PermissionServiceImpl implements PermissionService {
 		}
 
 		LOGGER.debug(jsonId.toString());
-		return update();
+		return update(json);
 	}
 
-
-	private boolean update() {
-
-		LOGGER.debug(json.toString());
-		try {
-			Session session = cmisService.createAdminSession();
-			cmisService.updateDocument(session, rbacPath, json.toString());
-		} catch (Exception e) {
-			return false;
-		}
-
-		return true;
-	}
 
 
 
@@ -349,6 +326,31 @@ public class PermissionServiceImpl implements PermissionService {
 		return authorized;
 	}
 
+    boolean isAuthorized(String id, String method, CMISUser user) {
+
+        if (user == null) {
+            user = new CMISUser("guest");
+        }
+
+        String username = user.getId();
+
+        List<String> groups = new ArrayList<String>();
+
+        if (user.getGroups() != null) {
+            for (CMISGroup g : user.getGroups()) {
+                groups.add(g.getGroup_name());
+            }
+        }
+
+        if (!username.equals("guest") ) {
+            groups.add("GROUP_EVERYONE");
+        }
+
+        return isAuthorized(id, method, username, groups);
+
+    }
+
+
 	/**
 	 *
 	 * Check if user is authorized to access the functionality "id" with method
@@ -356,35 +358,22 @@ public class PermissionServiceImpl implements PermissionService {
 	 *
 	 * @param id
 	 * @param method
-	 * @param user
+	 * @param username
 	 * @return true if user is authorized to access the functionality "id" with
 	 *         method "method"
 	 */
-	public boolean isAuthorized(String id, String method, CMISUser user) {
+	public boolean isAuthorized(String id, String method, String username, List<String> groups) {
 
-		if (user == null)
-			user = new CMISUser("guest");
-
-		String username = user.getId();
-
-		List<String> groups = new ArrayList<String>();
-
-		if (user.getGroups() != null) {
-			for (CMISGroup g : user.getGroups()) {
-				groups.add(g.getGroup_name());
-			}
-		}
-		if (!username.equals("guest") )
-			groups.add("GROUP_EVERYONE");
+        JsonObject json = loadPermission();
 
 		id = id.replaceAll("^/+", "");
 
 		if (json == null) {
 			LOGGER.error("permissions error");
 			try {
-				mailService.send("Permissions error on cool", "Offending request id:"+id+", method:"+method+", user"+user);
+				mailService.send("Permissions error on cool", "Offending request id:"+id+", method:"+method+", user"+username);
 			} catch (MailException e) {
-				LOGGER.warn("unable to send mail: Offending request id:"+id+", method:"+method+", user"+user, e);
+				LOGGER.warn("unable to send mail: Offending request id:"+id+", method:"+method+", user"+ username, e);
 			}
 			return false;
 		}
@@ -448,12 +437,10 @@ public class PermissionServiceImpl implements PermissionService {
 		return false;
 	}
 
-	public JsonObject getJson() {
-		return json;
-	}
 
-	public void setRbacPath(String rbacPath) {
-		LOGGER.info("using RBAC " + rbacPath);
-		this.rbacPath = rbacPath;
-	}
+    public boolean update (JsonObject j) {
+        return permissionRepository.update(j.toString());
+    }
+
+
 }

@@ -2,6 +2,7 @@ package it.cnr.cool.rest;
 
 import it.cnr.cool.security.SecurityChecked;
 import it.cnr.cool.service.workflow.WorkflowService;
+import it.cnr.cool.web.PermissionService;
 import it.cnr.cool.web.PermissionServiceImpl;
 
 import javax.ws.rs.DELETE;
@@ -21,8 +22,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.google.gson.JsonObject;
-
 @Path("rbac")
 @Component
 @SecurityChecked
@@ -34,7 +33,7 @@ public class RBACRest {
 	private WorkflowService workflowService;
 
 	@Autowired
-	private PermissionServiceImpl permission;
+	private PermissionService permissionService;
 
 	@POST
 	public Response post(@FormParam("id") String id,
@@ -49,7 +48,7 @@ public class RBACRest {
 
 		LOGGER.info("inserting " + item.toString());
 
-		if (!permission.add(item.getId(), item.getMethod(), item.getList(),
+		if (!permissionService.add(item.getId(), item.getMethod(), item.getList(),
 				item.getType(), item.getAuthority())) {
 
 			builder = Response.status(Status.INTERNAL_SERVER_ERROR)
@@ -69,9 +68,9 @@ public class RBACRest {
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response get() throws Exception {
-		JsonObject content = permission.getJson();
+		String content = permissionService.getRbacAsString();
 		ResponseBuilder rb = Response.status(Status.OK).entity(
-				content.toString());
+				content);
 		return rb.build();
 	}
 
@@ -90,7 +89,7 @@ public class RBACRest {
 
 		LOGGER.info("deleting " + item.toString());
 
-		if (!permission.delete(item.getId(), item.getMethod(), item.getList(),
+		if (!permissionService.delete(item.getId(), item.getMethod(), item.getList(),
 				item.getType(), item.getAuthority())) {
 
 			builder = Response.status(Status.INTERNAL_SERVER_ERROR)

@@ -3,11 +3,14 @@ package it.cnr.cool.service.workflow;
 import it.cnr.cool.cmis.service.CMISService;
 import it.cnr.cool.cmis.service.CacheService;
 import it.cnr.cool.cmis.service.UserCache;
+import it.cnr.cool.security.service.impl.alfresco.CMISGroup;
 import it.cnr.cool.security.service.impl.alfresco.CMISUser;
-import it.cnr.cool.web.PermissionServiceImpl;
+import it.cnr.cool.web.PermissionService;
 
 import java.io.InputStreamReader;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.apache.chemistry.opencmis.client.bindings.impl.CmisBindingsHelper;
@@ -29,7 +32,7 @@ public class WorkflowService implements UserCache, InitializingBean{
 	@Autowired
 	private CMISService cmisService;
 	@Autowired
-	private PermissionServiceImpl permission;
+	private PermissionService permissionService;
 	@Autowired
 	private CacheService cacheService;
 
@@ -64,8 +67,24 @@ public class WorkflowService implements UserCache, InitializingBean{
 			for (int i = 0; i < definitions.size(); i++) {
 				JsonObject definition = definitions.get(i).getAsJsonObject();
 				String workflowName = definition.get("name").getAsString();
-				boolean isAuthorized = permission.isAuthorized(workflowName, "GET",
-						user);
+
+				boolean isAuthorized;
+
+                if (user != null) {
+                    List<String> groups = new ArrayList();
+
+                    if (user.getGroups() != null) {
+                        for (CMISGroup g : user.getGroups()) {
+                            groups.add(g.getGroup_name());
+                        }
+                    }
+
+                    isAuthorized = permissionService.isAuthorized(workflowName, "GET",
+                            user.getId(), groups);
+                } else {
+                    isAuthorized = false;
+                }
+
 				LOGGER.debug(workflowName + " "
 						+ (isAuthorized ? "authorized" : "unauthorized"));
 				if (isAuthorized) {

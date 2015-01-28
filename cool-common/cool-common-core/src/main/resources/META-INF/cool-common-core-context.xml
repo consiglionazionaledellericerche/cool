@@ -11,9 +11,14 @@
 		<property name="dictionaryTypeId" value="D:cm:dictionaryModel" />
 	</bean>
 
-	<bean id="permission" class="it.cnr.cool.web.PermissionServiceImpl">
+
+	<bean id="permissionRepository" class="it.cnr.cool.repository.PermissionRepository">
 		<property name="rbacPath" value="${rbac.path}" />
 	</bean>
+
+	<bean id="permission" class="it.cnr.cool.web.PermissionServiceImpl" depends-on="permissionRepository">
+	</bean>
+
 
 	<bean id="cmisBaseCriteria" class="it.cnr.cool.cmis.service.CMISBaseCriteria" />
 
@@ -92,7 +97,6 @@
 	<bean id="groupService"
 		class="it.cnr.cool.security.service.impl.alfresco.GroupServiceImpl">
 	</bean>
-
 
 	<bean id="zoneService" class="it.cnr.cool.service.security.ZoneService" />
 

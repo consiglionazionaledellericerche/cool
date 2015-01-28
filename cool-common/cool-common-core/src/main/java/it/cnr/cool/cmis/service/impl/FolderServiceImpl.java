@@ -25,8 +25,8 @@ import org.apache.chemistry.opencmis.commons.exceptions.CmisContentAlreadyExists
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-
-import com.google.common.cache.CacheBuilder;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.stereotype.Repository;
 
 public class FolderServiceImpl implements FolderService {
 	private static final Logger LOGGER = LoggerFactory
@@ -41,10 +41,6 @@ public class FolderServiceImpl implements FolderService {
 	private Folder dataDictionary;
 
 	protected String dataDictionaryPath;
-
-	private final com.google.common.cache.Cache<String, Boolean> leafCache = CacheBuilder
-			.newBuilder().expireAfterWrite(60, TimeUnit.MINUTES)
-			.maximumSize(1000).build();
 
 	public void setDataDictionaryPath(String dataDictionaryPath) {
 		this.dataDictionaryPath = dataDictionaryPath;
@@ -75,8 +71,7 @@ public class FolderServiceImpl implements FolderService {
 				cmisDefaultOperationContext);
 	}
 
-	@Override
-	public boolean isLeaf(Session session, String parentFolderId) {
+	private boolean isLeaf(Session session, String parentFolderId) {
 		Criteria criteria = CriteriaFactory
 				.createCriteria(BaseTypeId.CMIS_FOLDER.value());
 		criteria.addColumn(PropertyIds.OBJECT_ID);
@@ -92,34 +87,22 @@ public class FolderServiceImpl implements FolderService {
 	}
 
 	/**
-	 * 
+	 *
 	 * Check if a folder contains subfolders or is leaf
-	 * 
+	 *
 	 * @param nodeRef
 	 * @param cmisSession
 	 * @return true if node is leaf
 	 */
 	@Override
+    @Cacheable("isLeaf")
 	public Boolean cachedIsLeaf(final String nodeRef, final Session cmisSession) {
-
-		Boolean isLeaf = false;
-		try {
-			isLeaf = leafCache.get(nodeRef, new Callable<Boolean>() {
-				@Override
-				public Boolean call() throws Exception {
-					return isLeaf(cmisSession, nodeRef);
-				}
-			});
-		} catch (ExecutionException e) {
-			LOGGER.warn("unable to evaluate isLeaf for node " + nodeRef);
-		}
-
-		return isLeaf;
-
+        LOGGER.debug("cachable isLeaf " + nodeRef);
+		return isLeaf(cmisSession, nodeRef);
 	}
 
-	@Override
-	public boolean isLeaf(Session session, Folder parentFolder) {
+
+	private boolean isLeaf(Session session, Folder parentFolder) {
 		return isLeaf(session, parentFolder.getId());
 	}
 

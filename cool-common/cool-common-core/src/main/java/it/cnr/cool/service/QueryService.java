@@ -43,7 +43,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.google.common.cache.CacheBuilder;
 import com.google.gson.Gson;
 
 public class QueryService implements GlobalCache, InitializingBean{
@@ -65,10 +64,7 @@ public class QueryService implements GlobalCache, InitializingBean{
 	@Autowired
 	private CacheService cacheService;
 
-	// cache nodes parents
-	private final com.google.common.cache.Cache<String, List<Folder>> nodeParentsCache = CacheBuilder
-			.newBuilder().expireAfterWrite(60, TimeUnit.MINUTES)
-			.maximumSize(100).build();
+	private Map<String, List<Folder>> nodeParentsCache = new HashMap();
 
 	public Map<String, Object> query(HttpServletRequest req) {
 
@@ -417,16 +413,18 @@ public class QueryService implements GlobalCache, InitializingBean{
 				.getPropertyValueById(PropertyIds.OBJECT_ID);
 		try {
 			// get parents from cache, if present
-			List<Folder> parents = nodeParentsCache.get(objectId,
-					new Callable<List<Folder>>() {
-						@Override
-						public List<Folder> call() throws Exception {
-							FileableCmisObject cmisObject = (FileableCmisObject) cmisSession
-									.getObject(objectId);
-							List<Folder> parents = cmisObject.getParents();
-							return parents;
-						}
-					});
+
+            List<Folder> parents;
+
+            if (nodeParentsCache.containsKey(objectId)) {
+                parents = nodeParentsCache.get(objectId);
+            } else {
+                FileableCmisObject cmisObject = (FileableCmisObject) cmisSession
+                        .getObject(objectId);
+                List<Folder> parentsz = cmisObject.getParents();
+                nodeParentsCache.put(objectId, parentsz);
+                parents = parentsz;
+            }
 
 			Map<String, Object> rels = new HashMap<String, Object>();
 			for (CmisObject parent : parents) {
@@ -452,8 +450,6 @@ public class QueryService implements GlobalCache, InitializingBean{
 			}
 		} catch (CmisPermissionDeniedException _ex) {
 			LOGGER.warn("Parent is not visible", _ex);
-		} catch (ExecutionException e) {
-			LOGGER.warn("Cache Exception", e);
 		}
 	}
 
@@ -464,12 +460,13 @@ public class QueryService implements GlobalCache, InitializingBean{
 
 	@Override
 	public void clear() {
-		nodeParentsCache.invalidateAll();
+		nodeParentsCache.clear();
 	}
 
 	@Override
 	public String get() {
-		return new Gson().toJson(nodeParentsCache.asMap().keySet());
+
+        return new Gson().toJson(nodeParentsCache.keySet());
 	}
 
 	@Override
