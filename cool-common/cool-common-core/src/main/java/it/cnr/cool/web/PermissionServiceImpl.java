@@ -7,7 +7,6 @@ import it.cnr.cool.security.service.UserService;
 import it.cnr.cool.security.service.impl.alfresco.CMISGroup;
 import it.cnr.cool.security.service.impl.alfresco.CMISUser;
 
-import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -51,7 +50,7 @@ public class PermissionServiceImpl implements PermissionService {
 
 
     public String getRbacAsString() {
-        LOGGER.debug("requested RBAC, could be already cached");
+        LOGGER.debug("requested RBAC, could be already cache");
         return permissionRepository.getRbac();
     }
 
@@ -88,7 +87,7 @@ public class PermissionServiceImpl implements PermissionService {
 			String authority) {
 
         JsonObject json = loadPermission();
-        
+
 		if (json.has(id)){
 			JsonObject jsonId = json.get(id).getAsJsonObject();
 			if(jsonId.has(method.toString())){
@@ -317,7 +316,7 @@ public class PermissionServiceImpl implements PermissionService {
 
 		CMISUser user = cmisService.getCMISUserFromSession(session);
 		// se l'utente non è loggato => user = null
-		boolean authorized = isAuthorized(id, method, user);
+		boolean authorized = isAuthorizedCMIS(id, method, user);
 		String message = String.format(MESSAGE_TEMPLATE, user == null ? "guest" : user.getId(), authorized ? "authorized" : "unauthorized", method, id);
 		if (authorized) {
 			LOGGER.debug(message);
@@ -327,7 +326,7 @@ public class PermissionServiceImpl implements PermissionService {
 		return authorized;
 	}
 
-    public boolean isAuthorized(String id, String method, CMISUser user) {
+    public boolean isAuthorizedCMIS(String id, String method, CMISUser user) {
 
         if (user == null) {
             user = new CMISUser("guest");

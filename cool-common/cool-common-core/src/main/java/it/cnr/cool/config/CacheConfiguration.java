@@ -1,4 +1,4 @@
-package it.cnr.doccnr.config;
+package it.cnr.cool.config;
 
 import com.hazelcast.config.Config;
 import com.hazelcast.core.HazelcastInstance;

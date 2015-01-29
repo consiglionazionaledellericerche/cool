@@ -33,26 +33,26 @@ public class PermissionTest {
 	// guest and unlisted webscript
 	@Test
 	public void testUnlistedFunctionality() {
-		assertFalse(p.isAuthorized("unlistedWebScript", GET, getUser("guest")));
+		assertFalse(p.isAuthorizedCMIS("unlistedWebScript", GET, getUser("guest")));
 	}
 
 
 	// per-user permission
 	@Test
 	public void testAllowedUser() {
-		assertTrue(p.isAuthorized(WORKFLOW_ASSOCIATION, GET, getUser("spaclient")));
+		assertTrue(p.isAuthorizedCMIS(WORKFLOW_ASSOCIATION, GET, getUser("spaclient")));
 	}
 
 	@Test
 	public void testForbiddenUser() {
-		assertFalse(p.isAuthorized(TEST_WEBSCRIPT, GET, getUser("francesco.uliana")));
+		assertFalse(p.isAuthorizedCMIS(TEST_WEBSCRIPT, GET, getUser("francesco.uliana")));
 	}
 
 	@Test
 	public void testAllowedUserForbiddenGroup() {
 		List<String> groups = new ArrayList<String>();
 		groups.add("itc");
-		assertTrue(p.isAuthorized(TEST_WEBSCRIPT, GET, getUser("abc", groups)));
+		assertTrue(p.isAuthorizedCMIS(TEST_WEBSCRIPT, GET, getUser("abc", groups)));
 	}
 
 
@@ -61,14 +61,14 @@ public class PermissionTest {
 	public void testForbiddenGroup() {
 		List<String> groups = new ArrayList<String>();
 		groups.add("itc");
-		assertFalse(p.isAuthorized(TEST_WEBSCRIPT, GET, getUser("itc", groups)));
+		assertFalse(p.isAuthorizedCMIS(TEST_WEBSCRIPT, GET, getUser("itc", groups)));
 	}
 
 	@Test
 	public void testAllowedGroup() {
 		List<String> groups = new ArrayList<String>();
 		groups.add("si");
-		assertTrue(p.isAuthorized(TEST_WEBSCRIPT, POST, getUser("somebody", groups)));
+		assertTrue(p.isAuthorizedCMIS(TEST_WEBSCRIPT, POST, getUser("somebody", groups)));
 	}
 
 	// multiple groups
@@ -77,18 +77,18 @@ public class PermissionTest {
 		List<String> groups = new ArrayList<String>();
 		groups.add("itc");
 		groups.add("si");
-		assertTrue(p.isAuthorized(TEST_WEBSCRIPT, POST, getUser("somebody", groups)));
+		assertTrue(p.isAuthorizedCMIS(TEST_WEBSCRIPT, POST, getUser("somebody", groups)));
 	}
 
 	// all allowed/forbidden
 	@Test
 	public void testAllowedAll(){
-		assertTrue(p.isAuthorized("i18n", GET, getUser("somebody")));
+		assertTrue(p.isAuthorizedCMIS("i18n", GET, getUser("somebody")));
 	}
 
 	@Test
 	public void testForbiddenAll() {
-		assertFalse(p.isAuthorized("/private", GET, getUser("somebody")));
+		assertFalse(p.isAuthorizedCMIS("/private", GET, getUser("somebody")));
 	}
 
 	@Test
@@ -100,9 +100,9 @@ public class PermissionTest {
 		PermissionServiceImpl.types type = PermissionServiceImpl.types.user;
 		String authority = "francesco.uliana";
 
-		assertFalse(p.isAuthorized(id, method.toString(), getUser(authority)));
+		assertFalse(p.isAuthorizedCMIS(id, method.toString(), getUser(authority)));
 		assertTrue(p.add(id, method, list, type, authority));
-		assertTrue(p.isAuthorized(id, method.toString(), getUser(authority)));
+		assertTrue(p.isAuthorizedCMIS(id, method.toString(), getUser(authority)));
 	}
 	
 	@Test
@@ -114,7 +114,7 @@ public class PermissionTest {
 		PermissionServiceImpl.types type = PermissionServiceImpl.types.user;
 		String authority = "francesco.uliana";
 
-		//assertFalse(p.isAuthorized(id, method, getUser(authority)));
+		//assertFalse(p.isAuthorizedCMIS(id, method, getUser(authority)));
 		try {
 			assertTrue(p.add(id, method, list, type, authority));		
 			assertTrue(false); // Exception expected: fail
@@ -203,7 +203,7 @@ public class PermissionTest {
 		String authority = "francesco.uliana";
 
 		try {
-			assertFalse(p.isAuthorized(id, method.toString(), getUser(authority)));
+			assertFalse(p.isAuthorizedCMIS(id, method.toString(), getUser(authority)));
 			assertTrue(p.add(id, method, list, type, authority));
 		} catch (IllegalArgumentException exp) {
 			// no-action
@@ -220,7 +220,7 @@ public class PermissionTest {
 		String authority = "";
 
 		try {
-			assertFalse(p.isAuthorized(id, method.toString(), getUser(authority)));
+			assertFalse(p.isAuthorizedCMIS(id, method.toString(), getUser(authority)));
 			assertTrue(p.add(id, method, list, type, authority));
 		} catch (IllegalArgumentException exp) {
 			// no-action
@@ -235,7 +235,7 @@ public class PermissionTest {
 		String authority = "paolo.cirone";
 		
 		assertTrue(p.enableAll(id, method));
-		assertTrue(p.isAuthorized(id, method.toString(), getUser(authority)));
+		assertTrue(p.isAuthorizedCMIS(id, method.toString(), getUser(authority)));
 	}
 
 	@Test
@@ -246,7 +246,7 @@ public class PermissionTest {
 		String authority = "paolo.cirone";
 		
 		assertTrue(p.disableAll(id, method));
-		assertFalse(p.isAuthorized(id, method.toString(), getUser(authority)));
+		assertFalse(p.isAuthorizedCMIS(id, method.toString(), getUser(authority)));
 	}
 	
 	@Test
@@ -259,9 +259,9 @@ public class PermissionTest {
 		PermissionServiceImpl.types type = PermissionServiceImpl.types.user;
 		String authority = "spaclient";
 
-		assertTrue(p.isAuthorized(id, method.toString(), getUser(authority)));
+		assertTrue(p.isAuthorizedCMIS(id, method.toString(), getUser(authority)));
 		assertTrue(p.delete(id, method, list, type, authority));
-		assertFalse(p.isAuthorized(id, method.toString(), getUser(authority)));
+		assertFalse(p.isAuthorizedCMIS(id, method.toString(), getUser(authority)));
 	}
 
 	
@@ -274,9 +274,9 @@ public class PermissionTest {
 		PermissionServiceImpl.types type = PermissionServiceImpl.types.user;
 		String authority = "spaclient";
 
-		assertFalse(p.isAuthorized(id, method.toString(), getUser(authority)));
+		assertFalse(p.isAuthorizedCMIS(id, method.toString(), getUser(authority)));
 		assertTrue(p.delete(id, method, list, type, authority));
-		assertFalse(p.isAuthorized(id, method.toString(), getUser(authority)));
+		assertFalse(p.isAuthorizedCMIS(id, method.toString(), getUser(authority)));
 	}
 
 	
