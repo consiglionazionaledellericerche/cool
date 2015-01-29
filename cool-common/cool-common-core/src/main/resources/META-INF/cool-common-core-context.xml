@@ -36,6 +36,8 @@
 					value="${org.apache.chemistry.opencmis.binding.readtimeout}" />
 				<entry key="org.apache.chemistry.opencmis.binding.httpinvoker.classname"
 					value="${org.apache.chemistry.opencmis.binding.httpinvoker.classname}" />
+				<entry key="org.apache.chemistry.opencmis.session.repository.id"
+					value="${org.apache.chemistry.opencmis.session.repository.id}" />
 				<entry key="user.guest.username" value="${user.guest.username}" />
 				<entry key="user.guest.password" value="${user.guest.password}" />
 				<entry key="user.admin.username" value="${user.admin.username}" />
