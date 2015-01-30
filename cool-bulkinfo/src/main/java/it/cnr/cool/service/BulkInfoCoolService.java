@@ -45,7 +45,6 @@ public class BulkInfoCoolService {
     @Autowired
     private VersionService versionService;
 
-	private static final long CACHE_MAXIMUM_SIZE = 1000;
 	private static final String RESOURCE_PATH = "/bulkInfo/";
 
 	Map<String, BulkInfoCool> bulkInfoCache = new HashMap();

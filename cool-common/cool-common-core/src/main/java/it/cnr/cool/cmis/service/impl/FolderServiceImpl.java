@@ -9,9 +9,6 @@ import it.spasia.opencmis.criteria.restrictions.Restrictions;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.Callable;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.TimeUnit;
 import java.util.regex.Pattern;
 
 import org.apache.chemistry.opencmis.client.api.Folder;
@@ -26,7 +23,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
-import org.springframework.stereotype.Repository;
 
 public class FolderServiceImpl implements FolderService {
 	private static final Logger LOGGER = LoggerFactory

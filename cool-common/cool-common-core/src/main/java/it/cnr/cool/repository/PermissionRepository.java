@@ -1,6 +1,5 @@
 package it.cnr.cool.repository;
 
-import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 import it.cnr.cool.cmis.service.CMISService;
 import org.apache.chemistry.opencmis.client.api.Session;
@@ -10,7 +9,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Repository;
 
 import java.io.IOException;
