@@ -7,24 +7,25 @@ import it.cnr.cool.service.QueryService;
 import it.cnr.cool.util.CalendarUtil;
 import it.cnr.mock.ISO8601DateFormatMethod;
 import it.cnr.mock.JSONUtils;
-
-import java.io.IOException;
-import java.util.Map;
+import org.apache.chemistry.opencmis.commons.exceptions.CmisUnauthorizedException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.ws.rs.*;
+import javax.ws.rs.GET;
+import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.CacheControl;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.ResponseBuilder;
 import javax.ws.rs.core.Response.Status;
-
-import org.apache.chemistry.opencmis.commons.exceptions.CmisUnauthorizedException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+import java.io.IOException;
+import java.util.Map;
 
 @Path("search")
 @Component
@@ -111,8 +112,7 @@ public class Search {
 			String fileName = "query";
 			if(model.containsKey("nameBando")) {
 				fileName = ((String) model.get("nameBando"));
-				//replace caratteri che non possono comparire nel nome del file in windows
-				fileName = fileName.replaceAll("[“”\"\\/:*<>|]", "").replace("\\", "");
+				fileName = refactoringFileName(fileName, "");
 			}
 
 			rb.header("Content-Disposition",
@@ -122,6 +122,11 @@ public class Search {
 			rb = Response.status(Status.INTERNAL_SERVER_ERROR);
 		}
 		return rb.build();
+	}
+
+	//replace caratteri che non possono comparire nel nome del file in windows
+	public static String refactoringFileName(String fileName, String newString) {
+		return fileName.replaceAll("[“”\"\\/:*<>| ’']", newString).replace("\\", newString);
 	}
 
 	public static String getJson(Map<String, Object> model) throws TemplateException, IOException {
