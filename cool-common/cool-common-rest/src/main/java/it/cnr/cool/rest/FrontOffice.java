@@ -5,29 +5,18 @@ import it.cnr.cool.rest.util.Util;
 import it.cnr.cool.security.SecurityChecked;
 import it.cnr.cool.service.frontOffice.FrontOfficeService;
 import it.cnr.cool.service.frontOffice.TypeDocument;
-
-import java.util.Enumeration;
-import java.util.HashMap;
-import java.util.Map;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.ws.rs.DELETE;
-import javax.ws.rs.DefaultValue;
-import javax.ws.rs.FormParam;
-import javax.ws.rs.GET;
-import javax.ws.rs.HeaderParam;
-import javax.ws.rs.POST;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
-import javax.ws.rs.QueryParam;
+import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.ResponseBuilder;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+import java.util.Enumeration;
+import java.util.HashMap;
+import java.util.Map;
 
 @Path("frontOffice")
 @Component
@@ -103,22 +92,18 @@ public class FrontOffice {
         for (String key : (Iterable<String>) req.getParameterMap().keySet()) {
             requestParameter.put(key, req.getParameter(key));
         }
-		Map<String, Object> model = frontOfficeService.post(
-				req.getServerName(), req.getContextPath(), req.getRemoteAddr(),
+		return frontOfficeService.post(req.getRemoteAddr(),
 				userAgent, requestHeader, requestParameter,
 				TypeDocument.fromValue("log"), stackTrace);
-		return model;
 	}
 
 	@POST
 	public Map<String, Object> post(@Context HttpServletRequest req,
 			@FormParam("stackTrace") String stackTrace,
 			@FormParam("type_document") String type_document) {
-		Map<String, Object> model = frontOfficeService.post(
-				req.getServerName(), req.getContextPath(), req.getRemoteAddr(),
+		return frontOfficeService.post(req.getRemoteAddr(),
 				null, null, null, TypeDocument.fromValue(type_document),
 				stackTrace);
-		return model;
 	}
 
 	@DELETE

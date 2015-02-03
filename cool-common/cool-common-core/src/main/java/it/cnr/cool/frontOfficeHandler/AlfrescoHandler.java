@@ -270,7 +270,7 @@ public class AlfrescoHandler implements ILoggerHandler {
 		}
 		if (!root.getAsJsonObject().get(CoolPropertyIds.NOTICE_TITLE.value())
 				.isJsonNull()
-				|| root.get(CoolPropertyIds.NOTICE_TITLE.value()).getAsString() != "") {
+				|| ! root.get(CoolPropertyIds.NOTICE_TITLE.value()).getAsString().equals("")) {
 			String title = root.get(CoolPropertyIds.NOTICE_TITLE.value())
 					.getAsString();
 			properties.put(CoolPropertyIds.NOTICE_TITLE.value(), title);

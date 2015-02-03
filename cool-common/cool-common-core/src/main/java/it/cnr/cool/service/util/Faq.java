@@ -19,7 +19,7 @@ public class Faq extends AlfrescoDocument {
 	public Faq(QueryResult doc) {
 		super(doc);
 		type = doc.getPropertyValueById(CoolPropertyIds.FAQ_TYPE.value());
-		dataPubblicazione = DATEFORMAT.format(( (GregorianCalendar) doc.getPropertyValueById(CoolPropertyIds.FAQ_DATA.value())).getTime());
+		dataPubblicazione = ALFRESCO_DATE_FORMAT.format(( (GregorianCalendar) doc.getPropertyValueById(CoolPropertyIds.FAQ_DATA.value())).getTime());
 		number = doc.getPropertyValueById(CoolPropertyIds.FAQ_NUMBER.value());
 		answer = doc.getPropertyValueById(CoolPropertyIds.FAQ_ANSWER.value());
 		faqBando = doc.getPropertyValueById(CoolPropertyIds.FAQ_TYPE.value());

@@ -57,7 +57,7 @@ public class FaqTest {
 				+ "\",\"faq:number\":\"10022\",\"faq:show\":\"true\"}";
 
 		// Post
-		Map<String, Object> mapPost = frontOfficeService.post(null, null, null,
+		Map<String, Object> mapPost = frontOfficeService.post(null,
 				null, null, null, TypeDocument.Faq, stackTrace);
 		nodeRefFaq = (String) mapPost.get("objectId");
 		assertTrue(nodeRefFaq != null);
@@ -113,7 +113,7 @@ public class FaqTest {
 				+ answerUpdate
 				+ "\",\"faq:number\":\"10022\",\"faq:show\":\"true\",\"nodeRefToEdit\":\""
 				+ nodeRefFaq + "\"}";
-		nodeRefFaq = (String) frontOfficeService.post(null, null, null, null,
+		nodeRefFaq = (String) frontOfficeService.post(null, null,
 				null, null, TypeDocument.Faq, stackTraceUpdate).get("objectId");
 		CmisObject faq = adminSession.getObject(nodeRefFaq);
 

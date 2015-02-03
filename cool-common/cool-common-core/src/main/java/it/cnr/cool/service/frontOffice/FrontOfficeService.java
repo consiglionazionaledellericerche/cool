@@ -1,5 +1,8 @@
 package it.cnr.cool.service.frontOffice;
 
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParseException;
+import com.google.gson.JsonParser;
 import it.cnr.cool.cmis.model.CoolPropertyIds;
 import it.cnr.cool.exception.CoolClientException;
 import it.cnr.cool.frontOfficeHandler.AlfrescoHandler;
@@ -14,25 +17,7 @@ import it.spasia.opencmis.criteria.Criteria;
 import it.spasia.opencmis.criteria.CriteriaFactory;
 import it.spasia.opencmis.criteria.Order;
 import it.spasia.opencmis.criteria.restrictions.Restrictions;
-
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Calendar;
-import java.util.GregorianCalendar;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.TimeZone;
-
-import org.apache.chemistry.opencmis.client.api.Document;
-import org.apache.chemistry.opencmis.client.api.ItemIterable;
-import org.apache.chemistry.opencmis.client.api.ObjectId;
-import org.apache.chemistry.opencmis.client.api.OperationContext;
-import org.apache.chemistry.opencmis.client.api.QueryResult;
-import org.apache.chemistry.opencmis.client.api.Session;
+import org.apache.chemistry.opencmis.client.api.*;
 import org.apache.chemistry.opencmis.client.runtime.ObjectIdImpl;
 import org.apache.chemistry.opencmis.client.runtime.OperationContextImpl;
 import org.apache.chemistry.opencmis.commons.PropertyIds;
@@ -41,9 +26,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParseException;
-import com.google.gson.JsonParser;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 
 public class FrontOfficeService{
@@ -130,7 +114,7 @@ public class FrontOfficeService{
 		return result;
 	}
 
-	public Map<String, Object> post(String serverName, String contexPath, String ip, String userAgent, HashMap<String, String> requestHeader, HashMap<String, String> requestParameter, TypeDocument typeDocument, String stackTrace) {
+	public Map<String, Object> post(String ip, String userAgent, HashMap<String, String> requestHeader, HashMap<String, String> requestParameter, TypeDocument typeDocument, String stackTrace) {
 		Map<String, Object> model = new HashMap<String, Object>();
 		String objectId = null;
 		try{
@@ -229,11 +213,10 @@ public class FrontOfficeService{
 
 		// con editor=false prende solo gli avvisi ancora validi(notice:dataScadenza >= oggi && notice:data(data di pubblicazione)<= oggi) altrimenti prende tutti gli avvisi
 		if (!editor) {
-			criteria.add(Restrictions.ge(CoolPropertyIds.NOTICE_SCADENZA.value(), getOrarioUTC()));
-			criteria.add(Restrictions.le(CoolPropertyIds.NOTICE_DATA.value(), getOrarioUTC()));
+			criteria.add(Restrictions.ge(CoolPropertyIds.NOTICE_SCADENZA.value(), getNowUTC()));
+			criteria.add(Restrictions.le(CoolPropertyIds.NOTICE_DATA.value(), getNowUTC()));
 		}
-		ItemIterable<QueryResult> queryResult = criteria.executeQuery(cmisSession, false, frontOfficeOperationContext);
-		return queryResult;
+		return criteria.executeQuery(cmisSession, false, frontOfficeOperationContext);
 	}
 
 
@@ -266,11 +249,10 @@ public class FrontOfficeService{
 
 		//con editor=FALSE prende solo le Faq da pubblicare (dataPubblicazione <= oggi) e flaq di visualizzazione settato a TRUE altrimenti prende tutte le Faq
 		if (!editor) {
-			criteria.add(Restrictions.le(CoolPropertyIds.FAQ_DATA.value(),  getOrarioUTC()));
+			criteria.add(Restrictions.le(CoolPropertyIds.FAQ_DATA.value(),  getNowUTC()));
 			criteria.add(Restrictions.eq(CoolPropertyIds.FAQ_SHOW.value(), true));
 		}
-		ItemIterable<QueryResult> queryResult = criteria.executeQuery(cmisSession, false, frontOfficeOperationContext);
-		return queryResult;
+		return criteria.executeQuery(cmisSession, false, frontOfficeOperationContext);
 	}
 
 
@@ -305,13 +287,11 @@ public class FrontOfficeService{
 			criteria.add(Restrictions.between(PropertyIds.CREATION_DATE, startDate.getTime(), endDate.getTime(), false, true, false));
 
 		criteria.addOrder(Order.desc(PropertyIds.CREATION_DATE));
-		ItemIterable<QueryResult> queryResult = criteria.executeQuery(cmisSession, false, frontOfficeOperationContext);
-		return queryResult;
+		return criteria.executeQuery(cmisSession, false, frontOfficeOperationContext);
 	}
 
-	private String getOrarioUTC(){
+	public static String getNowUTC(){
 		Calendar ora = Calendar.getInstance();
-		String oraUTC = FORMATTER_ALFRESCO.format(ora.getTime());
-		return oraUTC;
+		return FORMATTER_ALFRESCO.format(ora.getTime());
 	}
 }
