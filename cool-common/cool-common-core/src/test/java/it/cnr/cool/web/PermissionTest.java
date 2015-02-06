@@ -2,15 +2,27 @@ package it.cnr.cool.web;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
+
+import it.cnr.cool.cmis.service.CMISService;
+import it.cnr.cool.repository.PermissionRepository;
 import it.cnr.cool.security.service.impl.alfresco.CMISGroup;
 import it.cnr.cool.security.service.impl.alfresco.CMISUser;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.chemistry.opencmis.client.api.Session;
+import org.apache.commons.io.IOUtils;
+import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.annotation.DirtiesContext.ClassMode;
 import org.springframework.test.context.ContextConfiguration;
@@ -27,8 +39,36 @@ public class PermissionTest {
 	private static final String POST = "POST";
 	private static final String GET = "GET";
 
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(PermissionTest.class);
+
 	@Autowired
 	private PermissionServiceImpl p;
+
+    @Autowired
+    private CMISService cmisService;
+
+    private String content;
+
+    @Autowired
+    PermissionRepository permissionRepository;
+
+    @Value("${rbac.path}")
+    private String rbacPath;
+
+    @Before
+    public void before() throws IOException {
+        Session session = cmisService.createAdminSession();
+        InputStream is = cmisService.getDocumentInputStream(session, rbacPath);
+        content = IOUtils.toString(is);
+    }
+
+    @After
+    public void after () {
+        //Session session = cmisService.createAdminSession();
+        //cmisService.updateDocument(session, rbacPath, content);
+        permissionRepository.update(content);
+    }
 
 	// guest and unlisted webscript
 	@Test
@@ -244,7 +284,7 @@ public class PermissionTest {
 		String id = "webscript1";
 		PermissionServiceImpl.methods method = PermissionServiceImpl.methods.GET;
 		String authority = "paolo.cirone";
-		
+
 		assertTrue(p.disableAll(id, method));
 		assertFalse(p.isAuthorizedCMIS(id, method.toString(), getUser(authority)));
 	}

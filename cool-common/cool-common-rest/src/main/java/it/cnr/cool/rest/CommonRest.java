@@ -61,8 +61,7 @@ public class CommonRest {
 
 			model.put("artifact_version", versionService.getVersion());
 
-			CMISUser user = cmisService.getCMISUserFromSession(req
-					.getSession(false));
+			CMISUser user = cmisService.getCMISUserFromSession(req);
 
 			BindingSession bindingSession = cmisService
 					.getCurrentBindingSession(req);

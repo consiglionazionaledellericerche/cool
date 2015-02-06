@@ -39,7 +39,7 @@ public class FrontOffice {
 			@QueryParam("before") String before,
 			@QueryParam("filterAnswer") String filterAnswer) {
 		ResponseBuilder builder = Response.ok(frontOfficeService.getFaq(
-				cmisService.getCurrentCMISSession(req.getSession(false)),
+				cmisService.getCurrentCMISSession(req),
 				after, before, typeBando, editor, filterAnswer));
 		// setto Faq e Notice cachabili per un'ora, le altre risorse devono
 		// avere un timestamp nella URL
@@ -55,7 +55,7 @@ public class FrontOffice {
 			@QueryParam("after") String after,
 			@QueryParam("before") String before) {
 		ResponseBuilder builder = Response.ok(frontOfficeService.getNotice(
-				cmisService.getCurrentCMISSession(req.getSession(false)),
+				cmisService.getCurrentCMISSession(req),
 				cmisService.createAdminSession(),after, before, editor, typeBando));
 		builder.cacheControl(Util.getCache(3600));
 		return builder.build();
@@ -71,7 +71,7 @@ public class FrontOffice {
 			@QueryParam("userLog") String userLog) {
 		Map<String, Object> model = new HashMap<String, Object>();
 		model.put("docs", frontOfficeService.getLog(
-				cmisService.getCurrentCMISSession(req.getSession(false)),
+				cmisService.getCurrentCMISSession(req),
 				after, before, application, typeLog, userLog));
 		return Response.ok(model).build();
 	}
@@ -114,7 +114,7 @@ public class FrontOffice {
 			@PathParam("store_id") String store_id, @PathParam("id") String id) {
 		Map<String, Object> model = new HashMap<String, Object>();
 		frontOfficeService.deleteSingleNode(
-				cmisService.getCurrentCMISSession(req.getSession(false)),
+				cmisService.getCurrentCMISSession(req),
 				store_type + "://" + store_id + "/" + id);
 		model.put("totalNumItems", 1);
 		return model;

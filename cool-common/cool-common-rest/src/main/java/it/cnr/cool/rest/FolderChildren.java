@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
+
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
@@ -53,16 +53,14 @@ public class FolderChildren {
 	public Response getChildren(@Context HttpServletRequest req,
 			@QueryParam("parentFolderId") String parentFolderId) {
 
-		HttpSession session = req.getSession(false);
-		String username = (String) session
-				.getAttribute(CMISAuthenticatorFactory.SESSION_ATTRIBUTE_KEY_USER_ID);
+        String username = cmisService.getCMISUserFromSession(req).getId();
 
 		ArrayList<AlfrescoFolder> model;
 		Response response;
 
 		try {
 			model = folderChildrenService.get(
-					cmisService.getCurrentCMISSession(session), parentFolderId,
+					cmisService.getCurrentCMISSession(req), parentFolderId,
 					username);
 			response = Response.ok(model).build();
 		} catch (CmisRuntimeException e) {
@@ -75,8 +73,7 @@ public class FolderChildren {
 	@GET
 	@Path("root")
 	public Map<String, Object> getRoot(@Context HttpServletRequest req) {
-		HttpSession session = req.getSession(false);
-		Session cmisSession = cmisService.getCurrentCMISSession(session);
+		Session cmisSession = cmisService.getCurrentCMISSession(req);
 		Folder folder = folderService.getRootNode(cmisSession);
 
 		List<String> actions = getActions(folder);

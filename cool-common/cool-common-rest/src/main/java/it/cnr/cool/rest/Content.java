@@ -9,7 +9,7 @@ import java.io.OutputStream;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
+
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.QueryParam;
@@ -41,8 +41,7 @@ public class Content {
 			@QueryParam("nodeRef") String nodeRef,
 			@QueryParam("deleteAfterDownload") Boolean deleteAfterDownload) {
 
-		HttpSession session = req.getSession(false);
-		Session cmisSession = cmisService.getCurrentCMISSession(session);
+		Session cmisSession = cmisService.getCurrentCMISSession(req);
 
 		Document document;
 

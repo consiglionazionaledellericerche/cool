@@ -58,7 +58,7 @@ public class BulkInfoRest {
 		ResponseBuilder builder;
 		Map<String, Object> model;
 
-		Session session = cmisService.getCurrentCMISSession(req.getSession(false));
+		Session session = cmisService.getCurrentCMISSession(req);
 
 		try {
 			model = bulkInfoCoolService

@@ -2,13 +2,14 @@ package it.cnr.cool.rest;
 
 import static org.junit.Assert.assertEquals;
 import it.cnr.cool.cmis.service.CMISService;
+import it.cnr.cool.cmis.service.LoginException;
 import it.cnr.cool.interceptor.ProxyInterceptor;
 import it.cnr.cool.util.MimeTypes;
 
 import java.io.IOException;
 
 import javax.servlet.ServletOutputStream;
-import javax.servlet.http.HttpSession;
+
 
 import org.json.JSONObject;
 import org.junit.Ignore;
@@ -83,13 +84,13 @@ public class ProxyTest {
 	}
 
 	@Test
-	public void testPut() throws IOException {
+	public void testPut() throws IOException, LoginException {
 
 		MockHttpServletRequest req = new MockHttpServletRequest();
 
-		HttpSession session = req.getSession();
-		session.setAttribute(CMISService.BINDING_SESSION,
-				cmisService.createBindingSession("admin", "admin"));
+        String ticket = cmisService.getTicket("admin", "admin");
+
+        req.addHeader(CMISService.AUTHENTICATION_HEADER, ticket);
 
 		req.setParameter(URL, "service/api/people/" + username);
 		req.setContentType(MimeTypes.JSON.mimetype());

@@ -13,7 +13,7 @@ import java.io.IOException;
 import java.util.Locale;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
+
 import javax.ws.rs.core.MultivaluedHashMap;
 import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.core.Response;
@@ -48,7 +48,7 @@ public class SecurityRestTest implements InstanceTestClassListener{
 	private static final String URL = "url";
 
 	@Autowired
-	private SecurityRest security;	
+	private SecurityRest security;
 	@Autowired
 	private Proxy proxy;
 	@Autowired
@@ -68,14 +68,14 @@ public class SecurityRestTest implements InstanceTestClassListener{
 		form.add("lastName", "PAPERINO");
 		form.add("email", "pippo.paperino@pluto.it");
 		form.add("codicefiscale", "SPSMRC73H02C495");
-		
+
 		Response outcome = security.doCreateUser(req, form, "it");
 		assertEquals(Status.INTERNAL_SERVER_ERROR.getStatusCode(), outcome.getStatus());
-		
+
 		form.remove("codicefiscale");
 		form.add("codicefiscale", "SSSSSS73H02C495G");
 		outcome = security.doCreateUser(req, form, "it");
-		assertEquals(Status.OK.getStatusCode(), outcome.getStatus());		
+		assertEquals(Status.OK.getStatusCode(), outcome.getStatus());
 	}
 
 	@Test
@@ -92,15 +92,15 @@ public class SecurityRestTest implements InstanceTestClassListener{
 		assertEquals(Status.SEE_OTHER.getStatusCode(), response.getStatus());
 		assertTrue(response.getHeaderString("Location").contains("failure=yes"));
 	}
-	
+
 	@Test
 	public void test3ConfirmAccount() throws Exception {
-		CMISUser user = userService.loadUserForConfirm(NEWUSERNAME);		
+		CMISUser user = userService.loadUserForConfirm(NEWUSERNAME);
 		MockHttpServletRequest req = new MockHttpServletRequest();
 		Response response = security.confirmAccount(req, NEWUSERNAME, user.getPin());
 		assertEquals(Status.SEE_OTHER.getStatusCode(), response.getStatus());
 	}
-	
+
 	@Test
 	public void test4Login() throws Exception {
 		MockHttpServletRequest req = new MockHttpServletRequest();
@@ -108,7 +108,7 @@ public class SecurityRestTest implements InstanceTestClassListener{
 		assertEquals(Status.SEE_OTHER.getStatusCode(), response.getStatus());
 		assertTrue(response.getHeaderString("Location").equals("/home"));
 	}
-	
+
 	@Test
 	public void test5ForgotPassword() {
 		MockHttpServletRequest req = new MockHttpServletRequest();
@@ -143,8 +143,6 @@ public class SecurityRestTest implements InstanceTestClassListener{
 	public void test7ChangePassword(){
 		HttpServletRequest req = new MockHttpServletRequest();
 
-		HttpSession session = req.getSession();
-		session.setAttribute("_alf_USER_OBJECT", new CMISUser("someone"));
 
 		Response response = security.changePassword(req, USERNAME, "", "");
 
@@ -162,9 +160,6 @@ public class SecurityRestTest implements InstanceTestClassListener{
 	@Test
 	public void test8ChangePasswordPin() throws CoolUserFactoryException {
 		HttpServletRequest req = new MockHttpServletRequest();
-
-		HttpSession session = req.getSession();
-		session.setAttribute("_alf_USER_OBJECT", new CMISUser("someone"));
 
 		CMISUser user = userService.loadUserForConfirm(NEWUSERNAME);
 
@@ -192,14 +187,12 @@ public class SecurityRestTest implements InstanceTestClassListener{
 	public void afterClassSetup() {
 		MockHttpServletRequest req = new MockHttpServletRequest();
 		req.setParameter(URL, "service/api/people/" + NEWUSERNAME);
-		HttpSession session = req.getSession();
-		session.setAttribute(CMISService.BINDING_SESSION, cmisService.getAdminSession());		
 		MockHttpServletResponse res = new MockHttpServletResponse();
 		try {
 			proxy.delete(req, res);
 		} catch (IOException e) {
 		}
 		assertEquals(HttpStatus.OK.value(), res.getStatus());
-		
+
 	}
 }

@@ -9,7 +9,7 @@ import java.util.Map;
 import com.google.gson.annotations.SerializedName;
 
 public class CMISUser implements java.security.Principal, Serializable {
-	
+
 	public static final long serialVersionUID = 1L;
 	private Map<String, Boolean> immutability;
 	private String userName;
@@ -20,7 +20,7 @@ public class CMISUser implements java.security.Principal, Serializable {
 	private String telephone;
 	private String mobile;
 	private Boolean enabled;
-	
+
 	public static final String CAPABILITY_ADMIN = "isAdmin";
 	public static final String CAPABILITY_GUEST = "isGuest";
 	public static final String CAPABILITY_MUTABLE = "isMutable";
@@ -32,9 +32,6 @@ public class CMISUser implements java.security.Principal, Serializable {
 	protected final Map<String, Serializable> map = new HashMap<String, Serializable>(
 			32);
 
-	/** User object key in the session */
-	public static String SESSION_ATTRIBUTE_KEY_USER_OBJECT = "_alf_USER_OBJECT";
-
 	protected final Map<String, Boolean> capabilities = new HashMap<String, Boolean>();
 
 	/** Attributi CNR */
@@ -42,15 +39,15 @@ public class CMISUser implements java.security.Principal, Serializable {
 	private Integer matricola;
 	@SerializedName("cnrperson:emailesterno")
 	private String emailesterno;
-	@SerializedName("cnrperson:emailcertificatoperpuk")	
+	@SerializedName("cnrperson:emailcertificatoperpuk")
 	private String emailcertificatoperpuk;
 	@SerializedName("cnrperson:codicefiscale")
 	private String codicefiscale;
-	@SerializedName("cnrperson:dataDiNascita")	
+	@SerializedName("cnrperson:dataDiNascita")
 	private Date dataDiNascita;
 	@SerializedName("cnrperson:straniero")
 	private Boolean straniero;
-	@SerializedName("cnrperson:sesso")	
+	@SerializedName("cnrperson:sesso")
 	private String sesso;
 	@SerializedName("cnrperson:statoestero")
 	private String statoestero;
@@ -58,7 +55,7 @@ public class CMISUser implements java.security.Principal, Serializable {
 	private String pin;
 
 	private Boolean ldapuser;
-		
+
 	private Boolean disableAccount;
 	private List<CMISGroup> groups;
 
@@ -68,7 +65,7 @@ public class CMISUser implements java.security.Principal, Serializable {
 	public CMISUser(String userName) {
 		this.userName = userName;
 	}
-	
+
 	public void setUserName(String userName) {
 		this.userName = userName;
 	}
@@ -76,7 +73,7 @@ public class CMISUser implements java.security.Principal, Serializable {
 	public void setCapabilities(Map<String, Boolean> capabilities) {
 		this.capabilities.putAll(capabilities);
 	}
-	
+
 	public Map<String, Boolean> getImmutability() {
 		return immutability;
 	}
@@ -84,7 +81,7 @@ public class CMISUser implements java.security.Principal, Serializable {
 	public void setImmutability(Map<String, Boolean> immutability) {
 		this.immutability = immutability;
 	}
-		
+
 	public String getId() {
 		return userName;
 	}
@@ -210,7 +207,7 @@ public class CMISUser implements java.security.Principal, Serializable {
 	public void setLdapuser(Boolean ldapuser) {
 		this.ldapuser = ldapuser;
 	}
-	
+
 	public Integer getMatricola() {
 		return matricola;
 	}
@@ -257,7 +254,7 @@ public class CMISUser implements java.security.Principal, Serializable {
 
 	/**
 	 * Returns <code>true</code> if this user is a guest user
-	 * 
+	 *
 	 * @return <code>true</code> if this user is a guest user
 	 */
 	public boolean isGuest() {
@@ -268,18 +265,18 @@ public class CMISUser implements java.security.Principal, Serializable {
 	/**
 	 * Provides the full name for the user. This makes a best attempt at
 	 * building the full name based on what it knows about the user.
-	 * 
+	 *
 	 * If a first name is not known, the returned name will be the user id of
 	 * the user.
-	 * 
+	 *
 	 * If a first name is known, then the first name will be returned. If a
 	 * first and middle name are known, then the first and middle name will be
 	 * returned.
-	 * 
+	 *
 	 * Valid full names are therefore:
-	 * 
+	 *
 	 * jsmith Joe Joe D Joe Smith Joe D Smith
-	 * 
+	 *
 	 * @return A valid full name
 	 */
 	public String getFullName() {
@@ -311,7 +308,7 @@ public class CMISUser implements java.security.Principal, Serializable {
 
 	/**
 	 * Gets the middle name.
-	 * 
+	 *
 	 * @return the middle name
 	 */
 	public String getMiddleName() {
@@ -320,10 +317,10 @@ public class CMISUser implements java.security.Principal, Serializable {
 
 	/**
 	 * Gets the string property.
-	 * 
+	 *
 	 * @param key
 	 *            the key
-	 * 
+	 *
 	 * @return the string property
 	 */
 	public String getStringProperty(String key) {
@@ -332,7 +329,7 @@ public class CMISUser implements java.security.Principal, Serializable {
 
 	/**
 	 * Checks if is admin.
-	 * 
+	 *
 	 * @return the isAdmin
 	 */
 	public boolean isAdmin() {

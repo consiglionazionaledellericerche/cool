@@ -11,8 +11,9 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
+
 
 import org.apache.chemistry.opencmis.client.api.CmisObject;
 import org.apache.chemistry.opencmis.client.api.Document;
@@ -48,7 +49,7 @@ import com.google.gson.JsonParser;
 
 public class CMISService implements InitializingBean, CMISSessionManager {
 
-	static final Locale DEFAULT_LOCALE = Locale.ITALY;
+    static final Locale DEFAULT_LOCALE = Locale.ITALY;
 
 	private static final int SESSION_DURATION_MINUTES = 5; // TODO: gestire la scadenza di un ticket in seguito a riavvio Alfresco
 
@@ -59,6 +60,7 @@ public class CMISService implements InitializingBean, CMISSessionManager {
     public static final String SIPER_BINDING_SESSION = "siper.binding.session";
     public static final String QUERY_RESULT = "cmis.query.result";
     public static final String TOTAL_NUM_ITEMS = "cmis.query.total.num.items";
+    public static final String AUTHENTICATION_HEADER = "X-alfresco-ticket";
 
     // service dependencies
     @Autowired
@@ -78,6 +80,9 @@ public class CMISService implements InitializingBean, CMISSessionManager {
     private static SessionFactory sessionFactory = SessionFactoryImpl.newInstance();
     @Autowired
     private OperationContext cmisDefaultOperationContext;
+
+    @Autowired
+    private CmisAuthRepository cmisAuthRepository;
 
 
 	private String repositoryId;
@@ -339,49 +344,6 @@ public class CMISService implements InitializingBean, CMISSessionManager {
 
 	}
 
-	@Override
-	public Session getCurrentCMISSession(HttpSession se) {
-		if (se == null) {
-			return createSession();
-		} else {
-			if (se.getAttribute(CMISService.DEFAULT_SERVER) == null)
-				se.setAttribute(CMISService.DEFAULT_SERVER, createSession());
-			return (Session) se.getAttribute(CMISService.DEFAULT_SERVER);
-		}
-	}
-
-	public BindingSession getSiperCurrentBindingSession(HttpSession se) {
-
-        if (se == null) {
-            return createBindingSession();
-        } else {
-    		if (se.getAttribute(CMISService.SIPER_BINDING_SESSION) == null)
-    			se.setAttribute(CMISService.SIPER_BINDING_SESSION,
-    					createBindingSession(cmisConfig.getServerParameters().get(CMISConfig.ADMIN_USERNAME),
-    							cmisConfig.getServerParameters().get(CMISConfig.ADMIN_PASSWORD)));
-        }
-		return (BindingSession)se.getAttribute(CMISService.SIPER_BINDING_SESSION);
-	}
-
-	public BindingSession getCurrentBindingSession(HttpServletRequest req) {
-		HttpSession httpSession = req.getSession(false);
-        BindingSession bindingSession;
-
-        if (httpSession == null) {
-            bindingSession = createBindingSession();
-        } else {
-            if (httpSession.getAttribute(CMISService.BINDING_SESSION) == null) {
-                bindingSession = createBindingSession();
-                httpSession.setAttribute(CMISService.BINDING_SESSION, bindingSession);
-            } else {
-                bindingSession = (BindingSession) httpSession.getAttribute(CMISService.BINDING_SESSION);
-            }
-
-        }
-
-        return bindingSession;
-
-	}
 
 	@Override
 	public void afterPropertiesSet() throws Exception {
@@ -413,21 +375,6 @@ public class CMISService implements InitializingBean, CMISSessionManager {
 		return new Date().getTime() + (1000 * 60 * SESSION_DURATION_MINUTES);
 	}
 
-	public CMISUser getCMISUserFromSession(HttpSession session) {
-
-		CMISUser user = null;
-
-		if (session != null) {
-			user = ((CMISUser) session
-					.getAttribute(CMISUser.SESSION_ATTRIBUTE_KEY_USER_OBJECT));
-			LOGGER.debug("Retrieved from session user "
-					+ (user == null ? "guest" : user.getId()));
-		} else {
-			LOGGER.debug("session is null, return CMISUser null");
-		}
-
-		return user;
-	}
 
 	/**
 	 * Gets the HTTP Invoker object.
@@ -492,5 +439,92 @@ public class CMISService implements InitializingBean, CMISSessionManager {
 		}
 		return result;
 	}
+
+
+    public BindingSession getCurrentBindingSession(HttpServletRequest req) {
+
+        String ticket = extractTicketFromRequest(req);
+
+        SessionImpl bindingSession;
+
+        if (ticket == null) {
+            bindingSession = createBindingSession();
+            LOGGER.info("empty ticket, returning guest binding session");
+        } else {
+            bindingSession = cmisAuthRepository.getBindingSession(ticket);
+            LOGGER.info("retrieved binding session: " + bindingSession);
+        }
+
+
+
+        return bindingSession;
+    }
+
+
+    public Session getCurrentCMISSession(HttpServletRequest req) {
+
+        String ticket = extractTicketFromRequest(req);
+
+        if (ticket == null) {
+            LOGGER.info("cmis session nulla, returning guest session");
+            return createSession();
+        } else {
+            LOGGER.info("sessione: " + ticket);
+
+            Session session = cmisAuthRepository.getSession(ticket);
+            return session;
+        }
+
+
+    }
+
+
+    public CMISUser getCMISUserFromSession(HttpServletRequest request) {
+        String ticket = extractTicketFromRequest(request);
+        CMISUser user = cmisAuthRepository.getCachedCMISUser(ticket);
+
+        if (user == null) {
+            LOGGER.info("user is null, assuming aguest");
+            user = new CMISUser("guest");
+
+            Map<String, Boolean> capabilities = new HashMap<String, Boolean>();
+            capabilities.put(CMISUser.CAPABILITY_GUEST, true);
+            user.setCapabilities(capabilities);
+
+        } else {
+            LOGGER.info("retrieved user " + user.getId());
+        }
+        return user;
+    }
+
+    private String extractTicketFromRequest(HttpServletRequest req) {
+        String ticket = req.getHeader(AUTHENTICATION_HEADER);
+        
+        if (ticket != null) {
+            LOGGER.info("extracted ticket: " + ticket);
+        } else {
+            Cookie[] cookies = req.getCookies();
+
+            if (cookies != null && cookies.length > 0) {
+                for (Cookie cookie : cookies) {
+                    if (cookie.getName().equals("ticket")) {
+                        LOGGER.info("using ticket given by cookie");
+                        ticket = cookie.getValue();
+                    }
+                }
+            }
+
+        }
+
+        return ticket;
+    }
+
+
+    @Deprecated
+    public BindingSession getSiperCurrentBindingSession(HttpServletRequest request) {
+        throw new RuntimeException("implementare estrazione del SIPER CMIS Binding Session  dalla request!");
+    }
+
+
 
 }

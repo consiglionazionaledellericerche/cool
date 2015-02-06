@@ -3,14 +3,12 @@ package it.cnr.cool.service.workflow;
 import it.cnr.cool.cmis.service.CMISService;
 import it.cnr.cool.cmis.service.CacheService;
 import it.cnr.cool.cmis.service.UserCache;
-import it.cnr.cool.security.service.impl.alfresco.CMISGroup;
 import it.cnr.cool.security.service.impl.alfresco.CMISUser;
+import it.cnr.cool.util.GroupsUtils;
 import it.cnr.cool.web.PermissionService;
 
 import java.io.InputStreamReader;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import org.apache.chemistry.opencmis.client.bindings.impl.CmisBindingsHelper;
@@ -71,16 +69,10 @@ public class WorkflowService implements UserCache, InitializingBean{
 				boolean isAuthorized;
 
                 if (user != null) {
-                    List<String> groups = new ArrayList();
 
-                    if (user.getGroups() != null) {
-                        for (CMISGroup g : user.getGroups()) {
-                            groups.add(g.getGroup_name());
-                        }
-                    }
 
                     isAuthorized = permissionService.isAuthorized(workflowName, "GET",
-                            user.getId(), groups);
+                            user.getId(), GroupsUtils.getGroups(user));
                 } else {
                     isAuthorized = false;
                 }

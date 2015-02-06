@@ -4,14 +4,12 @@ import it.cnr.cool.cmis.service.CMISService;
 import it.cnr.cool.mail.MailService;
 import it.cnr.cool.repository.PermissionRepository;
 import it.cnr.cool.security.service.UserService;
-import it.cnr.cool.security.service.impl.alfresco.CMISGroup;
 import it.cnr.cool.security.service.impl.alfresco.CMISUser;
 
-import java.util.ArrayList;
 import java.util.List;
 
-import javax.servlet.http.HttpSession;
 
+import it.cnr.cool.util.GroupsUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -310,22 +308,6 @@ public class PermissionServiceImpl implements PermissionService {
 
 
 
-	@Override
-	public boolean isAuthorizedSession(String id, String method,
-			HttpSession session) {
-
-		CMISUser user = cmisService.getCMISUserFromSession(session);
-		// se l'utente non è loggato => user = null
-		boolean authorized = isAuthorizedCMIS(id, method, user);
-		String message = String.format(MESSAGE_TEMPLATE, user == null ? "guest" : user.getId(), authorized ? "authorized" : "unauthorized", method, id);
-		if (authorized) {
-			LOGGER.debug(message);
-		} else {
-			LOGGER.info(message);
-		}
-		return authorized;
-	}
-
     public boolean isAuthorizedCMIS(String id, String method, CMISUser user) {
 
         if (user == null) {
@@ -334,13 +316,7 @@ public class PermissionServiceImpl implements PermissionService {
 
         String username = user.getId();
 
-        List<String> groups = new ArrayList<String>();
-
-        if (user.getGroups() != null) {
-            for (CMISGroup g : user.getGroups()) {
-                groups.add(g.getGroup_name());
-            }
-        }
+        List<String> groups = GroupsUtils.getGroups(user);
 
         if (!username.equals("guest") ) {
             groups.add("GROUP_EVERYONE");

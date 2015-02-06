@@ -4,7 +4,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import it.cnr.cool.cmis.service.CMISService;
 
-import javax.servlet.http.HttpSession;
+
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
@@ -31,15 +31,13 @@ public class SearchTest {
 
 	@Autowired
 	private Search search;
-	
+
 	@Autowired
 	private CMISService cmisService;
 
 	@Test
 	public void testProcessRequest() {
 		MockHttpServletRequest request = new MockHttpServletRequest();
-		HttpSession session = request.getSession();
-		session.setAttribute(CMISService.DEFAULT_SERVER, cmisService.createAdminSession());
 		request.addParameter("q", "select * from jconon_call:folder");
 		request.addParameter("calculateTotalNumItems", Boolean.TRUE.toString());
 

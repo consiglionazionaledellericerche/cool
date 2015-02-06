@@ -41,7 +41,8 @@ public class QueryServiceTest {
 		MockHttpServletRequest req = new MockHttpServletRequest();
 		req.setParameter("q", QUERY);
 
-		List<QueryResultImpl> resultSet = getResultSet(req);
+        Session cmisSession = cmisService.createSession();
+        List<QueryResultImpl> resultSet = getResultSet(req, cmisSession);
 
 		assertTrue(resultSet.size() > 0);
 
@@ -61,7 +62,7 @@ public class QueryServiceTest {
 		req.setParameter("fetchCmisObject", Boolean.TRUE.toString());
 		req.setParameter("relationship", "parent");
 
-		Map<String, Object> m = queryService.query(req);
+		Map<String, Object> m = queryService.query(req, cmisSession);
 		Map<String, String> matricole = (Map<String, String>) m.get("matricole");
 		if (matricole != null)
 			assertTrue(matricole.keySet().size() > 0);
@@ -74,7 +75,9 @@ public class QueryServiceTest {
 		req.setParameter("q", QUERY);
 		req.setParameter("fetchCmisObject", Boolean.TRUE.toString());
 
-		List<QueryResultImpl> resultSet = getResultSet(req);
+        Session cmisSession = cmisService.createSession();
+
+		List<QueryResultImpl> resultSet = getResultSet(req, cmisSession);
 
 		assertTrue(resultSet.size() > 0);
 
@@ -93,7 +96,7 @@ public class QueryServiceTest {
 
 		req.setParameter("f", nodeRef);
 
-		List<QueryResultImpl> resultSet = getResultSet(req);
+		List<QueryResultImpl> resultSet = getResultSet(req, session);
 
 		assertTrue(resultSet.size() > 0);
 
@@ -101,8 +104,8 @@ public class QueryServiceTest {
 
 	}
 
-	private List<QueryResultImpl> getResultSet(MockHttpServletRequest req) {
-		Map<String, Object> m = queryService.query(req);
+	private List<QueryResultImpl> getResultSet(MockHttpServletRequest req, Session session) {
+        Map<String, Object> m = queryService.query(req, session);
 		List<QueryResultImpl> resultSet = (List<QueryResultImpl>) m
 				.get("models");
 		return resultSet;

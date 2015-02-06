@@ -114,10 +114,6 @@ public class BulkInfoCoolImpl extends BulkInfoImpl implements BulkInfoCool {
 		}
 	}
 
-	// TODO: ???
-	// HttpSession se = ServletUtil.getRequest().getSession(false);
-	// Session session = (Session)se.getAttribute(CMISService.DEFAULT_SERVER);
-
 	@Override
 	public PropertyDefinition<?> getPropertyDefinition(Session session,
 			CmisObject cmisObject, FieldProperty fieldProperty) {

@@ -3,6 +3,7 @@ package it.cnr.cool.rest;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
 import it.cnr.cool.cmis.service.CMISService;
+import it.cnr.cool.cmis.service.LoginException;
 import org.apache.chemistry.opencmis.client.api.*;
 import org.apache.chemistry.opencmis.client.api.Folder;
 import org.apache.chemistry.opencmis.commons.PropertyIds;
@@ -23,7 +24,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
+
 import javax.ws.rs.core.MultivaluedHashMap;
 import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.core.Response;
@@ -185,9 +186,10 @@ public class NodeTest {
 	}
 
 	@Test
-	public void testGetCmisObjectCachable() {
+	public void testGetCmisObjectCachable() throws LoginException {
 
 		MockHttpServletRequest req = new MockHttpServletRequest();
+        req.addHeader(CMISService.AUTHENTICATION_HEADER, cmisService.getTicket("admin", "admin"));
 		req.setParameter("cachable", "true");
 		req.setParameter("nodeRef", folder.getId());
 
@@ -206,11 +208,10 @@ public class NodeTest {
 	}
 
 	@Test
-	public void testMetadata() {
+	public void testMetadata() throws LoginException {
 
 		MockHttpServletRequest request = new MockHttpServletRequest();
-		HttpSession session = request.getSession();
-		session.setAttribute(CMISService.DEFAULT_SERVER, adminSession);
+        request.addHeader(CMISService.AUTHENTICATION_HEADER, cmisService.getTicket("admin", "admin"));
 		MultivaluedMap<String, String> formParams = new MultivaluedHashMap<String, String>();
 		formParams.add(PropertyIds.OBJECT_TYPE_ID, CMIS_DOCUMENT);
 		long prefix = data.getTime();
@@ -275,6 +276,7 @@ public class NodeTest {
 		HttpServletRequest request = makeRequest("DELETE",
 				"node.delete",
 				nodeRef);
+
 		Response response = node.delete(request);
 		LOGGER.debug(response.getEntity().toString());
 		LOGGER.debug("status: " + response.getStatus());
@@ -298,12 +300,13 @@ public class NodeTest {
 		MockHttpServletRequest request = new MockHttpServletRequest();
 		request.setMethod(method);
 		request.setContentType(contentType);
+        try {
+            request.addHeader(CMISService.AUTHENTICATION_HEADER, cmisService.getTicket("admin", "admin"));
+        } catch (LoginException e) {
+            LOGGER.error("unable to add header auth", e);
+        }
 
-		HttpSession session = request.getSession();
-		session.setAttribute(CMISService.DEFAULT_SERVER,
-				adminSession);
-
-		try {
+        try {
 			InputStream is = getClass().getResourceAsStream("/requests/" + path);
 			String content = IOUtils.toString(is);
 			content = content.replace(PLACEHOLDER, nodeRef);

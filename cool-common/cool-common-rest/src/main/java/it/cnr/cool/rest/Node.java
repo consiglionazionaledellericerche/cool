@@ -139,8 +139,7 @@ public class Node {
 		if (fields != null && fields.length() > 0) {
 			operationContext.setFilterString(fields);
 		}
-		Session cmisSession = cmisService.getCurrentCMISSession(req
-				.getSession(false));
+		Session cmisSession = cmisService.getCurrentCMISSession(req);
 		try {
 			CmisObject cmisObject = cmisSession.getObject(nodeRef, operationContext);
 			model = buildModel(cmisObject);
@@ -169,8 +168,7 @@ public class Node {
 		ResponseBuilder builder = null;
 		Map<String, Object> model = new HashMap<String, Object>();
 		try {
-			Session session = cmisService.getCurrentCMISSession(req
-					.getSession(false));
+			Session session = cmisService.getCurrentCMISSession(req);
 
 			CmisObject cmisObject = nodeMetedataService.updateObjectProperties(
 					RequestUtils.extractFormParams(formParams), session, req);

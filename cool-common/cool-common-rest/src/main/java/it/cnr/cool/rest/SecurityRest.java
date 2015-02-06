@@ -22,7 +22,7 @@ import java.util.Map;
 import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
+
 import javax.ws.rs.Consumes;
 import javax.ws.rs.CookieParam;
 import javax.ws.rs.FormParam;
@@ -32,10 +32,7 @@ import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
-import javax.ws.rs.core.Context;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.MultivaluedMap;
-import javax.ws.rs.core.Response;
+import javax.ws.rs.core.*;
 import javax.ws.rs.core.Response.ResponseBuilder;
 import javax.ws.rs.core.Response.Status;
 
@@ -94,9 +91,8 @@ public class SecurityRest {
 		Map<String, List<String>> values = new HashMap<String, List<String>>();
 		values.putAll(form);
 		try {
-			Map<String, Object> data = createAccountService.update(values, I18nService.getLocale(request, cookieLang));	
-			HttpSession session = request.getSession(false);
-			CMISUser currentUser = cmisService.getCMISUserFromSession(session);
+			Map<String, Object> data = createAccountService.update(values, I18nService.getLocale(request, cookieLang));
+			CMISUser currentUser = cmisService.getCMISUserFromSession(request);
 			CMISUser user = (CMISUser) data.get("user");
 			boolean isLoggedUserData = user.getUserName().equalsIgnoreCase(currentUser.getId());
 
@@ -104,12 +100,12 @@ public class SecurityRest {
 				reloadUserInSession(user, request);
 			}
 			return Response.ok(data).build();
-			
+
 		} catch (Exception e) {
 			return Response.serverError().entity(Collections.singletonMap("message", e.getMessage())).build();
 		}
 	}
-	
+
 	private void reloadUserInSession(CMISUser oldUser, HttpServletRequest request) throws UserFactoryException {
 		CMISUser user;
 		try {
@@ -118,7 +114,6 @@ public class SecurityRest {
 		} catch (CoolUserFactoryException e) {
 			throw new UserFactoryException("Error loading user: " + oldUser.getId(), e);
 		}
-		request.getSession(false).setAttribute(CMISUser.SESSION_ATTRIBUTE_KEY_USER_OBJECT, user);
 	}
 	@POST
 	@Path("change-password")
@@ -128,8 +123,6 @@ public class SecurityRest {
 
 		ResponseBuilder response = null;
 		String error = null;
-
-		HttpSession session = req.getSession(false);
 
 		if (userId == null || userId.isEmpty()) {
 			LOGGER.warn("no userid given");
@@ -147,8 +140,7 @@ public class SecurityRest {
 
 					String currentUserId = null;
 
-					CMISUser cmisUserFromSession = cmisService
-							.getCMISUserFromSession(session);
+					CMISUser cmisUserFromSession = cmisService.getCMISUserFromSession(req);
 
 					if (cmisUserFromSession != null) {
 						currentUserId = cmisUserFromSession.getId();
@@ -169,8 +161,11 @@ public class SecurityRest {
 							user.setPin("");
 							userService.updateUser(user);
 							userService.changeUserPassword(user, password);
-							if (session != null)
-								session.invalidate();
+
+                            LOGGER.warn("annullare la sessione");
+//							if (session != null)
+//								session.invalidate();
+
 							LOGGER.info("updated password for user " + userId);
 							String json = getJson(user);
 							response = Response.ok(json);
@@ -284,38 +279,69 @@ public class SecurityRest {
 			@FormParam("redirect") String redirect,
 			@FormParam("queryString") String queryString) {
 
-		boolean authenticated = cmisAuthenticatorFactory.authenticate(req,
+        String ticket = cmisAuthenticatorFactory.authenticate(req,
 				username, password);
 
-		URI uri;
+		boolean authenticated = ticket != null;
+
+
+
+        ResponseBuilder rb;
+
 
 		if (authenticated) {
+            URI uri;
 			if (queryString != null && queryString.length() > 0)
 				uri = URI.create(redirect + "?" + queryString);
 			else
 				uri = URI.create(redirect);
-		} else {
-			uri = URI.create("../" + Page.LOGIN_URL + "?failure=yes");
+
+            rb = Response.seeOther(uri);
+
+
+
+            //(name, value, null, null, DEFAULT_VERSION, null, DEFAULT_MAX_AGE, null, false, false);
+
+            //String name,     String value,      String path,         String domain,          String comment,
+            //int maxAge,        boolean secure)
+
+            NewCookie cookie = getCookie(ticket);
+
+            rb.cookie(cookie);
+
+        } else {
+			URI uri = URI.create("../" + Page.LOGIN_URL + "?failure=yes");
+            rb = Response.seeOther(uri);
 		}
 
-		return Response.seeOther(uri).build();
+
+		return rb.build();
 
 	}
 
+    private NewCookie getCookie (String ticket) {
+        int maxAge = ticket == null ? 0 : 3600;
+        NewCookie cookie = new NewCookie("ticket", ticket, "/", null, 1, null, maxAge, false);
+        return cookie;
+    }
+
 	@POST
 	@Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
 	@Path(Page.LOGIN_URL)
 	public Response loginJson(@Context HttpServletRequest req,
 			Credentials credentials) {
 
 		String username = credentials.getUsername();
-		boolean authenticated = cmisAuthenticatorFactory.authenticate(req,
+		String ticket = cmisAuthenticatorFactory.authenticate(req,
 				username, credentials.getPassword());
 
 		ResponseBuilder rb;
-		if (authenticated) {
-			rb = Response.ok();
-		} else {
+		if (ticket != null) {
+            Map<String, String> r = new HashMap<>();
+            r.put("ticket", ticket);
+			rb = Response.ok(r);
+        } else {
 			rb = Response.status(Status.FORBIDDEN).entity(
 					"access denied to user " + username);
 		}
@@ -328,10 +354,10 @@ public class SecurityRest {
 	@GET
 	@Path(Page.LOGOUT_URL)
 	public Response logout(@Context HttpServletRequest req) {
-		if (req.getSession(false) != null)
-			req.getSession(false).invalidate();
+
 		URI uri = URI.create("../" + Page.LOGIN_URL);
-		return Response.seeOther(uri).build();
+        NewCookie cookie = getCookie(null);
+        return Response.seeOther(uri).cookie(cookie).build();
 
 	}
 

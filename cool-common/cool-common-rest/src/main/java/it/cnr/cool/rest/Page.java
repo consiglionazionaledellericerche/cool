@@ -7,6 +7,7 @@ import it.cnr.cool.rest.util.Util;
 import it.cnr.cool.security.service.impl.alfresco.CMISUser;
 import it.cnr.cool.service.I18nService;
 import it.cnr.cool.service.PageService;
+import it.cnr.cool.util.GroupsUtils;
 import it.cnr.cool.web.PermissionService;
 
 import java.io.IOException;
@@ -18,7 +19,7 @@ import java.util.Map;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
+
 import javax.ws.rs.CookieParam;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -82,21 +83,21 @@ public class Page {
             cookie.setMaxAge(-1);
             res.addCookie(cookie);
             return reqLang;
-		}		
+		}
 		return lang;
 	}
 
 	private Response processRequest(HttpServletRequest req, HttpServletResponse res, String id,
 			MultivaluedMap<String, String> formParams, String cookieLang, String reqLang) {
 		ResponseBuilder rb;
-		String lang = i18nCookie(res, cookieLang, reqLang);		
+		String lang = i18nCookie(res, cookieLang, reqLang);
 		CoolPage page = pageService.loadPages().get(id);
-		
+
 		if (page == null) {
 			rb = Response
 					.status(Status.NOT_FOUND)
 					.entity("page not found: " + id);
-		} else if (!isAuthorized(page, id, req.getSession(false), formParams != null)) {
+		} else if (!isAuthorized(page, id, cmisService.getCMISUserFromSession(req), formParams != null)) {
 			String baseURI = req.getContextPath() + "/"
 					+ LOGIN_URL + "?redirect=" + id;
 			Map paramz = req.getParameterMap();
@@ -105,7 +106,7 @@ public class Page {
 				if (valuez.length > 0) {
 					baseURI = baseURI.concat("&"+(String) key + "=" + valuez[0]);
 				}
-			}			
+			}
 			URI uri = URI.create(baseURI);
 			rb = Response.seeOther(uri);
 		} else {
@@ -167,13 +168,11 @@ public class Page {
 		return rb.build();
 	}
 
-	private boolean isAuthorized(CoolPage page, String id, HttpSession session, boolean isPost) {
-		
-		CMISUser user = session == null ? null : cmisService
-				.getCMISUserFromSession(session);
-		
+	private boolean isAuthorized(CoolPage page, String id, CMISUser user, boolean isPost) {
+
+
 		boolean authorizedToViewPage;
-		
+
 		if (page.getAuthentication() == CoolPage.Authentication.ADMIN) {
 			LOGGER.debug("page " + page + " requires admin authorization");
 			authorizedToViewPage = user != null && user.isAdmin();
@@ -183,13 +182,13 @@ public class Page {
 		}  else {
 			authorizedToViewPage = true;
 		}
-		
+
 		LOGGER.debug(user + " "
 				+ (authorizedToViewPage ? "authorized" : "unauthorized")
 				+ " to view page, now checking RBAC");
-		
+
 		return authorizedToViewPage
-				&& permissionService.isAuthorizedSession(id, isPost?"POST":"GET", session);
+				&& permissionService.isAuthorized(id, isPost ? "POST" : "GET", user.getId(), GroupsUtils.getGroups(user));
 	}
 
 }

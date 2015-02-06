@@ -22,7 +22,7 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
+
 import java.io.IOException;
 import java.math.BigInteger;
 import java.text.ParseException;
@@ -46,12 +46,11 @@ public class NodeService {
 
 	public List<CmisObject> manageRequest(HttpServletRequest req,
 			boolean isPOST, boolean isDELETE) {
-		HttpSession session = req.getSession(false);
-		Session cmisSession = cmisService.getCurrentCMISSession(session);
+		Session cmisSession = cmisService.getCurrentCMISSession(req);
 		OperationContext oc = new OperationContextImpl(cmisSession.getDefaultContext());
 		oc.setFilterString(PropertyIds.OBJECT_ID);
 		String objectId = req.getParameter(PropertyIds.OBJECT_ID);
-		
+
 		MultipartHttpServletRequest mRequest = resolver.resolveMultipart(req);
 		if (objectId == null) {
 			objectId = mRequest.getParameter(PropertyIds.OBJECT_ID);
@@ -59,7 +58,7 @@ public class NodeService {
 		List<CmisObject> attachments = new ArrayList<CmisObject>();
 
 		if (isPOST) {
-			
+
 			String crudStatus = mRequest.getParameter(CRUD_STATUS);
 			boolean isStatusToBeUpdate = STATUS_TO_BE_UPDATE
 					.equalsIgnoreCase(crudStatus);
@@ -106,7 +105,7 @@ public class NodeService {
 						}
 					}
 				}
-				
+
 
 			} else if (isStatusToBeUpdate) {
 

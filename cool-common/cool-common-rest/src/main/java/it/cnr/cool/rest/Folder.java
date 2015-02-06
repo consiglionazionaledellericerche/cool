@@ -6,7 +6,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
+
 import javax.ws.rs.FormParam;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
@@ -41,8 +41,7 @@ public class Folder {
 			@FormParam("cmis:objectTypeId") String objectTypeId,
 			@FormParam("cmis:parentId") String parentId) {
 
-		HttpSession session = request.getSession(false);
-		Session cmisSession = cmisService.getCurrentCMISSession(session);
+		Session cmisSession = cmisService.getCurrentCMISSession(request);
 
 		Map<String, String> properties = new HashMap<String, String>();
 		properties.put(PropertyIds.NAME, name);

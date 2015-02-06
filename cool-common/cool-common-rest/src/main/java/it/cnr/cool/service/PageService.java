@@ -156,8 +156,7 @@ public class PageService {
 		url.put("context", urlContext);
 		model.put("url", url);
 
-		CMISUser user = cmisService.getCMISUserFromSession(req
-				.getSession(false));
+		CMISUser user = cmisService.getCMISUserFromSession(req);
 		Map<String, Object> context = getContext(user);
 
 		context.put("properties", new HashMap<String, Object>());

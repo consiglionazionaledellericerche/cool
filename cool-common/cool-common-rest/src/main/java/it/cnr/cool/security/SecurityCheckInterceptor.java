@@ -1,13 +1,16 @@
 package it.cnr.cool.security;
 
 
+import it.cnr.cool.cmis.service.CMISService;
+import it.cnr.cool.security.service.impl.alfresco.CMISUser;
+import it.cnr.cool.util.GroupsUtils;
 import it.cnr.cool.web.PermissionService;
 
 import java.io.IOException;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
+
 import javax.ws.rs.container.ContainerRequestContext;
 import javax.ws.rs.container.ContainerRequestFilter;
 import javax.ws.rs.core.Context;
@@ -28,15 +31,19 @@ public class SecurityCheckInterceptor implements ContainerRequestFilter{
 
 	@Autowired
 	private PermissionService permission;
+
+    @Autowired
+    private CMISService cmisService;
+
 	@Context
 	UriInfo uriInfo;
 
 	@Override
 	public void filter(ContainerRequestContext requestContext) throws IOException {
-		HttpSession session = request.getSession(false);
 		Object obj = uriInfo.getMatchedResources().get(0);
 		SecurityChecked sc = obj.getClass().getAnnotation(SecurityChecked.class);
-		if (sc.needExistingSession() && session == null){
+        //TODO: controllare il ticket
+		if (sc.needExistingSession()){
 			requestContext.abortWith(Response.status(Response.Status.UNAUTHORIZED)
 					.entity("Session exipred.").build());
 		}
@@ -44,11 +51,14 @@ public class SecurityCheckInterceptor implements ContainerRequestFilter{
 			String url = removePathParameter(request.getPathInfo(), uriInfo
 					.getPathParameters() );
 			LOGGER.debug(url);
-			if (!permission.isAuthorizedSession(url, request.getMethod(),
-					session)) {
+
+            CMISUser user = cmisService.getCMISUserFromSession(request);
+
+			if (!permission.isAuthorized(url, request.getMethod(),
+                    user.getId(), GroupsUtils.getGroups(user))) {
 				requestContext.abortWith(Response.status(Response.Status.FORBIDDEN)
 						.entity("User cannot access the resource.").build());
-			}			
+			}
 		}
 	}
 
