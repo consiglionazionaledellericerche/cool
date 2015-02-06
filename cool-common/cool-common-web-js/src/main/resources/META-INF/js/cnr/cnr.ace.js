@@ -259,8 +259,9 @@ define(['jquery', 'cnr/cnr', 'cnr/cnr.ui', 'cnr/cnr.ui.authority', 'i18n', 'cnr/
       name : name,
       roles : roles,
       inheritButton : inherit === undefined ? true : inherit
-    };
-    UI.bigmodal('Modifica i permessi ' + (name ? ' di "' + name + '"' : ''), show(objectId, setting));
+    }, content = $('<div><div>').addClass('modal-inner-fix');
+    content.append(show(objectId, setting));
+    UI.bigmodal('Modifica i permessi ' + (name ? ' di "' + name + '"' : ''), content);
   }
 
   return {
