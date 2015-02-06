@@ -1,6 +1,5 @@
 package it.cnr.cool.web;
 
-import it.cnr.cool.cmis.service.CMISService;
 import it.cnr.cool.mail.MailService;
 import it.cnr.cool.repository.PermissionRepository;
 import it.cnr.cool.security.service.UserService;
@@ -24,9 +23,6 @@ import com.google.gson.JsonPrimitive;
 public class PermissionServiceImpl implements PermissionService {
 
     @Autowired
-    private CMISService cmisService;
-
-    @Autowired
     private PermissionRepository permissionRepository;
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(PermissionServiceImpl.class);
@@ -34,8 +30,6 @@ public class PermissionServiceImpl implements PermissionService {
 	private static final String USER = "user";
 	private static final String GROUP = "group";
 	private static final String ALL = "all";
-
-	private static final String MESSAGE_TEMPLATE = "%s is %s to %s %s";
 
 	@Autowired
 	private MailService mailService;

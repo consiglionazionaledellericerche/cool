@@ -2,7 +2,6 @@ package it.cnr.cool.rest;
 
 import it.cnr.cool.cmis.service.CMISService;
 import it.cnr.cool.cmis.service.FolderService;
-import it.cnr.cool.security.CMISAuthenticatorFactory;
 import it.cnr.cool.security.SecurityChecked;
 import it.cnr.cool.service.FolderChildrenService;
 import it.cnr.cool.service.util.AlfrescoFolder;

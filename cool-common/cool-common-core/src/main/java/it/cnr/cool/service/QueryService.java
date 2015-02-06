@@ -1,7 +1,6 @@
 package it.cnr.cool.service;
 
 import it.cnr.cool.cmis.model.CoolPropertyIds;
-import it.cnr.cool.cmis.service.CMISService;
 import it.cnr.cool.cmis.service.CacheService;
 import it.cnr.cool.cmis.service.GlobalCache;
 import it.cnr.cool.exception.CoolUserFactoryException;
@@ -51,9 +50,6 @@ public class QueryService implements GlobalCache, InitializingBean{
 
 	@Autowired
 	private OperationContext cmisAllOperationContext;
-
-	@Autowired
-	private CMISService cmisService;
 
 	@Autowired
 	private UserService userService;

@@ -111,6 +111,7 @@ public class SecurityRest {
 		try {
 			BindingSession bindingSession = cmisService.getCurrentBindingSession(request);
 			user = userService.loadUser(oldUser.getId(), bindingSession);
+            LOGGER.debug("lodad user: " + user.getId());
 		} catch (CoolUserFactoryException e) {
 			throw new UserFactoryException("Error loading user: " + oldUser.getId(), e);
 		}
@@ -163,8 +164,6 @@ public class SecurityRest {
 							userService.changeUserPassword(user, password);
 
                             LOGGER.warn("annullare la sessione");
-//							if (session != null)
-//								session.invalidate();
 
 							LOGGER.info("updated password for user " + userId);
 							String json = getJson(user);
@@ -282,14 +281,9 @@ public class SecurityRest {
         String ticket = cmisAuthenticatorFactory.authenticate(req,
 				username, password);
 
-		boolean authenticated = ticket != null;
-
-
-
         ResponseBuilder rb;
 
-
-		if (authenticated) {
+		if (ticket != null) {
             URI uri;
 			if (queryString != null && queryString.length() > 0)
 				uri = URI.create(redirect + "?" + queryString);
@@ -297,13 +291,6 @@ public class SecurityRest {
 				uri = URI.create(redirect);
 
             rb = Response.seeOther(uri);
-
-
-
-            //(name, value, null, null, DEFAULT_VERSION, null, DEFAULT_MAX_AGE, null, false, false);
-
-            //String name,     String value,      String path,         String domain,          String comment,
-            //int maxAge,        boolean secure)
 
             NewCookie cookie = getCookie(ticket);
 

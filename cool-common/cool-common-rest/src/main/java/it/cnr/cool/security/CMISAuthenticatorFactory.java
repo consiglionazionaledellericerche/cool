@@ -10,7 +10,6 @@ import it.cnr.cool.service.UserFactoryException;
 import javax.servlet.http.HttpServletRequest;
 
 
-import org.apache.chemistry.opencmis.client.api.Session;
 import org.apache.chemistry.opencmis.client.bindings.spi.BindingSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

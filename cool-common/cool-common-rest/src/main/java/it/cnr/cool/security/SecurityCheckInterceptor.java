@@ -42,8 +42,8 @@ public class SecurityCheckInterceptor implements ContainerRequestFilter{
 	public void filter(ContainerRequestContext requestContext) throws IOException {
 		Object obj = uriInfo.getMatchedResources().get(0);
 		SecurityChecked sc = obj.getClass().getAnnotation(SecurityChecked.class);
-        //TODO: controllare il ticket
-		if (sc.needExistingSession()){
+
+		if (sc.needExistingSession() && cmisService.getCMISUserFromSession(request).isGuest() ){
 			requestContext.abortWith(Response.status(Response.Status.UNAUTHORIZED)
 					.entity("Session exipred.").build());
 		}
