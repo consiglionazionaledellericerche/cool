@@ -59,7 +59,6 @@ define(['jquery', 'cnr/cnr.ui', 'json!common', 'i18n', 'json!cache'], function (
         queryExcel: "rest/search/query.xls?guest=true",
         rootFolder : "rest/search/folder/root?guest=true",
         children: "rest/search/folder/children?guest=true",
-        siperAnadip: "search/siper/anadip?guest=true",
         demux: 'rest/proxy' + '?url=service/cnr/utils/demux'
       },
       node: {

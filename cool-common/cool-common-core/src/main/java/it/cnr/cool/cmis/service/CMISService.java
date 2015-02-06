@@ -1,28 +1,10 @@
 package it.cnr.cool.cmis.service;
 
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import it.cnr.cool.cmis.service.impl.ObjectTypeCacheImpl;
 import it.cnr.cool.security.service.impl.alfresco.CMISUser;
-
-import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
-
-import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletRequest;
-
-
-import org.apache.chemistry.opencmis.client.api.CmisObject;
-import org.apache.chemistry.opencmis.client.api.Document;
-import org.apache.chemistry.opencmis.client.api.ObjectType;
-import org.apache.chemistry.opencmis.client.api.OperationContext;
-import org.apache.chemistry.opencmis.client.api.Repository;
-import org.apache.chemistry.opencmis.client.api.SecondaryType;
-import org.apache.chemistry.opencmis.client.api.Session;
-import org.apache.chemistry.opencmis.client.api.SessionFactory;
+import org.apache.chemistry.opencmis.client.api.*;
 import org.apache.chemistry.opencmis.client.bindings.CmisBindingFactory;
 import org.apache.chemistry.opencmis.client.bindings.impl.CmisBindingsHelper;
 import org.apache.chemistry.opencmis.client.bindings.impl.SessionImpl;
@@ -44,8 +26,10 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
+import java.io.InputStream;
+import java.util.*;
 
 public class CMISService implements InitializingBean, CMISSessionManager {
 
@@ -57,7 +41,6 @@ public class CMISService implements InitializingBean, CMISSessionManager {
 
     public static final String DEFAULT_SERVER = "cmis.default";
     public static final String BINDING_SESSION = "cmis.binding.session";
-    public static final String SIPER_BINDING_SESSION = "siper.binding.session";
     public static final String QUERY_RESULT = "cmis.query.result";
     public static final String TOTAL_NUM_ITEMS = "cmis.query.total.num.items";
     public static final String AUTHENTICATION_HEADER = "X-alfresco-ticket";
@@ -499,7 +482,7 @@ public class CMISService implements InitializingBean, CMISSessionManager {
 
     private String extractTicketFromRequest(HttpServletRequest req) {
         String ticket = req.getHeader(AUTHENTICATION_HEADER);
-        
+
         if (ticket != null) {
             LOGGER.info("extracted ticket: " + ticket);
         } else {
@@ -518,13 +501,6 @@ public class CMISService implements InitializingBean, CMISSessionManager {
 
         return ticket;
     }
-
-
-    @Deprecated
-    public BindingSession getSiperCurrentBindingSession(HttpServletRequest request) {
-        throw new RuntimeException("implementare estrazione del SIPER CMIS Binding Session  dalla request!");
-    }
-
 
 
 }

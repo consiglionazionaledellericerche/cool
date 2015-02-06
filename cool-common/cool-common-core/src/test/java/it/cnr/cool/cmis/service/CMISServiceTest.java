@@ -172,21 +172,6 @@ public class CMISServiceTest {
 
 
 	@Test
-    @Ignore
-	public void testGetSiperCurrentBindingSession() {
-
-		BindingSession session = cmisService
-				.getSiperCurrentBindingSession(null);
-		System.out.println(session);
-
-		BindingSession session2 = cmisService
-				.getSiperCurrentBindingSession(null);
-
-		assertEquals(session, session2);
-
-	}
-
-	@Test
 	public void testGetCurrentBindingSession() {
 		HttpServletRequest req = new MockHttpServletRequest();
 		req.getSession();
