@@ -58,8 +58,6 @@
 		<property name="mailErrorEnabled" value="${mail.error.enabled}" />
 	</bean>
 
-	<bean id="cmisBindingListener" class="it.cnr.cool.security.CmisBindingListener" />
-
 	<!-- End CMIS service Bean -->
 
 	<bean id="webframework.factory.user.cmis" class="it.cnr.cool.security.CMISAuthenticatorFactory" />

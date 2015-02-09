@@ -2,7 +2,9 @@ package it.cnr.cool.repository;
 
 import com.google.gson.JsonParseException;
 import it.cnr.cool.cmis.service.CMISService;
+import org.apache.chemistry.opencmis.client.api.Document;
 import org.apache.chemistry.opencmis.client.api.Session;
+import org.apache.chemistry.opencmis.commons.impl.dataobjects.ContentStreamImpl;
 import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -36,7 +38,7 @@ public class PermissionRepository {
 
         try {
             Session session = cmisService.createAdminSession();
-            InputStream is = cmisService.getDocumentInputStream(session,
+            InputStream is = getDocumentInputStream(session,
                     rbacPath);
             return IOUtils.toString(is);
         } catch (IOException e) {
@@ -57,7 +59,7 @@ public class PermissionRepository {
         LOGGER.debug(json);
         try {
             Session session = cmisService.createAdminSession();
-            cmisService.updateDocument(session, rbacPath, json);
+            updateDocument(session, rbacPath, json);
         } catch (Exception e) {
             return false;
         }
@@ -70,5 +72,27 @@ public class PermissionRepository {
         LOGGER.info("using RBAC at path: " + rbacPath);
         this.rbacPath = rbacPath;
     }
+
+
+
+    public InputStream getDocumentInputStream(Session session, String path) {
+        Document document = (Document) session.getObjectByPath(path);
+        return document.getContentStream().getStream();
+    }
+
+
+
+    protected void updateDocument(Session session, String path, String content) {
+
+        Document document = (Document) session.getObjectByPath(path);
+        String name = document.getName();
+        String mimeType = document.getContentStreamMimeType();
+
+        ContentStreamImpl cs = new ContentStreamImpl(name, mimeType, content);
+
+        document.setContentStream(cs, true, true);
+    }
+
+
 
 }

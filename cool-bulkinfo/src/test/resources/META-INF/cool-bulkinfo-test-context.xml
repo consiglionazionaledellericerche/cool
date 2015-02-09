@@ -24,4 +24,6 @@
 
 	<import resource="classpath*:META-INF/cool-common-core-context.xml" />
 
+    <bean class="it.cnr.cool.cmis.service.CmisAuthRepository" />
+
 </beans>

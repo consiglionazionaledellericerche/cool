@@ -1,19 +1,9 @@
 package it.cnr.cool.web;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-
 import it.cnr.cool.cmis.service.CMISService;
 import it.cnr.cool.repository.PermissionRepository;
 import it.cnr.cool.security.service.impl.alfresco.CMISGroup;
 import it.cnr.cool.security.service.impl.alfresco.CMISUser;
-
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.List;
-
-import org.apache.chemistry.opencmis.client.api.Session;
 import org.apache.commons.io.IOUtils;
 import org.junit.After;
 import org.junit.Before;
@@ -27,6 +17,14 @@ import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.annotation.DirtiesContext.ClassMode;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.List;
+
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = { "classpath:/META-INF/cool-common-core-test-context.xml" })
@@ -56,21 +54,21 @@ public class PermissionTest {
     @Value("${rbac.path}")
     private String rbacPath;
 
+
     @Before
     public void before() throws IOException {
-        Session session = cmisService.createAdminSession();
-        InputStream is = cmisService.getDocumentInputStream(session, rbacPath);
+        InputStream is = PermissionTest.class.getResourceAsStream("/rbac.get.json.ftl");
         content = IOUtils.toString(is);
     }
 
+
     @After
     public void after () {
-        //Session session = cmisService.createAdminSession();
-        //cmisService.updateDocument(session, rbacPath, content);
         permissionRepository.update(content);
     }
 
-	// guest and unlisted webscript
+
+    // guest and unlisted webscript
 	@Test
 	public void testUnlistedFunctionality() {
 		assertFalse(p.isAuthorizedCMIS("unlistedWebScript", GET, getUser("guest")));

@@ -9,35 +9,26 @@ import it.cnr.cool.service.I18nService;
 import it.cnr.cool.service.PageService;
 import it.cnr.cool.util.GroupsUtils;
 import it.cnr.cool.web.PermissionService;
-
-import java.io.IOException;
-import java.net.URI;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
-import javax.ws.rs.CookieParam;
-import javax.ws.rs.GET;
-import javax.ws.rs.POST;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
-import javax.ws.rs.QueryParam;
+import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.ResponseBuilder;
 import javax.ws.rs.core.Response.Status;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+import java.io.IOException;
+import java.net.URI;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @Path("page")
 @Component
@@ -187,8 +178,16 @@ public class Page {
 				+ (authorizedToViewPage ? "authorized" : "unauthorized")
 				+ " to view page, now checking RBAC");
 
-		return authorizedToViewPage
-				&& permissionService.isAuthorized(id, isPost ? "POST" : "GET", user.getId(), GroupsUtils.getGroups(user));
+        boolean rbacAuthorized = permissionService.isAuthorized(id, isPost ? "POST" : "GET", user.getId(), GroupsUtils.getGroups(user));
+
+        if (rbacAuthorized) {
+            LOGGER.debug("RBAC: " + user + " authorized to access page " + page.getUrl());
+        } else {
+            LOGGER.warn("RBAC: " + user + " unauthorized to access page " + page.getUrl());
+        }
+
+        return authorizedToViewPage
+				&& rbacAuthorized;
 	}
 
 }

@@ -1,7 +1,5 @@
 package it.cnr.cool.cmis.service;
 
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
 import it.cnr.cool.cmis.service.impl.ObjectTypeCacheImpl;
 import it.cnr.cool.security.service.impl.alfresco.CMISUser;
 import org.apache.chemistry.opencmis.client.api.*;
@@ -13,14 +11,7 @@ import org.apache.chemistry.opencmis.client.bindings.spi.BindingSession;
 import org.apache.chemistry.opencmis.client.bindings.spi.http.HttpInvoker;
 import org.apache.chemistry.opencmis.client.runtime.SessionFactoryImpl;
 import org.apache.chemistry.opencmis.commons.SessionParameter;
-import org.apache.chemistry.opencmis.commons.data.CmisExtensionElement;
 import org.apache.chemistry.opencmis.commons.impl.dataobjects.ContentStreamImpl;
-import org.apache.commons.httpclient.HttpClient;
-import org.apache.commons.httpclient.HttpStatus;
-import org.apache.commons.httpclient.methods.PostMethod;
-import org.apache.commons.httpclient.methods.RequestEntity;
-import org.apache.commons.httpclient.methods.StringRequestEntity;
-import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
@@ -72,21 +63,21 @@ public class CMISService implements InitializingBean, CMISSessionManager {
     /**
      * Construct
      */
-    public CMISService()
+    private CMISService()
     {
     }
 
-    public List<Repository> getRepositories(String username, String password)
+    private List<Repository> getRepositories(String username, String password)
     {
         return getRepositories(DEFAULT_SERVER, username, password);
     }
 
-    public List<Repository> getRepositories(String server, String username, String password)
+    private List<Repository> getRepositories(String server, String username, String password)
     {
     	return getRepositories(cmisConfig, server, username, password);
     }
 
-    public List<Repository> getRepositories(CMISConfig config, String server, String username, String password)
+    private List<Repository> getRepositories(CMISConfig config, String server, String username, String password)
     {
         Map<String, String> parameters = config.getServerParameters();
         if (parameters == null)
@@ -100,7 +91,7 @@ public class CMISService implements InitializingBean, CMISSessionManager {
         return getRepositories(sessionParameters);
     }
 
-    public List<Repository> getRepositories(Map<String, String> parameters)
+    private List<Repository> getRepositories(Map<String, String> parameters)
     {
         return sessionFactory.getRepositories(parameters);
     }
@@ -111,7 +102,7 @@ public class CMISService implements InitializingBean, CMISSessionManager {
 	 *
 	 * @return
 	 */
-    public Session createSession()
+    private Session createSession()
     {
 		if (cmisGuestSession == null || isPast(cmisGuestSessionExpiration)) {
 
@@ -127,7 +118,7 @@ public class CMISService implements InitializingBean, CMISSessionManager {
     }
 
     @Override
-	public Session createAdminSession()
+    public Session createAdminSession()
     {
 		// TODO: copiaincollato da
 		// it.cnr.cool.cmis.service.CMISService.createSession()
@@ -150,9 +141,9 @@ public class CMISService implements InitializingBean, CMISSessionManager {
         return createSession(DEFAULT_SERVER, username, password);
     }
 
-    public Session createSession(String server, String username, String password)
+    private Session createSession(String server, String username, String password)
     {
-        return getRepositorySession(server,username,password);
+        return getRepositorySession(server, username, password);
     }
 
     /**
@@ -181,12 +172,12 @@ public class CMISService implements InitializingBean, CMISSessionManager {
         return createSession(server, repositoryId, username, password);
     }
 
-    public Session createSession(String server, String repositoryId, String username, String password)
+    private Session createSession(String server, String repositoryId, String username, String password)
     {
     	return createSession(cmisConfig, server, repositoryId, username, password);
     }
 
-    public Session createSession(CMISConfig config, String server, String repositoryId, String username, String password)
+    private Session createSession(CMISConfig config, String server, String repositoryId, String username, String password)
     {
         Map<String, String> parameters = config.getServerParameters();
         if (parameters == null)
@@ -205,15 +196,11 @@ public class CMISService implements InitializingBean, CMISSessionManager {
         return createSession(sessionParameters);
     }
 
-    public Session createSession(Map<String, String> parameters)
+    private Session createSession(Map<String, String> parameters)
     {
     	Session session = sessionFactory.createSession(parameters);
     	session.setDefaultContext(cmisDefaultOperationContext);
         return session;
-    }
-
-    public String getAdminUserId() {
-    	return cmisConfig.getServerParameters().get(CMISConfig.ADMIN_USERNAME);
     }
 
     public SessionImpl getAdminSession(){
@@ -234,7 +221,7 @@ public class CMISService implements InitializingBean, CMISSessionManager {
 		return adminSession;
     }
 
-    public SessionImpl createBindingSession(){
+    private SessionImpl createBindingSession(){
 
 		if (cmisGuestBindingSession == null) {
 
@@ -292,41 +279,6 @@ public class CMISService implements InitializingBean, CMISSessionManager {
     	return session;
     }
 
-	public String getTicket(String username, String password)
-			throws LoginException {
-
-		String ticketURL = getBaseURL() + "service/api/login.json";
-
-		PostMethod method = new PostMethod(ticketURL);
-
-		JSONObject body = new JSONObject();
-		try {
-			body.put("username", username);
-			body.put("password", password);
-
-			RequestEntity requestEntity = new StringRequestEntity(
-					body.toString(), "text/plain", "UTF-8");
-			method.setRequestEntity(requestEntity);
-
-			if (new HttpClient().executeMethod(method) != HttpStatus.SC_OK) {
-				throw new LoginException("Login failed for user " + username
-						+ " with HTTP status code: " + method.getStatusLine());
-			} else {
-				String json = new String(method.getResponseBody());
-				JsonObject response = new JsonParser().parse(json)
-						.getAsJsonObject();
-
-				return response.getAsJsonObject().get("data").getAsJsonObject()
-						.get("ticket").getAsString();
-			}
-
-		} catch (Exception e) {
-			throw new LoginException("unable to create ticket for user "
-					+ username, e);
-		}
-
-	}
-
 
 	@Override
 	public void afterPropertiesSet() throws Exception {
@@ -362,7 +314,7 @@ public class CMISService implements InitializingBean, CMISSessionManager {
 	/**
 	 * Gets the HTTP Invoker object.
 	 */
-	public HttpInvoker getHttpInvoker(BindingSession session) {
+    public HttpInvoker getHttpInvoker(BindingSession session) {
 		return CmisBindingsHelper.getHttpInvoker(session);
 	}
 
@@ -381,7 +333,7 @@ public class CMISService implements InitializingBean, CMISSessionManager {
     }
 
 
-	public void updateDocument(Session session, String path, String content) {
+    private void updateDocument(Session session, String path, String content) {
 
 		Document document = getDocument(session, path);
 		String name = document.getName();
@@ -392,35 +344,12 @@ public class CMISService implements InitializingBean, CMISSessionManager {
 		document.setContentStream(cs, true, true);
 	}
 
-	public InputStream getDocumentInputStream(Session session, String path) {
+    private InputStream getDocumentInputStream(Session session, String path) {
 		return getDocument(session, path).getContentStream().getStream();
 	}
 
-	public Document getDocument(Session session, String path) {
+    private Document getDocument(Session session, String path) {
 		return (Document) session.getObjectByPath(path);
-	}
-
-	public boolean hasSecondaryType(CmisObject cmisObject, String secondaryTypeId){
-		for (SecondaryType st : cmisObject.getSecondaryTypes()) {
-			if (st.getId().equals(secondaryTypeId)) {
-				return true;
-			}
-		}
-		return false;
-	}
-
-	public List<String> getMandatoryAspects(ObjectType objectType) {
-		List<String> result = new ArrayList<>();
-		if (objectType.getExtensions() != null) {
-			for (CmisExtensionElement cmisExtensionElement : objectType.getExtensions()) {
-				if (cmisExtensionElement.getName().equalsIgnoreCase("mandatoryAspects")) {
-					for (CmisExtensionElement child : cmisExtensionElement.getChildren()) {
-						result.add(child.getValue());
-					}
-				}
-			}
-		}
-		return result;
 	}
 
 
@@ -467,7 +396,7 @@ public class CMISService implements InitializingBean, CMISSessionManager {
         CMISUser user = cmisAuthRepository.getCachedCMISUser(ticket);
 
         if (user == null) {
-            LOGGER.info("user is null, assuming aguest");
+            LOGGER.info("user is null, assuming a guest");
             user = new CMISUser("guest");
 
             Map<String, Boolean> capabilities = new HashMap<String, Boolean>();

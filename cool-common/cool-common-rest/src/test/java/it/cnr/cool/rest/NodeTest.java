@@ -4,6 +4,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
 import it.cnr.cool.cmis.service.CMISService;
 import it.cnr.cool.cmis.service.LoginException;
+import it.cnr.cool.security.CMISAuthenticatorFactory;
 import org.apache.chemistry.opencmis.client.api.*;
 import org.apache.chemistry.opencmis.client.api.Folder;
 import org.apache.chemistry.opencmis.commons.PropertyIds;
@@ -24,7 +25,6 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import javax.servlet.http.HttpServletRequest;
-
 import javax.ws.rs.core.MultivaluedHashMap;
 import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.core.Response;
@@ -67,6 +67,9 @@ public class NodeTest {
 
 	@Autowired
 	private CMISService cmisService;
+
+    @Autowired
+    private CMISAuthenticatorFactory cmisAuthenticatorFactory;
 
 	private static Folder folder;
 
@@ -189,7 +192,7 @@ public class NodeTest {
 	public void testGetCmisObjectCachable() throws LoginException {
 
 		MockHttpServletRequest req = new MockHttpServletRequest();
-        req.addHeader(CMISService.AUTHENTICATION_HEADER, cmisService.getTicket("admin", "admin"));
+        req.addHeader(CMISService.AUTHENTICATION_HEADER, cmisAuthenticatorFactory.getTicket("admin", "admin"));
 		req.setParameter("cachable", "true");
 		req.setParameter("nodeRef", folder.getId());
 
@@ -211,7 +214,7 @@ public class NodeTest {
 	public void testMetadata() throws LoginException {
 
 		MockHttpServletRequest request = new MockHttpServletRequest();
-        request.addHeader(CMISService.AUTHENTICATION_HEADER, cmisService.getTicket("admin", "admin"));
+        request.addHeader(CMISService.AUTHENTICATION_HEADER, cmisAuthenticatorFactory.getTicket("admin", "admin"));
 		MultivaluedMap<String, String> formParams = new MultivaluedHashMap<String, String>();
 		formParams.add(PropertyIds.OBJECT_TYPE_ID, CMIS_DOCUMENT);
 		long prefix = data.getTime();
@@ -301,7 +304,7 @@ public class NodeTest {
 		request.setMethod(method);
 		request.setContentType(contentType);
         try {
-            request.addHeader(CMISService.AUTHENTICATION_HEADER, cmisService.getTicket("admin", "admin"));
+            request.addHeader(CMISService.AUTHENTICATION_HEADER, cmisAuthenticatorFactory.getTicket("admin", "admin"));
         } catch (LoginException e) {
             LOGGER.error("unable to add header auth", e);
         }

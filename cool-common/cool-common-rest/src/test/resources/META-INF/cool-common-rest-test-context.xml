@@ -16,10 +16,6 @@
 
 	<bean id="queryService" class="it.cnr.cool.service.QueryService"></bean>
 
-	<bean id="cmisService" class="it.cnr.cool.mocks.MockCMISService">
-		<property name="baseURL" value="${repository.base.url}" />
-	</bean>
-
     <bean class="it.cnr.cool.service.PageService" init-method="init"></bean>
 
 </beans>

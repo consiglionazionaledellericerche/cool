@@ -6,7 +6,6 @@ import org.apache.chemistry.opencmis.client.bindings.impl.SessionImpl;
 import org.apache.chemistry.opencmis.client.bindings.spi.BindingSession;
 import org.apache.chemistry.opencmis.commons.data.RepositoryInfo;
 import org.apache.chemistry.opencmis.commons.enums.CmisVersion;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
@@ -21,7 +20,6 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import javax.servlet.http.HttpServletRequest;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -68,7 +66,8 @@ public class CMISServiceTest {
 
 	@Test
 	public void testCreateSession() {
-		Session session = cmisService.createSession();
+        HttpServletRequest req = new MockHttpServletRequest();
+        Session session = cmisService.getCurrentCMISSession(req);
 		RepositoryInfo info = session.getRepositoryInfo();
 		LOGGER.info(info.getCmisVersion().toString());
 		assertEquals(CmisVersion.CMIS_1_1, info.getCmisVersion());
@@ -104,12 +103,6 @@ public class CMISServiceTest {
 		LOGGER.warn("Not yet implemented");
 	}
 
-	@Test
-	public void testGetAdminUserId() {
-		String userId = cmisService.getAdminUserId();
-		LOGGER.info(userId);
-		assertEquals(ADMIN_USERNAME, userId);
-	}
 
 	@Test
 	public void testGetAdminSession() {
@@ -122,7 +115,8 @@ public class CMISServiceTest {
 
 	@Test
 	public void testCreateBindingSession() {
-		SessionImpl session = cmisService.createBindingSession();
+        HttpServletRequest req = new MockHttpServletRequest();
+        BindingSession session = cmisService.getCurrentBindingSession(req);
 		String userId = session.get(USER_ADMIN_USERNAME).toString();
 		LOGGER.info(userId);
 		assertEquals(ADMIN_USERNAME, userId);

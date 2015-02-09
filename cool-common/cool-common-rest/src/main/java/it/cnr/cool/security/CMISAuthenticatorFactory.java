@@ -1,19 +1,26 @@
 package it.cnr.cool.security;
 
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import it.cnr.cool.cmis.service.CMISService;
 import it.cnr.cool.cmis.service.CmisAuthRepository;
+import it.cnr.cool.cmis.service.LoginException;
 import it.cnr.cool.exception.CoolUserFactoryException;
 import it.cnr.cool.security.service.UserService;
 import it.cnr.cool.security.service.impl.alfresco.CMISUser;
 import it.cnr.cool.service.UserFactoryException;
-
-import javax.servlet.http.HttpServletRequest;
-
-
 import org.apache.chemistry.opencmis.client.bindings.spi.BindingSession;
+import org.apache.commons.httpclient.HttpClient;
+import org.apache.commons.httpclient.HttpStatus;
+import org.apache.commons.httpclient.methods.PostMethod;
+import org.apache.commons.httpclient.methods.RequestEntity;
+import org.apache.commons.httpclient.methods.StringRequestEntity;
+import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+
+import javax.servlet.http.HttpServletRequest;
 
 public class CMISAuthenticatorFactory {
 	private static final Logger LOGGER = LoggerFactory
@@ -47,7 +54,7 @@ public class CMISAuthenticatorFactory {
 	public String authenticate(HttpServletRequest request, String username,
 			String password) {
 		try {
-			String ticket = cmisService.getTicket(username, password);
+			String ticket = getTicket(username, password);
 
 
             org.apache.chemistry.opencmis.client.bindings.impl.SessionImpl bindingSession;
@@ -67,5 +74,42 @@ public class CMISAuthenticatorFactory {
 		}
 		return null;
 	}
+
+
+    public String getTicket(String username, String password)
+            throws LoginException {
+
+        String ticketURL = cmisService.getBaseURL() + "service/api/login.json";
+
+        PostMethod method = new PostMethod(ticketURL);
+
+        JSONObject body = new JSONObject();
+        try {
+            body.put("username", username);
+            body.put("password", password);
+
+            RequestEntity requestEntity = new StringRequestEntity(
+                    body.toString(), "text/plain", "UTF-8");
+            method.setRequestEntity(requestEntity);
+
+            if (new HttpClient().executeMethod(method) != HttpStatus.SC_OK) {
+                throw new LoginException("Login failed for user " + username
+                        + " with HTTP status code: " + method.getStatusLine());
+            } else {
+                String json = new String(method.getResponseBody());
+                JsonObject response = new JsonParser().parse(json)
+                        .getAsJsonObject();
+
+                return response.getAsJsonObject().get("data").getAsJsonObject()
+                        .get("ticket").getAsString();
+            }
+
+        } catch (Exception e) {
+            throw new LoginException("unable to create ticket for user "
+                    + username, e);
+        }
+
+    }
+
 
 }

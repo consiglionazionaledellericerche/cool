@@ -1,16 +1,10 @@
 package it.cnr.cool.rest;
 
-import static org.junit.Assert.assertEquals;
 import it.cnr.cool.cmis.service.CMISService;
 import it.cnr.cool.cmis.service.LoginException;
 import it.cnr.cool.interceptor.ProxyInterceptor;
+import it.cnr.cool.security.CMISAuthenticatorFactory;
 import it.cnr.cool.util.MimeTypes;
-
-import java.io.IOException;
-
-import javax.servlet.ServletOutputStream;
-
-
 import org.json.JSONObject;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -25,6 +19,10 @@ import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.annotation.DirtiesContext.ClassMode;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+
+import java.io.IOException;
+
+import static org.junit.Assert.assertEquals;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = { "classpath:/META-INF/cool-common-rest-test-context.xml" })
@@ -41,6 +39,9 @@ public class ProxyTest {
 	private Proxy proxy;
 	@Autowired
 	private CMISService cmisService;
+
+    @Autowired
+    private CMISAuthenticatorFactory cmisAuthenticatorFactory;
 
 	@Test
 	public void testGet() throws IOException {
@@ -88,7 +89,7 @@ public class ProxyTest {
 
 		MockHttpServletRequest req = new MockHttpServletRequest();
 
-        String ticket = cmisService.getTicket("admin", "admin");
+        String ticket = cmisAuthenticatorFactory.getTicket("admin", "admin");
 
         req.addHeader(CMISService.AUTHENTICATION_HEADER, ticket);
 
