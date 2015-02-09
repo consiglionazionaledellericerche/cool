@@ -2,7 +2,7 @@ package it.cnr.cool.cmis.service;
 
 import it.cnr.cool.security.service.impl.alfresco.CMISUser;
 import org.apache.chemistry.opencmis.client.api.Session;
-import org.apache.chemistry.opencmis.client.bindings.impl.SessionImpl;
+import org.apache.chemistry.opencmis.client.bindings.spi.BindingSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,7 +40,7 @@ public class CmisAuthRepository {
     }
 
     @Cacheable("binding-session")
-    public SessionImpl getBindingSession(String ticket) {
+    public BindingSession getBindingSession(String ticket) {
         LOGGER.info("creating binding session for ticket " + ticket);
         return cmisService.createBindingSession("", ticket);
     }

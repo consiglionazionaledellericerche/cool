@@ -2,7 +2,6 @@ package it.cnr.cool.cmis.service;
 
 import it.cnr.cool.security.service.impl.alfresco.CMISUser;
 import org.apache.chemistry.opencmis.client.api.Session;
-import org.apache.chemistry.opencmis.client.bindings.impl.SessionImpl;
 import org.apache.chemistry.opencmis.client.bindings.spi.BindingSession;
 import org.apache.chemistry.opencmis.commons.data.RepositoryInfo;
 import org.apache.chemistry.opencmis.commons.enums.CmisVersion;
@@ -107,7 +106,7 @@ public class CMISServiceTest {
 	@Test
 	public void testGetAdminSession() {
 
-		SessionImpl session = cmisService.getAdminSession();
+		BindingSession session = cmisService.getAdminSession();
 		String userId = session.get(USER_ADMIN_USERNAME).toString();
 		LOGGER.info(userId);
 		assertEquals(ADMIN_USERNAME, userId);

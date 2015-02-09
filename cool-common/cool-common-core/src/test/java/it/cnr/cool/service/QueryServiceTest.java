@@ -55,7 +55,6 @@ public class QueryServiceTest {
 		MockHttpServletRequest req = new MockHttpServletRequest();
 
 		Session cmisSession = cmisService.createAdminSession();
-		req.getSession().setAttribute(CMISService.DEFAULT_SERVER, cmisSession);
 
 		req.setParameter("q", "select * from jconon_application:folder");
 		req.setParameter("exportData", Boolean.TRUE.toString());
@@ -91,8 +90,6 @@ public class QueryServiceTest {
 
 		Session session = cmisService.createAdminSession();
 		String nodeRef = session.getObjectByPath(FOLDER_PATH).getId();
-
-        req.getSession().setAttribute(CMISService.DEFAULT_SERVER, session);
 
 		req.setParameter("f", nodeRef);
 

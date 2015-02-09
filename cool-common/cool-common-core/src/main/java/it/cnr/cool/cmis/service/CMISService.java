@@ -11,7 +11,6 @@ import org.apache.chemistry.opencmis.client.bindings.spi.BindingSession;
 import org.apache.chemistry.opencmis.client.bindings.spi.http.HttpInvoker;
 import org.apache.chemistry.opencmis.client.runtime.SessionFactoryImpl;
 import org.apache.chemistry.opencmis.commons.SessionParameter;
-import org.apache.chemistry.opencmis.commons.impl.dataobjects.ContentStreamImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
@@ -19,7 +18,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
-import java.io.InputStream;
 import java.util.*;
 
 public class CMISService implements InitializingBean, CMISSessionManager {
@@ -30,17 +28,14 @@ public class CMISService implements InitializingBean, CMISSessionManager {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(CMISService.class);
 
-    public static final String DEFAULT_SERVER = "cmis.default";
-    public static final String BINDING_SESSION = "cmis.binding.session";
-    public static final String QUERY_RESULT = "cmis.query.result";
-    public static final String TOTAL_NUM_ITEMS = "cmis.query.total.num.items";
+    private static final String DEFAULT_SERVER = "cmis.default";
     public static final String AUTHENTICATION_HEADER = "X-alfresco-ticket";
 
     // service dependencies
     @Autowired
     private CMISConfig cmisConfig;
 
-    private SessionImpl adminSession;
+    private BindingSession adminSession;
     private Session cmisAdminSession;
     private Session cmisGuestSession;
 	private long cmisGuestSessionExpiration;
@@ -48,7 +43,7 @@ public class CMISService implements InitializingBean, CMISSessionManager {
 
     private String baseURL;
 
-	private SessionImpl cmisGuestBindingSession;
+	private BindingSession cmisGuestBindingSession;
 
     // OpenCMIS session factory
     private static SessionFactory sessionFactory = SessionFactoryImpl.newInstance();
@@ -60,26 +55,11 @@ public class CMISService implements InitializingBean, CMISSessionManager {
 
 
 	private String repositoryId;
-    /**
-     * Construct
-     */
-    private CMISService()
-    {
-    }
 
-    private List<Repository> getRepositories(String username, String password)
-    {
-        return getRepositories(DEFAULT_SERVER, username, password);
-    }
 
     private List<Repository> getRepositories(String server, String username, String password)
     {
-    	return getRepositories(cmisConfig, server, username, password);
-    }
-
-    private List<Repository> getRepositories(CMISConfig config, String server, String username, String password)
-    {
-        Map<String, String> parameters = config.getServerParameters();
+        Map<String, String> parameters = cmisConfig.getServerParameters();
         if (parameters == null)
         {
             return null;
@@ -88,13 +68,9 @@ public class CMISService implements InitializingBean, CMISSessionManager {
         sessionParameters.putAll(parameters);
         sessionParameters.put(SessionParameter.USER, username);
         sessionParameters.put(SessionParameter.PASSWORD, password);
-        return getRepositories(sessionParameters);
+        return sessionFactory.getRepositories(sessionParameters);
     }
 
-    private List<Repository> getRepositories(Map<String, String> parameters)
-    {
-        return sessionFactory.getRepositories(parameters);
-    }
 
 	/**
 	 *
@@ -110,7 +86,7 @@ public class CMISService implements InitializingBean, CMISSessionManager {
 			String username = params.get(CMISConfig.GUEST_USERNAME);
 			String password = params.get(CMISConfig.GUEST_PASSWORD);
 
-			cmisGuestSession = createSession(DEFAULT_SERVER, username, password);
+			cmisGuestSession = createSession(username, password);
 			cmisGuestSessionExpiration = getExpiration();
 
 		}
@@ -129,7 +105,7 @@ public class CMISService implements InitializingBean, CMISSessionManager {
 			String username = params.get(CMISConfig.ADMIN_USERNAME);
 			String password = params.get(CMISConfig.ADMIN_PASSWORD);
 
-			cmisAdminSession = createSession(DEFAULT_SERVER, username, password);
+			cmisAdminSession = createSession(username, password);
 			cmisAdminSessionExpiration = getExpiration();
 
 		}
@@ -138,13 +114,9 @@ public class CMISService implements InitializingBean, CMISSessionManager {
 
     public Session createSession(String username, String password)
     {
-        return createSession(DEFAULT_SERVER, username, password);
+        return getRepositorySession(DEFAULT_SERVER, username, password);
     }
 
-    private Session createSession(String server, String username, String password)
-    {
-        return getRepositorySession(server, username, password);
-    }
 
     /**
      * This method checks first whether a repository Id has been specified in the configuration,
@@ -203,7 +175,7 @@ public class CMISService implements InitializingBean, CMISSessionManager {
         return session;
     }
 
-    public SessionImpl getAdminSession(){
+    public BindingSession getAdminSession(){
 
 		// TODO: vedi
 		// it.cnr.cool.cmis.service.CMISService.createBindingSession()
@@ -221,7 +193,7 @@ public class CMISService implements InitializingBean, CMISSessionManager {
 		return adminSession;
     }
 
-    private SessionImpl createBindingSession(){
+    private BindingSession createBindingSession(){
 
 		if (cmisGuestBindingSession == null) {
 
@@ -236,7 +208,7 @@ public class CMISService implements InitializingBean, CMISSessionManager {
 		return cmisGuestBindingSession;
     }
 
-    public SessionImpl createBindingSession(String username, String password){
+    public BindingSession createBindingSession(String username, String password){
     	SessionImpl session = new SessionImpl();
         Map<String, String> parameters = cmisConfig.getServerParameters();
         if (parameters == null)
@@ -333,31 +305,13 @@ public class CMISService implements InitializingBean, CMISSessionManager {
     }
 
 
-    private void updateDocument(Session session, String path, String content) {
-
-		Document document = getDocument(session, path);
-		String name = document.getName();
-		String mimeType = document.getContentStreamMimeType();
-
-		ContentStreamImpl cs = new ContentStreamImpl(name, mimeType, content);
-
-		document.setContentStream(cs, true, true);
-	}
-
-    private InputStream getDocumentInputStream(Session session, String path) {
-		return getDocument(session, path).getContentStream().getStream();
-	}
-
-    private Document getDocument(Session session, String path) {
-		return (Document) session.getObjectByPath(path);
-	}
 
 
     public BindingSession getCurrentBindingSession(HttpServletRequest req) {
 
         String ticket = extractTicketFromRequest(req);
 
-        SessionImpl bindingSession;
+        BindingSession bindingSession;
 
         if (ticket == null) {
             bindingSession = createBindingSession();

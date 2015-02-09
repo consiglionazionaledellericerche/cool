@@ -57,7 +57,7 @@ public class CMISAuthenticatorFactory {
 			String ticket = getTicket(username, password);
 
 
-            org.apache.chemistry.opencmis.client.bindings.impl.SessionImpl bindingSession;
+            BindingSession bindingSession;
             bindingSession = cmisAuthRepository.getBindingSession(ticket);
 
             CMISUser user = userService.loadUser(username, bindingSession);
