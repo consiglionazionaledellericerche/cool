@@ -28,7 +28,6 @@ public class CMISService implements InitializingBean, CMISSessionManager {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(CMISService.class);
 
-    private static final String DEFAULT_SERVER = "cmis.default";
     public static final String AUTHENTICATION_HEADER = "X-alfresco-ticket";
 
     // service dependencies
@@ -57,7 +56,7 @@ public class CMISService implements InitializingBean, CMISSessionManager {
 	private String repositoryId;
 
 
-    private List<Repository> getRepositories(String server, String username, String password)
+    private List<Repository> getRepositories(String username, String password)
     {
         Map<String, String> parameters = cmisConfig.getServerParameters();
         if (parameters == null)
@@ -114,20 +113,19 @@ public class CMISService implements InitializingBean, CMISSessionManager {
 
     public Session createSession(String username, String password)
     {
-        return getRepositorySession(DEFAULT_SERVER, username, password);
+        return getRepositorySession(username, password);
     }
 
 
     /**
      * This method checks first whether a repository Id has been specified in the configuration,
      * and if not defaults to the first repository returned by the CMIS server
-     *
-     * @param server
      * @param username
      * @param password
+     *
      * @return
      */
-    private Session getRepositorySession(String server, String username, String password)
+    private Session getRepositorySession(String username, String password)
     {
         Map<String, String> parameters = cmisConfig.getServerParameters();
         if (parameters == null)
@@ -138,18 +136,18 @@ public class CMISService implements InitializingBean, CMISSessionManager {
             if(parameters.containsKey(SessionParameter.REPOSITORY_ID)) {
             	repositoryId = parameters.get(SessionParameter.REPOSITORY_ID);
             } else {
-            	repositoryId = getRepositories(server, username, password).get(0).getId();
+            	repositoryId = getRepositories(username, password).get(0).getId();
             }
         }
-        return createSession(server, repositoryId, username, password);
+        return createSession(repositoryId, username, password);
     }
 
-    private Session createSession(String server, String repositoryId, String username, String password)
+    private Session createSession(String repositoryId, String username, String password)
     {
-    	return createSession(cmisConfig, server, repositoryId, username, password);
+    	return createSession(cmisConfig, repositoryId, username, password);
     }
 
-    private Session createSession(CMISConfig config, String server, String repositoryId, String username, String password)
+    private Session createSession(CMISConfig config, String repositoryId, String username, String password)
     {
         Map<String, String> parameters = config.getServerParameters();
         if (parameters == null)
