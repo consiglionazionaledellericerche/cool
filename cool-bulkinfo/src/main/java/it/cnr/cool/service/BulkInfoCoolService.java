@@ -10,15 +10,6 @@ import it.cnr.bulkinfo.exception.BulkinfoNameException;
 import it.cnr.cool.cmis.service.CMISService;
 import it.cnr.cool.cmis.service.VersionService;
 import it.cnr.cool.rest.util.Util;
-
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import org.apache.chemistry.opencmis.client.api.ObjectType;
 import org.apache.chemistry.opencmis.client.api.Session;
 import org.apache.chemistry.opencmis.commons.data.CmisExtensionElement;
@@ -32,6 +23,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.*;
 
 public class BulkInfoCoolService {
 
@@ -47,7 +42,7 @@ public class BulkInfoCoolService {
 
 	private static final String RESOURCE_PATH = "/bulkInfo/";
 
-	Map<String, BulkInfoCool> bulkInfoCache = new HashMap();
+	static Map<String, BulkInfoCool> bulkInfoCache = new HashMap();
 
 	//TODO BulkInfoNotFoundException e' stato temporaneamente sostituito con return null per mantenere la compatibilita' con ApplicationModel
 	/**
@@ -119,11 +114,17 @@ public class BulkInfoCoolService {
         BulkInfoCool bi = null;
 
         if (bulkInfoCache.containsKey(bulkInfoName)) {
+            LOGGER.debug("serving bulkinfo " + bulkInfoName + " from cache");
             bi = bulkInfoCache.get(bulkInfoName);
         } else {
 
+            LOGGER.debug("building bulkinfo " + bulkInfoName);
+
             try {
                 bi = build(bulkInfoName);
+
+                bulkInfoCache.put(bulkInfoName, bi);
+
             } catch (BulkInfoNotFoundException e) {
                 LOGGER.error("Error finding Bulkinfo " + bulkInfoName, e);
             }
