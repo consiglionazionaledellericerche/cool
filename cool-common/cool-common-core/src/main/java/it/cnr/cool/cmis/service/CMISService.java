@@ -32,40 +32,16 @@ public class CMISService implements InitializingBean, CMISSessionManager {
     @Autowired
     private CMISConfig cmisConfig;
 
-    private BindingSession adminSession;
-    private Session cmisAdminSession;
-    private Session cmisGuestSession;
-
     private String baseURL;
-
-	private BindingSession cmisGuestBindingSession;
 
     // OpenCMIS session factory
     private static SessionFactory sessionFactory = SessionFactoryImpl.newInstance();
+
     @Autowired
     private OperationContext cmisDefaultOperationContext;
 
     @Autowired
     private CmisAuthRepository cmisAuthRepository;
-
-
-	private String repositoryId;
-
-
-    private List<Repository> getRepositories(String username, String password)
-    {
-        Map<String, String> parameters = cmisConfig.getServerParameters();
-        if (parameters == null)
-        {
-            return null;
-        }
-        Map<String, String> sessionParameters = new HashMap<String, String>();
-        sessionParameters.putAll(parameters);
-        sessionParameters.put(SessionParameter.USER, username);
-        sessionParameters.put(SessionParameter.PASSWORD, password);
-        return sessionFactory.getRepositories(sessionParameters);
-    }
-
 
 	/**
 	 *
@@ -75,28 +51,15 @@ public class CMISService implements InitializingBean, CMISSessionManager {
 	 */
     private Session createGuestSession()
     {
-
-        Map<String, String> params = cmisConfig.getServerParameters();
-        String username = params.get(CMISConfig.GUEST_USERNAME);
-        String password = params.get(CMISConfig.GUEST_PASSWORD);
-        return createSession(username, password);
-
-
+        LOGGER.debug("asked for a guest session");
+        return cmisAuthRepository.getGuestSession();
     }
 
     @Override
     public Session createAdminSession()
     {
-        Map<String, String> params = cmisConfig.getServerParameters();
-        String username = params.get(CMISConfig.ADMIN_USERNAME);
-        String password = params.get(CMISConfig.ADMIN_PASSWORD);
-    	return createSession(username, password);
-    }
-
-
-    public Session createSession(String username, String password)
-    {
-        return getRepositorySession(username, password);
+        LOGGER.debug("asked for an admin session");
+        return  cmisAuthRepository.getAdminSession();
     }
 
 
@@ -108,85 +71,37 @@ public class CMISService implements InitializingBean, CMISSessionManager {
      *
      * @return
      */
-    private Session getRepositorySession(String username, String password)
+    Session getRepositorySession(String username, String password)
     {
         Map<String, String> parameters = cmisConfig.getServerParameters();
         if (parameters == null)
         {
             return null;
         }
-        if (repositoryId == null) {
-            if(parameters.containsKey(SessionParameter.REPOSITORY_ID)) {
-            	repositoryId = parameters.get(SessionParameter.REPOSITORY_ID);
-            } else {
-            	repositoryId = getRepositories(username, password).get(0).getId();
-            }
-        }
-        return createSession(repositoryId, username, password);
-    }
 
-    private Session createSession(String repositoryId, String username, String password)
-    {
-    	return createSession(cmisConfig, repositoryId, username, password);
-    }
-
-    private Session createSession(CMISConfig config, String repositoryId, String username, String password)
-    {
-        Map<String, String> parameters = config.getServerParameters();
-        if (parameters == null)
-        {
-            return null;
-        }
         Map<String, String> sessionParameters = new HashMap<String, String>();
         sessionParameters.putAll(parameters);
         sessionParameters.put(SessionParameter.USER, username);
         sessionParameters.put(SessionParameter.PASSWORD, password);
-        sessionParameters.put(SessionParameter.REPOSITORY_ID, repositoryId);
         sessionParameters.put(SessionParameter.TYPE_DEFINITION_CACHE_CLASS, ObjectTypeCacheImpl.class.getName());
         sessionParameters.put(SessionParameter.LOCALE_ISO3166_COUNTRY, DEFAULT_LOCALE.getCountry());
         sessionParameters.put(SessionParameter.LOCALE_ISO639_LANGUAGE, DEFAULT_LOCALE.getLanguage());
         sessionParameters.put(SessionParameter.LOCALE_VARIANT, DEFAULT_LOCALE.getVariant());
-        return createSession(sessionParameters);
-    }
 
-    private Session createSession(Map<String, String> parameters)
-    {
-    	Session session = sessionFactory.createSession(parameters);
-    	session.setDefaultContext(cmisDefaultOperationContext);
+        Session session = sessionFactory.createSession(sessionParameters);
+        session.setDefaultContext(cmisDefaultOperationContext);
         return session;
     }
 
+
     public BindingSession getAdminSession(){
-
-		// TODO: vedi
-		// it.cnr.cool.cmis.service.CMISService.createBindingSession()
-
-		if (adminSession == null) {
-
-			Map<String, String> params = cmisConfig.getServerParameters();
-			String username = params.get(CMISConfig.ADMIN_USERNAME);
-			String password = params.get(CMISConfig.ADMIN_PASSWORD);
-
-			adminSession = createBindingSession(username, password);
-
-		}
-
-		return adminSession;
+        LOGGER.debug("requested an admin binding session");
+        return cmisAuthRepository.getAdminBindingSession();
     }
 
     private BindingSession createBindingSession(){
-
-		if (cmisGuestBindingSession == null) {
-
-			Map<String, String> params = cmisConfig.getServerParameters();
-			String username = params.get(CMISConfig.GUEST_USERNAME);
-			String password = params.get(CMISConfig.GUEST_PASSWORD);
-
-			cmisGuestBindingSession = createBindingSession(username, password);
-
-		}
-
-		return cmisGuestBindingSession;
+        LOGGER.debug("requested a guest binding session");
+        return cmisAuthRepository.getGuestBindingSession();
     }
 
     public BindingSession createBindingSession(String username, String password){
@@ -241,18 +156,6 @@ public class CMISService implements InitializingBean, CMISSessionManager {
 
 
 	// utility methods
-
-	/**
-	 *
-	 * Check if a time parameter is past
-	 *
-	 * @param time
-	 *            in millisecond since 1970
-	 * @return true if the parameter is before now
-	 */
-	private boolean isPast(Long time) {
-		return time == null || time < new Date().getTime();
-	}
 
 	/**
 	 * Gets the HTTP Invoker object.
