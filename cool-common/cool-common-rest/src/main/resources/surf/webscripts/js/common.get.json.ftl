@@ -4,8 +4,12 @@
 	"User": {
 	  <#if !context.user.guest!>
 	  "id": "${context.user.id}",
+	  <#if context.user.lastName??>
 	  "lastName": "${context.user.lastName}",
+	  </#if>
+	  <#if context.user.firstName??>
 	  "firstName": "${context.user.firstName}",
+	  </#if>
 	  <#if context.user??>
 	  "groups":[
 	  <#list context.user.groups as group>
