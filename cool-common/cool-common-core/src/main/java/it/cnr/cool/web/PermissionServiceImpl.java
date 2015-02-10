@@ -1,24 +1,17 @@
 package it.cnr.cool.web;
 
+import com.google.gson.*;
 import it.cnr.cool.mail.MailService;
 import it.cnr.cool.repository.PermissionRepository;
 import it.cnr.cool.security.service.UserService;
 import it.cnr.cool.security.service.impl.alfresco.CMISUser;
-
-import java.util.List;
-
-
 import it.cnr.cool.util.GroupsUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.MailException;
 
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
-import com.google.gson.JsonPrimitive;
+import java.util.List;
 
 public class PermissionServiceImpl implements PermissionService {
 
@@ -311,10 +304,6 @@ public class PermissionServiceImpl implements PermissionService {
         String username = user.getId();
 
         List<String> groups = GroupsUtils.getGroups(user);
-
-        if (!username.equals("guest") ) {
-            groups.add("GROUP_EVERYONE");
-        }
 
         return isAuthorized(id, method, username, groups);
 

@@ -24,8 +24,6 @@ public class CMISService implements InitializingBean, CMISSessionManager {
 
     static final Locale DEFAULT_LOCALE = Locale.ITALY;
 
-	private static final int SESSION_DURATION_MINUTES = 5; // TODO: gestire la scadenza di un ticket in seguito a riavvio Alfresco
-
 	private static final Logger LOGGER = LoggerFactory.getLogger(CMISService.class);
 
     public static final String AUTHENTICATION_HEADER = "X-alfresco-ticket";
@@ -37,8 +35,6 @@ public class CMISService implements InitializingBean, CMISSessionManager {
     private BindingSession adminSession;
     private Session cmisAdminSession;
     private Session cmisGuestSession;
-	private long cmisGuestSessionExpiration;
-	private long cmisAdminSessionExpiration;
 
     private String baseURL;
 
@@ -77,39 +73,26 @@ public class CMISService implements InitializingBean, CMISSessionManager {
 	 *
 	 * @return
 	 */
-    private Session createSession()
+    private Session createGuestSession()
     {
-		if (cmisGuestSession == null || isPast(cmisGuestSessionExpiration)) {
 
-			Map<String, String> params = cmisConfig.getServerParameters();
-			String username = params.get(CMISConfig.GUEST_USERNAME);
-			String password = params.get(CMISConfig.GUEST_PASSWORD);
+        Map<String, String> params = cmisConfig.getServerParameters();
+        String username = params.get(CMISConfig.GUEST_USERNAME);
+        String password = params.get(CMISConfig.GUEST_PASSWORD);
+        return createSession(username, password);
 
-			cmisGuestSession = createSession(username, password);
-			cmisGuestSessionExpiration = getExpiration();
 
-		}
-    	return cmisGuestSession;
     }
 
     @Override
     public Session createAdminSession()
     {
-		// TODO: copiaincollato da
-		// it.cnr.cool.cmis.service.CMISService.createSession()
-
-		if (cmisAdminSession == null || isPast(cmisAdminSessionExpiration)) {
-
-			Map<String, String> params = cmisConfig.getServerParameters();
-			String username = params.get(CMISConfig.ADMIN_USERNAME);
-			String password = params.get(CMISConfig.ADMIN_PASSWORD);
-
-			cmisAdminSession = createSession(username, password);
-			cmisAdminSessionExpiration = getExpiration();
-
-		}
-    	return cmisAdminSession;
+        Map<String, String> params = cmisConfig.getServerParameters();
+        String username = params.get(CMISConfig.ADMIN_USERNAME);
+        String password = params.get(CMISConfig.ADMIN_PASSWORD);
+    	return createSession(username, password);
     }
+
 
     public Session createSession(String username, String password)
     {
@@ -272,16 +255,6 @@ public class CMISService implements InitializingBean, CMISSessionManager {
 	}
 
 	/**
-	 *
-	 *
-	 * @return expiration as milliseconds since 1970
-	 */
-	private long getExpiration() {
-		return new Date().getTime() + (1000 * 60 * SESSION_DURATION_MINUTES);
-	}
-
-
-	/**
 	 * Gets the HTTP Invoker object.
 	 */
     public HttpInvoker getHttpInvoker(BindingSession session) {
@@ -331,7 +304,7 @@ public class CMISService implements InitializingBean, CMISSessionManager {
 
         if (ticket == null) {
             LOGGER.info("cmis session nulla, returning guest session");
-            return createSession();
+            return createGuestSession();
         } else {
             LOGGER.info("sessione: " + ticket);
 

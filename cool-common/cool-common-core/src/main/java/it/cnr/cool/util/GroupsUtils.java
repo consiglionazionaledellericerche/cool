@@ -18,6 +18,10 @@ public class GroupsUtils {
             }
         }
 
+        if (!user.isGuest()) {
+            groups.add("GROUP_EVERYONE");
+        }
+
         return groups;
 
     }

@@ -181,9 +181,9 @@ public class Page {
         boolean rbacAuthorized = permissionService.isAuthorized(id, isPost ? "POST" : "GET", user.getId(), GroupsUtils.getGroups(user));
 
         if (rbacAuthorized) {
-            LOGGER.debug("RBAC: " + user + " authorized to access page " + page.getUrl());
+            LOGGER.debug("RBAC: " + user + " authorized to access page " + id);
         } else {
-            LOGGER.warn("RBAC: " + user + " unauthorized to access page " + page.getUrl());
+            LOGGER.warn("RBAC: " + user + " unauthorized to access page " + id);
         }
 
         return authorizedToViewPage
