@@ -1,25 +1,15 @@
 package it.cnr.cool.rest;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
 import it.cnr.cool.cmis.service.CMISService;
+import it.cnr.cool.cmis.service.LoginException;
 import it.cnr.cool.exception.CoolUserFactoryException;
+import it.cnr.cool.security.CMISAuthenticatorFactory;
 import it.cnr.cool.security.service.UserService;
 import it.cnr.cool.security.service.impl.alfresco.CMISUser;
-import it.cnr.cool.test.InstanceTestClassListener;
 import it.cnr.cool.test.SpringInstanceTestClassRunner;
-
-import java.io.IOException;
-import java.util.Locale;
-
-import javax.servlet.http.HttpServletRequest;
-
-import javax.ws.rs.core.MultivaluedHashMap;
-import javax.ws.rs.core.MultivaluedMap;
-import javax.ws.rs.core.Response;
-import javax.ws.rs.core.Response.Status;
-
 import org.json.JSONObject;
+import org.junit.After;
+import org.junit.Before;
 import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -34,11 +24,21 @@ import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.annotation.DirtiesContext.ClassMode;
 import org.springframework.test.context.ContextConfiguration;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.ws.rs.core.MultivaluedHashMap;
+import javax.ws.rs.core.MultivaluedMap;
+import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.Status;
+import java.util.Locale;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+
 @RunWith(SpringInstanceTestClassRunner.class)
 @ContextConfiguration(locations = { "classpath:/META-INF/cool-common-rest-test-context.xml" })
 @DirtiesContext(classMode = ClassMode.AFTER_EACH_TEST_METHOD)
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
-public class SecurityRestTest implements InstanceTestClassListener{
+public class SecurityRestTest {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(SecurityRestTest.class);
 
@@ -57,7 +57,10 @@ public class SecurityRestTest implements InstanceTestClassListener{
 	@Autowired
 	private UserService userService;
 
-	@Override
+    @Autowired
+    private CMISAuthenticatorFactory cmisAuthenticatorFactory;
+
+	@Before
 	public void beforeClassSetup() {
 		MockHttpServletRequest req = new MockHttpServletRequest();
 		req.addPreferredLocale(Locale.ITALIAN);
@@ -75,6 +78,7 @@ public class SecurityRestTest implements InstanceTestClassListener{
 		form.remove("codicefiscale");
 		form.add("codicefiscale", "SSSSSS73H02C495G");
 		outcome = security.doCreateUser(req, form, "it");
+        LOGGER.debug(outcome.getEntity().toString());
 		assertEquals(Status.OK.getStatusCode(), outcome.getStatus());
 	}
 
@@ -183,15 +187,23 @@ public class SecurityRestTest implements InstanceTestClassListener{
 
 	}
 
-	@Override
+    @After
 	public void afterClassSetup() {
 		MockHttpServletRequest req = new MockHttpServletRequest();
-		req.setParameter(URL, "service/api/people/" + NEWUSERNAME);
+        try {
+            req.addHeader(CMISService.AUTHENTICATION_HEADER, cmisAuthenticatorFactory.getTicket("admin", "admin"));
+        } catch (LoginException e) {
+            LOGGER.error("error getting ticket", e);
+        }
+        req.setParameter(URL, "service/api/people/" + NEWUSERNAME);
 		MockHttpServletResponse res = new MockHttpServletResponse();
-		try {
-			proxy.delete(req, res);
-		} catch (IOException e) {
-		}
+
+        try {
+            proxy.delete(req, res);
+        } catch (Exception e) {
+            LOGGER.error("error deleting user " + NEWUSERNAME, e);
+        }
+
 		assertEquals(HttpStatus.OK.value(), res.getStatus());
 
 	}
