@@ -1,17 +1,17 @@
 package it.cnr.cool.cmis.service.impl;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import org.apache.chemistry.opencmis.client.bindings.cache.TypeDefinitionCache;
 import org.apache.chemistry.opencmis.client.bindings.spi.BindingSession;
 import org.apache.chemistry.opencmis.commons.definitions.TypeDefinition;
+
+import java.util.HashMap;
+import java.util.Map;
 
 
 public class ObjectTypeCacheImpl implements TypeDefinitionCache {
 	private static final long serialVersionUID = 1L;
 
-    private Map<String, TypeDefinition> cache = new HashMap<String, TypeDefinition>();
+    private static Map<String, TypeDefinition> cache = new HashMap<String, TypeDefinition>();
 
 	@Override
 	public void initialize(BindingSession session) {
@@ -27,6 +27,7 @@ public class ObjectTypeCacheImpl implements TypeDefinitionCache {
 
 	@Override
 	public TypeDefinition get(String repositoryId, String typeId) {
+
         return cache.get(typeId);
 	}
 
