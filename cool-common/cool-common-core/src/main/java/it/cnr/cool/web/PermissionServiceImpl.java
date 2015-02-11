@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.MailException;
 
 import java.util.List;
+import java.util.Collections;
 
 public class PermissionServiceImpl implements PermissionService {
 
@@ -299,6 +300,7 @@ public class PermissionServiceImpl implements PermissionService {
 
         if (user == null) {
             user = new CMISUser("guest");
+            user.setCapabilities(Collections.singletonMap(CMISUser.CAPABILITY_GUEST, true));
         }
 
         String username = user.getId();
