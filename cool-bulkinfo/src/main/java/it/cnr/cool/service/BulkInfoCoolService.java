@@ -7,7 +7,7 @@ import it.cnr.bulkinfo.exception.BulkInfoException;
 import it.cnr.bulkinfo.exception.BulkInfoNotFoundException;
 import it.cnr.bulkinfo.exception.BulkinfoKindException;
 import it.cnr.bulkinfo.exception.BulkinfoNameException;
-import it.cnr.cool.cmis.service.CMISService;
+import it.cnr.cool.BulkInfoRepository;
 import it.cnr.cool.cmis.service.VersionService;
 import it.cnr.cool.rest.util.Util;
 import org.apache.chemistry.opencmis.client.api.ObjectType;
@@ -15,7 +15,6 @@ import org.apache.chemistry.opencmis.client.api.Session;
 import org.apache.chemistry.opencmis.commons.data.CmisExtensionElement;
 import org.apache.chemistry.opencmis.commons.definitions.PropertyDefinition;
 import org.apache.chemistry.opencmis.commons.exceptions.CmisObjectNotFoundException;
-import org.apache.commons.io.IOUtils;
 import org.dom4j.Document;
 import org.dom4j.DocumentException;
 import org.dom4j.DocumentHelper;
@@ -24,8 +23,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.*;
 
 public class BulkInfoCoolService {
@@ -35,14 +32,12 @@ public class BulkInfoCoolService {
 	@Autowired
 	private ApplicationContext context;
 	
-	@Autowired
-	private CMISService cmisService;
     @Autowired
     private VersionService versionService;
 
-	private static final String RESOURCE_PATH = "/bulkInfo/";
 
-	static Map<String, BulkInfoCool> bulkInfoCache = new HashMap();
+    @Autowired
+    private BulkInfoRepository bulkInfoRepository;
 
 	//TODO BulkInfoNotFoundException e' stato temporaneamente sostituito con return null per mantenere la compatibilita' con ApplicationModel
 	/**
@@ -96,11 +91,6 @@ public class BulkInfoCoolService {
 		}
 		return model;
 	}
-	public void invalidateAllCache() {
-		if(bulkInfoCache != null) {
-            bulkInfoCache.clear();
-        }
-	}
 
 	/**
 	 * Questo metodo publico e' solo un livello di indirezione per costruire la
@@ -109,25 +99,17 @@ public class BulkInfoCoolService {
 	 * @param bulkInfoName
 	 * @return
 	 */
+    //TODO: cacharlo a livello HTTP!!!
 	public BulkInfoCool find(String bulkInfoName) {
 
         BulkInfoCool bi = null;
 
-        if (bulkInfoCache.containsKey(bulkInfoName)) {
-            LOGGER.debug("serving bulkinfo " + bulkInfoName + " from cache");
-            bi = bulkInfoCache.get(bulkInfoName);
-        } else {
+        LOGGER.debug("building bulkinfo " + bulkInfoName);
 
-            LOGGER.debug("building bulkinfo " + bulkInfoName);
-
-            try {
-                bi = build(bulkInfoName);
-
-                bulkInfoCache.put(bulkInfoName, bi);
-
-            } catch (BulkInfoNotFoundException e) {
-                LOGGER.error("Error finding Bulkinfo " + bulkInfoName, e);
-            }
+        try {
+            bi = build(bulkInfoName);
+        } catch (BulkInfoNotFoundException e) {
+            LOGGER.error("Error finding Bulkinfo " + bulkInfoName, e);
         }
 
         return bi;
@@ -177,8 +159,7 @@ public class BulkInfoCoolService {
 		ObjectType bulkObjectType = null;
 		try {
 			if (bulkInfo.getCmisTypeName() != null) {
-				bulkObjectType = cmisService.createAdminSession()
-						.getTypeDefinition(bulkInfo.getCmisTypeName());
+				bulkObjectType = getObjectType(bulkInfo.getCmisTypeName());
 			}
 
 		} catch (CmisObjectNotFoundException ex) {
@@ -216,29 +197,19 @@ public class BulkInfoCoolService {
 	 * @return BulkInfoNew or null
 	 */
 	private BulkInfoCool getBulkInfoFromResources(String bulkInfoName) {
-		BulkInfoCool bi = null;
-		try {
-			bulkInfoName = bulkInfoName.replaceAll(":", "_");
-			InputStream is = this.getClass().getResourceAsStream(
-					RESOURCE_PATH + bulkInfoName + ".xml"); // dara' NullPointer
-			// se non esiste, lo gestiamo
 
-			if (is != null) {
-				String xml = IOUtils.toString(is);
-				Document doc = DocumentHelper.parseText(xml);
-				bi = new BulkInfoCoolImpl(bulkInfoName, doc, versionService.isProduction());
-			}
-		} catch (DocumentException exp) { // log error, return null
-			LOGGER.error("DocumentExcpetion with bulkInfo :" + bulkInfoName,
-					exp);
-		} catch (IOException exp) { // log error, return null
-			LOGGER.error("IOException with bulkInfo :" + bulkInfoName, exp);
-		} catch (NullPointerException exp) { // log error, return null
-			LOGGER.error("NullPointerException with bulkInfo :" + bulkInfoName,
-					exp);
-		}
-		return bi;
+        LOGGER.info("loading bulkinfo: " + bulkInfoName);
+
+        Document doc = bulkInfoRepository.getXmlDocument(bulkInfoName);
+
+        if (doc != null) {
+            return new BulkInfoCoolImpl(bulkInfoName, doc, versionService.isProduction());
+        } else {
+            return null;
+        }
+
 	}
+
 
 	/**
 	 * SIDE EFFECTS su properties.
@@ -259,8 +230,7 @@ public class BulkInfoCoolService {
 		BulkInfoCool bulkInfo = null;
 
 		try {
-			ObjectType bulkObjectType = cmisService.createAdminSession()
-					.getTypeDefinition(bulkTypeName);
+			ObjectType bulkObjectType = getObjectType(bulkTypeName);
 
 			LOGGER.debug("successfully retrieved type definition for type: "
 					+ bulkObjectType.getId());
@@ -341,7 +311,7 @@ public class BulkInfoCoolService {
 
 		for (String cmisImplementsName : bulkInfo.getCmisImplementsName().keySet()) {
 			properties.addAll(
-					getPropertyWithChoice(cmisService.createAdminSession().getTypeDefinition(cmisImplementsName), bulkInfo));
+					getPropertyWithChoice(getObjectType(cmisImplementsName), bulkInfo));
 		}
 
 		if (bulkObjectType != null) {
@@ -385,8 +355,10 @@ public class BulkInfoCoolService {
 		return properties;
 	}
 
-	public void clearCache() {
-	  bulkInfoCache.clear();
-	}
+
+    private ObjectType getObjectType(String bulkTypeName) {
+        LOGGER.info("retrieving type: " + bulkTypeName);
+        return bulkInfoRepository.getObjectType(bulkTypeName);
+    }
 
 }

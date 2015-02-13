@@ -7,26 +7,19 @@ import it.cnr.cool.cmis.service.VersionService;
 import it.cnr.cool.rest.util.Util;
 import it.cnr.cool.service.BulkInfoCoolSerializer;
 import it.cnr.cool.service.BulkInfoCoolService;
-
-import java.util.Map;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.ws.rs.GET;
-import javax.ws.rs.POST;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
-import javax.ws.rs.QueryParam;
-import javax.ws.rs.core.Context;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
-import javax.ws.rs.core.Response.ResponseBuilder;
-
 import org.apache.chemistry.opencmis.client.api.Session;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.ws.rs.*;
+import javax.ws.rs.core.Context;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.ResponseBuilder;
+import java.util.Map;
 
 @Path("bulkInfo")
 @Component
@@ -116,16 +109,5 @@ public class BulkInfoRest {
 		return builder.build();
 	}
 
-	@POST
-	@Path("clearcache")
-	public Response getView(@Context HttpServletRequest req) {
-	  if(versionService.isProduction()) {
-	    LOGGER.warn("Attenzione: tentativo di svuotare la cache dei BulkInfo in produzione");
-	    return Response.status(Response.Status.BAD_REQUEST).build();
-	  }  else {
-	    bulkInfoCoolService.clearCache();
-	    return Response.ok().build();
-	  }
-	}
 }
 
