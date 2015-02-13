@@ -144,9 +144,13 @@ public class NodeMetadataService {
 			HttpServletRequest request) {
 		if (reqProperties != null) {
 			if (reqProperties.get(key) != null
-					&& reqProperties.get(key).getClass().isArray())
-				return ((String[]) reqProperties.get(key))[0];
-			else
+					&& reqProperties.get(key).getClass().isArray()) {
+				for (String value : (String[]) reqProperties.get(key)) {
+					if (value != null && value.length() > 0)
+						return value;
+				}
+				return null;
+			} else
 				return (String) reqProperties.get(key);
 		}
 		String[] values = request.getParameterValues(key);
