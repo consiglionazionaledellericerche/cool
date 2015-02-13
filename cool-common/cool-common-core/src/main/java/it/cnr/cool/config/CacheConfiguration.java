@@ -1,6 +1,7 @@
 package it.cnr.cool.config;
 
 import com.hazelcast.config.Config;
+import com.hazelcast.config.ManagementCenterConfig;
 import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.core.Hazelcast;
 import com.hazelcast.instance.HazelcastInstanceFactory;
@@ -30,6 +31,8 @@ public class CacheConfiguration {
 
     private @Value("${hazelcast.instance.name}") String hazelcastInstanceName;
 
+    private @Value("${hazelcast.mancenter:#{null}}") String mancenter;
+
 
     @PreDestroy
     public void destroy() {
@@ -42,10 +45,22 @@ public class CacheConfiguration {
     @Bean
     public CacheManager cacheManager() {
 
-        LOGGER.debug("Starting HazelcastCacheManager");
+        LOGGER.info("Starting HazelcastCacheManager");
 
 
         final Config config = new Config();
+
+
+        if (mancenter != null) {
+          LOGGER.info("using mancenter: " + mancenter);
+          ManagementCenterConfig mc = new ManagementCenterConfig();
+          mc.setEnabled(true);
+          mc.setUrl(mancenter);
+          config.setManagementCenterConfig(mc);
+        } else {
+          LOGGER.info("no mancenter configured");
+        }
+
         config.setInstanceName(hazelcastInstanceName);
         config.getNetworkConfig().setPort(hazelcastPort);
         config.getNetworkConfig().setPortAutoIncrement(true);
