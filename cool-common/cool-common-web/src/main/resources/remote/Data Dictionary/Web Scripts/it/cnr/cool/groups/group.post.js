@@ -1,7 +1,11 @@
-/*global jsonUtils,requestbody,logger,status,groupAuthority,model */
+/*global jsonUtils,requestbody,logger,status,groupAuthority,model,_,cnrutils */
 /**
  * Post children
  */
+var script = "/Company Home/Data Dictionary/Scripts/thirdparty/underscore.js";
+var code = cnrutils.getBean("javaScriptProcessor").loadScriptResource(script);
+eval(String(code));
+
 var json = jsonUtils.toObject(requestbody.content),
   parentGroupName = json.parent_group_name,
   parentNodeRef = json.parent_node_ref,
@@ -39,9 +43,10 @@ if (!groupName) {
     }
   }
   if (json.extraProperty) {
-    for (key in json.extraProperty) {
-      group.properties[key] = json.extraProperty[key];
-    }
+    "use strict";
+    _.each(json.extraProperty, function (key, value) {
+      group.properties[value] = key;
+    });
     group.save();
   }
   model.group = group;
