@@ -81,7 +81,8 @@
 
 <#macro generateMatricola userName>
 	<td nowrap="nowrap">
-		<#if matricole[userName]??>${matricole[userName]}</#if>
+		<#if matricole[userName]?? & matricole[userName] != 'null'>${matricole[userName]}
+			<#else></#if>
 	</td>
 </#macro>
 

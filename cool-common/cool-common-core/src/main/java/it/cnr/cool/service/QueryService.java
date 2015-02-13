@@ -1,5 +1,6 @@
 package it.cnr.cool.service;
 
+import com.google.gson.Gson;
 import it.cnr.cool.cmis.model.CoolPropertyIds;
 import it.cnr.cool.cmis.service.CacheService;
 import it.cnr.cool.cmis.service.GlobalCache;
@@ -7,28 +8,7 @@ import it.cnr.cool.exception.CoolUserFactoryException;
 import it.cnr.cool.security.service.UserService;
 import it.cnr.cool.security.service.impl.alfresco.CMISUser;
 import it.cnr.cool.service.model.RelationshipTypeParam;
-
-import java.math.BigInteger;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
-import javax.servlet.http.HttpServletRequest;
-
-
-import org.apache.chemistry.opencmis.client.api.CmisObject;
-import org.apache.chemistry.opencmis.client.api.Document;
-import org.apache.chemistry.opencmis.client.api.FileableCmisObject;
-import org.apache.chemistry.opencmis.client.api.Folder;
-import org.apache.chemistry.opencmis.client.api.ItemIterable;
-import org.apache.chemistry.opencmis.client.api.OperationContext;
-import org.apache.chemistry.opencmis.client.api.QueryResult;
-import org.apache.chemistry.opencmis.client.api.Relationship;
-import org.apache.chemistry.opencmis.client.api.Session;
+import org.apache.chemistry.opencmis.client.api.*;
 import org.apache.chemistry.opencmis.client.runtime.OperationContextImpl;
 import org.apache.chemistry.opencmis.commons.PropertyIds;
 import org.apache.chemistry.opencmis.commons.enums.BaseTypeId;
@@ -39,7 +19,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.google.gson.Gson;
+import javax.servlet.http.HttpServletRequest;
+import java.math.BigInteger;
+import java.util.*;
 
 public class QueryService implements GlobalCache, InitializingBean{
 
@@ -234,9 +216,8 @@ public class QueryService implements GlobalCache, InitializingBean{
 										CMISUser user = (CMISUser) userService.loadUserForConfirm(userName);
 										matricole.put(userName, String.valueOf(user.getMatricola()));
 									}
-								} catch (CoolUserFactoryException e) {
-									matricole.put(userName, "");
-									LOGGER.info("UserFactoryException - Utente: " + userName, e);
+								} catch (Exception e) {
+									LOGGER.info("CoolUserFactoryException - Eccezione nel recupero della matricola dell'utente " + userName, e);
 								}
 							}
 						} else {
