@@ -43,8 +43,8 @@ if (!groupName) {
     }
   }
   if (json.extraProperty) {
-    "use strict";
     _.each(json.extraProperty, function (key, value) {
+      "use strict";
       group.properties[value] = key;
     });
     group.save();
