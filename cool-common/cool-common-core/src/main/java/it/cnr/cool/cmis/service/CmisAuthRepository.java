@@ -32,7 +32,7 @@ public class CmisAuthRepository {
     }
 
     @CachePut(value= USER, key="#ticket")
-    public CMISUser getCMISUser(CMISUser user, String ticket) {
+    public CMISUser putCMISUser(CMISUser user, String ticket) {
         LOGGER.info("add to cache user " + (user == null ? "null" : user.getId()) + " to the cache having ticket = " + ticket);
         return user;
     }

@@ -63,9 +63,7 @@ public class CMISAuthenticatorFactory {
             CMISUser user = userService.loadUser(username, bindingSession);
             LOGGER.debug("loaded user: " + user.toString());
 
-            cmisAuthRepository.getCMISUser(user, ticket);
-
-            LOGGER.error("GESTIRE LA CREAZIONE DELL'AUTENTICAZIONE");
+            cmisAuthRepository.putCMISUser(user, ticket);
 
             return ticket;
 
