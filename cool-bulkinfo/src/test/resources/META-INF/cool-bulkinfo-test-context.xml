@@ -26,4 +26,10 @@
 
     <bean class="it.cnr.cool.cmis.service.CmisAuthRepository" />
 
+    <bean class="it.cnr.cool.BulkInfoRepository" />
+
+    <bean class="it.cnr.cool.repository.I18nRepository" />
+
+
+
 </beans>
