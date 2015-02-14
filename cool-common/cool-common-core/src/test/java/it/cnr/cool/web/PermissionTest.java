@@ -4,7 +4,6 @@ import it.cnr.cool.cmis.service.CMISService;
 import it.cnr.cool.repository.PermissionRepository;
 import it.cnr.cool.security.service.impl.alfresco.CMISGroup;
 import it.cnr.cool.security.service.impl.alfresco.CMISUser;
-import org.apache.commons.io.IOUtils;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -19,7 +18,6 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -46,25 +44,16 @@ public class PermissionTest {
     @Autowired
     private CMISService cmisService;
 
-    private String content;
 
     @Autowired
-    PermissionRepository permissionRepository;
+	private PermissionRepository permissionRepository;
 
     @Value("${rbac.path}")
     private String rbacPath;
 
-
-    @Before
-    public void before() throws IOException {
-        InputStream is = PermissionTest.class.getResourceAsStream("/rbac.get.json.ftl");
-        content = IOUtils.toString(is);
-    }
-
-
     @After
     public void after () {
-        permissionRepository.update(content);
+		permissionRepository.update(null);
     }
 
 

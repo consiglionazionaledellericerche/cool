@@ -36,4 +36,6 @@
 
   <bean id="adminService" class="it.cnr.cool.cmis.service.AdminService"></bean>
 
+  <bean id="permissionRepository" class="it.cnr.cool.service.MockPermissionRepository"></bean>
+
 </beans>

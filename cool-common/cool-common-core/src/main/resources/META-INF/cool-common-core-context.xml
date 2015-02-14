@@ -12,7 +12,7 @@
 	</bean>
 
 
-	<bean id="permissionRepository" class="it.cnr.cool.repository.PermissionRepository">
+	<bean id="permissionRepository" class="it.cnr.cool.repository.PermissionRepositoryImpl">
 		<property name="rbacPath" value="${rbac.path}" />
 	</bean>
 
