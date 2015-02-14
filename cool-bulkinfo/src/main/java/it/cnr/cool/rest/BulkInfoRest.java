@@ -3,7 +3,6 @@ package it.cnr.cool.rest;
 import it.cnr.bulkinfo.cool.BulkInfoCool;
 import it.cnr.bulkinfo.exception.BulkInfoException;
 import it.cnr.cool.cmis.service.CMISService;
-import it.cnr.cool.cmis.service.VersionService;
 import it.cnr.cool.rest.util.Util;
 import it.cnr.cool.service.BulkInfoCoolSerializer;
 import it.cnr.cool.service.BulkInfoCoolService;
@@ -37,8 +36,6 @@ public class BulkInfoRest {
 	private BulkInfoCoolSerializer bulkInfoCoolSerializer;
 	@Autowired
 	private CMISService cmisService;
-	@Autowired
-	private VersionService versionService;
 
 	@GET
 	@Path("view/{type}/{kind}/{name}")
