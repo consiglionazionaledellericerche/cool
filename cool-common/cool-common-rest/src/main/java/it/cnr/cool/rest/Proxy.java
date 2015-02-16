@@ -21,9 +21,11 @@ import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response.Status;
+import javax.xml.bind.DatatypeConverter;
 import java.io.*;
 import java.net.SocketException;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 
 
@@ -44,29 +46,63 @@ public class Proxy {
 
 	// TODO: try-catchare tutto
 
+    private final static String [] ALLOWED_HEADERS = {"WWW-Authenticate", "Cache-Control"};
+
 	@GET
 	public void get(@Context HttpServletRequest req, @QueryParam("backend") String backend,
 			@Context HttpServletResponse res) throws IOException {
 
-		BindingSession currentBindingSession = cmisService
-				.getCurrentBindingSession(req);
+
 		UrlBuilder url = getUrl(req, backend);
 
-		Response resp = CmisBindingsHelper
-				.getHttpInvoker(currentBindingSession).invokeGET(url,
-						currentBindingSession);
+        String authorization = req.getHeader("Authorization");
+
+        BindingSession currentBindingSession = createBindingSessionForBasicAuthentication(authorization);
+
+        if (currentBindingSession == null) {
+            LOGGER.info("no basic auth provided, using current binding session");
+            currentBindingSession = cmisService.getCurrentBindingSession(req);
+        } else {
+            LOGGER.info("basic auth provided");
+        }
+
+        Response resp = CmisBindingsHelper
+                .getHttpInvoker(currentBindingSession).invokeGET(url,
+                        currentBindingSession);
 
 		int responseCode = resp.getResponseCode();
+
+        for (Map.Entry<String, List<String>> header : resp.getHeaders().entrySet()) {
+
+            if (header.getValue().size() == 1) {
+                String key = header.getKey();
+                if (key != null && !key.isEmpty() && isHeaderToBeAdded(key)) {
+                    String value = header.getValue().get(0);
+                    LOGGER.debug("header {} = {}", key, value);
+                    res.setHeader(key, value);
+                }
+            } else {
+                LOGGER.error("error with headers: " + url.toString());
+            }
+
+        }
+
+
 		res.setStatus(responseCode);
 		res.setContentType(resp.getContentTypeHeader());
 		res.setCharacterEncoding(resp.getCharset().toUpperCase());
 
 		OutputStream outputStream = res.getOutputStream();
-		if (responseCode == Status.OK.getStatusCode()) {
-			IOUtils.copy(resp.getStream(), outputStream);
-		} else {
-			IOUtils.write("error " + responseCode, outputStream);
-		}
+
+        if (resp != null && resp.getStream() != null) {
+
+            if (responseCode != Status.OK.getStatusCode()) {
+                LOGGER.error("status code {} for request url", responseCode);
+
+            }
+
+            IOUtils.copy(resp.getStream(), outputStream);
+        }
 
 		outputStream.flush();
 
@@ -260,5 +296,46 @@ public class Proxy {
     public void setBackends(Map<String, String> backends) {
         this.backends = backends;
     }
+
+
+    private BindingSession createBindingSessionForBasicAuthentication(String authorization) {
+
+        if (authorization == null || authorization.isEmpty()) {
+            LOGGER.debug("no authorization header provided");
+            return null;
+        }
+
+        String usernameAndPasswordBase64 = authorization.split(" ")[1];
+
+        byte[] usernameAndPasswordByteArray = DatatypeConverter.parseBase64Binary(usernameAndPasswordBase64);
+
+        String [] usernameAndPassword = new String(usernameAndPasswordByteArray).split(":");
+
+        String username = usernameAndPassword[0];
+        String password = usernameAndPassword[1];
+
+        LOGGER.info("using BASIC auth for user: " + username);
+
+        return cmisService.createBindingSession(username, password);
+
+    }
+
+
+    private boolean isHeaderToBeAdded(String key) {
+
+        for (String allowed : ALLOWED_HEADERS) {
+
+            if (key.equalsIgnoreCase(allowed)) {
+                LOGGER.debug("setting HTTP header " + key);
+                return true;
+            }
+
+        }
+
+        LOGGER.debug("ignoring HTTP header " + key);
+
+        return false;
+    }
+
 
 }
