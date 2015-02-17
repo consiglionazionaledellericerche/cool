@@ -4,23 +4,16 @@ import it.cnr.cool.security.SecurityChecked;
 import it.cnr.cool.service.workflow.WorkflowService;
 import it.cnr.cool.web.PermissionService;
 import it.cnr.cool.web.PermissionServiceImpl;
-
-import javax.ws.rs.DELETE;
-import javax.ws.rs.FormParam;
-import javax.ws.rs.GET;
-import javax.ws.rs.POST;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
-import javax.ws.rs.QueryParam;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
-import javax.ws.rs.core.Response.ResponseBuilder;
-import javax.ws.rs.core.Response.Status;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
+import javax.ws.rs.*;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.ResponseBuilder;
+import javax.ws.rs.core.Response.Status;
 
 @Path("rbac")
 @Component
@@ -59,7 +52,7 @@ public class RBACRest {
 		}
 
 		if (Boolean.valueOf(workflow)) {
-			workflowService.clearWorkflowDefinitions(authority);
+			workflowService.clear();
 		}
 
 		return builder.build();
@@ -100,7 +93,7 @@ public class RBACRest {
 		}
 
 		if (Boolean.valueOf(workflow)) {
-			workflowService.clearWorkflowDefinitions(authority);
+			workflowService.clear();
 		}
 
 		return builder.build();
