@@ -99,7 +99,9 @@
 
 	<util:properties id="backendMap" location="classpath:backendMap.properties" />
 
-	<bean class="it.cnr.cool.rest.Proxy">
+	<bean class="it.cnr.cool.rest.Proxy"></bean>
+
+	<bean class="it.cnr.cool.service.ProxyService">
 		<property name="proxyInterceptor" ref="proxyInterceptor" />
 		 <property name="backends" ref="backendMap" />
 	</bean>

@@ -2,7 +2,6 @@ package it.cnr.cool.rest;
 
 import it.cnr.cool.cmis.service.CMISService;
 import it.cnr.cool.cmis.service.LoginException;
-import it.cnr.cool.interceptor.ProxyInterceptor;
 import it.cnr.cool.security.CMISAuthenticatorFactory;
 import it.cnr.cool.util.MimeTypes;
 import org.json.JSONObject;
@@ -126,11 +125,6 @@ public class ProxyTest {
 
 	}
 
-	@Test
-	public void testSetProxyInterceptor() {
-		ProxyInterceptor pi = new ProxyInterceptor();
-		proxy.setProxyInterceptor(pi);
-	}
 
     @Test
     @Ignore
