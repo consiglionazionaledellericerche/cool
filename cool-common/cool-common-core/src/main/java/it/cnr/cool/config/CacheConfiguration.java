@@ -2,11 +2,11 @@ package it.cnr.cool.config;
 
 import com.hazelcast.config.Config;
 import com.hazelcast.config.ManagementCenterConfig;
-import com.hazelcast.core.HazelcastInstance;
-import com.hazelcast.core.Hazelcast;
-import com.hazelcast.instance.HazelcastInstanceFactory;
 import com.hazelcast.config.MapConfig;
 import com.hazelcast.config.MaxSizeConfig;
+import com.hazelcast.core.Hazelcast;
+import com.hazelcast.core.HazelcastInstance;
+import com.hazelcast.instance.HazelcastInstanceFactory;
 import com.hazelcast.spring.cache.HazelcastCacheManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,19 +27,17 @@ public class CacheConfiguration {
 
     private @Value("${hazelcast.port}") int hazelcastPort;
 
-    private @Value("${hazelcast.multicast.port}") int hazelcastMulticastPort;
-
     private @Value("${hazelcast.instance.name}") String hazelcastInstanceName;
 
     private @Value("${hazelcast.mancenter:#{null}}") String mancenter;
 
+    private @Value("${hazelcast.members:#{null}}") String members;
 
     @PreDestroy
     public void destroy() {
         LOGGER.info("Closing Cache Manager");
         Hazelcast.shutdownAll();
     }
-
 
 
     @Bean
@@ -63,14 +61,17 @@ public class CacheConfiguration {
 
         config.setInstanceName(hazelcastInstanceName);
         config.getNetworkConfig().setPort(hazelcastPort);
-        config.getNetworkConfig().setPortAutoIncrement(true);
+        config.getNetworkConfig().setPortAutoIncrement(false);
 
-        config.getNetworkConfig().getJoin().getMulticastConfig().setMulticastPort(hazelcastMulticastPort);
-
-
+        config.getNetworkConfig().getJoin().getMulticastConfig().setEnabled(false);
         config.getNetworkConfig().getJoin().getAwsConfig().setEnabled(false);
-        config.getNetworkConfig().getJoin().getMulticastConfig().setEnabled(true);
-        config.getNetworkConfig().getJoin().getTcpIpConfig().setEnabled(false);
+
+        if (members != null) {
+            config.getNetworkConfig().getJoin().getTcpIpConfig().setEnabled(true);
+            config.getNetworkConfig().getJoin().getTcpIpConfig().addMember(members);
+        } else {
+            config.getNetworkConfig().getJoin().getTcpIpConfig().setEnabled(false);
+        }
 
         config.getMapConfigs().put("default", initializeDefaultMapConfig());
 
