@@ -18,8 +18,6 @@ import java.io.IOException;
 @Component
 public class Proxy {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(Proxy.class);
-
     @Autowired
     private ProxyService proxyService;
 
