@@ -60,7 +60,7 @@
 
 	<!-- End CMIS service Bean -->
 
-	<bean id="webframework.factory.user.cmis" class="it.cnr.cool.security.CMISAuthenticatorFactory" />
+
 
 	<bean id="frontOffice" class="it.cnr.cool.rest.FrontOffice"></bean>
     <bean class="it.cnr.cool.rest.TypesTree"></bean>
@@ -112,7 +112,7 @@
 
 	<bean id="createAccountService" class="it.cnr.cool.service.CreateAccountService"></bean>
 
-	<bean id="queryService" class="it.cnr.cool.service.QueryService"></bean>
+
 
 	<bean class="it.cnr.cool.service.NodeService"></bean>
 
