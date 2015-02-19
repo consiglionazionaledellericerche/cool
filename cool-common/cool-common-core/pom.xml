@@ -143,5 +143,12 @@
           <version>${hazelcast.version}</version>
       </dependency>
 
+
+      <!-- da togliere, se possibile -->
+      <dependency>
+          <groupId>org.freemarker</groupId>
+          <artifactId>freemarker</artifactId>
+          <version>2.3.18</version>
+      </dependency>
   </dependencies>
 </project>

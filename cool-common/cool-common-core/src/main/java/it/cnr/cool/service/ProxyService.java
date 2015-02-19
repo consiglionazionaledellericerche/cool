@@ -7,6 +7,7 @@ import org.apache.chemistry.opencmis.client.bindings.spi.BindingSession;
 import org.apache.chemistry.opencmis.client.bindings.spi.http.Output;
 import org.apache.chemistry.opencmis.client.bindings.spi.http.Response;
 import org.apache.chemistry.opencmis.commons.impl.UrlBuilder;
+import org.apache.commons.httpclient.HttpStatus;
 import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -105,7 +106,7 @@ public class ProxyService {
         res.setContentType(resp.getContentTypeHeader());
         res.setCharacterEncoding(resp.getCharset().toUpperCase());
 
-        if (resp.getResponseCode() == javax.ws.rs.core.Response.Status.OK.getStatusCode()) {
+        if (resp.getResponseCode() == HttpStatus.SC_OK) {
             OutputStream outputStream = res.getOutputStream();
             IOUtils.copy(resp.getStream(), outputStream);
             outputStream.flush();
@@ -161,7 +162,7 @@ public class ProxyService {
 
         if (resp != null && resp.getStream() != null) {
 
-            if (responseCode != javax.ws.rs.core.Response.Status.OK.getStatusCode()) {
+            if (responseCode != HttpStatus.SC_OK) {
                 LOGGER.error("status code {} for request url", responseCode);
 
             }
@@ -222,7 +223,7 @@ public class ProxyService {
         ServletOutputStream outputStream = res.getOutputStream();
 
         int status = outcome.getResponseCode();
-        if (status != javax.ws.rs.core.Response.Status.OK.getStatusCode()) {
+        if (status != HttpStatus.SC_OK) {
             res.setStatus(status);
 
             if (outcome != null && outcome.getErrorContent() != null) {
