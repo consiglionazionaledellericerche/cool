@@ -33,6 +33,8 @@ public class CacheConfiguration {
 
     private @Value("${hazelcast.members:#{null}}") String members;
 
+    private @Value("${hazelcast.multicast.port:#{null}}") Integer hazelcastMulticastPort;
+
     @PreDestroy
     public void destroy() {
         LOGGER.info("Closing Cache Manager");
@@ -67,8 +69,14 @@ public class CacheConfiguration {
         config.getNetworkConfig().getJoin().getAwsConfig().setEnabled(false);
 
         if (members != null) {
+            LOGGER.info("TCP members: " + members);
             config.getNetworkConfig().getJoin().getTcpIpConfig().setEnabled(true);
             config.getNetworkConfig().getJoin().getTcpIpConfig().addMember(members);
+        } else if (hazelcastMulticastPort != null) {
+            LOGGER.info("multicast on port " + hazelcastMulticastPort);
+            config.getNetworkConfig().getJoin().getMulticastConfig().setEnabled(true);
+            config.getNetworkConfig().getJoin().getMulticastConfig().setMulticastPort(hazelcastMulticastPort);
+            config.getNetworkConfig().getJoin().getTcpIpConfig().setEnabled(false);
         } else {
             config.getNetworkConfig().getJoin().getTcpIpConfig().setEnabled(false);
         }
