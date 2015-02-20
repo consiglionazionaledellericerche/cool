@@ -17,11 +17,6 @@
       <version>${project.version}</version>
     </dependency>
     <dependency>
-      <groupId>it.cnr.si</groupId>
-      <artifactId>cool-bulkinfo</artifactId>
-      <version>${project.version}</version>
-    </dependency>
-    <dependency>
       <groupId>it.cnr.si.cool</groupId>
       <artifactId>cool-common-web-js</artifactId>
       <version>${project.version}</version>

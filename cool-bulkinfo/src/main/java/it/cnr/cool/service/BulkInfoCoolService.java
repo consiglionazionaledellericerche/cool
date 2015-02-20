@@ -9,7 +9,6 @@ import it.cnr.bulkinfo.exception.BulkinfoKindException;
 import it.cnr.bulkinfo.exception.BulkinfoNameException;
 import it.cnr.cool.BulkInfoRepository;
 import it.cnr.cool.cmis.service.VersionService;
-import it.cnr.cool.rest.util.Util;
 import org.apache.chemistry.opencmis.client.api.ObjectType;
 import org.apache.chemistry.opencmis.client.api.Session;
 import org.apache.chemistry.opencmis.commons.data.CmisExtensionElement;
@@ -81,7 +80,7 @@ public class BulkInfoCoolService {
 				throw new BulkinfoKindException("Variabilie kind non impostata");
 			}
 
-			model.put("jsonUtils", new Util());
+//			model.put("jsonUtils", new Util());
 			model.put("cmisSession", cmisSession);
 			model.put("url.context", "");
 

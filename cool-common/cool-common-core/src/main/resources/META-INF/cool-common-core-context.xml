@@ -124,4 +124,6 @@
 	<bean id="queryService" class="it.cnr.cool.service.QueryService"></bean>
 
 	<bean id="webframework.factory.user.cmis" class="it.cnr.cool.security.CMISAuthenticatorFactory" />
+
+	<bean id="proxyInterceptor" class="it.cnr.cool.interceptor.ProxyInterceptor" />
 </beans>

@@ -81,6 +81,11 @@
 			<artifactId>dom4j</artifactId>
 			<version>${dom4j.version}</version>
 		</dependency>
+		<dependency>
+		  <groupId>it.cnr.si</groupId>
+		  <artifactId>cool-bulkinfo</artifactId>
+		  <version>${project.version}</version>
+		</dependency>
 	</dependencies>
 
 </project>

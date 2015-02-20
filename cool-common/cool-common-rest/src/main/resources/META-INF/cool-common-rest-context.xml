@@ -108,7 +108,7 @@
 
 	<bean id="securityCheckInterceptor" class="it.cnr.cool.security.SecurityCheckInterceptor"></bean>
 
-	<bean id="proxyInterceptor" class="it.cnr.cool.interceptor.ProxyInterceptor" />
+
 
 	<bean id="createAccountService" class="it.cnr.cool.service.CreateAccountService"></bean>
 
@@ -135,4 +135,5 @@
 	<bean class="it.cnr.cool.rest.Search">
 		<property name="queryService" ref="queryService" />
 	</bean>
+	<bean class="it.cnr.cool.rest.BulkInfoRest"></bean>
 </beans>
