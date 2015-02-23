@@ -1,7 +1,7 @@
 package it.cnr.cool.rest;
 
+import com.google.gson.JsonObject;
 import it.cnr.cool.cmis.service.CMISService;
-import it.cnr.cool.dto.Credentials;
 import it.cnr.cool.exception.CoolUserFactoryException;
 import it.cnr.cool.mail.MailService;
 import it.cnr.cool.rest.util.Util;
@@ -11,38 +11,20 @@ import it.cnr.cool.security.service.impl.alfresco.CMISUser;
 import it.cnr.cool.service.CreateAccountService;
 import it.cnr.cool.service.I18nService;
 import it.cnr.cool.service.UserFactoryException;
-
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
-import java.util.UUID;
-
-import javax.servlet.http.HttpServletRequest;
-
-import javax.ws.rs.Consumes;
-import javax.ws.rs.CookieParam;
-import javax.ws.rs.FormParam;
-import javax.ws.rs.GET;
-import javax.ws.rs.POST;
-import javax.ws.rs.PUT;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
-import javax.ws.rs.QueryParam;
-import javax.ws.rs.core.*;
-import javax.ws.rs.core.Response.ResponseBuilder;
-import javax.ws.rs.core.Response.Status;
-
 import org.apache.chemistry.opencmis.client.bindings.spi.BindingSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.google.gson.JsonObject;
+import javax.servlet.http.HttpServletRequest;
+import javax.ws.rs.*;
+import javax.ws.rs.core.*;
+import javax.ws.rs.core.Response.ResponseBuilder;
+import javax.ws.rs.core.Response.Status;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.util.*;
 
 @Path("security")
 @Component
@@ -311,32 +293,6 @@ public class SecurityRest {
         NewCookie cookie = new NewCookie("ticket", ticket, "/", null, 1, null, maxAge, false);
         return cookie;
     }
-
-	@POST
-	@Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.APPLICATION_JSON)
-	@Path(Page.LOGIN_URL)
-	public Response loginJson(@Context HttpServletRequest req,
-			Credentials credentials) {
-
-		String username = credentials.getUsername();
-		String ticket = cmisAuthenticatorFactory.authenticate(req,
-				username, credentials.getPassword());
-
-		ResponseBuilder rb;
-		if (ticket != null) {
-            Map<String, String> r = new HashMap<>();
-            r.put("ticket", ticket);
-			rb = Response.ok(r);
-        } else {
-			rb = Response.status(Status.FORBIDDEN).entity(
-					"access denied to user " + username);
-		}
-
-		return rb.build();
-
-	}
-
 
 	@GET
 	@Path(Page.LOGOUT_URL)
