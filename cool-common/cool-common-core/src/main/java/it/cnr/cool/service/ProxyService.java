@@ -59,8 +59,8 @@ public class ProxyService {
     public void processRequest(HttpServletRequest req,
                                HttpServletResponse res, boolean isPost) throws IOException {
 
-        BindingSession currentBindingSession = cmisService
-                .getCurrentBindingSession(req);
+        BindingSession currentBindingSession = getBindingSession(req);
+
         UrlBuilder url = getUrl(req);
         String urlParam = getUrlParam(req);
 
@@ -95,7 +95,8 @@ public class ProxyService {
 
     public void processDelete (HttpServletRequest req, HttpServletResponse res) throws IOException {
 
-        BindingSession currentBindingSession = cmisService.getCurrentBindingSession(req);
+        BindingSession currentBindingSession = getBindingSession(req);
+
         UrlBuilder url = getUrl(req);
 
         Response resp = CmisBindingsHelper
@@ -121,16 +122,7 @@ public class ProxyService {
 
         UrlBuilder url = getUrl(req, backend);
 
-        String authorization = req.getHeader("Authorization");
-
-        BindingSession currentBindingSession = createBindingSessionForBasicAuthentication(authorization);
-
-        if (currentBindingSession == null) {
-            LOGGER.info("no basic auth provided, using current binding session");
-            currentBindingSession = cmisService.getCurrentBindingSession(req);
-        } else {
-            LOGGER.info("basic auth provided");
-        }
+        BindingSession currentBindingSession = getBindingSession(req);
 
         Response resp = CmisBindingsHelper
                 .getHttpInvoker(currentBindingSession).invokeGET(url,
@@ -172,6 +164,20 @@ public class ProxyService {
 
         outputStream.flush();
 
+    }
+
+    private BindingSession getBindingSession(HttpServletRequest req) {
+        String authorization = req.getHeader("Authorization");
+
+        BindingSession currentBindingSession = createBindingSessionForBasicAuthentication(authorization);
+
+        if (currentBindingSession == null) {
+            LOGGER.info("no basic auth provided, using current binding session");
+            currentBindingSession = cmisService.getCurrentBindingSession(req);
+        } else {
+            LOGGER.info("basic auth provided");
+        }
+        return currentBindingSession;
     }
 
 
