@@ -71,7 +71,7 @@ public class CMISService implements InitializingBean, CMISSessionManager {
      *
      * @return
      */
-    Session getRepositorySession(String username, String password)
+    public Session getRepositorySession(String username, String password)
     {
         Map<String, String> parameters = cmisConfig.getServerParameters();
         if (parameters == null)
