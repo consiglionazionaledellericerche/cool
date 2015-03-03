@@ -14,6 +14,6 @@ if (filter !== null) {
 	}
 }
 // Get the collection of people
-var peopleCollection = search.luceneSearch(luceneQuery, "@cm\\:userName", true);
+var peopleCollection = search.luceneSearch(luceneQuery, "@cm\\:userName", true, maxResults);
 // Pass the queried sites to the template
 model.peoplelist = peopleCollection;
