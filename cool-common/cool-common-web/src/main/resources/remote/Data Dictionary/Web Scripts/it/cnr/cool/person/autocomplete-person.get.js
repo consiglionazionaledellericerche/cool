@@ -1,7 +1,7 @@
 /*global args, search, model */
 // Get the args
 var filter = args.filter;
-var maxItems = args.maxItems;
+var maxItems = args.maxItems || 10;
 var luceneQuery = "TYPE:\"{http://www.alfresco.org/model/content/1.0}person\" ";
 if (filter !== null) {
 	var separatorIndex = filter.indexOf(':');
