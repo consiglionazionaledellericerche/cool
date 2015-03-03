@@ -1,7 +1,7 @@
 /*global args, search, model */
 // Get the args
 var filter = args.filter;
-var maxResults = args.maxResults;
+var maxItems = args.maxItems;
 var luceneQuery = "TYPE:\"{http://www.alfresco.org/model/content/1.0}person\" ";
 if (filter !== null) {
 	var separatorIndex = filter.indexOf(':');
@@ -14,6 +14,6 @@ if (filter !== null) {
 	}
 }
 // Get the collection of people
-var peopleCollection = search.luceneSearch(luceneQuery, "@cm\\:userName", true, maxResults);
+var peopleCollection = search.luceneSearch(luceneQuery, "@cm\\:userName", true, maxItems);
 // Pass the queried sites to the template
 model.peoplelist = peopleCollection;
