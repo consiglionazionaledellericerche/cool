@@ -8,8 +8,6 @@ import it.cnr.cool.security.service.UserService;
 import it.cnr.cool.security.service.impl.alfresco.CMISUser;
 import it.cnr.cool.test.SpringInstanceTestClassRunner;
 import org.json.JSONObject;
-import org.junit.After;
-import org.junit.Before;
 import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -60,8 +58,8 @@ public class SecurityRestTest {
     @Autowired
     private CMISAuthenticatorFactory cmisAuthenticatorFactory;
 
-	@Before
-	public void beforeClassSetup() {
+	@Test
+	public void test0beforeClassSetup() {
 		MockHttpServletRequest req = new MockHttpServletRequest();
 		req.addPreferredLocale(Locale.ITALIAN);
 		MultivaluedMap<String, String> form = new MultivaluedHashMap<String, String>();
@@ -70,7 +68,7 @@ public class SecurityRestTest {
 		form.add("firstName", "PIPPO");
 		form.add("lastName", "PAPERINO");
 		form.add("email", "pippo.paperino@pluto.it");
-		form.add("codicefiscale", "SPSMRC73H02C495");
+		form.add("codicefiscale", "LNUFNC84P23H501L");
 
 		Response outcome = security.doCreateUser(req, form, "it");
 		assertEquals(Status.INTERNAL_SERVER_ERROR.getStatusCode(), outcome.getStatus());
@@ -187,8 +185,8 @@ public class SecurityRestTest {
 
 	}
 
-    @After
-	public void afterClassSetup() {
+    @Test
+	public void test9afterClassSetup() {
 		MockHttpServletRequest req = new MockHttpServletRequest();
         try {
             req.addHeader(CMISService.AUTHENTICATION_HEADER, cmisAuthenticatorFactory.getTicket("admin", "admin"));

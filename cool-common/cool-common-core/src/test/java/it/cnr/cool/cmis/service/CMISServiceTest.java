@@ -170,7 +170,7 @@ public class CMISServiceTest {
 		req.getSession();
 		BindingSession session = cmisService.getCurrentBindingSession(req);
 		BindingSession session2 = cmisService.getCurrentBindingSession(req);
-		assertEquals(session, session2);
+		assertEquals(session.getSessionId(), session2.getSessionId());
 	}
 
 	@Test

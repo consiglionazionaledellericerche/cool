@@ -1,13 +1,5 @@
 package it.cnr.cool.service;
 
-import static org.junit.Assert.assertEquals;
-
-import java.io.IOException;
-import java.util.Locale;
-import java.util.Properties;
-
-import javax.servlet.http.HttpServletRequest;
-
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
@@ -18,6 +10,13 @@ import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.annotation.DirtiesContext.ClassMode;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+
+import javax.servlet.http.HttpServletRequest;
+import java.io.IOException;
+import java.util.Locale;
+import java.util.Properties;
+
+import static org.junit.Assert.assertEquals;
 
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -34,7 +33,7 @@ public class I18nServiceTest {
 		HttpServletRequest request = new MockHttpServletRequest();
 		Locale locale = I18nService.getLocale(request, Locale.getDefault().getLanguage());
 		LOGGER.info(locale.toString());
-		assertEquals("it", locale.getLanguage());
+		assertEquals("en", locale.getLanguage());
 	}
 
 	@Test
