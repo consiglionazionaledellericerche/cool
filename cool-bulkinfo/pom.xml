@@ -43,12 +43,5 @@
 			<scope>test</scope>
 		</dependency>
 
-		<dependency>
-			<groupId>javax.jms</groupId>
-			<artifactId>jms</artifactId>
-			<version>${jms.version}</version>
-			<scope>test</scope>
-		</dependency>
-
 	</dependencies>
 </project>

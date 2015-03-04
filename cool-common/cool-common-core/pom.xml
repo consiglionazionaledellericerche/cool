@@ -97,12 +97,7 @@
       <version>2.4</version>
     </dependency>
 
-    <dependency>
-      <groupId>javax.jms</groupId>
-      <artifactId>jms</artifactId>
-      <version>${jms.version}</version>
-      <scope>provided</scope>
-    </dependency>
+
 
     <dependency>
       <artifactId>cool-common-api</artifactId>

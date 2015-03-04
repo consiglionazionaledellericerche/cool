@@ -18,13 +18,6 @@
 		</dependency>
 
 		<dependency>
-			<groupId>javax.jms</groupId>
-			<artifactId>jms</artifactId>
-			<version>${jms.version}</version>
-			<scope>test</scope>
-		</dependency>
-
-		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-web</artifactId>
 			<version>${spring.version}</version>
