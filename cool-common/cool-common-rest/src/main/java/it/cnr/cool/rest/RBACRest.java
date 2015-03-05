@@ -1,7 +1,6 @@
 package it.cnr.cool.rest;
 
 import it.cnr.cool.security.SecurityChecked;
-import it.cnr.cool.service.workflow.WorkflowService;
 import it.cnr.cool.web.PermissionService;
 import it.cnr.cool.web.PermissionServiceImpl;
 import org.slf4j.Logger;
@@ -21,9 +20,6 @@ import javax.ws.rs.core.Response.Status;
 public class RBACRest {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(RBACRest.class);
-
-	@Autowired
-	private WorkflowService workflowService;
 
 	@Autowired
 	private PermissionService permissionService;
@@ -49,10 +45,6 @@ public class RBACRest {
 		} else {
 			builder = Response.ok();
 
-		}
-
-		if (Boolean.valueOf(workflow)) {
-			workflowService.clear();
 		}
 
 		return builder.build();
@@ -90,10 +82,6 @@ public class RBACRest {
 		} else {
 			builder = Response.ok();
 
-		}
-
-		if (Boolean.valueOf(workflow)) {
-			workflowService.clear();
 		}
 
 		return builder.build();
