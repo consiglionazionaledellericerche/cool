@@ -70,7 +70,7 @@ public class CmisAuthRepository {
     }
 
 
-    @Cacheable("adming-binding-session")
+    @Cacheable("admin-binding-session")
     public BindingSession getAdminBindingSession() {
 
         LOGGER.debug("creating an admin binding session");
