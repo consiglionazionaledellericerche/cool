@@ -13,7 +13,8 @@ public enum MimeTypes
     ATOMENTRY ("application/atom+xml;type=entry", ""),
     FORMDATA ("multipart/form-data", ""),
     JSON ("application/json", ""),
-    ZIP ("application/zip", ".zip");
+    ZIP ("application/zip", ".zip"),
+    ISO ("application/octet-stream", ".iso");
     
     private String mimetype;
 
