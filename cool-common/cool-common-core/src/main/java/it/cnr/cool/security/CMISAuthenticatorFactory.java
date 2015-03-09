@@ -5,10 +5,7 @@ import com.google.gson.JsonParser;
 import it.cnr.cool.cmis.service.CMISService;
 import it.cnr.cool.cmis.service.CmisAuthRepository;
 import it.cnr.cool.cmis.service.LoginException;
-import it.cnr.cool.exception.CoolUserFactoryException;
-import it.cnr.cool.security.service.UserService;
 import it.cnr.cool.security.service.impl.alfresco.CMISUser;
-import it.cnr.cool.service.UserFactoryException;
 import org.apache.chemistry.opencmis.client.bindings.spi.BindingSession;
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.HttpStatus;
@@ -29,36 +26,15 @@ public class CMISAuthenticatorFactory {
 	@Autowired
 	private CMISService cmisService;
 
-	@Autowired
-	private UserService userService;
-
     @Autowired
     private CmisAuthRepository cmisAuthRepository;
-
-	public CMISUser loadUser(HttpServletRequest request, String userId)
-			throws UserFactoryException {
-		return loadUser(request, userId, null);
-	}
-
-	public CMISUser loadUser(HttpServletRequest request, String userId,
-			String endpointId) throws UserFactoryException {
-		try {
-			BindingSession bindingSession = cmisService
-					.getCurrentBindingSession(request);
-			return userService.loadUser(userId, bindingSession);
-		} catch (CoolUserFactoryException e) {
-			throw new UserFactoryException("Error loading user: " + userId, e);
-		}
-	}
 
 	public String authenticate(String username,
 			String password) {
 		try {
 			String ticket = getTicket(username, password);
 
-
-            BindingSession bindingSession;
-            bindingSession = cmisAuthRepository.getBindingSession(ticket);
+            BindingSession bindingSession = cmisAuthRepository.getBindingSession(ticket);
 
             CMISUser user = cmisAuthRepository.getCachedCMISUser(ticket, bindingSession);
 
