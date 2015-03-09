@@ -59,11 +59,12 @@ public class QueryService implements GlobalCache, InitializingBean{
 				.getParameterValues("relationship.field");
 		String parameter_skip_count = req.getParameter("skipCount");
 		String orderBy = req.getParameter("orderBy");
+        Boolean allColumns = Boolean.valueOf(req.getParameter("allColumns"));
 
 		return query(cmisSession, parameter_relationship,
 				parameter_relationship_name, maxItems, exportData, folder,
 				objectRel, fetchCmisObject, calculateTotalNumItems, statement,
-				parameter_relationship_field, parameter_skip_count, orderBy);
+				parameter_relationship_field, parameter_skip_count, orderBy, allColumns);
 
 	}
 
@@ -85,7 +86,7 @@ public class QueryService implements GlobalCache, InitializingBean{
 			Boolean exportData, String folder, String objectRel,
 			Boolean fetchCmisObject, Boolean calculateTotalNumItems,
 			String statement, String[] parameter_relationship_field,
-			String parameter_skip_count, String orderBy) {
+			String parameter_skip_count, String orderBy, boolean allColumns) {
 
 
 
@@ -127,17 +128,19 @@ public class QueryService implements GlobalCache, InitializingBean{
 							+ ((orderBy != null && orderBy.length() > 0) ? ","
 									+ orderBy : ""));
 
-					Set<String> columns = new HashSet<String>();
-					columns.add(PropertyIds.OBJECT_ID);
-					columns.add(PropertyIds.OBJECT_TYPE_ID);
-					columns.add(PropertyIds.BASE_TYPE_ID);
-					columns.add(PropertyIds.NAME);
-					columns.add(PropertyIds.LAST_MODIFICATION_DATE);
-					columns.add(PropertyIds.LAST_MODIFIED_BY);
-					columns.add(PropertyIds.CONTENT_STREAM_LENGTH);
-					columns.add(PropertyIds.CONTENT_STREAM_MIME_TYPE);
-					columns.add(CoolPropertyIds.ALFCMIS_NODEREF.value());
-					operationContext.setFilter(columns);
+                    if (!allColumns) {
+                        Set<String> columns = new HashSet<String>();
+                        columns.add(PropertyIds.OBJECT_ID);
+                        columns.add(PropertyIds.OBJECT_TYPE_ID);
+                        columns.add(PropertyIds.BASE_TYPE_ID);
+                        columns.add(PropertyIds.NAME);
+                        columns.add(PropertyIds.LAST_MODIFICATION_DATE);
+                        columns.add(PropertyIds.LAST_MODIFIED_BY);
+                        columns.add(PropertyIds.CONTENT_STREAM_LENGTH);
+                        columns.add(PropertyIds.CONTENT_STREAM_MIME_TYPE);
+                        columns.add(CoolPropertyIds.ALFCMIS_NODEREF.value());
+                        operationContext.setFilter(columns);
+                    }
 
 					operationContext.setIncludeAllowableActions(true);
 					operationContext.setIncludePathSegments(false);
