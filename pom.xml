@@ -109,7 +109,7 @@
                   <options>
                     <indent>2</indent>
                     <!-- predefined -->
-                    <predef>define,require,sitedata,model,cmisSession,cmisService,args,url,childPages,params,cnrutils,cache,status,Xsd2Json,search,utils</predef>
+                    <predef>define,require,sitedata,model,cmisSession,cmisService,args,url,childPages,params,cnrutils,cache,status,Xsd2Json,search,utils,person</predef>
                     <!-- tolerate ++ -->
                     <plusplus>true</plusplus>
                     <!-- dangling _ in identifiers -->
