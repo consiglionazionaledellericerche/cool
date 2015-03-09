@@ -166,8 +166,6 @@ public class ProxyService {
     }
 
     private BindingSession getBindingSession(HttpServletRequest req) {
-        String authorization = req.getHeader("Authorization");
-
         BindingSession currentBindingSession = cmisService.getCurrentBindingSession(req);
 
         if (currentBindingSession == null) {
