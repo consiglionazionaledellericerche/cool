@@ -260,8 +260,7 @@ public class SecurityRest {
 			@FormParam("redirect") String redirect,
 			@FormParam("queryString") String queryString) {
 
-        String ticket = cmisAuthenticatorFactory.authenticate(req,
-				username, password);
+        String ticket = cmisAuthenticatorFactory.authenticate(username, password);
 
         ResponseBuilder rb;
 

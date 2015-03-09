@@ -51,7 +51,7 @@ public class CMISAuthenticatorFactory {
 		}
 	}
 
-	public String authenticate(HttpServletRequest request, String username,
+	public String authenticate(String username,
 			String password) {
 		try {
 			String ticket = getTicket(username, password);

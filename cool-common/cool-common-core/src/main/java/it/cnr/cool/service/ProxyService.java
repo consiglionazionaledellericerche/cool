@@ -18,7 +18,6 @@ import org.springframework.util.FileCopyUtils;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.xml.bind.DatatypeConverter;
 import java.io.*;
 import java.net.SocketException;
 import java.util.Arrays;
@@ -169,7 +168,7 @@ public class ProxyService {
     private BindingSession getBindingSession(HttpServletRequest req) {
         String authorization = req.getHeader("Authorization");
 
-        BindingSession currentBindingSession = createBindingSessionForBasicAuthentication(authorization);
+        BindingSession currentBindingSession = cmisService.getCurrentBindingSession(req);
 
         if (currentBindingSession == null) {
             LOGGER.info("no basic auth provided, using current binding session");
@@ -278,30 +277,6 @@ public class ProxyService {
     public void setBackends(Map<String, String> backends) {
         this.backends = backends;
     }
-
-
-    private BindingSession createBindingSessionForBasicAuthentication(String authorization) {
-
-        if (authorization == null || authorization.isEmpty()) {
-            LOGGER.debug("no authorization header provided");
-            return null;
-        }
-
-        String usernameAndPasswordBase64 = authorization.split(" ")[1];
-
-        byte[] usernameAndPasswordByteArray = DatatypeConverter.parseBase64Binary(usernameAndPasswordBase64);
-
-        String [] usernameAndPassword = new String(usernameAndPasswordByteArray).split(":");
-
-        String username = usernameAndPassword[0];
-        String password = usernameAndPassword[1];
-
-        LOGGER.info("using BASIC auth for user: " + username);
-
-        return cmisService.createBindingSession(username, password);
-
-    }
-
 
     private boolean isHeaderToBeAdded(String key) {
 

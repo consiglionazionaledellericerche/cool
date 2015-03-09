@@ -1,8 +1,12 @@
 package it.cnr.cool.cmis.service;
 
 import it.cnr.cool.cmis.service.impl.ObjectTypeCacheImpl;
+import it.cnr.cool.dto.Credentials;
+import it.cnr.cool.security.CMISAuthenticatorFactory;
 import it.cnr.cool.security.service.impl.alfresco.CMISUser;
-import org.apache.chemistry.opencmis.client.api.*;
+import org.apache.chemistry.opencmis.client.api.OperationContext;
+import org.apache.chemistry.opencmis.client.api.Session;
+import org.apache.chemistry.opencmis.client.api.SessionFactory;
 import org.apache.chemistry.opencmis.client.bindings.CmisBindingFactory;
 import org.apache.chemistry.opencmis.client.bindings.impl.CmisBindingsHelper;
 import org.apache.chemistry.opencmis.client.bindings.impl.SessionImpl;
@@ -18,7 +22,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
-import java.util.*;
+import javax.xml.bind.DatatypeConverter;
+import java.util.HashMap;
+import java.util.Locale;
+import java.util.Map;
 
 public class CMISService implements InitializingBean, CMISSessionManager {
 
@@ -42,6 +49,9 @@ public class CMISService implements InitializingBean, CMISSessionManager {
 
     @Autowired
     private CmisAuthRepository cmisAuthRepository;
+
+    @Autowired
+    private CMISAuthenticatorFactory cmisAuthenticatorFactory;
 
 	/**
 	 *
@@ -242,7 +252,28 @@ public class CMISService implements InitializingBean, CMISSessionManager {
     }
 
     private String extractTicketFromRequest(HttpServletRequest req) {
-        String ticket = req.getHeader(AUTHENTICATION_HEADER);
+
+        String ticket;
+
+        String authorization = req.getHeader("Authorization");
+
+        if (authorization != null) {
+
+            LOGGER.info("basic auth: " + authorization);
+
+            Credentials credentials = extractCredentials(authorization);
+
+            String username = credentials.getUsername();
+            String password = credentials.getPassword();
+
+            LOGGER.debug("basic auth user: " + username);
+
+            ticket = cmisAuthenticatorFactory.authenticate(username, password);
+
+        } else {
+            ticket = req.getHeader(AUTHENTICATION_HEADER);
+        }
+
 
         if (ticket != null) {
             LOGGER.info("extracted ticket: " + ticket);
@@ -261,6 +292,30 @@ public class CMISService implements InitializingBean, CMISSessionManager {
         }
 
         return ticket;
+    }
+
+
+
+    private static Credentials extractCredentials(String authorization) {
+
+        if (authorization == null || authorization.isEmpty()) {
+            LOGGER.debug("no authorization header provided");
+            return null;
+        }
+
+        String usernameAndPasswordBase64 = authorization.split(" ")[1];
+
+        byte[] usernameAndPasswordByteArray = DatatypeConverter.parseBase64Binary(usernameAndPasswordBase64);
+
+        String [] usernameAndPassword = new String(usernameAndPasswordByteArray).split(":");
+
+        String username = usernameAndPassword[0];
+        String password = usernameAndPassword[1];
+
+        LOGGER.info("using BASIC auth for user: " + username);
+
+        return new Credentials(username, password);
+
     }
 
 
