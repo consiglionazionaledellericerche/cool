@@ -49,16 +49,18 @@ public class CmisAuthRepository {
         // who am I ?
         String link = cmisService.getBaseURL().concat("service/cnr/person/whoami");
         UrlBuilder url = new UrlBuilder(link);
-        Response resp = CmisBindingsHelper.getHttpInvoker(bindingSession).invokeGET(url, bindingSession);
-        int status = resp.getResponseCode();
+        Response response = CmisBindingsHelper.getHttpInvoker(bindingSession).invokeGET(url, bindingSession);
+        int status = response.getResponseCode();
 
         if (status == HttpStatus.SC_OK) {
 
             try {
-                InputStreamReader src = new InputStreamReader(resp.getStream());
-                CMISUser tempUser = new ObjectMapper().readValue(src, CMISUser.class);
+                InputStreamReader reader = new InputStreamReader(response.getStream());
+                CMISUser tempUser = new ObjectMapper().readValue(reader, CMISUser.class);
 
                 String username = tempUser.getUserName();
+
+                LOGGER.debug("retrieved user: " + username);
 
                 CMISUser user = userService.loadUser(username, bindingSession);
                 LOGGER.info("add to cache user " + (user == null ? "null" : user.getId()) + " to the cache having ticket = " + ticket);
