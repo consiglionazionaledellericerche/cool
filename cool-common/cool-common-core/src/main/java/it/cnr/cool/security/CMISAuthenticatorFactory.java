@@ -60,10 +60,9 @@ public class CMISAuthenticatorFactory {
             BindingSession bindingSession;
             bindingSession = cmisAuthRepository.getBindingSession(ticket);
 
-            CMISUser user = userService.loadUser(username, bindingSession);
-            LOGGER.debug("loaded user: " + user.toString());
+            CMISUser user = cmisAuthRepository.getCachedCMISUser(ticket, bindingSession);
 
-            cmisAuthRepository.putCMISUser(user, ticket);
+            LOGGER.debug("loaded user: " + user.toString());
 
             return ticket;
 

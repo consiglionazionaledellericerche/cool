@@ -1,15 +1,22 @@
 package it.cnr.cool.cmis.service;
 
+import it.cnr.cool.security.service.UserService;
 import it.cnr.cool.security.service.impl.alfresco.CMISUser;
 import org.apache.chemistry.opencmis.client.api.Session;
+import org.apache.chemistry.opencmis.client.bindings.impl.CmisBindingsHelper;
 import org.apache.chemistry.opencmis.client.bindings.spi.BindingSession;
+import org.apache.chemistry.opencmis.client.bindings.spi.http.Response;
+import org.apache.chemistry.opencmis.commons.impl.UrlBuilder;
+import org.apache.commons.httpclient.HttpStatus;
+import org.codehaus.jackson.map.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Repository;
 
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.Map;
 
 @Repository
@@ -25,22 +32,47 @@ public class CmisAuthRepository {
     @Autowired
     private CMISConfig cmisConfig;
 
+    @Autowired
+    private UserService userService;
+
     @Cacheable("cmis-session")
     public Session getSession(String ticket) {
         LOGGER.info("creating a new CMIS Session for ticket: " + ticket);
         return createSession("", ticket);
     }
 
-    @CachePut(value= USER, key="#ticket")
-    public CMISUser putCMISUser(CMISUser user, String ticket) {
-        LOGGER.info("add to cache user " + (user == null ? "null" : user.getId()) + " to the cache having ticket = " + ticket);
-        return user;
-    }
 
     @Cacheable(value= USER)
-    public CMISUser getCachedCMISUser(String ticket) {
-        LOGGER.error("user not cached for ticket " + ticket + ", returning null");
-        return null;
+    public CMISUser getCachedCMISUser(String ticket, BindingSession bindingSession) {
+        LOGGER.info("user not cached for ticket " + ticket);
+
+        // who am I ?
+        String link = cmisService.getBaseURL().concat("service/cnr/person/whoami");
+        UrlBuilder url = new UrlBuilder(link);
+        Response resp = CmisBindingsHelper.getHttpInvoker(bindingSession).invokeGET(url, bindingSession);
+        int status = resp.getResponseCode();
+
+        if (status == HttpStatus.SC_OK) {
+
+            try {
+                InputStreamReader src = new InputStreamReader(resp.getStream());
+                CMISUser tempUser = new ObjectMapper().readValue(src, CMISUser.class);
+
+                String username = tempUser.getUserName();
+
+                CMISUser user = userService.loadUser(username, bindingSession);
+                LOGGER.info("add to cache user " + (user == null ? "null" : user.getId()) + " to the cache having ticket = " + ticket);
+                return user;
+
+            } catch (IOException e) {
+                LOGGER.warn("IO error retrieving user having ticket: " + ticket, e);
+                return null;
+            }
+
+        } else {
+            LOGGER.warn("HTTP Error retrieving user having ticket: " + ticket + ", status: " + status);
+            return null;
+        }
 
     }
 

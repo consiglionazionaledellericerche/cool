@@ -221,7 +221,11 @@ public class CMISService implements InitializingBean, CMISSessionManager {
 
     public CMISUser getCMISUserFromSession(HttpServletRequest request) {
         String ticket = extractTicketFromRequest(request);
-        CMISUser user = cmisAuthRepository.getCachedCMISUser(ticket);
+
+        BindingSession bindingSession = cmisAuthRepository.getBindingSession(ticket);
+
+        CMISUser user = cmisAuthRepository.getCachedCMISUser(ticket, bindingSession);
+
 
         if (user == null) {
             LOGGER.info("user is null, assuming a guest");
