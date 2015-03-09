@@ -1,0 +1,10 @@
+<webscript>
+   <shortname>Get UserName</shortname>
+   <description>returns username, given a valid ticket</description>
+   <url>/cnr/person/whoami</url>
+   <format default="json">argument</format>
+   <authentication>user</authentication>
+   <transaction>required</transaction>
+   <family>CNR</family>
+   <family>person</family>
+</webscript>
