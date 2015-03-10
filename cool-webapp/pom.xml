@@ -38,11 +38,6 @@
       <artifactId>jaxen</artifactId>
       <version>${jaxen.version}</version>
     </dependency>
-    <dependency>
-      <groupId>org.tuckey</groupId>
-      <artifactId>urlrewritefilter</artifactId>
-      <version>4.0.3</version>
-    </dependency>
   </dependencies>
 
   <build>
