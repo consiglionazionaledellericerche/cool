@@ -42,7 +42,7 @@ public class CmisAuthRepository {
     }
 
 
-    @Cacheable(value= USER)
+    @Cacheable(value= USER, key="#ticket")
     public CMISUser getCachedCMISUser(String ticket, BindingSession bindingSession) {
         LOGGER.info("user not cached for ticket " + ticket);
 

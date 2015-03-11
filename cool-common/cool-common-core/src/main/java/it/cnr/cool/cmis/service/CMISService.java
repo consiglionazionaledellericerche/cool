@@ -234,7 +234,13 @@ public class CMISService implements InitializingBean, CMISSessionManager {
 
         BindingSession bindingSession = cmisAuthRepository.getBindingSession(ticket);
 
-        CMISUser user = cmisAuthRepository.getCachedCMISUser(ticket, bindingSession);
+        CMISUser user;
+
+        if (ticket != null) {
+            user = cmisAuthRepository.getCachedCMISUser(ticket, bindingSession);
+        } else {
+            user = null;
+        }
 
 
         if (user == null) {
