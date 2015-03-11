@@ -53,7 +53,7 @@ define(['jquery', 'cnr/cnr.ui', 'json!common', 'i18n', 'json!cache'], function (
         generateTemplate: 'rest/models/generateTemplate'
       },
       typesTree: 'rest/typesTree/tree',
-      zipper: 'rest/zipper/',
+      exportVariazioni: 'rest/exportVariazioni/',
       search: {
         content: "rest/content",
         query: "rest/search?guest=true",
