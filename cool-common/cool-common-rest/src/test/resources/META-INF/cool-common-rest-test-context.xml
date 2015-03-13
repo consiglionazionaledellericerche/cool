@@ -19,4 +19,28 @@
 
     <bean class="it.cnr.cool.service.PageService" init-method="init"></bean>
 
+    <bean id="proxy" class="it.cnr.cool.rest.Proxy">
+        <property name="backends">
+            <map key-type="java.lang.String" value-type="java.lang.String">
+                <entry key="helpdesk">
+                    <map>
+                        <!--<entry key="url" value="https://testsiper.si.cnr.it/siper/json/userinfo"/>-->
+                        <entry key="url" value="https://testoil.si.cnr.it/helpdesk/rest/catg/HDConcorsi"/>
+                        <entry key="userName" value="app.hdselezioni"/>
+                        <entry key="psw" value="category!dyn!"/>
+                    </map>
+                </entry>
+                <entry key="siper">
+                    <map>
+                        <entry key="url" value=""/>
+                    </map>
+                </entry>
+                <entry key="missioni">
+                    <map>
+                        <entry key="url" value="http://as1dock.si.cnr.it:90/elasticsearch/"/>
+                    </map>
+                </entry>
+            </map>
+        </property>
+    </bean>
 </beans>

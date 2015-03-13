@@ -1,139 +1,157 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
-	xmlns:context="http://www.springframework.org/schema/context"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xmlns:util="http://www.springframework.org/schema/util"
-	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:util="http://www.springframework.org/schema/util"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
     http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd
     http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-3.0.xsd">
 
 
-	<import resource="classpath*:META-INF/cool-common-core-context.xml" />
+    <import resource="classpath*:META-INF/cool-common-core-context.xml"/>
 
-	<!-- This will automatically locate any and all property files you have
-		within your classpath, provided they fall under the META-INF/spring directory.
-		The located property files are parsed and their values can then be used within
-		application context files in the form of ${propertyKey}. -->
-	<bean
-		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
-		<property name="locations">
-			<list>
-				<value>classpath*:META-INF/spring/*.properties</value>
-				<value>classpath*:*/extension/repository.properties</value>
-			</list>
-		</property>
-		<property name="ignoreUnresolvablePlaceholders" value="true" />
-	</bean>
+    <!-- This will automatically locate any and all property files you have
+        within your classpath, provided they fall under the META-INF/spring directory.
+        The located property files are parsed and their values can then be used within
+        application context files in the form of ${propertyKey}. -->
+    <bean
+            class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+        <property name="locations">
+            <list>
+                <value>classpath*:META-INF/spring/*.properties</value>
+                <value>classpath*:*/extension/repository.properties</value>
+            </list>
+        </property>
+        <property name="ignoreUnresolvablePlaceholders" value="true"/>
+    </bean>
 
-	<!-- Configures Apache Commons Fileupload -->
-	<bean id="multipartResolver"
-		class="it.cnr.cool.web.multipart.commons.CustomMultipartResolver">
-		<property name="maxUploadSize" value="15360000" />
-		<property name="characterEncoding" value="UTF-8" />
-	</bean>
+    <!-- Configures Apache Commons Fileupload -->
+    <bean id="multipartResolver"
+          class="it.cnr.cool.web.multipart.commons.CustomMultipartResolver">
+        <property name="maxUploadSize" value="15360000"/>
+        <property name="characterEncoding" value="UTF-8"/>
+    </bean>
 
-	<!-- Mail service -->
-	<bean id="mailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl">
-		<property name="host" value="${mail.host}" />
-		<property name="port" value="${mail.port}" />
-		<property name="username" value="${mail.username}" />
-		<property name="password" value="${mail.password}" />
-		<property name="javaMailProperties">
-			<props>
-				<prop key="mail.from.default">${mail.from.default}</prop>
-				<!-- Use SMTP-AUTH to authenticate to SMTP server -->
-				<prop key="mail.smtp.auth">${mail.smtp.auth}</prop>
-				<!-- Use TLS to encrypt communication with SMTP server -->
-				<prop key="mail.smtp.starttls.enable">${mail.smtp.starttls.enable}</prop>
-			</props>
-		</property>
-	</bean>
+    <!-- Mail service -->
+    <bean id="mailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl">
+        <property name="host" value="${mail.host}"/>
+        <property name="port" value="${mail.port}"/>
+        <property name="username" value="${mail.username}"/>
+        <property name="password" value="${mail.password}"/>
+        <property name="javaMailProperties">
+            <props>
+                <prop key="mail.from.default">${mail.from.default}</prop>
+                <!-- Use SMTP-AUTH to authenticate to SMTP server -->
+                <prop key="mail.smtp.auth">${mail.smtp.auth}</prop>
+                <!-- Use TLS to encrypt communication with SMTP server -->
+                <prop key="mail.smtp.starttls.enable">${mail.smtp.starttls.enable}</prop>
+            </props>
+        </property>
+    </bean>
 
-	<bean id="mailService" class="it.cnr.cool.mail.MailServiceImpl" depends-on="mailSender">
-		<property name="mailFromDefault" value="${mail.from.default}" />
-		<property name="mailToAdmin" value="${mail.admin}" />
-		<property name="mailToProtocollo" value="${mail.protocollo}" />
-		<property name="mailToHelpDesk" value="${mail.helpdesk}" />
-		<property name="mailToErrorMessage" value="${mail.to.error.message}" />
-		<property name="mailErrorEnabled" value="${mail.error.enabled}" />
-	</bean>
+    <bean id="mailService" class="it.cnr.cool.mail.MailServiceImpl" depends-on="mailSender">
+        <property name="mailFromDefault" value="${mail.from.default}"/>
+        <property name="mailToAdmin" value="${mail.admin}"/>
+        <property name="mailToProtocollo" value="${mail.protocollo}"/>
+        <property name="mailToHelpDesk" value="${mail.helpdesk}"/>
+        <property name="mailToErrorMessage" value="${mail.to.error.message}"/>
+        <property name="mailErrorEnabled" value="${mail.error.enabled}"/>
+    </bean>
 
-	<!-- End CMIS service Bean -->
+    <!-- End CMIS service Bean -->
 
 
-
-	<bean id="frontOffice" class="it.cnr.cool.rest.FrontOffice"></bean>
+    <bean id="frontOffice" class="it.cnr.cool.rest.FrontOffice"></bean>
     <bean class="it.cnr.cool.rest.TypesTree"></bean>
 
-	<bean id="folderChildren" class="it.cnr.cool.rest.FolderChildren"></bean>
+    <bean id="folderChildren" class="it.cnr.cool.rest.FolderChildren"></bean>
 
-	<bean id="cmisFindOperationContext"
-		class="org.apache.chemistry.opencmis.client.runtime.OperationContextImpl">
-		<property name="maxItemsPerPage" value="1000" />
-		<property name="includeAllowableActions" value="false" />
-		<property name="includePathSegments" value="false" />
-		<property name="cacheEnabled" value="false" />
-	</bean>
-	<bean id="cmisCountOperationContext"
-		class="org.apache.chemistry.opencmis.client.runtime.OperationContextImpl">
-		<property name="maxItemsPerPage" value="1" />
-		<property name="includeAllowableActions" value="false" />
-		<property name="includePathSegments" value="false" />
-		<property name="cacheEnabled" value="true" />
-	</bean>
-	<bean id="cmisAllOperationContext"
-		class="org.apache.chemistry.opencmis.client.runtime.OperationContextImpl">
-		<property name="maxItemsPerPage" value="10000" />
-		<property name="includeAllowableActions" value="true" />
-		<property name="includePathSegments" value="false" />
-		<property name="cacheEnabled" value="false" />
-	</bean>
-	<bean id="cmisAclOperationContext"
-		class="org.apache.chemistry.opencmis.client.runtime.OperationContextImpl">
-		<property name="cacheEnabled" value="true" />
-		<property name="includeAcls" value="true" />
-	</bean>
-
-
-	<bean class="java.util.ArrayList"></bean>
-
-	<util:properties id="backendMap" location="classpath:backendMap.properties" />
-
-	<bean class="it.cnr.cool.rest.Proxy"></bean>
-
-	<bean class="it.cnr.cool.service.ProxyService">
-		<property name="proxyInterceptor" ref="proxyInterceptor" />
-		 <property name="backends" ref="backendMap" />
-	</bean>
-
-	<bean id="securityCheckInterceptor" class="it.cnr.cool.security.SecurityCheckInterceptor"></bean>
+    <bean id="cmisFindOperationContext"
+          class="org.apache.chemistry.opencmis.client.runtime.OperationContextImpl">
+        <property name="maxItemsPerPage" value="1000"/>
+        <property name="includeAllowableActions" value="false"/>
+        <property name="includePathSegments" value="false"/>
+        <property name="cacheEnabled" value="false"/>
+    </bean>
+    <bean id="cmisCountOperationContext"
+          class="org.apache.chemistry.opencmis.client.runtime.OperationContextImpl">
+        <property name="maxItemsPerPage" value="1"/>
+        <property name="includeAllowableActions" value="false"/>
+        <property name="includePathSegments" value="false"/>
+        <property name="cacheEnabled" value="true"/>
+    </bean>
+    <bean id="cmisAllOperationContext"
+          class="org.apache.chemistry.opencmis.client.runtime.OperationContextImpl">
+        <property name="maxItemsPerPage" value="10000"/>
+        <property name="includeAllowableActions" value="true"/>
+        <property name="includePathSegments" value="false"/>
+        <property name="cacheEnabled" value="false"/>
+    </bean>
+    <bean id="cmisAclOperationContext"
+          class="org.apache.chemistry.opencmis.client.runtime.OperationContextImpl">
+        <property name="cacheEnabled" value="true"/>
+        <property name="includeAcls" value="true"/>
+    </bean>
 
 
+    <bean class="java.util.ArrayList"></bean>
 
-	<bean id="createAccountService" class="it.cnr.cool.service.CreateAccountService"></bean>
+    <bean id="proxy" class="it.cnr.cool.rest.Proxy">
+        <property name="backends">
+            <map key-type="java.lang.String" value-type="java.lang.String">
+                <entry key="helpdesk">
+                    <map>
+                        <!--<entry key="url" value="https://testsiper.si.cnr.it/siper/json/userinfo"/>-->
+                        <entry key="url" value="https://testoil.si.cnr.it/helpdesk/rest/catg/HDConcorsi"/>
+                        <entry key="userName" value="app.hdselezioni"/>
+                        <entry key="psw" value="category!dyn!"/>
+                    </map>
+                </entry>
+                <entry key="siper">
+                    <map>
+                        <entry key="url" value=""/>
+                    </map>
+                </entry>
+                <entry key="missioni">
+                    <map>
+                        <entry key="url" value="http://as1dock.si.cnr.it:90/elasticsearch/"/>
+                    </map>
+                </entry>
+            </map>
+        </property>
+    </bean>
+
+    <bean class="it.cnr.cool.service.ProxyService">
+        <property name="proxyInterceptor" ref="proxyInterceptor"/>
+    </bean>
+
+    <bean id="securityCheckInterceptor" class="it.cnr.cool.security.SecurityCheckInterceptor"></bean>
 
 
+    <bean id="createAccountService" class="it.cnr.cool.service.CreateAccountService"></bean>
 
-	<bean class="it.cnr.cool.service.NodeService"></bean>
 
-	<bean class="it.cnr.mock.CnrRegion"></bean>
-	<bean id="messageMethod" class="it.cnr.mock.MessageMethod" scope="prototype"/>
+    <bean class="it.cnr.cool.service.NodeService"></bean>
 
-	<bean class="it.cnr.cool.rest.CacheRest"></bean>
+    <bean class="it.cnr.mock.CnrRegion"></bean>
+    <bean id="messageMethod" class="it.cnr.mock.MessageMethod" scope="prototype"/>
 
-	<bean class="it.cnr.cool.rest.Page"></bean>
-	<bean class="it.cnr.cool.rest.CommonRest"></bean>
-	<bean class="it.cnr.cool.rest.StaticResouce"></bean>
+    <bean class="it.cnr.cool.rest.CacheRest"></bean>
 
-	<bean class="it.cnr.cool.rest.I18n"></bean>
-	<bean class="it.cnr.cool.rest.Folder"></bean>
-	<bean class="it.cnr.cool.rest.RBACRest"></bean>
-	<bean class="it.cnr.cool.rest.Content"></bean>
+    <bean class="it.cnr.cool.rest.Page"></bean>
+    <bean class="it.cnr.cool.rest.CommonRest"></bean>
+    <bean class="it.cnr.cool.rest.StaticResouce"></bean>
 
-	<bean class="it.cnr.cool.rest.Node"></bean>
+    <bean class="it.cnr.cool.rest.I18n"></bean>
+    <bean class="it.cnr.cool.rest.Folder"></bean>
+    <bean class="it.cnr.cool.rest.RBACRest"></bean>
+    <bean class="it.cnr.cool.rest.Content"></bean>
 
-	<bean class="it.cnr.cool.rest.Search">
-		<property name="queryService" ref="queryService" />
-	</bean>
-	<bean class="it.cnr.cool.rest.BulkInfoRest"></bean>
+    <bean class="it.cnr.cool.rest.Node"></bean>
+
+    <bean class="it.cnr.cool.rest.Search">
+        <property name="queryService" ref="queryService"/>
+    </bean>
+
+    <bean class="it.cnr.cool.rest.BulkInfoRest"></bean>
 </beans>

@@ -2,12 +2,22 @@ package it.cnr.cool.service;
 
 import it.cnr.cool.cmis.service.CMISService;
 import it.cnr.cool.interceptor.ProxyInterceptor;
+import it.cnr.cool.web.PermissionService;
 import org.apache.chemistry.opencmis.client.bindings.impl.CmisBindingsHelper;
 import org.apache.chemistry.opencmis.client.bindings.spi.BindingSession;
 import org.apache.chemistry.opencmis.client.bindings.spi.http.Output;
 import org.apache.chemistry.opencmis.client.bindings.spi.http.Response;
 import org.apache.chemistry.opencmis.commons.impl.UrlBuilder;
+import org.apache.commons.httpclient.Header;
+import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.HttpStatus;
+import org.apache.commons.httpclient.UsernamePasswordCredentials;
+import org.apache.commons.httpclient.auth.AuthScope;
+import org.apache.commons.httpclient.methods.DeleteMethod;
+import org.apache.commons.httpclient.methods.GetMethod;
+import org.apache.commons.httpclient.methods.PostMethod;
+import org.apache.commons.httpclient.methods.PutMethod;
+import org.apache.commons.httpclient.params.HttpMethodParams;
 import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -32,21 +42,13 @@ import java.util.Map;
 public class ProxyService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ProxyService.class);
-
+    private final static String[] ALLOWED_HEADERS = {"WWW-Authenticate", "Cache-Control"};
     @Autowired
     private CMISService cmisService;
-
-
-    private Map<String, String> backends;
-
     @Autowired
     private ProxyInterceptor proxyInterceptor;
 
-
-    private final static String [] ALLOWED_HEADERS = {"WWW-Authenticate", "Cache-Control"};
-
     /**
-     *
      * Process POST or PUT request
      *
      * @param req
@@ -55,8 +57,9 @@ public class ProxyService {
      * @return
      * @throws java.io.IOException
      */
-    public void processRequest(HttpServletRequest req,
-                               HttpServletResponse res, boolean isPost) throws IOException {
+    public void processRequest(
+            HttpServletRequest req,
+            HttpServletResponse res, boolean isPost) throws IOException {
 
         BindingSession currentBindingSession = getBindingSession(req);
 
@@ -88,11 +91,66 @@ public class ProxyService {
 
         process(res, resp);
 
+    }
 
+    /**
+     * @param req
+     * @param res
+     * @param service: etichetta del web service esterno (che richiede l'autenticazione) da invocare tramite il proxy
+     * @throws IOException
+     */
+    public void processAutenticateRequest(HttpServletRequest req, HttpServletResponse res, Map<String, String> service) throws IOException {
+
+        OutputStream outputStream = res.getOutputStream();
+        String url = service.get("url");
+
+        HttpClient httpClient = new HttpClient();
+        httpClient.getState().setCredentials(AuthScope.ANY, new UsernamePasswordCredentials(
+                service.get("userName"), service.get("psw")));
+        org.apache.commons.httpclient.HttpMethod method = null;
+        switch ((PermissionService.methods.valueOf(req.getMethod()))) {
+            case GET:
+                method = new GetMethod(url);
+                break;
+            case POST:
+                method = new PostMethod(url);
+                break;
+            case DELETE:
+                method = new DeleteMethod(url);
+                break;
+            case PUT:
+                method = new PutMethod(url);
+                break;
+        }
+
+        HttpMethodParams params = new HttpMethodParams();
+        Map paramReq = req.getParameterMap();
+
+        for (Object paramName : paramReq.keySet()) {
+            if (!((String) paramName).equals("backend")) {
+                params.setParameter((String) paramName, paramReq.get(paramName));
+            }
+        }
+        method.setParams(params);
+        LOGGER.info("Invocazione del Ws: " + url);
+        int responseCode = httpClient.executeMethod(method);
+
+        if (responseCode != HttpStatus.SC_OK) {
+            LOGGER.error("Chiamata al servizio " + url + " fallita: " + responseCode + " - " + method.getStatusText());
+            res.setStatus(responseCode);
+        } else {
+            Header[] headers = method.getResponseHeaders();
+            for (int i = 0; i < headers.length; i++) {
+                res.setHeader(headers[i].getName(), headers[i].getValue());
+            }
+            res.setStatus(responseCode);
+        }
+        IOUtils.copy(method.getResponseBodyAsStream(), outputStream);
+        outputStream.flush();
     }
 
 
-    public void processDelete (HttpServletRequest req, HttpServletResponse res) throws IOException {
+    public void processDelete(HttpServletRequest req, HttpServletResponse res) throws IOException {
 
         BindingSession currentBindingSession = getBindingSession(req);
 
@@ -100,7 +158,7 @@ public class ProxyService {
 
         Response resp = CmisBindingsHelper
                 .getHttpInvoker(currentBindingSession).invokeDELETE(url,
-                        currentBindingSession);
+                                                                    currentBindingSession);
 
         res.setStatus(resp.getResponseCode());
         res.setContentType(resp.getContentTypeHeader());
@@ -117,15 +175,17 @@ public class ProxyService {
     }
 
 
-    public void processGet (HttpServletRequest req, String backend, HttpServletResponse res) throws IOException {
-
-        UrlBuilder url = getUrl(req, backend);
-
+    public void processGet(HttpServletRequest req, String backendUrl, HttpServletResponse res) throws IOException {
+        UrlBuilder url;
+        if (backendUrl != null) {
+            url = new UrlBuilder((backendUrl));
+        } else {
+            url = getUrl(req);
+        }
         BindingSession currentBindingSession = getBindingSession(req);
-
         Response resp = CmisBindingsHelper
                 .getHttpInvoker(currentBindingSession).invokeGET(url,
-                        currentBindingSession);
+                                                                 currentBindingSession);
 
         int responseCode = resp.getResponseCode();
 
@@ -181,24 +241,8 @@ public class ProxyService {
     // utility methods
 
     private UrlBuilder getUrl(HttpServletRequest req) {
-        return getUrl(req, null);
-    }
-
-    private UrlBuilder getUrl(HttpServletRequest req, String backend) {
-
         String urlParam = getUrlParam(req);
-
-        String baseURL = null;
-        if (backend != null && backends.containsKey(backend)) {
-
-            baseURL = backends.get(backend);
-            LOGGER.debug("using custom backend: " + backend + " " + baseURL);
-
-        } else {
-            baseURL = cmisService.getBaseURL();
-        }
-
-        String link = baseURL.concat(urlParam);
+        String link = cmisService.getBaseURL().concat(urlParam);
         if (req.getQueryString() != null)
             link = link.concat("?").concat(req.getQueryString());
         return new UrlBuilder(link);
@@ -209,12 +253,10 @@ public class ProxyService {
         String urlParam = null;
         if (req.getParameter("url") != null) {
             urlParam = it.cnr.cool.util.UriUtils.encode(req.getParameter("url"));
-            //urlParam = req.getParameter("url");
-        }
-        else
+        } else
             urlParam = it.cnr.cool.util.UriUtils.encode(req.getPathInfo()
-                    .replaceFirst(
-                            "/[a-zA-Z\\-]*/", ""));
+                                                                .replaceFirst(
+                                                                        "/[a-zA-Z\\-]*/", ""));
 
         return urlParam;
 
@@ -231,7 +273,7 @@ public class ProxyService {
 
             if (outcome != null && outcome.getErrorContent() != null) {
                 IOUtils.copy(new ByteArrayInputStream(outcome.getErrorContent()
-                        .getBytes()), outputStream);
+                                                              .getBytes()), outputStream);
             }
 
             outputStream.flush();
@@ -255,12 +297,12 @@ public class ProxyService {
             // apart from a little error message
             if (LOGGER.isInfoEnabled())
                 LOGGER.info("Client aborted stream read:\n\tcontent: "
-                        + e1.getMessage());
+                                    + e1.getMessage());
         } catch (IOException e) {
 
             res.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             IOUtils.copy(new ByteArrayInputStream(e.getMessage().getBytes()),
-                    outputStream);
+                         outputStream);
 
         }
 
@@ -270,11 +312,7 @@ public class ProxyService {
     public void setProxyInterceptor(ProxyInterceptor proxyInterceptor) {
         this.proxyInterceptor = proxyInterceptor;
     }
-
-
-    public void setBackends(Map<String, String> backends) {
-        this.backends = backends;
-    }
+    
 
     private boolean isHeaderToBeAdded(String key) {
 
