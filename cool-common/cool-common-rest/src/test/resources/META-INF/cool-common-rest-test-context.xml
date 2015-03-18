@@ -30,6 +30,18 @@
                         <entry key="psw" value="category!dyn!"/>
                     </map>
                 </entry>
+                <entry key="alfresco">
+                    <map>
+                        <entry key="url" value="http://as1dock.si.cnr.it:8080/alfresco"/>
+                        <entry key="userName" value="admin"/>
+                        <entry key="psw" value="admin"/>
+                    </map>
+                </entry>
+                <entry key="alfresco-public">
+                    <map>
+                        <entry key="url" value="http://as1dock.si.cnr.it:8080/alfresco"/>
+                    </map>
+                </entry>
                 <entry key="siper">
                     <map>
                         <entry key="url" value=""/>
