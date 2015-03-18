@@ -6,7 +6,6 @@ import it.cnr.cool.cmis.service.LoginException;
 import it.cnr.cool.security.CMISAuthenticatorFactory;
 import it.cnr.cool.util.MimeTypes;
 import org.json.JSONObject;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
@@ -45,20 +44,39 @@ public class ProxyTest {
     private CMISAuthenticatorFactory cmisAuthenticatorFactory;
 
     @Test
-    public void testBackendHeldesk() throws IOException {
+    public void testBackendAlfresco() throws IOException {
 
         MockHttpServletRequest req = new MockHttpServletRequest();
         MockHttpServletResponse res = new MockHttpServletResponse();
         req.setMethod("GET");
-        proxy.get(req, "helpdesk", res);
+        req.addParameter("url", "/service/cnr/groups/zones");
+        proxy.get(req, "alfresco", res);
 
         assertEquals(HttpStatus.OK.value(), res.getStatus());
 
         String content = res.getContentAsString();
 
         LOGGER.info(content);
-        assertTrue(new JsonParser().parse(content).isJsonArray());
-        assertEquals("max-age=3600, public", res.getHeader("Cache-Control"));
+        assertTrue(new JsonParser().parse(content).isJsonObject());
+    }
+
+
+
+    @Test
+    public void testBackendAlfrescoFail() throws IOException {
+
+        MockHttpServletRequest req = new MockHttpServletRequest();
+        MockHttpServletResponse res = new MockHttpServletResponse();
+        req.setMethod("GET");
+        req.addParameter("url", "/service/api/server");
+        proxy.get(req, "alfresco-public", res);
+
+        assertEquals(HttpStatus.OK.value(), res.getStatus());
+
+        String content = res.getContentAsString();
+
+        LOGGER.info(content);
+        assertTrue(new JsonParser().parse(content).isJsonObject());
     }
 
     @Test
@@ -140,24 +158,6 @@ public class ProxyTest {
         proxy.delete(req, res);
 
         assertEquals(HttpStatus.UNAUTHORIZED.value(), res.getStatus());
-
-
-    }
-
-
-    @Test
-    @Ignore
-    public void testMissioni() throws Exception {
-
-        MockHttpServletRequest req = new MockHttpServletRequest();
-        req.setParameter(URL, "_nodes");
-
-        MockHttpServletResponse res = new MockHttpServletResponse();
-        proxy.get(req, "missioni", res);
-
-        LOGGER.debug(res.getContentAsString());
-
-        assertEquals(HttpStatus.OK.value(), res.getStatus());
 
 
     }
