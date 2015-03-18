@@ -7,27 +7,22 @@ import it.cnr.cool.rest.util.Util;
 import it.cnr.cool.security.service.impl.alfresco.CMISUser;
 import it.cnr.cool.service.PageService;
 import it.cnr.cool.util.StringUtil;
-
-import java.util.HashMap;
-import java.util.Map;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.ws.rs.DELETE;
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
-import javax.ws.rs.QueryParam;
-import javax.ws.rs.core.Context;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
-import javax.ws.rs.core.Response.ResponseBuilder;
-import javax.ws.rs.core.Response.Status;
-
 import org.apache.chemistry.opencmis.client.bindings.spi.BindingSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.ws.rs.*;
+import javax.ws.rs.core.CacheControl;
+import javax.ws.rs.core.Context;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.ResponseBuilder;
+import javax.ws.rs.core.Response.Status;
+import java.util.HashMap;
+import java.util.Map;
 
 @Path("common")
 @Component
@@ -77,6 +72,9 @@ public class CommonRest {
 			String json = Util.processTemplate(model, FTL);
 			LOGGER.debug(json);
 			rb = Response.ok(json);
+            CacheControl cacheControl = new CacheControl();
+            cacheControl.setNoCache(true);
+            rb.cacheControl(cacheControl);
 		} catch (Exception e) {
 			LOGGER.error("unable to process common json", e);
 			rb = Response.status(Status.INTERNAL_SERVER_ERROR);
