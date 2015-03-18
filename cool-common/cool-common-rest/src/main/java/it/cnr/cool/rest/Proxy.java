@@ -2,8 +2,6 @@ package it.cnr.cool.rest;
 
 
 import it.cnr.cool.cmis.service.CMISService;
-import it.cnr.cool.cmis.service.CmisAuthRepository;
-import it.cnr.cool.security.CMISAuthenticatorFactory;
 import it.cnr.cool.service.ProxyService;
 import org.apache.chemistry.opencmis.client.bindings.spi.BindingSession;
 import org.apache.chemistry.opencmis.commons.impl.UrlBuilder;
@@ -27,12 +25,6 @@ public class Proxy {
 
     @Autowired
     private ProxyService proxyService;
-
-    @Autowired
-    private CmisAuthRepository cmisAuthRepository;
-
-    @Autowired
-    private CMISAuthenticatorFactory cmisAuthenticatorFactory;
 
     @Autowired
     private CMISService cmisService;
