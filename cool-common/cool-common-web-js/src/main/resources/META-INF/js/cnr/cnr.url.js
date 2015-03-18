@@ -22,8 +22,7 @@ define(['jquery', 'cnr/cnr.ui', 'json!common', 'i18n', 'json!cache'], function (
         metadata: 'rest/proxy' + '?url=service/api/metadata',
         metadataNode: 'rest/proxy' + '?url=service/api/metadata/node/$store_type/$store_id/$id',
         version: 'rest/proxy' + '?url=service/cnr/nodes/version',
-        //dinamicCategory: 'rest/proxy' + '?url=https://testsiper.si.cnr.it/siper/json/userinfo/'
-        dinamicCategory: 'rest/proxy' + '?url=https://testoil.si.cnr.it/helpdesk/rest/catg/HDConcorsi/1'
+        dynamicProxy: 'rest/proxy'
       },
       security : {
         forgotPassword: 'rest/security/forgotPassword'

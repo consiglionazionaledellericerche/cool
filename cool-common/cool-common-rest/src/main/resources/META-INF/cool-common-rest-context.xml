@@ -102,9 +102,13 @@
                 <entry key="helpdesk">
                     <map>
                         <!--<entry key="url" value="https://testsiper.si.cnr.it/siper/json/userinfo"/>-->
-                        <entry key="url" value="https://testoil.si.cnr.it/helpdesk/rest/catg/HDConcorsi"/>
-                        <entry key="userName" value="app.hdselezioni"/>
-                        <entry key="psw" value="category!dyn!"/>
+                        <!-- <entry key="url" value="https://testoil.si.cnr.it/helpdesk"/> -->
+<!--                         <entry key="userName" value="app.hdselezioni"/>
+                        <entry key="psw" value="category!dyn!"/> -->
+                        <entry key="url" value="http://as1dock.si.cnr.it:8080/alfresco"/>
+                        <!-- TODO: modificare prima del rilascio -->
+                        <entry key="userName" value="jconon"/>
+                        <entry key="psw" value="jcononpw"/>
                     </map>
                 </entry>
                 <entry key="siper">
