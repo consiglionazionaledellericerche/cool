@@ -2,22 +2,12 @@ package it.cnr.cool.service;
 
 import it.cnr.cool.cmis.service.CMISService;
 import it.cnr.cool.interceptor.ProxyInterceptor;
-import it.cnr.cool.web.PermissionService;
 import org.apache.chemistry.opencmis.client.bindings.impl.CmisBindingsHelper;
 import org.apache.chemistry.opencmis.client.bindings.spi.BindingSession;
 import org.apache.chemistry.opencmis.client.bindings.spi.http.Output;
 import org.apache.chemistry.opencmis.client.bindings.spi.http.Response;
 import org.apache.chemistry.opencmis.commons.impl.UrlBuilder;
-import org.apache.commons.httpclient.Header;
-import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.HttpStatus;
-import org.apache.commons.httpclient.UsernamePasswordCredentials;
-import org.apache.commons.httpclient.auth.AuthScope;
-import org.apache.commons.httpclient.methods.DeleteMethod;
-import org.apache.commons.httpclient.methods.GetMethod;
-import org.apache.commons.httpclient.methods.PostMethod;
-import org.apache.commons.httpclient.methods.PutMethod;
-import org.apache.commons.httpclient.params.HttpMethodParams;
 import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -61,9 +51,9 @@ public class ProxyService {
             HttpServletRequest req,
             HttpServletResponse res, boolean isPost) throws IOException {
 
-        BindingSession currentBindingSession = getBindingSession(req);
+        BindingSession currentBindingSession = cmisService.getCurrentBindingSession(req);
 
-        UrlBuilder url = getUrl(req);
+        UrlBuilder url = getUrl(req, cmisService.getBaseURL());
         String urlParam = getUrlParam(req);
 
         final InputStream is = req.getInputStream();
@@ -93,68 +83,12 @@ public class ProxyService {
 
     }
 
-    /**
-     * @param req
-     * @param res
-     * @param service: etichetta del web service esterno (che richiede l'autenticazione) da invocare tramite il proxy
-     * @throws IOException
-     */
-    public void processAutenticateRequest(HttpServletRequest req, HttpServletResponse res, Map<String, String> service) throws IOException {
-
-        OutputStream outputStream = res.getOutputStream();
-        String url = service.get("url");
-
-        HttpClient httpClient = new HttpClient();
-        httpClient.getState().setCredentials(AuthScope.ANY, new UsernamePasswordCredentials(
-                service.get("userName"), service.get("psw")));
-        org.apache.commons.httpclient.HttpMethod method = null;
-        switch ((PermissionService.methods.valueOf(req.getMethod()))) {
-            case GET:
-                method = new GetMethod(url);
-                break;
-            case POST:
-                method = new PostMethod(url);
-                break;
-            case DELETE:
-                method = new DeleteMethod(url);
-                break;
-            case PUT:
-                method = new PutMethod(url);
-                break;
-        }
-
-        HttpMethodParams params = new HttpMethodParams();
-        Map paramReq = req.getParameterMap();
-
-        for (Object paramName : paramReq.keySet()) {
-            if (!((String) paramName).equals("backend")) {
-                params.setParameter((String) paramName, paramReq.get(paramName));
-            }
-        }
-        method.setParams(params);
-        LOGGER.info("Invocazione del Ws: " + url);
-        int responseCode = httpClient.executeMethod(method);
-
-        if (responseCode != HttpStatus.SC_OK) {
-            LOGGER.error("Chiamata al servizio " + url + " fallita: " + responseCode + " - " + method.getStatusText());
-            res.setStatus(responseCode);
-        } else {
-            Header[] headers = method.getResponseHeaders();
-            for (int i = 0; i < headers.length; i++) {
-                res.setHeader(headers[i].getName(), headers[i].getValue());
-            }
-            res.setStatus(responseCode);
-        }
-        IOUtils.copy(method.getResponseBodyAsStream(), outputStream);
-        outputStream.flush();
-    }
-
 
     public void processDelete(HttpServletRequest req, HttpServletResponse res) throws IOException {
 
-        BindingSession currentBindingSession = getBindingSession(req);
+        BindingSession currentBindingSession = cmisService.getCurrentBindingSession(req);
 
-        UrlBuilder url = getUrl(req);
+        UrlBuilder url = getUrl(req, cmisService.getBaseURL());
 
         Response resp = CmisBindingsHelper
                 .getHttpInvoker(currentBindingSession).invokeDELETE(url,
@@ -175,14 +109,11 @@ public class ProxyService {
     }
 
 
-    public void processGet(HttpServletRequest req, String backendUrl, HttpServletResponse res) throws IOException {
-        UrlBuilder url;
-        if (backendUrl != null) {
-            url = new UrlBuilder((backendUrl));
-        } else {
-            url = getUrl(req);
-        }
-        BindingSession currentBindingSession = getBindingSession(req);
+
+    public void processGet(BindingSession currentBindingSession, UrlBuilder url, HttpServletResponse res) throws IOException {
+
+        LOGGER.debug(url.toString());
+
         Response resp = CmisBindingsHelper
                 .getHttpInvoker(currentBindingSession).invokeGET(url,
                                                                  currentBindingSession);
@@ -225,38 +156,34 @@ public class ProxyService {
 
     }
 
-    private BindingSession getBindingSession(HttpServletRequest req) {
-        BindingSession currentBindingSession = cmisService.getCurrentBindingSession(req);
-
-        if (currentBindingSession == null) {
-            LOGGER.info("no basic auth provided, using current binding session");
-            currentBindingSession = cmisService.getCurrentBindingSession(req);
-        } else {
-            LOGGER.info("basic auth provided");
-        }
-        return currentBindingSession;
-    }
 
 
     // utility methods
 
-    private UrlBuilder getUrl(HttpServletRequest req) {
+
+    public static UrlBuilder getUrl(HttpServletRequest req, String base) {
         String urlParam = getUrlParam(req);
-        String link = cmisService.getBaseURL().concat(urlParam);
+        String link = base.concat(urlParam);
         if (req.getQueryString() != null)
             link = link.concat("?").concat(req.getQueryString());
+
+        LOGGER.info(link);
+
         return new UrlBuilder(link);
     }
 
-    private String getUrlParam(HttpServletRequest req) {
+    private static String getUrlParam(HttpServletRequest req) {
 
         String urlParam = null;
         if (req.getParameter("url") != null) {
             urlParam = it.cnr.cool.util.UriUtils.encode(req.getParameter("url"));
-        } else
+        } else if (req.getPathInfo() != null) {
             urlParam = it.cnr.cool.util.UriUtils.encode(req.getPathInfo()
-                                                                .replaceFirst(
-                                                                        "/[a-zA-Z\\-]*/", ""));
+                    .replaceFirst(
+                            "/[a-zA-Z\\-]*/", ""));
+        } else {
+            urlParam = "";
+        }
 
         return urlParam;
 
