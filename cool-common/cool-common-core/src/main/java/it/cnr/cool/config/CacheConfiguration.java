@@ -35,6 +35,8 @@ public class CacheConfiguration {
 
     private @Value("${hazelcast.multicast.port:#{null}}") Integer hazelcastMulticastPort;
 
+    private @Value("${hazelcast.ttl:86400}") int ttl;
+
     @PreDestroy
     public void destroy() {
         LOGGER.info("Closing Cache Manager");
@@ -124,6 +126,9 @@ public class CacheConfiguration {
             get evicted.
          */
         mapConfig.setEvictionPercentage(25);
+
+        LOGGER.info("time to live: " + ttl);
+        mapConfig.setTimeToLiveSeconds(ttl);
 
         return mapConfig;
     }
