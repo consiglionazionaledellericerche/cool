@@ -64,8 +64,19 @@ public class Search {
 		try {
 			String json = getJson(model);
 			rb = Response.ok(json);
-			CacheControl cacheControl = new CacheControl();
-			cacheControl.setNoCache(true);
+            String cache = request.getParameter("cache");
+            CacheControl cacheControl;
+            if (cache != null) {
+
+                int seconds = Integer.parseInt(cache);
+                LOGGER.debug("cache for {} seconds", seconds);
+                cacheControl = Util.getCache(seconds);
+
+            } else {
+                LOGGER.debug("no cache");
+                cacheControl = new CacheControl();
+                cacheControl.setNoCache(true);
+            }
 			rb.cacheControl(cacheControl);
 		} catch (TemplateException e) {
 			LOGGER.error(e.getMessage(), e);

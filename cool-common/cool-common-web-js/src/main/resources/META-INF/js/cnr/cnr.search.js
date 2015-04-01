@@ -130,7 +130,8 @@ define(['jquery', 'cnr/cnr', 'i18n', 'cnr/cnr.url', 'cnr/cnr.searchfilter', 'cnr
         maxItems: settings.maxItems,
         skipCount: (settings.maxItems * page),
         fetchCmisObject: settings.fetchCmisObject,
-        calculateTotalNumItems: settings.calculateTotalNumItems
+        calculateTotalNumItems: settings.calculateTotalNumItems,
+        cache: settings.cache
       },
         conditions = settings.lastCriteria.conditions,
         // FIXME: aggiungere il prefisso anche al sort ???
