@@ -131,7 +131,6 @@
                     <exclude>**/thirdparty/**</exclude>
                     <exclude>**/it/cnr/cool/Workflow/**</exclude>
                     <exclude>**/Scripts/wfContatoriStorico**</exclude>
-                    <exclude>**/demux.get.js</exclude>
                     <exclude>**/src/main/config/**</exclude>
                     <exclude>**/src/main/js/**</exclude>
                     <exclude>**/src/test/**</exclude>

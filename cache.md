@@ -10,11 +10,10 @@
 * font (e.g. fontawesome)
 * avvisi per i non-admin
 * faq per i non-admin
-* demux *solo per i bandi della home*
 
 ##CACHE DISABILITATA##
 * html
-* query al documentale, tranne eccezioni (demux ?)
+* query al documentale
 
 ###ATTENZIONE###
 ####Le risorse seguenti non hanno la versione nella URL####
