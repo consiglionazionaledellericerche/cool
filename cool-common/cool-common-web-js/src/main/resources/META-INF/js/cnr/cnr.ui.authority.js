@@ -8,6 +8,10 @@ define(['jquery', 'cnr/cnr.url'], function ($, URL) {
   function getAssignee(assigneeType, query, cb, isValidation) {
     isValidation = isValidation || false;
     var commonSettings = {
+      data: {
+          filter: isValidation ? query : ('*' + query + '*'),
+          maxItems: maxItems
+      },
       queue: isValidation ? 'validation' : 'search', // we need two different XHRs queues
       dataType: "json",
       error: function (jqXHR, textStatus, errorThrown) {
@@ -19,10 +23,6 @@ define(['jquery', 'cnr/cnr.url'], function ($, URL) {
       cb([]);
     } else if (assigneeType === "users") {
       specificSettings = {
-        data: {
-          filter: '*' + query + '*',
-          maxItems: maxItems
-        },
         success: function (users) {
           var map = $.map(users.people, function (n) {
             return isValidation ? n.userName : n.userName + ' (' + n.firstName + ' ' + n.lastName + ' - ' + n.email + ')';
@@ -33,10 +33,6 @@ define(['jquery', 'cnr/cnr.url'], function ($, URL) {
       URL.Data.proxy.person($.extend({}, commonSettings, specificSettings));
     } else {
       specificSettings = {
-        data: {
-          filter: '*' + query + '*',
-          maxItems: maxItems
-        },
         success: function (data) {
           var map = $.map(data.groups, function (n) {
             return n.authorityName;
@@ -51,9 +47,6 @@ define(['jquery', 'cnr/cnr.url'], function ($, URL) {
   function validateAssignee(assigneeType, query, controlGroup) {
     getAssignee(assigneeType, query, function (data) {
       var errorClass = "error", successClass = "success", isValid = data.indexOf(query) >= 0;
-      if (isValid) {
-        controlGroup.find('input').trigger('blur');
-      }
       controlGroup
         .addClass(isValid ? successClass : errorClass)
         .removeClass(isValid ? errorClass : successClass)
