@@ -9,8 +9,8 @@ define(['jquery', 'cnr/cnr.url'], function ($, URL) {
     isValidation = isValidation || false;
     var commonSettings = {
       data: {
-          filter: isValidation ? query : ('*' + query + '*'),
-          maxItems: maxItems
+        filter: isValidation ? query : ('*' + query + '*'),
+        maxItems: maxItems
       },
       queue: isValidation ? 'validation' : 'search', // we need two different XHRs queues
       dataType: "json",
