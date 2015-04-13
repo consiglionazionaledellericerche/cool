@@ -12,7 +12,6 @@
   <properties>
     <cool.build.number>${maven.build.timestamp}</cool.build.number>
     <cool.mode>development</cool.mode> <!-- deprecato -->
-    <jenkins.url>http://bandt.si.cnr.it:8180/jenkins</jenkins.url>
     <log.dir>${catalina.base}/logs</log.dir>
   </properties>
 
