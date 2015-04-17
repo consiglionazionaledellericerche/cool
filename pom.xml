@@ -319,8 +319,8 @@
   </build>
 
   <scm>
-    <connection>scm:git:ssh://git@git.si.cnr.it:documentale/cool.git</connection>
-    <developerConnection>scm:git:ssh://git@git.si.cnr.it:documentale/cool.git</developerConnection>
+    <connection>scm:git:ssh://git@git.si.cnr.it/documentale/cool.git</connection>
+    <developerConnection>scm:git:ssh://git@git.si.cnr.it/documentale/cool.git</developerConnection>
     <tag>HEAD</tag>
   </scm>
 
