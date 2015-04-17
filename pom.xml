@@ -10,7 +10,7 @@
   <parent>
     <artifactId>archetype</artifactId>
     <groupId>it.cnr.si</groupId>
-    <version>0.2</version>
+    <version>0.21</version>
   </parent>
 
   <properties>
