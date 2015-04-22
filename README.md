@@ -39,7 +39,7 @@ jconon
 ---
 gli artefatti vengono generati automaticamente da Jenkins con il comando:
 
-	clean deploy -Pjconon,produzione -Dcool.build.number=${SVN_REVISION}
+	clean deploy -Pjconon,produzione
 
 e vengono depositati sul repository nexus <http://bandt.si.cnr.it:8280/nexus/content/groups/public/it/cnr/si/cool/cool-jconon/>
 

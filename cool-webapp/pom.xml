@@ -10,7 +10,6 @@
   <packaging>pom</packaging>
 
   <properties>
-    <cool.build.number>${maven.build.timestamp}</cool.build.number>
     <cool.mode>development</cool.mode> <!-- deprecato -->
     <log.dir>${catalina.base}/logs</log.dir>
   </properties>
@@ -57,7 +56,7 @@
               <Dependencies>org.dom4j,javax.mail.api</Dependencies>
               <Specification-Title>${project.name}</Specification-Title>
               <Specification-Version>${project.version}</Specification-Version>
-              <Implementation-Version>${project.version}-${cool.build.number}</Implementation-Version>
+               <Implementation-Version>${project.version}</Implementation-Version>
               <mode>${cool.mode}</mode>
             </manifestEntries>
           </archive>

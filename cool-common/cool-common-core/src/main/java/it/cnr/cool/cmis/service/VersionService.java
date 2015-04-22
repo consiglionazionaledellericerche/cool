@@ -2,6 +2,7 @@ package it.cnr.cool.cmis.service;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Date;
 import java.util.jar.Attributes;
 import java.util.jar.Manifest;
 
@@ -23,7 +24,7 @@ public class VersionService {
 	private boolean production;
 
 	@Autowired
-	private ServletContext context;	
+	private ServletContext context;
 
 	public void init() {
 		InputStream is = context.getResourceAsStream(MANIFEST_PATH);
@@ -33,8 +34,13 @@ public class VersionService {
 				Attributes attributes = manifest.getMainAttributes();
 				String mode = attributes.getValue("mode");
 				if (mode != null) {
-					version = attributes.getValue("Implementation-Version");
 					production = mode.equalsIgnoreCase(PRODUCTION);
+				}
+				String implementationVersion = attributes.getValue("Implementation-Version");
+				if (implementationVersion != null) {
+					version = implementationVersion;
+				} else {
+					version = "UNKNOWN-" + new Date().getTime();
 				}
 			} catch (IOException e) {
 				LOGGER.warn("unable to retrieve implementation version", e);
@@ -43,21 +49,6 @@ public class VersionService {
 	}
 
 	public String getVersion() {
-		if (version == null) {
-
-    	    // fallback to using Java API
-    	    if (version == null) {
-    	        Package aPackage = getClass().getPackage();
-    	        if (aPackage != null) {
-    	            version = aPackage.getImplementationVersion();
-    	            if (version == null) {
-    	                version = aPackage.getSpecificationVersion();
-    	            }
-    	        }
-    	    }
-    	    if (version == null)
-    	    	version = "1.0";
-		}
 		return version;
 	}
 
