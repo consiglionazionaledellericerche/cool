@@ -1,0 +1,20 @@
+[
+  {
+    "folders": [
+      {
+        "path": ".",
+        "folder_exclude_patterns": [
+          ".idea",
+          ".git",
+          "target",
+          "node_modules",
+          "bower_components"
+        ],
+        "file_exclude_patterns": [
+          "*.sublime-workspace",
+          "*.iml"
+        ]
+      }
+    ]
+  }
+]
