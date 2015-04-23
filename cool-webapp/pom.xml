@@ -67,12 +67,6 @@
 
   <profiles>
     <profile>
-      <id>jconon</id>
-      <modules>
-        <module>cool-jconon</module>
-      </modules>
-    </profile>
-    <profile>
       <id>nexus</id>
       <build>
         <plugins>

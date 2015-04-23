@@ -36,9 +36,6 @@
 
   <profiles>
     <profile>
-      <id>jconon</id>
-    </profile>
-    <profile>
       <id>validators</id>
       <build>
         <plugins>
@@ -156,7 +153,6 @@
 <!--                   </includes> -->
 <!--                   <excludes> -->
 <!--                     <exclude>**/target/**</exclude> -->
-<!--                     <exclude>**/cool-jconon/**</exclude> -->
 <!--                   </excludes> -->
 <!--                 </validationSet> -->
                 <validationSet>
