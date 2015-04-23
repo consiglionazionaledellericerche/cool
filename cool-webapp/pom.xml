@@ -67,15 +67,6 @@
 
   <profiles>
     <profile>
-      <id>doccnr</id>
-      <activation>
-        <activeByDefault>true</activeByDefault>
-      </activation>
-      <modules>
-        <module>cool-doccnr</module>
-      </modules>
-    </profile>
-    <profile>
       <id>jconon</id>
       <modules>
         <module>cool-jconon</module>

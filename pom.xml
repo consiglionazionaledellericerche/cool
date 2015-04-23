@@ -36,16 +36,6 @@
 
   <profiles>
     <profile>
-      <id>doccnr</id>
-      <activation>
-        <activeByDefault>true</activeByDefault>
-      </activation>
-      <modules>
-        <module>cool-accounting</module>
-        <module>cool-variazioni</module>
-      </modules>
-    </profile>
-    <profile>
       <id>jconon</id>
     </profile>
     <profile>
