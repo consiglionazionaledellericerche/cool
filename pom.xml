@@ -16,7 +16,6 @@
   <properties>
     <opencmis.version>0.12.0</opencmis.version>
     <spring.version>3.2.13.RELEASE</spring.version>
-    <jasperreports.version>6.0.0</jasperreports.version>
     <jslint4java.version>2.0.2</jslint4java.version>
     <junit.version>4.11</junit.version>
     <slf4j.version>1.7.5</slf4j.version>
@@ -29,7 +28,6 @@
 
   <modules>
     <module>cool-common</module>
-    <module>cool-webapp</module>
     <module>cool-bulkinfo</module>
     <module>cool-view</module>
   </modules>
@@ -126,64 +124,6 @@
               </execution>
             </executions>
           </plugin>
-          <plugin>
-            <groupId>org.codehaus.mojo</groupId>
-            <artifactId>xml-maven-plugin</artifactId>
-            <version>1.0</version>
-            <executions>
-              <execution>
-                <id>validate-xml</id>
-                <goals>
-                  <goal>validate</goal>
-                </goals>
-              </execution>
-            </executions>
-            <configuration>
-              <validationSets>
-                <!-- Questo validator valida i BulkInfo, SOLO quando si builda cool-parent -->
-                <!-- Altrimenti dice che la cartella base non esiste (Vogliamo validarli tutti una sola volta dal parent) -->
-<!--                 <validationSet> -->
-<!--                   <dir>.</dir> -->
-<!--                   <systemId>cool-view/src/main/resources/META-INF/model/BulkInfo.xsd</systemId> -->
-<!--                   <includes> -->
-<!--                     <include>cool-bulkinfo/**/bulkInfo/*.xml</include> -->
-<!--                     <include>cool-common/**/bulkInfo/*.xml</include> -->
-<!--                     <include>cool-view/**/bulkInfo/*.xml</include> -->
-<!--                     <include>cool-webapp/**/bulkInfo/*.xml</include> -->
-<!--                   </includes> -->
-<!--                   <excludes> -->
-<!--                     <exclude>**/target/**</exclude> -->
-<!--                   </excludes> -->
-<!--                 </validationSet> -->
-                <validationSet>
-                  <dir>./cool-webapp/</dir>
-                  <systemId>cool-view/src/main/resources/META-INF/model/BulkInfo_v2.xsd</systemId>
-                  <includes>
-                    <include>**/bulkInfo/*.xml</include>
-                    <include>cool-bulkinfo/**/bulkInfo/*.xml</include>
-                    <include>cool-common/**/bulkInfo/*.xml</include>
-                    <include>cool-view/**/bulkInfo/*.xml</include>
-                    <include>cool-webapp/**/bulkInfo/*.xml</include>
-                  </includes>
-                  <excludes>
-                    <exclude>**/target/**</exclude>
-                    <exclude>**/node_modules/**</exclude>
-                  </excludes>
-                </validationSet>
-                <!-- Questo valdator si assicura soltanto che tutti gli xml siano ben formati -->
-                <validationSet>
-                  <dir>.</dir>
-                  <includes>
-                    <include>**/*.xml</include>
-                  </includes>
-                  <excludes>
-                    <exclude>**/target/**</exclude>
-                    <exclude>**/node_modules/**</exclude>
-                  </excludes>
-                </validationSet>
-              </validationSets>
-            </configuration>
-          </plugin>
         </plugins>
       </build>
     </profile>
@@ -248,49 +188,10 @@
     <pluginManagement>
     	<plugins>
         <plugin>
-          <groupId>org.codehaus.mojo</groupId>
-          <artifactId>sonar-maven-plugin</artifactId>
-          <version>2.4</version>
-        </plugin>
-        <plugin>
           <groupId>org.apache.tomcat.maven</groupId>
           <artifactId>tomcat7-maven-plugin</artifactId>
           <version>2.2</version>
         </plugin>
-         <plugin>
-          <groupId>org.codehaus.mojo</groupId>
-          <artifactId>tomcat-maven-plugin</artifactId>
-          <configuration>
-            <port>8980</port>
-          </configuration>
-        </plugin>
-         <!--This plugin's configuration is used to store Eclipse m2e settings only. It has no influence on the Maven build itself.-->
-         <plugin>
-         	<groupId>org.eclipse.m2e</groupId>
-         	<artifactId>lifecycle-mapping</artifactId>
-         	<version>1.0.0</version>
-         	<configuration>
-         		<lifecycleMappingMetadata>
-         			<pluginExecutions>
-         				<pluginExecution>
-         					<pluginExecutionFilter>
-         						<groupId>net.alchim31.maven</groupId>
-         						<artifactId>
-         							yuicompressor-maven-plugin
-         						</artifactId>
-         						<versionRange>[1.3.2,)</versionRange>
-         						<goals>
-         							<goal>compress</goal>
-         						</goals>
-         					</pluginExecutionFilter>
-         					<action>
-         						<ignore />
-         					</action>
-         				</pluginExecution>
-         			</pluginExecutions>
-         		</lifecycleMappingMetadata>
-         	</configuration>
-         </plugin>
     	</plugins>
     </pluginManagement>
   </build>
