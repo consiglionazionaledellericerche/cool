@@ -19,9 +19,10 @@ public class VersionService {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(VersionService.class);
 
-    private String version;
 
-	private boolean production;
+	private String version = "0.0";
+
+	private boolean production =  false;
 
 	@Autowired
 	private ServletContext context;
@@ -46,6 +47,9 @@ public class VersionService {
 				LOGGER.warn("unable to retrieve implementation version", e);
 			}
 		}
+
+		LOGGER.info("profilo: " + (production ? "PRODUZIONE" : "SVILUPPO"));
+		LOGGER.info("versione: " + version);
 	}
 
 	public String getVersion() {
