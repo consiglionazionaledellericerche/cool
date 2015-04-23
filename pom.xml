@@ -30,7 +30,6 @@
   <modules>
     <module>cool-common</module>
     <module>cool-webapp</module>
-    <module>cool-model</module>
     <module>cool-bulkinfo</module>
     <module>cool-view</module>
     <module>cool-bpm</module>
@@ -136,8 +135,6 @@
                     <exclude>**/cnr/cool/permissions/**</exclude>
                     <!-- webscript copiati da alfresco -->
                     <exclude>**/nodes/permissions.*.js</exclude>
-                    <!-- cool-dashboard validato con jshint -->
-                    <exclude>**/angular/**</exclude>
                     <!-- cool-flows validato con jshint -->
                     <exclude>**/ng/**</exclude>
                   </excludes>
@@ -167,7 +164,6 @@
 <!--                   <includes> -->
 <!--                     <include>cool-bulkinfo/**/bulkInfo/*.xml</include> -->
 <!--                     <include>cool-common/**/bulkInfo/*.xml</include> -->
-<!--                     <include>cool-model/**/bulkInfo/*.xml</include> -->
 <!--                     <include>cool-view/**/bulkInfo/*.xml</include> -->
 <!--                     <include>cool-webapp/**/bulkInfo/*.xml</include> -->
 <!--                   </includes> -->
@@ -183,7 +179,6 @@
                     <include>**/bulkInfo/*.xml</include>
                     <include>cool-bulkinfo/**/bulkInfo/*.xml</include>
                     <include>cool-common/**/bulkInfo/*.xml</include>
-                    <include>cool-model/**/bulkInfo/*.xml</include>
                     <include>cool-view/**/bulkInfo/*.xml</include>
                     <include>cool-webapp/**/bulkInfo/*.xml</include>
                   </includes>
