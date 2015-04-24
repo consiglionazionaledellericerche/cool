@@ -47,7 +47,7 @@ public class RRDService implements InitializingBean {
 
 	@Autowired
 	private ACLService aclService;
-    
+
 	@Autowired
 	private MailService mailService;
 
@@ -64,6 +64,8 @@ public class RRDService implements InitializingBean {
 		if (!versionService.isProduction()) {
 			LOGGER.warn("development mode, avoid scan document paths");
 			return;
+		} else {
+			LOGGER.info("production mode");
 		}
 		PathMatchingResourcePatternResolver resolver = new PathMatchingResourcePatternResolver();
 		Resource[] resources = resolver.getResources("classpath*:remote/**");
@@ -75,7 +77,7 @@ public class RRDService implements InitializingBean {
 			if (!resource.isReadable())
 				continue;
 			String urlPath = resource.getURL().toString();
-			String cmisPath = URIUtil.decode(urlPath.substring(urlPath.indexOf("remote/") + 6));					
+			String cmisPath = URIUtil.decode(urlPath.substring(urlPath.indexOf("remote/") + 6));
 			LOGGER.debug(urlPath);
 			try{
 				CmisObject doc = cmisSession.getObjectByPath(cmisPath);
@@ -91,7 +93,7 @@ public class RRDService implements InitializingBean {
 
 			}catch(CmisObjectNotFoundException _ex){
 				String fileName = cmisPath.substring(cmisPath.lastIndexOf("/") + 1);
-				boolean createFolder = !fileName.equalsIgnoreCase("bulkInfoMapping.js");				
+				boolean createFolder = !fileName.equalsIgnoreCase("bulkInfoMapping.js");
 				CmisObject source = createPath(cmisSession, cmisPath.substring(0, cmisPath.lastIndexOf("/")), createFolder);
 				if (source == null)
 					continue;
@@ -102,11 +104,11 @@ public class RRDService implements InitializingBean {
 				if (fileName.endsWith(".xml") && cmisPath.contains("Models")){
 					properties.put(PropertyIds.OBJECT_TYPE_ID, dictionaryTypeId);
 					contentType = "text/xml";
-				} else if (fileName.endsWith(".jbpm.xml")) {	
+				} else if (fileName.endsWith(".jbpm.xml")) {
 					properties.put(PropertyIds.OBJECT_TYPE_ID, "D:bpm:workflowDefinition");
 					properties.put("bpm:engineId", "jbpm");
 					contentType = "text/xml";
-				} else if (fileName.endsWith(".activiti.xml")) {	
+				} else if (fileName.endsWith(".activiti.xml")) {
 					properties.put(PropertyIds.OBJECT_TYPE_ID, "D:bpm:workflowDefinition");
 					properties.put("bpm:engineId", "activiti");
 					contentType = "text/xml";
@@ -115,18 +117,18 @@ public class RRDService implements InitializingBean {
 				}
 				InputStream is = resource.getInputStream();
 				ContentStream contentStream = new ContentStreamImpl(
-						fileName,BigInteger.valueOf(is.available()), 
+						fileName,BigInteger.valueOf(is.available()),
 						contentType, is);
-				Document doc = (Document)cmisSession.getObject(cmisSession.createDocument(properties, source, 
+				Document doc = (Document)cmisSession.getObject(cmisSession.createDocument(properties, source,
 					contentStream, VersioningState.MAJOR));
-				if (fileName.endsWith(".jbpm.xml")) {	
+				if (fileName.endsWith(".jbpm.xml")) {
 					properties.put("bpm:definitionDeployed", Boolean.TRUE);
 					doc.updateProperties(properties);
 				}
 				if (fileName.endsWith(".xml") && cmisPath.contains("Models")){
 					try {
 						properties.put("cm:modelActive", Boolean.TRUE);
-						doc.updateProperties(properties);						
+						doc.updateProperties(properties);
 					} catch (Exception ex) {
 						LOGGER.error("Cannot activate Model:"+fileName);
 						documentsToBeActive.add(doc);
@@ -145,13 +147,13 @@ public class RRDService implements InitializingBean {
 				try {
 					Map<String, Object> properties = new HashMap<String, Object>();
 					properties.put("cm:modelActive", Boolean.TRUE);
-					document.updateProperties(properties);										
+					document.updateProperties(properties);
 					iterator.remove();
 				} catch (Exception ex) {
 					LOGGER.warn("Cannot activate Model:" + document.getName());
 				}
 			}
-		}		
+		}
 		/*Reset dei webscript sul repository CMIS*/
 		if (webscriptCreated){
 			String link = cmisService.getBaseURL().concat(
