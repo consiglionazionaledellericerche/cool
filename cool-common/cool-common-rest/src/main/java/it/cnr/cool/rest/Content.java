@@ -87,7 +87,7 @@ public class Content {
 				redirect = redirect.concat("&nodeRef="+nodeRef);
 			return Response.seeOther(new URI(getUrl(req) + redirect)).build();
 		} catch (IOException e) {
-			LOGGER.error("unable to get content for path " + path, e);
+			LOGGER.error("unable to get content for path " + path + ", URL " + req.getRequestURL(), e);
 			res.setStatus(HttpStatus.SC_INTERNAL_SERVER_ERROR);
 		}
 

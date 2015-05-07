@@ -82,7 +82,7 @@ public class FrontOfficeService{
 			if(editor)
 				model.put("maxNotice", alfrescoHandler.getMax(CoolPropertyIds.NOTICE_QUERY_NAME.value(), CoolPropertyIds.NOTICE_NUMBER.value()));
 		} catch (CmisUnauthorizedException e) {
-			LOGGER.error("cmis exception", e);
+			LOGGER.error("cmis unauthorized exception", e);
 		}
 		return model;
 	}

@@ -67,7 +67,7 @@ public class BulkInfoRest {
 			LOGGER.error("", e);
 			builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(DEFAULT_ERROR);
 		} catch (Exception e) {
-			LOGGER.error("", e);
+			LOGGER.error("error for bulkinfo: " + req.getRequestURL(), e);
 			builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(DEFAULT_ERROR);
 		}
 
