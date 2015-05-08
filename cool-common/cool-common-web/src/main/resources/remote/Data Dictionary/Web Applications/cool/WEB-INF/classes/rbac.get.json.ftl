@@ -92,47 +92,6 @@
         }
     },
     "exportVariazioni": {
-        "GET": {
-            "whitelist": {
-                "user": [
-                    "spaclient",
-                    "paolo.cirone",
-                    "giada.fassone",
-                    "marco.spasiano"
-                ],
-                "group": [
-                    "GROUP_VARIAZIONI_PIANO_DI_GESTIONE"
-                ]
-            }
-        },
-        "POST": {
-            "whitelist": {
-                "user": [
-                    "spaclient",
-                    "paolo.cirone",
-                    "giada.fassone",
-                    "marco.spasiano"
-                ],
-                "group": [
-                    "GROUP_VARIAZIONI_PIANO_DI_GESTIONE"
-                ]
-            }
-        }
-    },
-    "exportVariazioni/main": {
-        "GET": {
-            "whitelist": {
-                "user": [
-                    "spaclient",
-                    "paolo.cirone",
-                    "giada.fassone",
-                    "marco.spasiano"
-                ],
-                "group": [
-                    "GROUP_VARIAZIONI_PIANO_DI_GESTIONE"
-                ]
-            }
-        },
         "POST": {
             "whitelist": {
                 "user": [
