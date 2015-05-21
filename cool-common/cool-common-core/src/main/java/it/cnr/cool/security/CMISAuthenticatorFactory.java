@@ -35,7 +35,9 @@ public class CMISAuthenticatorFactory {
 
       CMISUser user = cmisAuthRepository.getCachedCMISUser(ticket, bindingSession);
 
-      LOGGER.debug("loaded user: " + user.toString());
+      if (user !=  null) {
+        LOGGER.debug("loaded user: " + user.toString());
+      }
 
       return ticket;
 
