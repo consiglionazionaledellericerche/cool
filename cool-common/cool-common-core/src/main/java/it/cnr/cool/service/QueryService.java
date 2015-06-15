@@ -1,7 +1,6 @@
 package it.cnr.cool.service;
 
 import it.cnr.cool.cmis.model.CoolPropertyIds;
-import it.cnr.cool.cmis.service.CacheService;
 import it.cnr.cool.security.service.UserService;
 import it.cnr.cool.security.service.impl.alfresco.CMISUser;
 import it.cnr.cool.service.model.RelationshipTypeParam;
@@ -46,9 +45,6 @@ public class QueryService {
 
 	@Autowired
 	private UserService userService;
-
-	@Autowired
-	private CacheService cacheService;
 
 	public Map<String, Object> query(HttpServletRequest req, Session cmisSession) {
 
