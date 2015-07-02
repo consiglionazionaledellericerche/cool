@@ -391,12 +391,10 @@ define(['cnr/cnr.ui.widgets', 'jquery', 'cnr/cnr', 'cnr/cnr.style', 'handlebars'
           settings.target.find('.' + el.id + '_' + (el.value ? String(el.value).match(/[a-zA-Z0-9-_]+/, '') : '')).parents('.' + classes.group).show();
         }
       });
-
-      settings.callback.afterCreateForm(form);
       validator = Validator.validate(form, {
         rules: rules
       });
-
+      settings.callback.afterCreateForm(form);
     }
 
     function render() {
