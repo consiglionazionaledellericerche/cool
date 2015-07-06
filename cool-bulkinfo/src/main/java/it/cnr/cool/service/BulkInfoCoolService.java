@@ -356,7 +356,7 @@ public class BulkInfoCoolService {
 
 
     private ObjectType getObjectType(String bulkTypeName) {
-        LOGGER.info("retrieving type: " + bulkTypeName);
+        LOGGER.debug("retrieving type: " + bulkTypeName);
         return bulkInfoRepository.getObjectType(bulkTypeName);
     }
 

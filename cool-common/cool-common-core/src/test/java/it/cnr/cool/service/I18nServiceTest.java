@@ -58,7 +58,13 @@ public class I18nServiceTest {
         assertEquals("Benvenuto", label);
     }
 
-
+	@Test
+	public void testGetLabelEnglishCanada() {
+		String label = i18nService.getLabel("welcome",
+				Locale.CANADA);
+		LOGGER.info(label);
+		assertEquals("Welcome", label);
+	}
 
 
     @Test

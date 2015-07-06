@@ -88,11 +88,11 @@ public class I18nService {
 
 		String language = locale.getLanguage();
 
-        LOGGER.info("loading labels for locale " + language);
+        LOGGER.debug("loading labels for locale " + language);
 
         Properties p;
 
-        if (locale.equals(Locale.ITALIAN) || locale.equals(Locale.ITALY) || locale.equals(Locale.ENGLISH)) {
+        if (locale.equals(Locale.ITALIAN) || locale.equals(Locale.ITALY) || locale.getLanguage().equals(Locale.ENGLISH.getLanguage())) {
             p = i18nRepository.loadProperties(locale.getLanguage(), locations);
         } else {
             LOGGER.warn("locale " + language
