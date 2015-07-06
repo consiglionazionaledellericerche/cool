@@ -1,13 +1,29 @@
 package it.cnr.cool.service;
 
-import com.google.gson.Gson;
 import it.cnr.cool.cmis.model.CoolPropertyIds;
-import it.cnr.cool.cmis.service.CacheService;
-import it.cnr.cool.cmis.service.GlobalCache;
 import it.cnr.cool.security.service.UserService;
 import it.cnr.cool.security.service.impl.alfresco.CMISUser;
 import it.cnr.cool.service.model.RelationshipTypeParam;
-import org.apache.chemistry.opencmis.client.api.*;
+
+import java.math.BigInteger;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
+import javax.servlet.http.HttpServletRequest;
+
+import org.apache.chemistry.opencmis.client.api.CmisObject;
+import org.apache.chemistry.opencmis.client.api.Document;
+import org.apache.chemistry.opencmis.client.api.Folder;
+import org.apache.chemistry.opencmis.client.api.ItemIterable;
+import org.apache.chemistry.opencmis.client.api.OperationContext;
+import org.apache.chemistry.opencmis.client.api.QueryResult;
+import org.apache.chemistry.opencmis.client.api.Relationship;
+import org.apache.chemistry.opencmis.client.api.Session;
 import org.apache.chemistry.opencmis.client.runtime.OperationContextImpl;
 import org.apache.chemistry.opencmis.commons.PropertyIds;
 import org.apache.chemistry.opencmis.commons.enums.BaseTypeId;
@@ -15,14 +31,9 @@ import org.apache.chemistry.opencmis.commons.enums.IncludeRelationships;
 import org.apache.chemistry.opencmis.commons.exceptions.CmisPermissionDeniedException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import javax.servlet.http.HttpServletRequest;
-import java.math.BigInteger;
-import java.util.*;
-
-public class QueryService implements GlobalCache, InitializingBean{
+public class QueryService {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(QueryService.class);
 
@@ -34,11 +45,6 @@ public class QueryService implements GlobalCache, InitializingBean{
 
 	@Autowired
 	private UserService userService;
-
-	@Autowired
-	private CacheService cacheService;
-
-	private Map<String, List<Folder>> nodeParentsCache = new HashMap();
 
 	public Map<String, Object> query(HttpServletRequest req, Session cmisSession) {
 
@@ -205,6 +211,7 @@ public class QueryService implements GlobalCache, InitializingBean{
 					Map<String, String> matricole = new HashMap<String, String>();
 					List<Object> recentSubmission = new ArrayList<Object>();
 					Map<String, Map<String, Object>> relationships = new HashMap<String, Map<String, Object>>();
+					Map<String, CmisObject> parents = new HashMap<String, CmisObject>();
 					for (QueryResult result : queryResult) {
 						if (fetchCmisObject) {
 							String nodeRef = result.getPropertyValueById(PropertyIds.OBJECT_ID);
@@ -231,12 +238,12 @@ public class QueryService implements GlobalCache, InitializingBean{
 									relationshipTypeParam, relationshipName,
 									relationshipField);
 						if (relationshipTypeParam.isChildRelationship())
-					addChildToModel(cmisSession, result, relationships,
-							relationshipName, relationshipField);
-						if (relationshipTypeParam.isParentRelationship())
-					addParentToModel(cmisSession, result, relationships,
-							relationshipName, relationshipField);
-
+							addChildToModel(cmisSession, result, relationships,
+									relationshipName, relationshipField);
+						if (relationshipTypeParam.isParentRelationship()) {
+							addParentToModel(cmisSession, result, relationships,
+									relationshipName, relationshipField, parents);							
+						}
 					}
 					model.put("models", recentSubmission);
 					if (!relationships.isEmpty())
@@ -375,38 +382,34 @@ public class QueryService implements GlobalCache, InitializingBean{
 	private void addParentToModel(final Session cmisSession,
 			QueryResult result,
 			Map<String, Map<String, Object>> relationships,
-			List<String> relationshipName, List<String> relationshipField) {
-		final String objectId = (String) result
+			List<String> relationshipName, List<String> relationshipField, Map<String, CmisObject> parents) {
+		String objectId = result
 				.getPropertyValueById(PropertyIds.OBJECT_ID);
+		String parentId = result
+				.getPropertyValueById(PropertyIds.PARENT_ID);		
 		try {
-			// get parents from cache, if present
-
-            List<Folder> parents;
-
-            if (nodeParentsCache.containsKey(objectId)) {
-                parents = nodeParentsCache.get(objectId);
-            } else {
-                FileableCmisObject cmisObject = (FileableCmisObject) cmisSession
-                        .getObject(objectId);
-                List<Folder> parentsz = cmisObject.getParents();
-                nodeParentsCache.put(objectId, parentsz);
-                parents = parentsz;
-            }
-
+			if (parentId == null) {
+				parentId = cmisSession.getObject(objectId).getPropertyValue(PropertyIds.PARENT_ID);
+			}				
+			CmisObject parent;
+			if (parents.containsKey(parentId))
+				parent = parents.get(parentId);
+			else {
+				parent = cmisSession.getObject(parentId);
+				parents.put(parentId, parent);
+			}
 			Map<String, Object> rels = new HashMap<String, Object>();
-			for (CmisObject parent : parents) {
-				if (relationshipField != null && !relationshipField.isEmpty()) {
-					Set<String> propertiesField = new HashSet<String>();
-					for (String relField : relationshipField) {
-						propertiesField.add(relField);
-					}
+			if (relationshipField != null && !relationshipField.isEmpty()) {
+				Set<String> propertiesField = new HashSet<String>();
+				for (String relField : relationshipField) {
+					propertiesField.add(relField);
 				}
-				if (relationshipName != null && !relationshipName.isEmpty()) {
-					if (relationshipName.contains(parent.getType().getId()))
-						addToPropertyMap(rels, objectId, parent);
-				} else {
+			}
+			if (relationshipName != null && !relationshipName.isEmpty()) {
+				if (relationshipName.contains(parent.getType().getId()))
 					addToPropertyMap(rels, objectId, parent);
-				}
+			} else {
+				addToPropertyMap(rels, objectId, parent);
 			}
 			if (!rels.isEmpty()) {
 				if (relationships.containsKey("parent")) {
@@ -419,26 +422,4 @@ public class QueryService implements GlobalCache, InitializingBean{
 			LOGGER.warn("Parent is not visible", _ex);
 		}
 	}
-
-	@Override
-	public String name() {
-		return "nodeParentsCache";
-	}
-
-	@Override
-	public void clear() {
-		nodeParentsCache.clear();
-	}
-
-	@Override
-	public String get() {
-
-        return new Gson().toJson(nodeParentsCache.keySet());
-	}
-
-	@Override
-	public void afterPropertiesSet() throws Exception {
-		cacheService.register(this);
-	}
-
 }

@@ -195,7 +195,7 @@ define(['jquery', 'cnr/cnr.node', 'cnr/cnr.ui.select', 'i18n', 'cnr/cnr.search',
     buttonUpload
       .click(function () {
         if (typeof opts.isSaved === 'function' && !opts.isSaved()) {
-          UI.alert('Prima di iniziare la compilazione della sezione è necessario effettuare il salvataggio della domanda');
+          UI.alert('Prima di iniziare la compilazione della sezione &egrave; necessario effettuare il salvataggio!');
           return;
         }
         var type = selectObjectType.data('value');
