@@ -30,8 +30,5 @@
 
     <bean class="it.cnr.cool.repository.I18nRepository" />
 
-    <bean class="it.cnr.cool.repository.WorkflowRepository" />
-
-
 
 </beans>
