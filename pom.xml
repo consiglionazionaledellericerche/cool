@@ -111,7 +111,6 @@
                   <excludes>
                     <exclude>**/target/**</exclude>
                     <exclude>**/thirdparty/**</exclude>
-                    <exclude>**/it/cnr/cool/Workflow/**</exclude>
                     <exclude>**/Scripts/wfContatoriStorico**</exclude>
                     <exclude>**/src/main/config/**</exclude>
                     <exclude>**/src/main/js/**</exclude>
