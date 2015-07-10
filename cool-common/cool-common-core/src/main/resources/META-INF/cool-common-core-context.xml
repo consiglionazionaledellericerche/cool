@@ -103,8 +103,6 @@
 
 	<bean id="typesTreeService" class="it.cnr.cool.service.typestree.TypesTreeService" />
 
-	<bean id="workflowService" class="it.cnr.cool.service.workflow.WorkflowService" />
-
 	<bean id="gsonBuilder" class="com.google.gson.GsonBuilder" />
 	<bean id="gsonParser" class="it.cnr.cool.util.format.GsonParser"
 		init-method="init">
