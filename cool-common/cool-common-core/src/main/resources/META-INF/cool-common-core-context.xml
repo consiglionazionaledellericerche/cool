@@ -57,8 +57,6 @@
 	<bean id="aclService" class="it.cnr.cool.cmis.service.ACLService"></bean>
 	<bean id="nodeVersionService" class="it.cnr.cool.cmis.service.NodeVersionService"></bean>
 
-	<bean id="cacheService" class="it.cnr.cool.cmis.service.impl.CacheServiceImpl">
-	</bean>
 
 	<bean id="cmisFolderService" class="it.cnr.cool.cmis.service.impl.FolderServiceImpl">
 		<property name="dataDictionaryPath" value="${dataDictionary.path}" />

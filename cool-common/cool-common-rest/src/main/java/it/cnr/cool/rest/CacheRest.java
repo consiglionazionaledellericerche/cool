@@ -1,12 +1,14 @@
 package it.cnr.cool.rest;
 
-import it.cnr.cool.cmis.service.CacheService;
 import it.cnr.cool.cmis.service.FolderService;
 import it.cnr.cool.cmis.service.VersionService;
 import it.cnr.cool.rest.util.Util;
-
-import java.util.HashMap;
-import java.util.Map;
+import it.cnr.cool.service.security.ZoneService;
+import it.cnr.cool.util.Pair;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.GET;
@@ -17,11 +19,10 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.ResponseBuilder;
 import javax.ws.rs.core.Response.Status;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @Path("cache")
 @Component
@@ -33,13 +34,13 @@ public class CacheRest {
 	private static final String FTL = "/surf/webscripts/js/cache.get.json.ftl";
 
 	@Autowired
-	private CacheService cacheService;
-
-	@Autowired
 	private VersionService versionService;
 
 	@Autowired
 	protected FolderService folderService;
+
+	@Autowired
+	private ZoneService zoneService;
 
 	private static final Logger LOGGER = LoggerFactory
 			.getLogger(CacheRest.class);
@@ -54,9 +55,16 @@ public class CacheRest {
 			HashMap<String, Object> url = new HashMap<String, Object>();
 			url.put("context", req.getContextPath());
 			model.put("url", url);
-			model.put("publicCaches", cacheService.getPublicCaches());
 			model.put("isProduction", versionService.isProduction());
 			model.put("dataDictionary", folderService.getDataDictionaryId());
+
+
+			String s = zoneService.get(); //TODO: cachare
+
+			Pair<String, Object> zones = new Pair<String, Object>("zones", s);
+			List<Pair<String, Object>> xxx = Arrays.asList(zones);
+
+			model.put("publicCaches", xxx);
 
 			String json = Util.processTemplate(model, FTL);
 			rb = Response.ok(json);

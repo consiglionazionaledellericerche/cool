@@ -1,7 +1,6 @@
 package it.cnr.cool.rest;
 
 import it.cnr.cool.cmis.service.CMISService;
-import it.cnr.cool.cmis.service.CacheService;
 import it.cnr.cool.cmis.service.VersionService;
 import it.cnr.cool.rest.util.Util;
 import it.cnr.cool.security.service.impl.alfresco.CMISUser;
@@ -14,13 +13,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.ws.rs.*;
+import javax.ws.rs.GET;
+import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
 import javax.ws.rs.core.CacheControl;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.ResponseBuilder;
 import javax.ws.rs.core.Response.Status;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -36,9 +38,6 @@ public class CommonRest {
 
 	@Autowired
 	private VersionService versionService;
-
-	@Autowired
-	private CacheService cacheService;
 
 	@Autowired
 	private CMISService cmisService;
@@ -61,7 +60,7 @@ public class CommonRest {
 			BindingSession bindingSession = cmisService
 					.getCurrentBindingSession(req);
 
-			model.put("caches", cacheService.getCaches(user, bindingSession));
+			model.put("caches", Arrays.asList()); //TODO: serve solo a JCONON
 
 			model.put("cmisDateFormat", StringUtil.CMIS_DATEFORMAT);
 
@@ -84,15 +83,4 @@ public class CommonRest {
 
 	}
 
-	@DELETE
-	public void delete(@Context HttpServletRequest req, @QueryParam("authortiyName") String authortiyName) {
-		BindingSession bindingSession = cmisService
-				.getCurrentBindingSession(req);
-		if (authortiyName != null) {
-			if (authortiyName.startsWith("GROUP_"))
-				cacheService.clearGroupCache(authortiyName, bindingSession);
-			else
-				cacheService.clearCache(authortiyName);
-		}
-	}
 }
