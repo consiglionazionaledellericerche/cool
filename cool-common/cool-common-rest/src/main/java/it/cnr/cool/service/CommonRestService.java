@@ -1,24 +1,16 @@
-package it.cnr.cool.rest;
+package it.cnr.cool.service;
 
 import it.cnr.cool.cmis.service.CMISService;
 import it.cnr.cool.cmis.service.VersionService;
 import it.cnr.cool.rest.util.Util;
 import it.cnr.cool.security.service.impl.alfresco.CMISUser;
-import it.cnr.cool.service.PageService;
 import it.cnr.cool.util.StringUtil;
-import org.apache.chemistry.opencmis.client.bindings.spi.BindingSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
 import javax.ws.rs.core.CacheControl;
-import javax.ws.rs.core.Context;
-import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.ResponseBuilder;
 import javax.ws.rs.core.Response.Status;
@@ -26,10 +18,8 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
-@Path("common")
 @Component
-@Produces(MediaType.APPLICATION_JSON)
-public class CommonRest {
+public class CommonRestService {
 
 	private static final String FTL = "/surf/webscripts/js/common.get.json.ftl";
 
@@ -43,30 +33,12 @@ public class CommonRest {
 	private CMISService cmisService;
 
 	private static final Logger LOGGER = LoggerFactory
-			.getLogger(CommonRest.class);
+			.getLogger(CommonRestService.class);
 
-	@GET
-	public Response foo(@Context HttpServletRequest req) {
+	public Response getResponse(Map<String, Object> model) {
 
 		ResponseBuilder rb;
 		try {
-
-			Map<String, Object> model = new HashMap<String, Object>();
-
-			model.put("artifact_version", versionService.getVersion());
-
-			CMISUser user = cmisService.getCMISUserFromSession(req);
-
-			BindingSession bindingSession = cmisService
-					.getCurrentBindingSession(req);
-
-			model.put("caches", Arrays.asList()); //TODO: serve solo a JCONON
-
-			model.put("cmisDateFormat", StringUtil.CMIS_DATEFORMAT);
-
-			Map<String, Object> context = pageService.getContext(user);
-
-			model.put("context", context);
 
 			String json = Util.processTemplate(model, FTL);
 			LOGGER.debug(json);
@@ -80,7 +52,21 @@ public class CommonRest {
 		}
 
 		return rb.build();
+	}
 
+	public Map<String, Object> getStringObjectMap(CMISUser user) {
+		Map<String, Object> model = new HashMap<String, Object>();
+
+		model.put("artifact_version", versionService.getVersion());
+
+		model.put("caches", Arrays.asList()); //TODO: serve solo a JCONON
+
+		model.put("cmisDateFormat", StringUtil.CMIS_DATEFORMAT);
+
+		Map<String, Object> context = pageService.getContext(user);
+
+		model.put("context", context);
+		return model;
 	}
 
 }

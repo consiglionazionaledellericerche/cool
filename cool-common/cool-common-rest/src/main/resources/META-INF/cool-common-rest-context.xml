@@ -141,7 +141,7 @@
     <bean id="messageMethod" class="it.cnr.mock.MessageMethod" scope="prototype"/>
 
     <bean class="it.cnr.cool.rest.Page"></bean>
-    <bean class="it.cnr.cool.rest.CommonRest"></bean>
+    <bean class="it.cnr.cool.service.CommonRestService"></bean>
     <bean class="it.cnr.cool.rest.StaticResouce"></bean>
 
     <bean class="it.cnr.cool.rest.I18n"></bean>
