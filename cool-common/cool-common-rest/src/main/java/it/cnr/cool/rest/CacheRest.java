@@ -3,7 +3,7 @@ package it.cnr.cool.rest;
 import it.cnr.cool.cmis.service.FolderService;
 import it.cnr.cool.cmis.service.VersionService;
 import it.cnr.cool.rest.util.Util;
-import it.cnr.cool.service.security.ZoneService;
+import it.cnr.cool.repository.ZoneRepository;
 import it.cnr.cool.util.Pair;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -40,7 +40,7 @@ public class CacheRest {
 	protected FolderService folderService;
 
 	@Autowired
-	private ZoneService zoneService;
+	private ZoneRepository zoneRepository;
 
 	private static final Logger LOGGER = LoggerFactory
 			.getLogger(CacheRest.class);
@@ -59,12 +59,11 @@ public class CacheRest {
 			model.put("dataDictionary", folderService.getDataDictionaryId());
 
 
-			String s = zoneService.get(); //TODO: cachare
+			LOGGER.debug("adding zones to public caches");
+			Pair<String, Object> zones = new Pair<String, Object>("zones", zoneRepository.get());
+			List<Pair<String, Object>> publicCaches = Arrays.asList(zones);
 
-			Pair<String, Object> zones = new Pair<String, Object>("zones", s);
-			List<Pair<String, Object>> xxx = Arrays.asList(zones);
-
-			model.put("publicCaches", xxx);
+			model.put("publicCaches", publicCaches);
 
 			String json = Util.processTemplate(model, FTL);
 			rb = Response.ok(json);
