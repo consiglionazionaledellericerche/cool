@@ -1,5 +1,5 @@
 /*jslint es5:true */
-define(['jquery', 'header', 'json!common', 'cnr/cnr', 'ace', 'cnr/cnr.ui', 'cnr/cnr.url', 'json!cache'], function ($, header, common, CNR, ace, UI, URL, cache) {
+define(['jquery', 'header', 'json!common', 'cnr/cnr', 'ace', 'cnr/cnr.ui', 'cnr/cnr.url'], function ($, header, common, CNR, ace, UI, URL) {
 
   "use strict";
   var term = $("#outcome"),
