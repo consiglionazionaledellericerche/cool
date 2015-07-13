@@ -140,8 +140,6 @@
     <bean class="it.cnr.mock.CnrRegion"></bean>
     <bean id="messageMethod" class="it.cnr.mock.MessageMethod" scope="prototype"/>
 
-    <bean class="it.cnr.cool.rest.CacheRest"></bean>
-
     <bean class="it.cnr.cool.rest.Page"></bean>
     <bean class="it.cnr.cool.rest.CommonRest"></bean>
     <bean class="it.cnr.cool.rest.StaticResouce"></bean>
