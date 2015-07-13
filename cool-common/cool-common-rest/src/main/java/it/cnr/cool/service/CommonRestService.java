@@ -28,9 +28,6 @@ public class CommonRestService {
 	@Autowired
 	private VersionService versionService;
 
-	@Autowired
-	private CMISService cmisService;
-
 	private static final Logger LOGGER = LoggerFactory
 			.getLogger(CommonRestService.class);
 
