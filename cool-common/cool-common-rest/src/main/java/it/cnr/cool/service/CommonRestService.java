@@ -14,7 +14,6 @@ import javax.ws.rs.core.CacheControl;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.ResponseBuilder;
 import javax.ws.rs.core.Response.Status;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -58,8 +57,6 @@ public class CommonRestService {
 		Map<String, Object> model = new HashMap<String, Object>();
 
 		model.put("artifact_version", versionService.getVersion());
-
-		model.put("caches", Arrays.asList()); //TODO: serve solo a JCONON
 
 		model.put("cmisDateFormat", StringUtil.CMIS_DATEFORMAT);
 
