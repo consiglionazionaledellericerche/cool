@@ -28,7 +28,7 @@ define(['jquery', 'i18n', 'select2', 'select2-i18n', 'cnr/cnr'], function ($, i1
         });
       }
       options = $.map([].concat(item.jsonlist), function (el) {
-        var opt = $('<option data-title="' + (i18n.prop(el.key + '.title', i18n.prop(el.label, el.defaultLabel)))  + '" value="' + el.key + '">' + i18n.prop(el.label, el.defaultLabel) + '</option>');
+        var opt = $('<option data-title="' + (i18n.prop(el.key + '.title', i18n.prop(el.label, el.defaultLabel)).replace(/[^0-9A-Za-z]/g, ' '))  + '" value="' + el.key + '">' + i18n.prop(el.label, el.defaultLabel) + '</option>');
         if (item.val && el.key !== "" && [].concat(item.val).indexOf(el.key) >= 0) {
           opt.attr('selected', 'true');
         }
