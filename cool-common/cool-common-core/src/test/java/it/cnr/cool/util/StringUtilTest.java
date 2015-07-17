@@ -13,11 +13,13 @@ public class StringUtilTest {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(StringUtilTest.class);
 
-    @Test(expected=NullPointerException.class)
+    @Test(expected = NullPointerException.class)
     public void testGetMd5Null() throws Exception {
         String md5 = StringUtil.getMd5(null);
         LOGGER.info(md5);
-    }@Test
+    }
+
+    @Test
      public void testGetMd5EmptyString() throws Exception {
         InputStream is = IOUtils.toInputStream("");
         String md5 = StringUtil.getMd5(is);

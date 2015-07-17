@@ -131,13 +131,19 @@ public final class StringUtil {
 	};
 
 	public static String getMd5(InputStream is) {
-		return getHexDigest(is, "MD5");
-	}
-
-	private static String getHexDigest(InputStream is, String algorithmName) {
-		byte[] digest = null;
 		try {
 			byte[] buffer = IOUtils.toByteArray(is);
+			return getHexDigest(buffer, "MD5");
+		}
+		catch (IOException e) {
+			throw new CoolException("Error: ", e);
+		}
+	}
+
+	private static String getHexDigest(byte[] buffer, String algorithmName) {
+		byte[] digest = null;
+		try {
+
 			java.security.MessageDigest algorithm = java.security.MessageDigest
 					.getInstance(algorithmName);
 			algorithm.reset();
@@ -146,8 +152,6 @@ public final class StringUtil {
 		} catch (java.security.NoSuchAlgorithmException e) {
 			throw new CoolException("Algoritmo non supportato: "
 					+ algorithmName, e);
-		} catch (IOException e) {
-			throw new CoolException("Error: ", e);
 		}
 		StringBuffer hexString = new StringBuffer();
 		for (int i = 0; i < digest.length; i++) {
