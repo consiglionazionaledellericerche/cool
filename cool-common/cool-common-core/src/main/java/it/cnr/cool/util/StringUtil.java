@@ -15,7 +15,8 @@ import java.util.Locale;
 public final class StringUtil {
 	public static final SimpleDateFormat DATEFORMAT = new SimpleDateFormat("dd/MM/yyyy", Locale.ITALY);
 	public static final SimpleDateFormat DATETIMEFORMAT = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss.SSS", Locale.ITALY);
-	
+	public static final String MD5 = "MD5";
+
 	public static String convertStreamToString(InputStream is) {
         BufferedReader reader = new BufferedReader(new InputStreamReader(is));
         StringBuilder sb = new StringBuilder();
@@ -133,11 +134,15 @@ public final class StringUtil {
 	public static String getMd5(InputStream is) {
 		try {
 			byte[] buffer = IOUtils.toByteArray(is);
-			return getHexDigest(buffer, "MD5");
+			return getMd5(buffer);
 		}
 		catch (IOException e) {
 			throw new CoolException("Error: ", e);
 		}
+	}
+
+	public static String getMd5(byte [] buffer) {
+		return getHexDigest(buffer, MD5);
 	}
 
 	private static String getHexDigest(byte[] buffer, String algorithmName) {

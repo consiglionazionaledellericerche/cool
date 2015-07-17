@@ -5,6 +5,7 @@ import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 
 import static org.junit.Assert.assertEquals;
@@ -12,12 +13,6 @@ import static org.junit.Assert.assertEquals;
 public class StringUtilTest {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(StringUtilTest.class);
-
-    @Test(expected = NullPointerException.class)
-    public void testGetMd5Null() throws Exception {
-        String md5 = StringUtil.getMd5(null);
-        LOGGER.info(md5);
-    }
 
     @Test
      public void testGetMd5EmptyString() throws Exception {
