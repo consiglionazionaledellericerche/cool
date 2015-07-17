@@ -1,6 +1,7 @@
 package it.cnr.cool.util;
 
 import it.cnr.cool.exception.CoolException;
+import org.apache.commons.io.IOUtils;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -10,8 +11,6 @@ import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
-
-import org.apache.commons.io.IOUtils;
 
 public final class StringUtil {
 	public static final SimpleDateFormat DATEFORMAT = new SimpleDateFormat("dd/MM/yyyy", Locale.ITALY);
@@ -135,7 +134,7 @@ public final class StringUtil {
 		return getHexDigest(is, "MD5");
 	}
 
-	public static String getHexDigest(InputStream is, String algorithmName) {
+	private static String getHexDigest(InputStream is, String algorithmName) {
 		byte[] digest = null;
 		try {
 			byte[] buffer = IOUtils.toByteArray(is);
