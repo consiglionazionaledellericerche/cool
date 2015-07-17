@@ -17,14 +17,23 @@ public class StringUtilTest {
     public void testGetMd5Null() throws Exception {
         String md5 = StringUtil.getMd5(null);
         LOGGER.info(md5);
-    }
-    @Test
-    public void testGetMd5EmptyString() throws Exception {
+    }@Test
+     public void testGetMd5EmptyString() throws Exception {
         InputStream is = IOUtils.toInputStream("");
         String md5 = StringUtil.getMd5(is);
         LOGGER.info(md5);
         assertEquals("d41d8cd98f00b204e9800998ecf8427e", md5);
     }
+
+    @Test
+    public void testGetMd5Space() throws Exception {
+        InputStream is = IOUtils.toInputStream(" ");
+        String md5 = StringUtil.getMd5(is);
+        LOGGER.info(md5);
+        assertEquals("7215ee9c7d9dc229d2921a40e899ec5f", md5);
+    }
+
+
 
     @Test
     public void testGetMd5String() throws Exception {
