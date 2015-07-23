@@ -13,7 +13,7 @@ if (nodeRef === null || versionLabel === null || node === null) {
   model.esito = false;
 } else {
   version = versionService.getVersionHistory(node.nodeRef).getVersion(versionLabel);
-  if (version.versionType !== null) {
+  if (String(version.versionType) === "MAJOR") {
     model.esito = false;
   } else {
     versionService.deleteVersion(node.nodeRef, version);
