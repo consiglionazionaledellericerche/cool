@@ -29,11 +29,11 @@ public class CacheConfiguration {
 
     private @Value("${hazelcast.instance.name}") String hazelcastInstanceName;
 
-    private @Value("${hazelcast.mancenter:#{null}}") String mancenter;
+    private @Value("${hazelcast.mancenter}") String mancenter;
 
-    private @Value("${hazelcast.members:#{null}}") String members;
+    private @Value("${hazelcast.members}") String members;
 
-    private @Value("${hazelcast.multicast.port:#{null}}") Integer hazelcastMulticastPort;
+    private @Value("${hazelcast.multicast.port}") Integer hazelcastMulticastPort;
 
     private @Value("${hazelcast.ttl:86400}") int ttl;
 
