@@ -257,7 +257,7 @@ public class CMISService implements InitializingBean, CMISSessionManager {
         return user;
     }
 
-    private String extractTicketFromRequest(HttpServletRequest req) {
+    public String extractTicketFromRequest(HttpServletRequest req) {
 
         String ticket;
 
