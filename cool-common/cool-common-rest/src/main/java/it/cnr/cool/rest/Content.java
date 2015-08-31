@@ -2,21 +2,6 @@ package it.cnr.cool.rest;
 
 import it.cnr.cool.cmis.service.CMISService;
 import it.cnr.cool.security.SecurityChecked;
-
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.net.URI;
-import java.net.URISyntaxException;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.QueryParam;
-import javax.ws.rs.core.Context;
-import javax.ws.rs.core.Response;
-
 import org.apache.chemistry.opencmis.client.api.Document;
 import org.apache.chemistry.opencmis.client.api.Session;
 import org.apache.chemistry.opencmis.commons.exceptions.CmisUnauthorizedException;
@@ -26,6 +11,20 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.ws.rs.GET;
+import javax.ws.rs.Path;
+import javax.ws.rs.QueryParam;
+import javax.ws.rs.core.Context;
+import javax.ws.rs.core.Response;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.net.SocketException;
+import java.net.URI;
+import java.net.URISyntaxException;
 
 @Path("content")
 @Component
@@ -51,9 +50,11 @@ public class Content {
 				String cleanPath = path.replaceAll("\\?.*", "");
 				LOGGER.debug("get content for path: " + cleanPath);
 				document = (Document) cmisSession.getObjectByPath(cleanPath);
-			} else {
+			} else if (nodeRef != null && !nodeRef.isEmpty()) {
 				LOGGER.debug("get content for nodeRef: " + nodeRef);
 				document = (Document) cmisSession.getObject(nodeRef);
+			} else {
+				return Response.status(Response.Status.BAD_REQUEST).build();
 			}
 
 			res.setContentType(document.getContentStreamMimeType());
@@ -86,6 +87,10 @@ public class Content {
 			if (nodeRef != null && !nodeRef.isEmpty())
 				redirect = redirect.concat("&nodeRef="+nodeRef);
 			return Response.seeOther(new URI(getUrl(req) + redirect)).build();
+		} catch (SocketException e) {
+			// very frequent errors of type java.net.SocketException: Pipe rotta
+			LOGGER.warn("unable to send content {} {}", path, nodeRef, e);
+			res.setStatus(HttpStatus.SC_INTERNAL_SERVER_ERROR);
 		} catch (IOException e) {
 			LOGGER.error("unable to get content for path " + path + ", URL " + req.getRequestURL(), e);
 			res.setStatus(HttpStatus.SC_INTERNAL_SERVER_ERROR);
