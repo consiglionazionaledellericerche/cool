@@ -111,6 +111,11 @@ public class ProxyService {
 
 
     public void processGet(BindingSession currentBindingSession, UrlBuilder url, HttpServletResponse res) throws IOException {
+        processGet(currentBindingSession, url, res, true);
+    }
+
+
+    public void processGet(BindingSession currentBindingSession, UrlBuilder url, HttpServletResponse res, boolean includeHeaders) throws IOException {
 
         LOGGER.debug(url.toString());
 
@@ -124,7 +129,7 @@ public class ProxyService {
 
             if (header.getValue().size() == 1) {
                 String key = header.getKey();
-                if (key != null && !key.isEmpty() && isHeaderToBeAdded(key)) {
+                if (key != null && !key.isEmpty() && includeHeaders && isHeaderToBeAdded(key)) {
                     String value = header.getValue().get(0);
                     LOGGER.debug("header {} = {}", key, value);
                     res.setHeader(key, value);
