@@ -41,7 +41,8 @@ public class Content {
 	public Response content(@Context HttpServletRequest req,
 			@Context HttpServletResponse res, @QueryParam("path") String path,
 			@QueryParam("nodeRef") String nodeRef,
-			@QueryParam("deleteAfterDownload") Boolean deleteAfterDownload) throws URISyntaxException {
+			@QueryParam("deleteAfterDownload") Boolean deleteAfterDownload,
+			@QueryParam("fileName") String fileName) throws URISyntaxException {
 		Session cmisSession = cmisService.getCurrentCMISSession(req);
 
 		Document document = null;
@@ -59,6 +60,8 @@ public class Content {
 			res.setContentType(document.getContentStreamMimeType());
 
 			String attachFileName = document.getContentStreamFileName();
+			if (fileName != null)
+				attachFileName = fileName;
 			String headerValue = "attachment";
 			if (attachFileName != null && !attachFileName.isEmpty()) {
 				headerValue += "; filename=\"" + attachFileName + "\"";
