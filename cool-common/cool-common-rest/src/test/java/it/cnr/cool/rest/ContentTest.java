@@ -45,7 +45,7 @@ public class ContentTest {
     public void testContentByPathGuest() throws Exception {
         MockHttpServletRequest req = new MockHttpServletRequest();
         MockHttpServletResponse res = new MockHttpServletResponse();
-        Response response = content.content(req, res, PATH, null, null);
+        Response response = content.content(req, res, PATH, null, null, null);
         assertEquals(200, response.getStatus());
         String content = res.getContentAsString();
         LOGGER.info(content);
@@ -57,7 +57,7 @@ public class ContentTest {
         MockHttpServletResponse res = new MockHttpServletResponse();
         String nodeRef = cmisService.createAdminSession().getObjectByPath(PATH).getId();
         LOGGER.info("the nodeRef of path {} is {}", PATH, nodeRef);
-        Response response = content.content(req, res, null, nodeRef, null);
+        Response response = content.content(req, res, null, nodeRef, null, null);
         assertEquals(200, response.getStatus());
         String content = res.getContentAsString();
         LOGGER.info(content);
@@ -69,7 +69,7 @@ public class ContentTest {
     public void testContentNoQueryStringParams() throws Exception {
         MockHttpServletRequest req = new MockHttpServletRequest();
         MockHttpServletResponse res = new MockHttpServletResponse();
-        Response response = content.content(req, res, null, null, null);
+        Response response = content.content(req, res, null, null, null, null);
         assertEquals(Response.Status.BAD_REQUEST.getStatusCode(), response.getStatus());
     }
 
