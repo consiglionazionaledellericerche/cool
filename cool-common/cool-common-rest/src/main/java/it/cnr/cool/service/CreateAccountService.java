@@ -9,18 +9,13 @@ import it.cnr.cool.rest.util.Util;
 import it.cnr.cool.security.service.UserService;
 import it.cnr.cool.security.service.impl.alfresco.CMISUser;
 import it.cnr.cool.util.CalendarUtil;
-
-import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
-import java.util.UUID;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+
+import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
+import java.util.*;
 
 public class CreateAccountService {
 
@@ -95,7 +90,7 @@ public class CreateAccountService {
 				
 				model.putAll(data);
 			} else {
-				LOGGER.error("possibile anomalia " + model);
+				LOGGER.error("possibile anomalia", user, model);
 				throw new CoolException(String.valueOf(model.get("error")));
 			}
 

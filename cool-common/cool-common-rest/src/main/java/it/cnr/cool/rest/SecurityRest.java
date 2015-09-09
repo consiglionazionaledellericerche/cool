@@ -11,10 +11,13 @@ import it.cnr.cool.security.service.impl.alfresco.CMISUser;
 import it.cnr.cool.service.CreateAccountService;
 import it.cnr.cool.service.I18nService;
 import it.cnr.cool.service.UserFactoryException;
+import org.apache.chemistry.opencmis.client.bindings.impl.CmisBindingsHelper;
 import org.apache.chemistry.opencmis.client.bindings.spi.BindingSession;
+import org.apache.chemistry.opencmis.commons.impl.UrlBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 
 import javax.servlet.http.HttpServletRequest;
@@ -296,6 +299,21 @@ public class SecurityRest {
 	@GET
 	@Path(Page.LOGOUT_URL)
 	public Response logout(@Context HttpServletRequest req) {
+
+		String ticket = cmisService.extractTicketFromRequest(req);
+
+		LOGGER.info("logout " + ticket);
+		BindingSession bindingSession = cmisService.getCurrentBindingSession(req);
+		String link = cmisService.getBaseURL().concat("service/api/login/ticket/" + ticket);
+		UrlBuilder url = new UrlBuilder(link);
+		int status = CmisBindingsHelper.getHttpInvoker(bindingSession).invokeDELETE(url, bindingSession).getResponseCode();
+
+		if (status == HttpStatus.OK.value()) {
+			LOGGER.info("logout ok");
+		} else {
+			LOGGER.warn("error while logout");
+		}
+
 
 		URI uri = URI.create("../" + Page.LOGIN_URL);
         NewCookie cookie = getCookie(null);
