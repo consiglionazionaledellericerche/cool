@@ -146,15 +146,13 @@ public class ProxyService {
         res.setCharacterEncoding(resp.getCharset().toUpperCase());
 
         OutputStream outputStream = res.getOutputStream();
-
-        if (resp != null && resp.getStream() != null) {
-
+        if (resp != null && (resp.getStream() != null || resp.getErrorContent() != null)) {
             if (responseCode != HttpStatus.SC_OK) {
-                LOGGER.error("status code {} for request url", responseCode);
-
+            	LOGGER.error("status code {} for request url", responseCode + resp.getErrorContent());
+            	IOUtils.copy(new ByteArrayInputStream(resp.getErrorContent().getBytes("UTF-8")), outputStream);
             }
-
-            IOUtils.copy(resp.getStream(), outputStream);
+            if (resp.getStream() != null)
+            	IOUtils.copy(resp.getStream(), outputStream);
         }
 
         outputStream.flush();
