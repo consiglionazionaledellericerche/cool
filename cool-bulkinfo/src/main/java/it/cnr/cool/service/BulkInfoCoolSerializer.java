@@ -79,7 +79,7 @@ public class BulkInfoCoolSerializer extends BulkInfoSerializer {
 	 * @param fpJson
 	 */
 	private String propJSONCMISValue(FieldProperty fieldProperty, BulkInfoCool bulkInfo, CmisObject cmisObject) {
-		String propertyName = fieldProperty.getAttribute("property");
+		String propertyName = fieldProperty.getAttribute("property"), propertyMultiple = fieldProperty.getAttribute("multiple");
 		if( propertyName != null && !propertyName.equals("")) {
 			Object value = cmisObject.getPropertyValue(propertyName);
 			
@@ -87,11 +87,11 @@ public class BulkInfoCoolSerializer extends BulkInfoSerializer {
 				PropertyDefinition property = bulkInfo.getPropertyDefinition(null, cmisObject, fieldProperty);
 				
 				if(property != null && !property.toString().equals("") ) {
-					if( !property.getCardinality().value().equals("multi") ) {
+					if( property.getCardinality().value().equals("multi") && "multiple".equals(propertyMultiple)) {
+						return getMultiValue(cmisObject, propertyName);
+					} else {
 						return getValueByPropertyType(cmisObject, propertyName,
 								property);
-					} else {
-						return getMultiValue(cmisObject, propertyName);
 					}
 				}
 			}
@@ -128,19 +128,19 @@ public class BulkInfoCoolSerializer extends BulkInfoSerializer {
 	private String getValueByPropertyType(CmisObject cmisObject,
 			String propertyName, PropertyDefinition property) {
 		if( property.getPropertyType().value().equals("boolean")) {
-			return cmisObject.getPropertyValue(propertyName).toString();
+			return cmisObject.getProperty(propertyName).getValueAsString();
 		} else if ( property.getPropertyType().value().equals("datetime") ) {
 			Date date = ((Calendar)cmisObject.getPropertyValue(propertyName)).getTime();
 			SimpleDateFormat sdf = new SimpleDateFormat(DATE_FORMAT);
 			return sdf.format(date);
 		} else if ( property.getPropertyType().value().equals("integer") ) {
-			return cmisObject.getPropertyValue(propertyName).toString(); // TODO formattare come un numero
+			return cmisObject.getProperty(propertyName).getValueAsString(); // TODO formattare come un numero
 		} else if ( property.getPropertyType().value().equals("decimal") ) {
 			DecimalFormat df = new DecimalFormat("#0.##");
 			BigDecimal bdValue = (BigDecimal) cmisObject.getPropertyValue(propertyName);
 			return df.format(bdValue); // TODO formattare come un decimale
 		} else {
-			return cmisObject.getPropertyValue(propertyName).toString();
+			return cmisObject.getProperty(propertyName).getValueAsString();
 		}
 	}
 }
