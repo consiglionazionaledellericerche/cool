@@ -23,7 +23,7 @@
     <jaxen.version>1.1.4</jaxen.version>
     <mail.version>1.4.5</mail.version>
     <servlet.version>2.5</servlet.version>
-    <cnr.rest.version>0.12.0</cnr.rest.version>
+    <cnr.rest.version>0.13</cnr.rest.version>
   </properties>
 
   <modules>
