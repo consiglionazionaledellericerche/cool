@@ -197,7 +197,7 @@ public class BulkInfoCoolService {
 	 */
 	private BulkInfoCool getBulkInfoFromResources(String bulkInfoName) {
 
-        LOGGER.info("loading bulkinfo: " + bulkInfoName);
+        LOGGER.debug("loading bulkinfo: " + bulkInfoName);
 
         Document doc = bulkInfoRepository.getXmlDocument(bulkInfoName);
 

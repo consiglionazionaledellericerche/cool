@@ -59,7 +59,8 @@ define(['jquery', 'cnr/cnr.ui', 'json!common', 'i18n', 'json!cache'], function (
         version: "rest/search/document/version?guest=true",
         queryExcel: "rest/search/query.xls?guest=true",
         rootFolder : "rest/search/folder/root?guest=true",
-        children: "rest/search/folder/children?guest=true"
+        children: "rest/search/folder/children?guest=true",
+        folderByPath: 'rest/search/folder/by-path'
       },
       node: {
         metadata: "rest/node/metadata",

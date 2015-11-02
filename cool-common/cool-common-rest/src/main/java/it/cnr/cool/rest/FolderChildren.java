@@ -12,7 +12,6 @@ import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
-
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
@@ -74,6 +73,22 @@ public class FolderChildren {
 	public Map<String, Object> getRoot(@Context HttpServletRequest req) {
 		Session cmisSession = cmisService.getCurrentCMISSession(req);
 		Folder folder = folderService.getRootNode(cmisSession);
+
+		List<String> actions = getActions(folder);
+
+		Map<String, Object> response = new HashMap<String, Object>();
+		response.put("id", folder.getId());
+		response.put("allowableActions", actions);
+
+		return response;
+
+	}
+
+	@GET
+	@Path("by-path")
+	public Map<String, Object> getFolderByPath(@Context HttpServletRequest req, @QueryParam("path") String path) {
+		Session cmisSession = cmisService.getCurrentCMISSession(req);
+		Folder folder = (Folder) cmisSession.getObjectByPath(path);
 
 		List<String> actions = getActions(folder);
 
