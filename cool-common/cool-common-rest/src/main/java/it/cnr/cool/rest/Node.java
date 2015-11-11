@@ -7,7 +7,6 @@ import it.cnr.cool.rest.util.Util;
 import it.cnr.cool.service.NodeService;
 import it.cnr.mock.ISO8601DateFormatMethod;
 import it.cnr.mock.JSONUtils;
-import it.cnr.mock.RequestUtils;
 import org.apache.chemistry.opencmis.client.api.CmisObject;
 import org.apache.chemistry.opencmis.client.api.OperationContext;
 import org.apache.chemistry.opencmis.client.api.Session;
