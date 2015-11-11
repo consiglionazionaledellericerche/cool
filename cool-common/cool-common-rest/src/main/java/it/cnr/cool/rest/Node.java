@@ -151,15 +151,17 @@ public class Node {
 	@POST
 	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
 	@Path("metadata")
-	public Response metadata(@Context HttpServletRequest req,
-			MultivaluedMap<String, String> formParams) {
+	public Response metadata(@Context HttpServletRequest req) {
+
+		Map formParamz = req.getParameterMap();
+
 		ResponseBuilder builder = null;
 		Map<String, Object> model = new HashMap<String, Object>();
 		try {
 			Session session = cmisService.getCurrentCMISSession(req);
 
 			CmisObject cmisObject = nodeMetedataService.updateObjectProperties(
-					RequestUtils.extractFormParams(formParams), session, req);
+					formParamz, session, req);
 
 			model = buildModel(cmisObject);
 			String content = Util.processTemplate(model, PATH_POST_FTL);
