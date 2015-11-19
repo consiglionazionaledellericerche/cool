@@ -221,7 +221,9 @@ public class NodeTest {
 		formParams.add(PropertyIds.NAME, NOME_DOCUMENTO + "-" + prefix);
 		formParams.add(PropertyIds.PARENT_ID, parentObject.getId());
 		// creazione documento di test
-		Response response = node.metadata(request, formParams);
+
+		request.setParameters(formParams);
+		Response response = node.metadata(request);
 		LOGGER.debug(response.toString());
 		String content = response.getEntity().toString();
 		LOGGER.info(content);
