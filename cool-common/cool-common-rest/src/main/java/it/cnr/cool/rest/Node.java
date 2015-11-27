@@ -1,12 +1,15 @@
 package it.cnr.cool.rest;
 
 import com.google.gson.GsonBuilder;
+
 import it.cnr.cool.cmis.service.CMISService;
 import it.cnr.cool.cmis.service.NodeMetadataService;
 import it.cnr.cool.rest.util.Util;
 import it.cnr.cool.service.NodeService;
 import it.cnr.mock.ISO8601DateFormatMethod;
 import it.cnr.mock.JSONUtils;
+import it.cnr.mock.RequestUtils;
+
 import org.apache.chemistry.opencmis.client.api.CmisObject;
 import org.apache.chemistry.opencmis.client.api.OperationContext;
 import org.apache.chemistry.opencmis.client.api.Session;
@@ -22,6 +25,7 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.*;
 import javax.ws.rs.core.Response.ResponseBuilder;
 import javax.ws.rs.core.Response.Status;
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -147,18 +151,19 @@ public class Node {
 		return builder.build();
 	}
 
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@POST
 	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
 	@Path("metadata")
-	public Response metadata(@Context HttpServletRequest req) {
-
-		Map formParamz = req.getParameterMap();
-
+	public Response metadata(@Context HttpServletRequest req, MultivaluedMap<String, String> formParams) {
+		Map formParamz = new HashMap<>();
+		formParamz.putAll(req.getParameterMap());
+		if (formParams != null && !formParams.isEmpty())
+			formParamz.putAll(RequestUtils.extractFormParams(formParams));
 		ResponseBuilder builder = null;
 		Map<String, Object> model = new HashMap<String, Object>();
 		try {
 			Session session = cmisService.getCurrentCMISSession(req);
-
 			CmisObject cmisObject = nodeMetedataService.updateObjectProperties(
 					formParamz, session, req);
 

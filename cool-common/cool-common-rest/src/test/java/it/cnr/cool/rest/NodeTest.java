@@ -1,12 +1,31 @@
 package it.cnr.cool.rest;
 
-import com.google.gson.JsonElement;
-import com.google.gson.JsonParser;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 import it.cnr.cool.cmis.service.CMISService;
 import it.cnr.cool.cmis.service.LoginException;
 import it.cnr.cool.security.CMISAuthenticatorFactory;
-import org.apache.chemistry.opencmis.client.api.*;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.Serializable;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.ws.rs.core.MultivaluedHashMap;
+import javax.ws.rs.core.MultivaluedMap;
+import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.Status;
+
+import org.apache.chemistry.opencmis.client.api.CmisObject;
 import org.apache.chemistry.opencmis.client.api.Folder;
+import org.apache.chemistry.opencmis.client.api.ItemIterable;
+import org.apache.chemistry.opencmis.client.api.ObjectId;
+import org.apache.chemistry.opencmis.client.api.Session;
 import org.apache.chemistry.opencmis.commons.PropertyIds;
 import org.apache.chemistry.opencmis.commons.exceptions.CmisObjectNotFoundException;
 import org.apache.commons.io.IOUtils;
@@ -24,19 +43,8 @@ import org.springframework.test.annotation.DirtiesContext.ClassMode;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.ws.rs.core.MultivaluedHashMap;
-import javax.ws.rs.core.MultivaluedMap;
-import javax.ws.rs.core.Response;
-import javax.ws.rs.core.Response.Status;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.Serializable;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
-
-import static org.junit.Assert.*;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonParser;
 
 
 
@@ -210,6 +218,7 @@ public class NodeTest {
 		assertFalse(jsonObj.getBoolean("jconon_call:pubblicato"));
 	}
 
+	@SuppressWarnings("rawtypes")
 	@Test
 	public void testMetadata() throws LoginException {
 
@@ -223,7 +232,7 @@ public class NodeTest {
 		// creazione documento di test
 
 		request.setParameters(formParams);
-		Response response = node.metadata(request);
+		Response response = node.metadata(request, new MultivaluedHashMap());
 		LOGGER.debug(response.toString());
 		String content = response.getEntity().toString();
 		LOGGER.info(content);

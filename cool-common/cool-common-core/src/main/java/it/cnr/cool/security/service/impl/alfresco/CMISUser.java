@@ -20,6 +20,7 @@ public class CMISUser implements java.security.Principal, Serializable {
 	private String telephone;
 	private String mobile;
 	private Boolean enabled;
+	private String homeFolder;
 
 	public static final String CAPABILITY_ADMIN = "isAdmin";
 	public static final String CAPABILITY_GUEST = "isGuest";
@@ -304,6 +305,14 @@ public class CMISUser implements java.security.Principal, Serializable {
 		}
 
 		return this.fullName;
+	}
+
+	public String getHomeFolder() {
+		return homeFolder;
+	}
+
+	public void setHomeFolder(String homeFolder) {
+		this.homeFolder = homeFolder;
 	}
 
 	/**
