@@ -218,7 +218,6 @@ public class NodeTest {
 		assertFalse(jsonObj.getBoolean("jconon_call:pubblicato"));
 	}
 
-	@SuppressWarnings("rawtypes")
 	@Test
 	public void testMetadata() throws LoginException {
 
@@ -231,8 +230,7 @@ public class NodeTest {
 		formParams.add(PropertyIds.PARENT_ID, parentObject.getId());
 		// creazione documento di test
 
-		request.setParameters(formParams);
-		Response response = node.metadata(request, new MultivaluedHashMap());
+		Response response = node.metadata(request, formParams);
 		LOGGER.debug(response.toString());
 		String content = response.getEntity().toString();
 		LOGGER.info(content);
