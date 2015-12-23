@@ -9,10 +9,12 @@ import it.cnr.bulkinfo.exception.BulkinfoKindException;
 import it.cnr.bulkinfo.exception.BulkinfoNameException;
 import it.cnr.cool.BulkInfoRepository;
 import it.cnr.cool.cmis.service.VersionService;
+
 import org.apache.chemistry.opencmis.client.api.ObjectType;
 import org.apache.chemistry.opencmis.client.api.Session;
 import org.apache.chemistry.opencmis.commons.data.CmisExtensionElement;
 import org.apache.chemistry.opencmis.commons.definitions.PropertyDefinition;
+import org.apache.chemistry.opencmis.commons.enums.BaseTypeId;
 import org.apache.chemistry.opencmis.commons.exceptions.CmisObjectNotFoundException;
 import org.dom4j.Document;
 import org.dom4j.DocumentException;
@@ -147,6 +149,10 @@ public class BulkInfoCoolService {
 
 		if (bulkInfo != null) {
 			ObjectType bulkObjectType = getObjectType(bulkInfoName, bulkInfo);
+			if (bulkObjectType.getBaseTypeId().equals(BaseTypeId.CMIS_SECONDARY) && bulkInfo.getForm(bulkObjectType.getId()).isEmpty()) {
+				bulkInfo.addForm(bulkObjectType.getId());
+				bulkInfo.addPrintForm(bulkObjectType.getId());				
+			}			
 			injectParentAndAspects(bulkInfo);
 			insertProperties(bulkInfo, properties, bulkObjectType);
 		}
@@ -320,6 +326,13 @@ public class BulkInfoCoolService {
 		for (PropertyDefinition<?> propertyDefinition : properties) {
 			LOGGER.debug("Add property to BulkInfo :"+ propertyDefinition.getId());
 			bulkInfo.addFieldProperty(propertyDefinition);
+			if (bulkObjectType.getBaseTypeId().equals(BaseTypeId.CMIS_SECONDARY)) {
+				FieldProperty fieldProperty = bulkInfo.getFieldProperties().get(propertyDefinition.getLocalName());
+				if (fieldProperty != null) {
+					bulkInfo.getForms().get(bulkObjectType.getId()).addFormFieldProperty(fieldProperty);
+					bulkInfo.getPrintForms().get(bulkObjectType.getId()).addPrintFieldProperty(fieldProperty);
+				}
+			}			
 		}
 	}
 

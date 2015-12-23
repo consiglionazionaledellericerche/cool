@@ -44,9 +44,10 @@ public class BulkInfoCoolImpl extends BulkInfoImpl implements BulkInfoCool {
 
 		if (getFieldPropertyByProperty(propertyDefinition.getId()) == null
 				|| getFieldPropertyByProperty(propertyDefinition.getId()).isEmpty()) {
-
+			 
+			JSONObject jsonvalidator = new JSONObject();
 			FieldProperty fieldProperty = new FieldProperty();
-			fieldProperty.addAttribute("name", propertyDefinition.getId());
+			fieldProperty.addAttribute("name", propertyDefinition.getLocalName());
 			fieldProperty.addAttribute("property", propertyDefinition.getId());
 			fieldProperty.addAttribute(
 					"jsonlabel",
@@ -56,7 +57,8 @@ public class BulkInfoCoolImpl extends BulkInfoImpl implements BulkInfoCool {
 							.concat(propertyDefinition.getDisplayName())
 							.concat("\"}"));
 			fieldProperty.addAttribute("visible", String.valueOf(Boolean.TRUE));
-
+			fieldProperty.addAttribute("generated", String.valueOf(Boolean.TRUE));
+			fieldProperty.addAttribute("class", "input-xxlarge");
 			if (propertyDefinition.getCardinality().equals(Cardinality.MULTI)) {
 				fieldProperty.addAttribute("multiple", "multiple");
 			}
@@ -66,7 +68,9 @@ public class BulkInfoCoolImpl extends BulkInfoImpl implements BulkInfoCool {
 			} else {
 				fieldProperty.addAttribute("inputType", "TEXT");
 			}
-
+			if (propertyDefinition.getLocalName().contains("stato_estero")) {
+				fieldProperty.addAttribute("widget", "ui.country");
+			}
 			if (propertyDefinition.getPropertyType().equals(PropertyType.DATETIME)) {
 				fieldProperty.addAttribute("widget", "ui.datepicker");
 			}
@@ -74,8 +78,18 @@ public class BulkInfoCoolImpl extends BulkInfoImpl implements BulkInfoCool {
 				fieldProperty.addAttribute("default", String.valueOf(propertyDefinition.getDefaultValue().get(0)));
 			}
 			fieldProperty.addAttribute("labelClass", "control-label");
-			if (propertyDefinition.isRequired() && fieldProperty.getAttribute("jsonvalidator") == null) {
-				fieldProperty.addAttribute("jsonvalidator", "{\"required\": true}");
+			if (propertyDefinition.getPropertyType().equals(PropertyType.INTEGER)) {
+				jsonvalidator.put("digits", true);
+			}
+			if (propertyDefinition.isRequired()) {
+				if (fieldProperty.getAttribute("widget") != null)
+					jsonvalidator.put("requiredWidget", true);
+				else
+					jsonvalidator.put("required", true);
+			}
+						
+			if (jsonvalidator.length() > 0 ) {
+				fieldProperty.addAttribute("jsonvalidator", jsonvalidator.toString());				
 			}
 			fieldProperty.setBulkInfo(this);
 			if (!propertyDefinition.getUpdatability().equals(Updatability.READONLY)) {
@@ -136,5 +150,4 @@ public class BulkInfoCoolImpl extends BulkInfoImpl implements BulkInfoCool {
 		}
 		return null;
 	}
-
 }

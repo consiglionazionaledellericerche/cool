@@ -13,4 +13,6 @@ public interface BulkInfoCool extends BulkInfo {
 
 	PropertyDefinition<?> getPropertyDefinition(Session session,
 			CmisObject cmisObject, FieldProperty fieldProperty);
+	void addForm(String formName);
+	void addPrintForm(String id);
 }

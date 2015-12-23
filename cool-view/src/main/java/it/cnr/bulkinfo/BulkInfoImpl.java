@@ -412,8 +412,14 @@ public class BulkInfoImpl implements BulkInfo {
 		addFieldPropertySet(forms, fieldpropertyset);
 	}
 
+	public void addForm(String formName) {
+		addFieldPropertySet(forms, new FieldPropertySet(this, formName));
+	}
 	public void addPrintForm(FieldPropertySet fieldpropertyset) {
 		addFieldPropertySet(printForms, fieldpropertyset);
+	}
+	public void addPrintForm(String formName) {
+		addFieldPropertySet(printForms, new FieldPropertySet(this, formName));
 	}
 
 	public void addColumnSet(FieldPropertySet fieldpropertyset) {
