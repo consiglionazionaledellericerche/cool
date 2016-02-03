@@ -35,8 +35,8 @@
 	  "isGuest": ${context.user.guest?string("true", "false")}
 	},
 	"now": "${cmisDateFormat.format(.now)}",
-	<#if page??>
-		"pageId": "${page.id}",
+	<#if pageId??>
+		"pageId": "${pageId}",
 	</#if>	
 	<#if caches??>
 		<#list caches as cache>

@@ -61,7 +61,7 @@
         cache: '../../rest/cache',
         ckeditor: 'thirdparty/ckeditor/ckeditor',
         'ckeditor-jquery': 'thirdparty/ckeditor/adapters/jquery',
-        common: '../../rest/common',
+        common: '../../rest/common?pageId=${page.id}',
         datepicker: 'thirdparty/datepicker/bootstrap-datepicker-cnr',
         'datepicker-i18n': 'thirdparty/datepicker/locales/bootstrap-datepicker.${locale_suffix}',
         datetimepicker: 'thirdparty/datetimepicker/bootstrap-datetimepicker',
