@@ -68,7 +68,11 @@ define(['jquery'], function ($) {
     } else if (criteria.type === "NOT") {
       s = 'NOT (' + analyzeCriteria(criteria.what) + ')';
     } else if (criteria.type === "CONTAINS") {
-      s = 'CONTAINS (' + escape(criteria.what) + ')';
+      if (criteria.to) {
+        s = 'CONTAINS (' + criteria.to + ',' + escape(criteria.what) + ')';
+      } else {
+        s = 'CONTAINS (' + escape(criteria.what) + ')';
+      }
     } else if (criteria.type === "EQUALS") {
       s = criteria.what + ' = \'' + criteria.to + '\'';
     } else if (criteria.type === "LIKE") {
@@ -101,9 +105,10 @@ define(['jquery'], function ($) {
     }
     return {
       build: build,
-      contains: function (s) {
+      contains: function (s, prefix) {
         var item = {};
         item.type = 'CONTAINS';
+        item.to = prefix;
         item.what = s;
         c.conditions.push(item);
         return this;

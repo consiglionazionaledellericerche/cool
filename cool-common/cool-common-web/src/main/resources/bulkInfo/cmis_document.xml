@@ -2,4 +2,24 @@
 	<cmisImplementsName join="true" name="P:cm:titled"/>
 	<fieldProperty class="input-xlarge" inputType="TEXT" label="cmis.name" labelClass="control-label" name="name" property="cmis:name"/>
 	<formFieldProperty name="name"/>
+	<form name="filters">
+		<formFieldProperty
+			name="name"
+			property="doc.cmis:name"
+			class="criteria-like"/>
+		<formFieldProperty 
+			name="title"
+			property="tit.cm:title"
+			class="criteria-like"/>
+		<formFieldProperty 
+			name="description" 
+			property="tit.cm:description"
+			class="criteria-like"/>
+		<formFieldProperty 
+			name="contenuto" 
+			label="Contenuto"
+			inputType="TEXTAREA" 
+			class="criteria-contains"
+			labelClass="control-label"/>
+	</form>
 </bulkInfo>
