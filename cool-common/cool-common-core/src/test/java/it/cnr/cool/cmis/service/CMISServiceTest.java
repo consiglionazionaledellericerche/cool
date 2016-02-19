@@ -1,5 +1,6 @@
 package it.cnr.cool.cmis.service;
 
+import it.cnr.cool.security.CMISAuthenticatorFactory;
 import it.cnr.cool.security.service.impl.alfresco.CMISUser;
 import org.apache.chemistry.opencmis.client.api.Session;
 import org.apache.chemistry.opencmis.client.bindings.spi.BindingSession;
@@ -16,10 +17,11 @@ import org.springframework.test.annotation.DirtiesContext.ClassMode;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
+import javax.xml.bind.DatatypeConverter;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = { "classpath:/META-INF/cool-common-core-test-context.xml" })
@@ -31,9 +33,17 @@ public class CMISServiceTest {
 	private static final String USER_ADMIN_USERNAME = "user.admin.username";
 
 	private static final String ADMIN_USERNAME = "spaclient";
+	private static final String ADMIN_PASSWORD = "sp@si@n0";
+
 
 	@Autowired
 	private CMISService cmisService;
+
+	@Autowired
+	private CmisAuthRepository cmisAuthRepository;
+
+	@Autowired
+	private CMISAuthenticatorFactory cmisAuthenticatorFactory;
 
 	private static final Logger LOGGER = LoggerFactory
 			.getLogger(CMISServiceTest.class);
@@ -209,5 +219,47 @@ public class CMISServiceTest {
 		LOGGER.warn("Not yet implemented");
 	}
 
+	@Test
+	public void testExtractTicketFromRequestAuthorization () {
+		MockHttpServletRequest request = new MockHttpServletRequest();
+		String usernameAndPassword = ADMIN_USERNAME + ":" + ADMIN_PASSWORD;
+
+		String base64Auth = DatatypeConverter.printBase64Binary(usernameAndPassword.getBytes());
+		request.addHeader("Authorization", "Basic " + base64Auth);
+
+		assertEquals(ADMIN_USERNAME, usernameOf(request));
+	}
+
+	@Test
+	public void testExtractTicketFromRequestXAlfrescoTicket() {
+		MockHttpServletRequest request = new MockHttpServletRequest();
+		String ticket = cmisAuthenticatorFactory.authenticate(ADMIN_USERNAME, ADMIN_PASSWORD);
+		request.addHeader(CMISService.AUTHENTICATION_HEADER, ticket);
+
+		assertEquals(ADMIN_USERNAME, usernameOf(request));
+	}
+
+	@Test
+	public void testExtractTicketFromRequestCookie() {
+		MockHttpServletRequest request = new MockHttpServletRequest();
+		String ticket = cmisAuthenticatorFactory.authenticate(ADMIN_USERNAME, ADMIN_PASSWORD);
+		Cookie cookie = new Cookie(CMISService.COOKIE_TICKET_NAME, ticket);
+		request.setCookies(cookie);
+
+		assertEquals(ADMIN_USERNAME, usernameOf(request));
+	}
+
+
+	private String usernameOf(HttpServletRequest request) {
+		String ticket = cmisService.extractTicketFromRequest(request);
+		LOGGER.debug(ticket);
+		assertNotNull(ticket);
+		BindingSession bindingSession = cmisAuthRepository.getBindingSession(ticket);
+		CMISUser user = cmisAuthRepository.getCachedCMISUser(ticket, bindingSession);
+		LOGGER.debug(user.toString());
+		String id = user.getId();
+		LOGGER.debug(id);
+		return id;
+	}
 
 }

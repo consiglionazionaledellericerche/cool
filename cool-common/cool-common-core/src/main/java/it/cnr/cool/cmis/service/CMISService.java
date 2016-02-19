@@ -34,6 +34,7 @@ public class CMISService implements InitializingBean, CMISSessionManager {
 	private static final Logger LOGGER = LoggerFactory.getLogger(CMISService.class);
 
     public static final String AUTHENTICATION_HEADER = "X-alfresco-ticket";
+    public static final String COOKIE_TICKET_NAME = "ticket";
 
     // service dependencies
     @Autowired
@@ -288,7 +289,7 @@ public class CMISService implements InitializingBean, CMISSessionManager {
 
             if (cookies != null && cookies.length > 0) {
                 for (Cookie cookie : cookies) {
-                    if (cookie.getName().equals("ticket")) {
+                    if (cookie.getName().equals(COOKIE_TICKET_NAME)) {
                         LOGGER.info("using ticket given by cookie");
                         ticket = cookie.getValue();
                     }
