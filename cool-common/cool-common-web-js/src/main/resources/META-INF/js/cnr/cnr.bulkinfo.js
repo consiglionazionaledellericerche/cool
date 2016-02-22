@@ -429,7 +429,7 @@ define(['cnr/cnr.ui.widgets', 'jquery', 'cnr/cnr', 'cnr/cnr.style', 'handlebars'
           return Handlebars.helpers.date.call(this, value, this.prop.format || 'DD/MM/YYYY');
         } else if (this.prop.jsonlist) {
           var filtered = this.prop.jsonlist.filter(function (el, index) {
-            return el.key === value;
+            return el.key === String(value);
           })[0];
           return filtered ? i18n.prop(filtered.label, filtered.defaultLabel) : value;
         } else {
