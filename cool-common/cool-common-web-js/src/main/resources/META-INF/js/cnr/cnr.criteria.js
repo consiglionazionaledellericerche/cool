@@ -64,7 +64,11 @@ define(['jquery'], function ($) {
     } else if (criteria.type === "IN") {
       s = criteria.what + ' IN (' + parseValue(criteria.to, criteria.valueType) + ')';
     } else if (criteria.type === "IN_TREE") {
-      s = 'IN_TREE (' + escape(criteria.what) + ')';
+      if (criteria.to) {
+        s = 'IN_TREE (' + criteria.to + ',' + escape(criteria.what) + ')';
+      } else {
+        s = 'IN_TREE (' + escape(criteria.what) + ')';
+      }
     } else if (criteria.type === "NOT") {
       s = 'NOT (' + analyzeCriteria(criteria.what) + ')';
     } else if (criteria.type === "CONTAINS") {
@@ -171,10 +175,11 @@ define(['jquery'], function ($) {
         c.conditions.push(item);
         return this;
       },
-      inTree: function (f) {
+      inTree: function (f, type) {
         var item = {};
         item.type = 'IN_TREE';
-        item.what = f; //FIXME: prefix ? prefix + '.' + f : f;
+        item.what = prefix ? prefix + '.' + f : f;
+        item.to = type;
         c.conditions.push(item);
         return this;
       },
