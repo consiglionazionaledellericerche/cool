@@ -41,7 +41,7 @@ gli artefatti vengono generati automaticamente da Jenkins con il comando:
 
 	clean deploy -Pjconon,produzione
 
-e vengono depositati sul repository nexus <http://bandt.si.cnr.it:8280/nexus/content/groups/public/it/cnr/si/cool/cool-jconon/>
+e vengono depositati sul repository nexus <http://maven.si.cnr.it/content/groups/public/it/cnr/si/cool/jconon/cool-jconon/>
 
 maven-replacer-plugin
 ---
