@@ -90,7 +90,7 @@ public class CreateAccountService {
 				
 				model.putAll(data);
 			} else {
-				LOGGER.error("possibile anomalia", user, model);
+				LOGGER.warn("possibile anomalia: " + String.valueOf(model.get("error")) + " userId:" + user.getId(), user, model);
 				throw new CoolException(String.valueOf(model.get("error")));
 			}
 
