@@ -58,13 +58,37 @@ public class BulkInfoCoolImpl extends BulkInfoImpl implements BulkInfoCool {
 							.concat("\"}"));
 			fieldProperty.addAttribute("visible", String.valueOf(Boolean.TRUE));
 			fieldProperty.addAttribute("generated", String.valueOf(Boolean.TRUE));
-			fieldProperty.addAttribute("class", "input-xxlarge");
+			if (propertyDefinition.getDescription().startsWith("class:")) {
+				fieldProperty.addAttribute("class", propertyDefinition.getDescription().substring(6) + " input-xxlarge");				
+			} else {
+				fieldProperty.addAttribute("class", "input-xxlarge");				
+			}
 			if (propertyDefinition.getCardinality().equals(Cardinality.MULTI)) {
 				fieldProperty.addAttribute("multiple", "multiple");
 			}
 			if (propertyDefinition.getPropertyType().equals(PropertyType.BOOLEAN)) {
-				fieldProperty.addAttribute("inputType", "CHECKBOX");
-				fieldProperty.addAttribute("widget", "ui.checkbox");
+				if (propertyDefinition.getDescription().equals("ui.radio")) {
+					fieldProperty.addAttribute("inputType", "RADIOGROUP");
+					fieldProperty.addAttribute("widget", "ui.radio");
+					fieldProperty.addAttribute("class", "check");
+					
+					FieldProperty field = new FieldProperty();
+					field.setElementName("jsonlist");
+					FieldProperty yes = new FieldProperty();
+					yes.addAttribute("defaultLabel", "Y");
+					yes.addAttribute("key", "true");
+					yes.addAttribute("label", "label.option.yes");					
+					field.addListElement(yes);
+					FieldProperty no = new FieldProperty();					
+					no.addAttribute("defaultLabel", "N");
+					no.addAttribute("key", "false");
+					no.addAttribute("label", "label.option.no");										
+					field.addListElement(no);
+					fieldProperty.addSubProperty("jsonlist", field);
+				} else {					
+					fieldProperty.addAttribute("inputType", "CHECKBOX");
+					fieldProperty.addAttribute("widget", "ui.checkbox");					
+				}
 			} else {
 				fieldProperty.addAttribute("inputType", "TEXT");
 			}
