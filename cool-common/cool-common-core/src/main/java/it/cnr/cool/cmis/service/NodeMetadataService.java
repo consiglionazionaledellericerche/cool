@@ -1,5 +1,6 @@
 package it.cnr.cool.cmis.service;
 
+import it.cnr.cool.cmis.model.CoolPropertyIds;
 import it.cnr.cool.cmis.model.PolicyType;
 import it.cnr.cool.exception.CoolClientException;
 import it.cnr.cool.exception.CoolException;
@@ -23,6 +24,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.apache.chemistry.opencmis.client.api.CmisObject;
 import org.apache.chemistry.opencmis.client.api.ObjectType;
 import org.apache.chemistry.opencmis.client.api.Session;
+import org.apache.chemistry.opencmis.client.bindings.spi.BindingSession;
 import org.apache.chemistry.opencmis.commons.PropertyIds;
 import org.apache.chemistry.opencmis.commons.definitions.PropertyBooleanDefinition;
 import org.apache.chemistry.opencmis.commons.definitions.PropertyDateTimeDefinition;
@@ -35,6 +37,7 @@ import org.apache.chemistry.opencmis.commons.enums.Cardinality;
 import org.apache.chemistry.opencmis.commons.exceptions.CmisContentAlreadyExistsException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 
 public class NodeMetadataService {
 
@@ -43,6 +46,10 @@ public class NodeMetadataService {
 	public static final String RE_XML_PROP = "[^\\x09\\x0A\\x0D\\x20-\\xD7FF\\xE000-\\xFFFD\\x10000-x10FFFF\\u2018\\u2019\\u201c\\u201d]";
 
 	private String datePattern;
+	@Autowired
+	private ACLService aclService;
+	@Autowired
+	private CMISService cmisService;
 
 	private Map<String, Object> internalPopulateMetadataFromRequest(
 			Map<String, ?> reqProperties,
@@ -279,6 +286,8 @@ public class NodeMetadataService {
 					reqProperties, request);
 			String objectTypeId = getParameter(PropertyIds.OBJECT_TYPE_ID,
 					reqProperties, request);
+			String inheritedPermission = getParameter(ACLService.PARAM_INHERITED_PERMISSION,
+					reqProperties, request);
 			if (getParameterValues(PolicyType.ASPECT_REQ_PARAMETER_NAME,
 					reqProperties, request) != null) {
 				aspectNames = Arrays.asList(getParameterValues(
@@ -286,14 +295,14 @@ public class NodeMetadataService {
 						request));
 			}
 
-		return updateObjectProperties(cmisSession, objectId,
-				objectTypeId, objectParentId,
+		return updateObjectProperties(cmisSession, cmisService.getCurrentBindingSession(request), objectId,
+				objectTypeId, objectParentId, inheritedPermission,
 				aspectNames, aspectProperties, properties);
 
 	}
 
-	private CmisObject updateObjectProperties(Session cmisSession,
-			String objectId, String objectTypeId, String objectParentId,
+	private CmisObject updateObjectProperties(Session cmisSession, BindingSession bindingSession,
+			String objectId, String objectTypeId, String objectParentId, String inheritedPermission,
 			List<String> aspectNames, Map<String, Object> aspectProperties,
 			Map<String, Object> properties) {
 
@@ -309,6 +318,11 @@ public class NodeMetadataService {
 				cmisObject = cmisSession.getObject(objectId);
 				cmisObject.updateProperties(properties);
 			}
+			if (inheritedPermission != null) {
+				aclService.setInheritedPermission(bindingSession, 
+						(String) cmisObject.getPropertyValue(CoolPropertyIds.ALFCMIS_NODEREF.value()), 
+						Boolean.valueOf(inheritedPermission));
+			}			
 			return cmisObject;
 		} catch (CmisContentAlreadyExistsException _ex) {
 			throw new CoolClientException("message.file.alredy.exists", _ex);

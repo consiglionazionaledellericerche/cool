@@ -22,7 +22,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 public class ACLService {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(ACLService.class);
-
+	public static String PARAM_INHERITED_PERMISSION = "inheritedPermission";
 	@Autowired
 	private CMISService cmisService;
 
