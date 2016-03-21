@@ -130,15 +130,11 @@ public class FrontOfficeService{
 				item.addProperty("IP", ip);
 
 				Iterator<ILoggerHandler> it = handlers.values().iterator();
-				// uso tutti gli handler (AlfrescoHandler e Log4jHandler) se la
-				// log è da scrivere su alfresco
-				if (ErrorCode.fromValue(item.get("codice").getAsInt()).isAlfrescoWrite()) {
-					while (it.hasNext()) {
-						objectId = it.next().write(item.toString(), TypeDocument.Log);
-					}
-				}else {
-					log4jHandler.write(item.toString(), TypeDocument.Log);
-				}
+
+            //scrivo dolo sulla consolle un logger.error
+			if (ErrorCode.fromValue(item.get("codice").getAsInt()).isAlfrescoWrite())
+				log4jHandler.write(item.toString(), TypeDocument.Log);
+
 				break;
 			case Faq:
 				objectId = alfrescoHandler.write(item.toString(), TypeDocument.Faq);
