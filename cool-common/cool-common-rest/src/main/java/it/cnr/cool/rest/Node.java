@@ -14,6 +14,7 @@ import org.apache.chemistry.opencmis.client.api.CmisObject;
 import org.apache.chemistry.opencmis.client.api.OperationContext;
 import org.apache.chemistry.opencmis.client.api.Session;
 import org.apache.chemistry.opencmis.client.runtime.OperationContextImpl;
+import org.apache.chemistry.opencmis.commons.exceptions.CmisUnauthorizedException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -82,6 +83,8 @@ public class Node {
 
 			String json = serializeJson(l);
 			rb = Response.ok(json);
+		} catch(CmisUnauthorizedException _ex) {
+			rb = Response.status(Status.UNAUTHORIZED);			
 		} catch (Exception e) {
 			LOGGER.error("Exception: ", e.getMessage(), e);
 			Map<String, Object> model = new HashMap<String, Object>();
@@ -100,6 +103,8 @@ public class Node {
 		try {
 			String json = serializeJson(l);
 			rb = Response.ok(json);
+		} catch(CmisUnauthorizedException _ex) {
+			rb = Response.status(Status.UNAUTHORIZED);			
 		} catch (Exception e) {
 			LOGGER.error("Exception: ", e.getMessage(), e);
 			Map<String, Object> model = new HashMap<String, Object>();
@@ -142,7 +147,8 @@ public class Node {
 				CacheControl cache = Util.getCache(MAX_AGE);
 				builder.cacheControl(cache);
 			}
-
+		} catch(CmisUnauthorizedException _ex) {
+			builder = Response.status(Status.UNAUTHORIZED);
 		} catch (Exception e) {
 			model.put("message", e.getMessage());
 			builder = Response.status(Status.INTERNAL_SERVER_ERROR).entity(
@@ -171,6 +177,8 @@ public class Node {
 			String content = Util.processTemplate(model, PATH_POST_FTL);
 			LOGGER.debug(content);
 			builder = Response.ok(content);
+		} catch(CmisUnauthorizedException _ex) {
+			builder = Response.status(Status.UNAUTHORIZED);
 		} catch (Exception e) {
 			LOGGER.error("Exception: ", e);
 			model.put("message", e.getMessage());

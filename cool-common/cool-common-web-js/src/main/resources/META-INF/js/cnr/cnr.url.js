@@ -71,6 +71,7 @@ define(['jquery', 'cnr/cnr.ui', 'json!common', 'i18n', 'json!cache'], function (
       folder: "rest/folder",
       root: "",
       login: "login",
+      logout: "rest/security/logout",
       common: "rest/common",
       handlebars: 'res/js/handlebars/$id',
       sedi: 'rest/sedi'
@@ -128,7 +129,7 @@ define(['jquery', 'cnr/cnr.ui', 'json!common', 'i18n', 'json!cache'], function (
       });
     } else if (jqXHR.status === 401) {
       UI.alert(i18n['message.session.expired'], null, function () {
-        window.location = urls.login;
+        window.location = urls.logout;
       });
     } else if (jqXHR.status) {
       var jsonError, errorMessage, clientException;
