@@ -1,10 +1,11 @@
 <#macro generatePropertyValue queryResult property>
 <#compress>
 <#if queryResult.getPropertyValueById(property.id)??>
+	<#assign values = queryResult.getPropertyMultivalueById(property.id)/>
 	<#assign value = queryResult.getPropertyValueById(property.id)/>
-	<#if value?is_enumerable>
+	<#if values?size gt 1>
 	[
-	<#list value as propertyValue>
+	<#list values as propertyValue>
 	  <#if propertyValue?is_boolean>
 		${propertyValue?string}
 	  <#elseif propertyValue?is_number>
