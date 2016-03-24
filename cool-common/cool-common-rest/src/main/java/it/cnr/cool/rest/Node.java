@@ -86,7 +86,7 @@ public class Node {
 		} catch(CmisUnauthorizedException _ex) {
 			rb = Response.status(Status.UNAUTHORIZED);			
 		} catch (Exception e) {
-			LOGGER.error("Exception: ", e.getMessage(), e);
+			LOGGER.error("Exception: " + e.getMessage(), e);
 			Map<String, Object> model = new HashMap<String, Object>();
 			model.put("message", e.getMessage());
 			rb = Response.status(Status.INTERNAL_SERVER_ERROR).entity(model);
@@ -106,7 +106,7 @@ public class Node {
 		} catch(CmisUnauthorizedException _ex) {
 			rb = Response.status(Status.UNAUTHORIZED);			
 		} catch (Exception e) {
-			LOGGER.error("Exception: ", e.getMessage(), e);
+			LOGGER.error("Exception: " + e.getMessage(), e);
 			Map<String, Object> model = new HashMap<String, Object>();
 			model.put("message", e.getMessage());
 			rb = Response.status(Status.INTERNAL_SERVER_ERROR).entity(model);
@@ -180,7 +180,7 @@ public class Node {
 		} catch(CmisUnauthorizedException _ex) {
 			builder = Response.status(Status.UNAUTHORIZED);
 		} catch (Exception e) {
-			LOGGER.error("Exception: ", e);
+			LOGGER.error("Exception: " + e.getMessage(), e);
 			model.put("message", e.getMessage());
 			builder = Response.status(Status.INTERNAL_SERVER_ERROR).entity(
 					model);
