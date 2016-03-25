@@ -95,7 +95,7 @@ public class Content {
 			LOGGER.warn("unable to send content {} {}", path, nodeRef, e);
 			res.setStatus(HttpStatus.SC_INTERNAL_SERVER_ERROR);
 		} catch (IOException e) {
-			LOGGER.error("unable to get content for path " + path + ", URL " + req.getRequestURL(), e);
+			LOGGER.error("unable to get content for path " + path + " or nodeRef "+ nodeRef + ", URL " + req.getRequestURL() + " - " + e.getMessage(), e);
 			res.setStatus(HttpStatus.SC_INTERNAL_SERVER_ERROR);
 		}
 

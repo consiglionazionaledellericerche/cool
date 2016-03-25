@@ -15,6 +15,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -316,6 +317,10 @@ public class NodeMetadataService {
 						cmisSession.createObjectId(objectParentId), null, null));
 			} else {
 				cmisObject = cmisSession.getObject(objectId);
+				List<Object> aspectToAdd = new ArrayList<>();
+				aspectToAdd.addAll(aspectNames);
+				aspectToAdd.addAll(cmisObject.getProperty(PropertyIds.SECONDARY_OBJECT_TYPE_IDS).getValues());
+				properties.put(PropertyIds.SECONDARY_OBJECT_TYPE_IDS, aspectToAdd);				
 				cmisObject.updateProperties(properties);
 			}
 			if (inheritedPermission != null) {
