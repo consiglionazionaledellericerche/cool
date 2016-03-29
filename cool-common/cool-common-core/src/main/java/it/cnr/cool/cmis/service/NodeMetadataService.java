@@ -317,8 +317,10 @@ public class NodeMetadataService {
 			} else {
 				cmisObject = cmisSession.getObject(objectId);
 				List<Object> aspectToAdd = new ArrayList<>();
-				aspectToAdd.addAll(aspectNames);
-				aspectToAdd.addAll(cmisObject.getProperty(PropertyIds.SECONDARY_OBJECT_TYPE_IDS).getValues());
+				if (aspectNames != null && !aspectNames.isEmpty())
+					aspectToAdd.addAll(aspectNames);
+				if (cmisObject.getProperty(PropertyIds.SECONDARY_OBJECT_TYPE_IDS) != null)
+					aspectToAdd.addAll(cmisObject.getProperty(PropertyIds.SECONDARY_OBJECT_TYPE_IDS).getValues());
 				properties.put(PropertyIds.SECONDARY_OBJECT_TYPE_IDS, aspectToAdd);				
 				cmisObject.updateProperties(properties);
 			}
