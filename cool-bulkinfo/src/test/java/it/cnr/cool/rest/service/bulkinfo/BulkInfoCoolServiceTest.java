@@ -1,19 +1,11 @@
 package it.cnr.cool.rest.service.bulkinfo;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
 import it.cnr.bulkinfo.cool.BulkInfoCool;
 import it.cnr.bulkinfo.exception.BulkInfoException;
 import it.cnr.bulkinfo.exception.BulkinfoKindException;
 import it.cnr.bulkinfo.exception.BulkinfoNameException;
 import it.cnr.cool.cmis.service.CMISService;
 import it.cnr.cool.service.BulkInfoCoolService;
-
-import java.util.Map;
-
 import org.apache.chemistry.opencmis.client.api.Session;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -22,6 +14,10 @@ import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.annotation.DirtiesContext.ClassMode;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+
+import java.util.Map;
+
+import static org.junit.Assert.*;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = { "classpath:/META-INF/cool-bulkinfo-test-context.xml" })
@@ -149,7 +145,7 @@ public class BulkInfoCoolServiceTest {
 			//count columns for a random column set
 
 			//get all forms
-			assertEquals(1, bi.getForms().size());
+			assertEquals(3, bi.getForms().size());
 			assertTrue(bi.getForms().containsKey("default"));
 			assertTrue(bi.getForms().get("default") != null);
 
@@ -182,7 +178,7 @@ public class BulkInfoCoolServiceTest {
 			assertTrue(bi.getColumnSet("home").size() == 19);
 
 			//get all forms
-			assertTrue(bi.getForms().size() == 10);
+			assertTrue(bi.getForms().size() == 12);
 			assertTrue(bi.getForms().containsKey("default"));
 			assertTrue(bi.getForms().containsKey("affix_sezione_1"));
 			assertTrue(bi.getForms().containsKey("affix_sezione_2"));
