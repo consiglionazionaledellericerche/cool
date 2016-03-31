@@ -110,10 +110,10 @@ define(['jquery', 'cnr/cnr.ui', 'json!common', 'i18n', 'json!cache'], function (
 
   function extractError(text) {
     var line = text.split('\n')[0],
-      re = /.*ClientMessageException: [0-9]+ (.*)\|(.*)/g,
+      re = /.*ClientMessageException: (.*)/g,
       suffix = '';
     if (re.test(line)) {
-      suffix = i18n.prop(line.replace(re, '$1'), line.replace(re, '$2'));
+      suffix = i18n.prop(line.replace(re, '$1'), line.replace(re, '$1'));
     }
     return suffix;
   }

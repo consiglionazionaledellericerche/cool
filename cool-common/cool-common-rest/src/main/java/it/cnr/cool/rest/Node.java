@@ -1,35 +1,48 @@
 package it.cnr.cool.rest;
 
-import com.google.gson.GsonBuilder;
-
 import it.cnr.cool.cmis.service.CMISService;
 import it.cnr.cool.cmis.service.NodeMetadataService;
 import it.cnr.cool.rest.util.Util;
 import it.cnr.cool.service.NodeService;
+import it.cnr.cool.web.scripts.exception.ClientMessageException;
 import it.cnr.mock.ISO8601DateFormatMethod;
 import it.cnr.mock.JSONUtils;
 import it.cnr.mock.RequestUtils;
+
+import java.text.DecimalFormat;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
+import javax.ws.rs.GET;
+import javax.ws.rs.POST;
+import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
+import javax.ws.rs.core.CacheControl;
+import javax.ws.rs.core.Context;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.MultivaluedMap;
+import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.ResponseBuilder;
+import javax.ws.rs.core.Response.Status;
 
 import org.apache.chemistry.opencmis.client.api.CmisObject;
 import org.apache.chemistry.opencmis.client.api.OperationContext;
 import org.apache.chemistry.opencmis.client.api.Session;
 import org.apache.chemistry.opencmis.client.runtime.OperationContextImpl;
+import org.apache.chemistry.opencmis.commons.exceptions.CmisContentAlreadyExistsException;
 import org.apache.chemistry.opencmis.commons.exceptions.CmisUnauthorizedException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
+import org.springframework.web.multipart.MaxUploadSizeExceededException;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.ws.rs.*;
-import javax.ws.rs.core.*;
-import javax.ws.rs.core.Response.ResponseBuilder;
-import javax.ws.rs.core.Response.Status;
-
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import com.google.gson.GsonBuilder;
 
 @Path("node")
 @Component
@@ -56,19 +69,23 @@ public class Node {
 	@POST
 	@Produces(MediaType.TEXT_HTML)
 	public Response postHTML(@Context HttpServletRequest request) {
-
-		List<CmisObject> l = nodeService.manageRequest(request, true, false);
 		ResponseBuilder rb;
-
 		try {
+			List<CmisObject> l = nodeService.manageRequest(request, true, false);
 			String json = serializeJson(l);
 			String html = "<textarea>" + json + "</textarea>";
 			rb = Response.ok(html);
+		} catch(MaxUploadSizeExceededException _ex) {		
+			throw new ClientMessageException("Il file ( " + readableFileSize(request.getContentLength()) + ") supera la dimensione massima consentita (" + readableFileSize(_ex.getMaxUploadSize()) + ")");
 		} catch (Exception e) {
-			LOGGER.error("error processing request", e);
-			Map<String, Object> model = new HashMap<String, Object>();
-			model.put("message", e.getMessage());
-			rb = Response.status(Status.INTERNAL_SERVER_ERROR).entity(model);
+			if (e instanceof ClientMessageException)
+				throw e;
+			else {
+				LOGGER.error("error processing request", e);
+				Map<String, Object> model = new HashMap<String, Object>();
+				model.put("message", e.getMessage());
+				rb = Response.status(Status.INTERNAL_SERVER_ERROR).entity(model);				
+			}
 		}
 		return rb.build();
 	}
@@ -83,6 +100,10 @@ public class Node {
 
 			String json = serializeJson(l);
 			rb = Response.ok(json);
+		} catch(MaxUploadSizeExceededException _ex) {
+			Map<String, Object> model = new HashMap<String, Object>();
+			model.put("message", "Il file ( " + readableFileSize(request.getContentLength()) + ") supera la dimensione massima consentita (" + readableFileSize(_ex.getMaxUploadSize()) + ")");			
+			rb = Response.status(Status.INTERNAL_SERVER_ERROR).entity(model);			
 		} catch(CmisUnauthorizedException _ex) {
 			rb = Response.status(Status.UNAUTHORIZED);			
 		} catch (Exception e) {
@@ -180,7 +201,8 @@ public class Node {
 		} catch(CmisUnauthorizedException _ex) {
 			builder = Response.status(Status.UNAUTHORIZED);
 		} catch (Exception e) {
-			LOGGER.error("Exception: " + e.getMessage(), e);
+			if (!(e.getCause() instanceof CmisContentAlreadyExistsException))
+				LOGGER.error("Exception: " + e.getMessage(), e);
 			model.put("message", e.getMessage());
 			builder = Response.status(Status.INTERNAL_SERVER_ERROR).entity(
 					model);
@@ -188,7 +210,13 @@ public class Node {
 		return builder.build();
 	}
 
-
+	private String readableFileSize(long size) {
+	    if(size <= 0) return "0";
+	    final String[] units = new String[] { "B", "kB", "MB", "GB", "TB" };
+	    int digitGroups = (int) (Math.log10(size)/Math.log10(1000));
+	    return new DecimalFormat("#,##0.#").format(size/Math.pow(1000, digitGroups)) + " " + units[digitGroups];
+	}
+	
 	private String serializeJson(List<CmisObject> l) {
 
 		Map<String, String> hml = new HashMap<String, String>();
