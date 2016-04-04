@@ -12,7 +12,7 @@ public class Log4jHandler implements ILoggerHandler {
 	@Override
 	public String write(String json, TypeDocument typeDocument) {
 
-		LOGGER.info(typeDocument.getName() + "," + json);
+		LOGGER.error(typeDocument.getName() + "," + json);
 
 		return null;
 	}
