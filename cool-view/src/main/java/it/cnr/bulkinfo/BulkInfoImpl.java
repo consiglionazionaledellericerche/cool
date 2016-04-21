@@ -84,11 +84,13 @@ public class BulkInfoImpl implements BulkInfo {
 		printForms = new LinkedHashMap<String, FieldPropertySet>();
 		columnSets = new LinkedHashMap<String, FieldPropertySet>();
 		freeSearchSets = new LinkedHashMap<String, FieldPropertySet>();
-
+		
 		constructSets(forms, PROP_FORM_ID, PROP_FORM_FIELD_PROPERTY_ID);
 		constructSets(printForms, PROP_PRINT_FORM_ID, PROP_PRINT_FORM_FIELD_PROPERTY_ID);
 		constructSets(columnSets, PROP_COLUMNSET_ID, PROP_COLUMN_FIELD_PROPERTY_ID);
 		constructSets(freeSearchSets, PROP_FREESEARCHSET_ID, PROP_FIND_FIELD_PROPERTY_ID);
+		
+		constructCmisImplementsName();
 	}
 
 	@Deprecated
@@ -187,20 +189,20 @@ public class BulkInfoImpl implements BulkInfo {
 		this.cmisExtendsName = cmisExtendsName;
 	}
 
-	@Override
 	@SuppressWarnings("unchecked")
-	public Map<String, Boolean> getCmisImplementsName() {
-		if (cmisImplementsNameJoin == null) {
-			cmisImplementsNameJoin = new HashMap<String, Boolean>();
-			List<Element> elements = getDocument().getRootElement().elements(PROP_CMIS_IMPLEMENTS_ID);
-			for (Element element : elements) {
-				Boolean join = Boolean.TRUE;
-				if (element.attribute("join") != null) {
-					join = Boolean.valueOf(element.attribute("join").getText());
-				}
-				cmisImplementsNameJoin.put(element.attribute("name").getText(), join);
+	private void constructCmisImplementsName() {
+		cmisImplementsNameJoin = new HashMap<String, Boolean>();
+		List<Element> elements = getDocument().getRootElement().elements(PROP_CMIS_IMPLEMENTS_ID);
+		for (Element element : elements) {
+			Boolean join = Boolean.TRUE;
+			if (element.attribute("join") != null) {
+				join = Boolean.valueOf(element.attribute("join").getText());
 			}
-		}
+			cmisImplementsNameJoin.put(element.attribute("name").getText(), join);
+		}		
+	}
+	@Override
+	public Map<String, Boolean> getCmisImplementsName() {
 		return cmisImplementsNameJoin;
 	}
 
@@ -616,7 +618,11 @@ public class BulkInfoImpl implements BulkInfo {
 	public void completeWithParent(BulkInfo parent, boolean aspect) {
 
 		if (parent.getCmisImplementsName() != null) {
-			getCmisImplementsName().putAll(parent.getCmisImplementsName());
+			for (String key : parent.getCmisImplementsName().keySet()) {
+				if (!getCmisImplementsName().containsKey(key))
+					getCmisImplementsName().put(key,
+							parent.getCmisImplementsName().get(key));
+			}
 		}
 		for (FieldProperty fieldproperty : parent.getFieldProperties().values()) {
 			completeFieldProperty(fieldproperty, true);
