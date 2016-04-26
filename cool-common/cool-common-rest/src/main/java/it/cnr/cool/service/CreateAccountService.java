@@ -68,7 +68,7 @@ public class CreateAccountService {
 			} else {
 				// aggiorna l'utente e se l'utente ha modificato i suoi dati li
 				// ricarica in sessione
-				model = saveUser(user);
+				model = saveUser(user, locale);
 			}
 
 			if (model.containsKey("account")) {
@@ -103,7 +103,7 @@ public class CreateAccountService {
 
 
 
-	private Map<String, Object> saveUser(CMISUser user) throws UserFactoryException {
+	private Map<String, Object> saveUser(CMISUser user, Locale locale) throws UserFactoryException {
 		Map<String, Object> model = new HashMap<String, Object>();
 		CMISUser tempUser;
 		try {
@@ -115,8 +115,9 @@ public class CreateAccountService {
 			} else if (tempUser.getCodicefiscale() != null && !tempUser.getCodicefiscale().equals(user.getCodicefiscale())){
 				CMISUser userCodfis = userService.findUserByCodiceFiscale(
 						user.getCodicefiscale(), cmisService.getAdminSession());
+				userCodfis = userService.loadUserForConfirm(userCodfis.getUserName());				
 				if(userCodfis != null && !userCodfis.getId().equals(tempUser.getId()))
-					model.put("error", "message.taxcode.alredy.exists");
+					model.put("error", i18nService.getLabel("message.taxcode.alredy.exists", locale, userCodfis.getUserName(), (userCodfis.getImmutability() == null || userCodfis.getImmutability().isEmpty()? "" : i18nService.getLabel("message.user.cnr", locale))));
 			}
 
 			if (!model.containsKey("error")){
@@ -141,11 +142,14 @@ public class CreateAccountService {
 			if (userService.findUserByEmail(user.getEmail(), cmisService.getAdminSession()) != null)
 				model.put("error", "message.email.alredy.exists");
 			else if (user.getCodicefiscale() != null
-					&& user.getCodicefiscale().length() > 0
-					&& userService.findUserByCodiceFiscale(user.getCodicefiscale(),
-							cmisService.getAdminSession()) != null)
-				model.put("error", "message.taxcode.alredy.exists");
-			else {
+					&& user.getCodicefiscale().length() > 0) {
+				CMISUser userCodfis = userService.findUserByCodiceFiscale(
+						user.getCodicefiscale(), cmisService.getAdminSession());
+				userCodfis = userService.loadUserForConfirm(userCodfis.getUserName());
+				if (userCodfis != null) {
+					model.put("error", i18nService.getLabel("message.taxcode.alredy.exists", locale, userCodfis.getUserName(), (userCodfis.getImmutability() == null || userCodfis.getImmutability().isEmpty()? "" : i18nService.getLabel("message.user.cnr", locale))));					
+				}				
+			} else {
 				CMISUser newUser = userService.createUser(user);
 				model.put("account", newUser);
 				if (LOGGER.isDebugEnabled())
