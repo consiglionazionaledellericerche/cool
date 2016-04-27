@@ -120,7 +120,6 @@ public class CreateAccountService {
 					model.put("error", i18nService.getLabel("message.taxcode.alredy.exists", locale, userCodfis.getUserName(), (userCodfis.getImmutability() == null || userCodfis.getImmutability().isEmpty()? "" : i18nService.getLabel("message.user.cnr", locale))));					
 				}
 			}
-
 			if (!model.containsKey("error")){
 				model.put("account", userService.updateUser(user));
 			}
@@ -140,24 +139,25 @@ public class CreateAccountService {
 		user.setPin(UUID.randomUUID().toString());
 
 		try {
-			if (userService.findUserByEmail(user.getEmail(), cmisService.getAdminSession()) != null)
+			if (userService.findUserByEmail(user.getEmail(), cmisService.getAdminSession()) != null) {
 				model.put("error", "message.email.alredy.exists");
-			else if (user.getCodicefiscale() != null
+				return model;
+			} else if (user.getCodicefiscale() != null
 					&& user.getCodicefiscale().length() > 0) {
 				CMISUser userCodfis = userService.findUserByCodiceFiscale(
 						user.getCodicefiscale(), cmisService.getAdminSession());
 				if (userCodfis != null) {
 					userCodfis = userService.loadUserForConfirm(userCodfis.getUserName());
 					model.put("error", i18nService.getLabel("message.taxcode.alredy.exists", locale, userCodfis.getUserName(), (userCodfis.getImmutability() == null || userCodfis.getImmutability().isEmpty()? "" : i18nService.getLabel("message.user.cnr", locale))));					
-				}				
-			} else {
-				CMISUser newUser = userService.createUser(user);
-				model.put("account", newUser);
-				if (LOGGER.isDebugEnabled())
-					LOGGER.debug("User created " + newUser.getFullName());
-				model.put("url", url);
-				sendConfirmMail(model, locale);
+					return model;
+				}
 			}
+			CMISUser newUser = userService.createUser(user);
+			model.put("account", newUser);
+			if (LOGGER.isDebugEnabled())
+				LOGGER.debug("User created " + newUser.getFullName());
+			model.put("url", url);
+			sendConfirmMail(model, locale);
 		} catch (CoolUserFactoryException e) {
 			throw new UserFactoryException(e.getMessage(), e);
 		}
