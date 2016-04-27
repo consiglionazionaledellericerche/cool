@@ -115,9 +115,10 @@ public class CreateAccountService {
 			} else if (tempUser.getCodicefiscale() != null && !tempUser.getCodicefiscale().equals(user.getCodicefiscale())){
 				CMISUser userCodfis = userService.findUserByCodiceFiscale(
 						user.getCodicefiscale(), cmisService.getAdminSession());
-				userCodfis = userService.loadUserForConfirm(userCodfis.getUserName());				
-				if(userCodfis != null && !userCodfis.getId().equals(tempUser.getId()))
-					model.put("error", i18nService.getLabel("message.taxcode.alredy.exists", locale, userCodfis.getUserName(), (userCodfis.getImmutability() == null || userCodfis.getImmutability().isEmpty()? "" : i18nService.getLabel("message.user.cnr", locale))));
+				if(userCodfis != null && !userCodfis.getId().equals(tempUser.getId())) {
+					userCodfis = userService.loadUserForConfirm(userCodfis.getUserName());				
+					model.put("error", i18nService.getLabel("message.taxcode.alredy.exists", locale, userCodfis.getUserName(), (userCodfis.getImmutability() == null || userCodfis.getImmutability().isEmpty()? "" : i18nService.getLabel("message.user.cnr", locale))));					
+				}
 			}
 
 			if (!model.containsKey("error")){
@@ -145,8 +146,8 @@ public class CreateAccountService {
 					&& user.getCodicefiscale().length() > 0) {
 				CMISUser userCodfis = userService.findUserByCodiceFiscale(
 						user.getCodicefiscale(), cmisService.getAdminSession());
-				userCodfis = userService.loadUserForConfirm(userCodfis.getUserName());
 				if (userCodfis != null) {
+					userCodfis = userService.loadUserForConfirm(userCodfis.getUserName());
 					model.put("error", i18nService.getLabel("message.taxcode.alredy.exists", locale, userCodfis.getUserName(), (userCodfis.getImmutability() == null || userCodfis.getImmutability().isEmpty()? "" : i18nService.getLabel("message.user.cnr", locale))));					
 				}				
 			} else {
