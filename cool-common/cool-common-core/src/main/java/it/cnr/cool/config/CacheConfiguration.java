@@ -3,6 +3,7 @@ package it.cnr.cool.config;
 import com.hazelcast.config.Config;
 import com.hazelcast.config.ManagementCenterConfig;
 import com.hazelcast.config.MapConfig;
+import com.hazelcast.config.EvictionPolicy;
 import com.hazelcast.config.MaxSizeConfig;
 import com.hazelcast.core.Hazelcast;
 import com.hazelcast.core.HazelcastInstance;
@@ -109,7 +110,7 @@ public class CacheConfiguration {
             LFU (Least Frequently Used).
             NONE is the default.
          */
-        mapConfig.setEvictionPolicy(MapConfig.EvictionPolicy.LRU);
+        mapConfig.setEvictionPolicy(EvictionPolicy.LRU);
 
         /*
             Maximum size of the map. When max size is reached,
