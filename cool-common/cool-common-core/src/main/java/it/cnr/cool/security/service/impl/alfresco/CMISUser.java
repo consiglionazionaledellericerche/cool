@@ -1,12 +1,12 @@
 package it.cnr.cool.security.service.impl.alfresco;
 
+import com.google.gson.annotations.SerializedName;
+
 import java.io.Serializable;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import com.google.gson.annotations.SerializedName;
 
 public class CMISUser implements java.security.Principal, Serializable {
 
@@ -282,12 +282,12 @@ public class CMISUser implements java.security.Principal, Serializable {
 	 */
 	public String getFullName() {
 		if (this.fullName == null) {
-			boolean hasFirstName = (getFirstName() != null && getFirstName()
-					.length() != 0);
-			boolean hasMiddleName = (getMiddleName() != null && getMiddleName()
-					.length() != 0);
-			boolean hasLastName = (getLastName() != null && getLastName()
-					.length() != 0);
+			boolean hasFirstName = getFirstName() != null && getFirstName()
+					.length() != 0;
+			boolean hasMiddleName = getMiddleName() != null && getMiddleName()
+					.length() != 0;
+			boolean hasLastName = getLastName() != null && getLastName()
+					.length() != 0;
 
 			// if they don't have a first name, then use their user id
 			this.fullName = getId();

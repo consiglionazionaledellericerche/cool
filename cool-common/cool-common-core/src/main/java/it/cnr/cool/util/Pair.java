@@ -1,11 +1,11 @@
 package it.cnr.cool.util;
 
+import com.google.gson.annotations.Expose;
+
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectInputStream.GetField;
 import java.io.Serializable;
-
-import com.google.gson.annotations.Expose;
 
 /**
  * Utility class for containing two things that aren't like each other
@@ -87,7 +87,7 @@ public final class Pair<F extends Comparable<F>, S> implements Serializable, Com
     
     public static boolean nullSafeEquals(Object left, Object right)
     {
-        return (left == right) || (left != null && right != null && left.equals(right));
+        return left == right || left != null && right != null && left.equals(right);
     }
     
     @Override

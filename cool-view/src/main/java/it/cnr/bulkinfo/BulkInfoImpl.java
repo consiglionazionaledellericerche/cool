@@ -1,15 +1,8 @@
 package it.cnr.bulkinfo;
 
 
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import org.apache.commons.collections.MultiHashMap;
 import org.dom4j.Attribute;
 import org.dom4j.Document;
@@ -17,8 +10,8 @@ import org.dom4j.Element;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
+import java.io.Serializable;
+import java.util.*;
 
 public class BulkInfoImpl implements BulkInfo {
 
@@ -718,7 +711,7 @@ public class BulkInfoImpl implements BulkInfo {
 				for (FieldProperty fieldproperty : parentFieldSet.get(columnSetName).getFieldProperties()) {
 					String override = decideOverride(aspect, parentFieldSet,
 							localFieldSet, columnSetName);
-					if ((override != null && override == "false") || override == null) {
+					if (override != null && override == "false" || override == null) {
 						localFieldSet.get(columnSetName).addColumnFieldProperty(fieldproperty);
 					} else {
 						if (this.getColumnSets().get(columnSetName).getFieldProperty(fieldproperty.getName()) != null) {
@@ -762,7 +755,7 @@ public class BulkInfoImpl implements BulkInfo {
 
 					String override = decideOverride(aspect, parentFieldSet, localFieldSet, formName);
 
-					if ((override != null && override == "false") || override == null) {
+					if (override != null && override == "false" || override == null) {
 						localFieldSet.get(formName).addFormFieldProperty(fieldproperty);
 					} else {
 						if (localFieldSet.get(formName).getFieldProperty(fieldproperty.getName()) != null) {

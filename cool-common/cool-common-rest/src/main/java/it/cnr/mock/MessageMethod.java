@@ -1,17 +1,15 @@
 package it.cnr.mock;
 
+import freemarker.template.SimpleScalar;
+import freemarker.template.TemplateMethodModelEx;
+import freemarker.template.TemplateModelException;
 import it.cnr.cool.service.I18nService;
-
-import java.util.List;
-import java.util.Locale;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import freemarker.template.SimpleScalar;
-import freemarker.template.TemplateMethodModelEx;
-import freemarker.template.TemplateModelException;
+import java.util.List;
+import java.util.Locale;
 
 public class MessageMethod implements TemplateMethodModelEx{
 	private static final Logger LOGGER = LoggerFactory
@@ -46,7 +44,7 @@ public class MessageMethod implements TemplateMethodModelEx{
 		List subList = arguments.subList(1, arguments.size());
 		String label = uri != null ? 
 				(subList.size() > 0 ? i18nService.getLabel(key, uri, locale, subList.toArray()) : i18nService.getLabel(key, uri, locale)): 
-				(subList.size() > 0 ? i18nService.getLabel(key, locale, subList.toArray()) : i18nService.getLabel(key, locale));
+				subList.size() > 0 ? i18nService.getLabel(key, locale, subList.toArray()) : i18nService.getLabel(key, locale);
 		LOGGER.debug(key + ": " + label);
 		return label != null ? label : key;
 	}
