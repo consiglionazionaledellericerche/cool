@@ -23,6 +23,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.Map;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -131,11 +132,9 @@ public class NoticeTest {
                 + "\",\"avvisi:dataScadenza\":\"2019-10-18T14:00:00.000+02:00\",\"avvisi:authority\":\"GROUP_EVERYONE\",\"nodeRefToEdit\":\""
                 + nodeRefNotice + "\"}";
         nodeRefNotice = (String) frontOfficeService.post(null, null, null, null, TypeDocument.Notice, stackTraceUpdate).get("objectId");
-        CmisObject notice = cmisSession.getObject(nodeRefNotice);
-        assertTrue(notice
-                .getPropertyValue(CoolPropertyIds.NOTICE_TITLE.value()).equals(
-                        titleUpdate));
-        assertTrue(notice.getPropertyValue(CoolPropertyIds.NOTICE_TYPE.value())
-                .equals(typeUpdate));
+        CmisObject notice = cmisSession.getObject(nodeRefNotice.split(";")[0]);
+        assertEquals(titleUpdate, notice
+                .getPropertyValue(CoolPropertyIds.NOTICE_TITLE.value()));
+        assertEquals(typeUpdate, notice.getPropertyValue(CoolPropertyIds.NOTICE_TYPE.value()));
     }
 }

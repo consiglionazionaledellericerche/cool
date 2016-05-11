@@ -115,11 +115,9 @@ public class FaqTest {
 				+ nodeRefFaq + "\"}";
 		nodeRefFaq = (String) frontOfficeService.post(null, null,
 				null, null, TypeDocument.Faq, stackTraceUpdate).get("objectId");
-		CmisObject faq = adminSession.getObject(nodeRefFaq);
+		CmisObject faq = adminSession.getObject(nodeRefFaq.split(";")[0]);
 
-		assertTrue(faq.getPropertyValue(CoolPropertyIds.FAQ_QUESTION.value())
-				.equals(questionUpdate));
-		assertTrue(faq.getPropertyValue(CoolPropertyIds.FAQ_ANSWER.value())
-				.equals(answerUpdate));
+		assertEquals(questionUpdate, faq.getPropertyValue(CoolPropertyIds.FAQ_QUESTION.value()));
+		assertEquals(answerUpdate, faq.getPropertyValue(CoolPropertyIds.FAQ_ANSWER.value()));
 	}
 }
