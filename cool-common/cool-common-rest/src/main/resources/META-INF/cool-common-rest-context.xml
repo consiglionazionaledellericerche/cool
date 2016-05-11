@@ -135,9 +135,9 @@
     <bean id="createAccountService" class="it.cnr.cool.service.CreateAccountService"></bean>
 
 
-    <bean class="it.cnr.cool.service.NodeService"></bean>
+    <bean name="nodeService" class="it.cnr.cool.service.NodeService"></bean>
 
-    <bean class="it.cnr.mock.CnrRegion"></bean>
+    <bean name="cnrRegion" class="it.cnr.mock.CnrRegion"></bean>
     <bean id="messageMethod" class="it.cnr.mock.MessageMethod" scope="prototype"/>
 
     <bean class="it.cnr.cool.rest.Page"></bean>
