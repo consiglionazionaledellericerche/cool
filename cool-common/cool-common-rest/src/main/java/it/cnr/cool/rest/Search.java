@@ -33,10 +33,7 @@ import java.util.Map;
 @Component
 public class Search {
 
-	private static final String BOM_EXCEL_UTF_8 = "\ufeff";
-	private static final String ENCODING_UTF_8 = "UTF-8";
 	private static final String FTL_JSON_PATH = "/surf/webscripts/search/query.lib.ftl";
-	private static final String FTL_XLS_PATH = "/surf/webscripts/search/query.get.xls.ftl";
 
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(Search.class);
@@ -115,39 +112,6 @@ public class Search {
 
 		return rb.build();
 
-	}
-
-	@GET
-	@Path("query.xls")
-	@Produces("application/vnd.ms-excel")
-	public Response queryExcel(@Context HttpServletRequest request) {
-
-		ResponseBuilder rb;
-
-        Session session = cmisService.getCurrentCMISSession(request);
-
-		Map<String, Object> model = queryService.query(request, session);
-		try {
-			String xls = processTemplate(model, FTL_XLS_PATH);
-			rb = Response.ok((BOM_EXCEL_UTF_8 + xls).getBytes(ENCODING_UTF_8));
-			String fileName = "query";
-			if(model.containsKey("nameBando")) {
-				fileName = ((String) model.get("nameBando"));
-				fileName = refactoringFileName(fileName, "");
-			}
-
-			rb.header("Content-Disposition",
-					"attachment; filename=\"" + fileName.concat(".xls\""));
-		} catch (Exception e) {
-			LOGGER.error(e.getMessage(), e);
-			rb = Response.status(Status.INTERNAL_SERVER_ERROR);
-		}
-		return rb.build();
-	}
-
-	//replace caratteri che non possono comparire nel nome del file in windows
-	public static String refactoringFileName(String fileName, String newString) {
-		return fileName.replaceAll("[“”\"\\/:*<>| ’']", newString).replace("\\", newString);
 	}
 
 	public static String getJson(Map<String, Object> model) throws TemplateException, IOException {

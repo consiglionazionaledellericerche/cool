@@ -2,9 +2,27 @@ package it.cnr.cool.service;
 
 import it.cnr.cool.cmis.model.CoolPropertyIds;
 import it.cnr.cool.security.service.UserService;
-import it.cnr.cool.security.service.impl.alfresco.CMISUser;
 import it.cnr.cool.service.model.RelationshipTypeParam;
-import org.apache.chemistry.opencmis.client.api.*;
+
+import java.math.BigInteger;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
+import javax.servlet.http.HttpServletRequest;
+
+import org.apache.chemistry.opencmis.client.api.CmisObject;
+import org.apache.chemistry.opencmis.client.api.Document;
+import org.apache.chemistry.opencmis.client.api.Folder;
+import org.apache.chemistry.opencmis.client.api.ItemIterable;
+import org.apache.chemistry.opencmis.client.api.OperationContext;
+import org.apache.chemistry.opencmis.client.api.QueryResult;
+import org.apache.chemistry.opencmis.client.api.Relationship;
+import org.apache.chemistry.opencmis.client.api.Session;
 import org.apache.chemistry.opencmis.client.runtime.OperationContextImpl;
 import org.apache.chemistry.opencmis.commons.PropertyIds;
 import org.apache.chemistry.opencmis.commons.enums.BaseTypeId;
@@ -13,10 +31,6 @@ import org.apache.chemistry.opencmis.commons.exceptions.CmisPermissionDeniedExce
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-
-import javax.servlet.http.HttpServletRequest;
-import java.math.BigInteger;
-import java.util.*;
 
 public class QueryService {
 
@@ -192,8 +206,6 @@ public class QueryService {
 					if (LOGGER.isDebugEnabled())
 						LOGGER.debug("There are " + totalNumItems
 								+ " documents in repository");
-
-					Map<String, String> matricole = new HashMap<String, String>();
 					List<Object> recentSubmission = new ArrayList<Object>();
 					Map<String, Map<String, Object>> relationships = new HashMap<String, Map<String, Object>>();
 					Map<String, CmisObject> parents = new HashMap<String, CmisObject>();
@@ -202,18 +214,6 @@ public class QueryService {
 							String nodeRef = result.getPropertyValueById(PropertyIds.OBJECT_ID);
 							CmisObject cmisObject = cmisSession.getObject(nodeRef, operationContext);
 							recentSubmission.add(cmisObject);
-							//Recupero anche le matricole (export-xls)
-							if(exportData) {
-								String userName = cmisObject.getPropertyValue("jconon_application:user");
-								try {
-									if(!matricole.containsKey(userName)){
-										CMISUser user = (CMISUser) userService.loadUserForConfirm(userName);
-										matricole.put(userName, String.valueOf(user.getMatricola()));
-									}
-								} catch (Exception e) {
-									LOGGER.info("CoolUserFactoryException - Eccezione nel recupero della matricola dell'utente " + userName, e);
-								}
-							}
 						} else {
 							recentSubmission.add(result);
 						}
@@ -233,22 +233,6 @@ public class QueryService {
 					model.put("models", recentSubmission);
 					if (!relationships.isEmpty())
 						model.put("relationships", relationships);
-
-					if(exportData){
-						Folder bandoPadre;
-						Folder domandaGenerica;
-						if (!recentSubmission.isEmpty()){
-							domandaGenerica =(Folder) recentSubmission.get(0);
-							Folder bandoAppo = domandaGenerica.getFolderParent();
-							if(bandoAppo.getProperty("jconon_call:has_macro_call") == null || bandoAppo.getPropertyValue("jconon_call:has_macro_call").equals(false)){
-								bandoPadre = bandoAppo;
-							}else{
-								bandoPadre = bandoAppo.getFolderParent();
-							}
-							model.put("nameBando", bandoPadre.getName());
-							model.put("matricole", matricole);
-						}
-					}
 				}
 
 				model.put("hasMoreItems", hasMoreItems);
