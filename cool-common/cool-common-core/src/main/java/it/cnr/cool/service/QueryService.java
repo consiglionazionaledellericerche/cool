@@ -1,7 +1,6 @@
 package it.cnr.cool.service;
 
 import it.cnr.cool.cmis.model.CoolPropertyIds;
-import it.cnr.cool.security.service.UserService;
 import it.cnr.cool.service.model.RelationshipTypeParam;
 
 import java.math.BigInteger;
@@ -41,9 +40,6 @@ public class QueryService {
 
 	@Autowired
 	private OperationContext cmisAllOperationContext;
-
-	@Autowired
-	private UserService userService;
 
 	public Map<String, Object> query(HttpServletRequest req, Session cmisSession) {
 
