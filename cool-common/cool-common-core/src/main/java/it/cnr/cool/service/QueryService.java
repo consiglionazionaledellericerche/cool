@@ -56,7 +56,6 @@ public class QueryService {
 				.getParameter("calculateTotalNumItems"));
 		Boolean fetchCmisObject = Boolean.valueOf(req
 				.getParameter("fetchCmisObject"));
-		Boolean exportData = Boolean.valueOf(req.getParameter("exportData"));
 		String parameter_relationship = req.getParameter("relationship");
 		String[] parameter_relationship_name = req
 				.getParameterValues("relationship.name");
@@ -67,7 +66,7 @@ public class QueryService {
         Boolean allColumns = Boolean.valueOf(req.getParameter("allColumns"));
 
 		return query(cmisSession, parameter_relationship,
-				parameter_relationship_name, maxItems, exportData, folder,
+				parameter_relationship_name, maxItems, folder,
 				objectRel, fetchCmisObject, calculateTotalNumItems, statement,
 				parameter_relationship_field, parameter_skip_count, orderBy, allColumns);
 
@@ -88,7 +87,7 @@ public class QueryService {
 	private Map<String, Object> query(Session cmisSession,
 			String parameter_relationship,
 			String[] parameter_relationship_name, String maxItems,
-			Boolean exportData, String folder, String objectRel,
+			String folder, String objectRel,
 			Boolean fetchCmisObject, Boolean calculateTotalNumItems,
 			String statement, String[] parameter_relationship_field,
 			String parameter_skip_count, String orderBy, boolean allColumns) {
@@ -206,6 +205,7 @@ public class QueryService {
 					if (LOGGER.isDebugEnabled())
 						LOGGER.debug("There are " + totalNumItems
 								+ " documents in repository");
+
 					List<Object> recentSubmission = new ArrayList<Object>();
 					Map<String, Map<String, Object>> relationships = new HashMap<String, Map<String, Object>>();
 					Map<String, CmisObject> parents = new HashMap<String, CmisObject>();
