@@ -10,6 +10,5 @@ public interface MailService {
 	void send(EmailMessage emailMessage) throws MailException;
 	void sendErrorMessage(final String currentUser, String url, String serverPath, final Exception we) throws MailException;
 	void sendErrorMessage(final String currentUser, String subject, String body) throws MailException;
-	String getMailToProtocollo();
 	String getMailToHelpDesk();
 }

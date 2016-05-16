@@ -46,11 +46,6 @@ public class MockMailService implements MailService {
 
 	}
 
-	@Override
-	public String getMailToProtocollo() {
-		// TODO Auto-generated method stub
-		return null;
-	}
 
 	@Override
 	public String getMailToHelpDesk() {
