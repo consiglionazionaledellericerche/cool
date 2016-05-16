@@ -36,6 +36,11 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 public class UserServiceImpl implements UserService{
+	private static final String SERVICE_CNR_PERSON_DISABLE_ACCOUNT = "service/cnr/person/disable-account",
+			SERVICE_API_PERSON_CHANGEPASSWORD = "service/api/person/changepassword/",
+			SERVICE_CNR_GROUPS = "service/cnr/groups/",
+			SERVICE_CNR_PERSON_PERSON = "service/cnr/person/person",
+			SERVICE_CNR_PERSON_PEOPLE = "service/cnr/person/people";
 	@Autowired
 	private GsonParser gsonParser;
 	@Autowired
@@ -52,7 +57,7 @@ public class UserServiceImpl implements UserService{
 	@Override
 	public CMISUser loadUser(String userId, BindingSession cmisSession)
 			throws CoolUserFactoryException {
-		String link = cmisService.getBaseURL().concat("service/cnr/person/person/").concat(UriUtils.encode(userId));
+		String link = cmisService.getBaseURL().concat(SERVICE_CNR_PERSON_PERSON + "/").concat(UriUtils.encode(userId));
         UrlBuilder url = new UrlBuilder(link);
         url.addParameter("groups", true);
 		Response resp = CmisBindingsHelper.getHttpInvoker(cmisSession).invokeGET(url, cmisSession);
@@ -82,7 +87,7 @@ public class UserServiceImpl implements UserService{
 
 	@Override
 	public InputStream findUser(String term, BindingSession cmisSession) throws CoolUserFactoryException {
-		String link = cmisService.getBaseURL().concat("service/api/people").concat("?filter=*"+term+"*");
+		String link = cmisService.getBaseURL().concat(SERVICE_CNR_PERSON_PEOPLE).concat("?filter=*"+term+"*");
         UrlBuilder url = new UrlBuilder(link);
 		Response resp = CmisBindingsHelper.getHttpInvoker(cmisSession).invokeGET(url, cmisSession);
 		int status = resp.getResponseCode();
@@ -97,7 +102,7 @@ public class UserServiceImpl implements UserService{
 	@Override
 	public List<String> findMembers(String groupName, BindingSession cmisSession) throws CoolUserFactoryException{
 		List<String> result = new ArrayList<String>();
-		String link = cmisService.getBaseURL().concat("service/cnr/groups/").concat(UriUtils.encode(groupName)).concat("/members");
+		String link = cmisService.getBaseURL().concat(SERVICE_CNR_GROUPS).concat(UriUtils.encode(groupName)).concat("/members");
         UrlBuilder url = new UrlBuilder(link);
 		Response resp = CmisBindingsHelper.getHttpInvoker(cmisSession).invokeGET(url, cmisSession);
 		int status = resp.getResponseCode();
@@ -121,7 +126,7 @@ public class UserServiceImpl implements UserService{
 	@Override
 	public CMISUser findUserByEmail(String email, BindingSession cmisSession)
 			throws CoolUserFactoryException {
-		String link = cmisService.getBaseURL().concat("service/cnr/person/people").concat("?filter=email:"+email);
+		String link = cmisService.getBaseURL().concat(SERVICE_CNR_PERSON_PEOPLE).concat("?filter=email:"+email);
         UrlBuilder url = new UrlBuilder(link);
 		Response resp = CmisBindingsHelper.getHttpInvoker(cmisSession).invokeGET(url, cmisSession);
 		int status = resp.getResponseCode();
@@ -144,7 +149,7 @@ public class UserServiceImpl implements UserService{
 
 	@Override
 	public CMISUser findUserByCodiceFiscale(String codicefiscale, BindingSession cmisSession) throws CoolUserFactoryException {
-		String link = cmisService.getBaseURL().concat("service/cnr/person/people").concat("?filter=codicefiscale:"+codicefiscale);
+		String link = cmisService.getBaseURL().concat(SERVICE_CNR_PERSON_PEOPLE).concat("?filter=codicefiscale:"+codicefiscale);
         UrlBuilder url = new UrlBuilder(link);
 		Response resp = CmisBindingsHelper.getHttpInvoker(cmisSession).invokeGET(url, cmisSession);
 		int status = resp.getResponseCode();
@@ -170,7 +175,7 @@ public class UserServiceImpl implements UserService{
 
 	@Override
 	public CMISUser createUser(final CMISUser user) throws CoolUserFactoryException {
-		String link = cmisService.getBaseURL().concat("service/cnr/person/person");
+		String link = cmisService.getBaseURL().concat(SERVICE_CNR_PERSON_PERSON);
 		user.setDisableAccount(true);
         UrlBuilder url = new UrlBuilder(link);
         BindingSession cmisSession = cmisService.getAdminSession();
@@ -193,7 +198,7 @@ public class UserServiceImpl implements UserService{
 
 	@Override
 	public CMISUser updateUser(final CMISUser user) throws CoolUserFactoryException {
-		String link = cmisService.getBaseURL().concat("service/cnr/person/person/").concat(UriUtils.encode(user.getId()));
+		String link = cmisService.getBaseURL().concat(SERVICE_CNR_PERSON_PERSON + "/").concat(UriUtils.encode(user.getId()));
         UrlBuilder url = new UrlBuilder(link);
         BindingSession cmisSession = cmisService.getAdminSession();
 		Response resp = CmisBindingsHelper.getHttpInvoker(cmisSession).invokePUT(url, MimeTypes.JSON.mimetype(), null,
@@ -212,7 +217,7 @@ public class UserServiceImpl implements UserService{
 
 	@Override
 	public CMISUser changeUserPassword(final CMISUser user, final String newPassword) throws CoolUserFactoryException {
-		String link = cmisService.getBaseURL().concat("service/api/person/changepassword/").concat(UriUtils.encode(user.getId()));
+		String link = cmisService.getBaseURL().concat(SERVICE_API_PERSON_CHANGEPASSWORD).concat(UriUtils.encode(user.getId()));
         UrlBuilder url = new UrlBuilder(link);
         BindingSession cmisSession = cmisService.getAdminSession();
         final String respJson = "{\"newpw\":\""+newPassword+"\"}";
@@ -233,15 +238,11 @@ public class UserServiceImpl implements UserService{
 	@Override
 	public void disableAccount(String userName) throws CoolUserFactoryException {
 
-		String link = cmisService.getBaseURL().concat(
-				"service/cnr/person/disable-account");
+		String link = cmisService.getBaseURL().concat(SERVICE_CNR_PERSON_DISABLE_ACCOUNT);
 		UrlBuilder url = new UrlBuilder(link);
-
 		BindingSession cmisSession = cmisService.getAdminSession();
-
 		final String respJson = "{\"userName\":\"" + userName
 				+ "\", \"disableUser\": true}";
-
 		Response resp = CmisBindingsHelper.getHttpInvoker(cmisSession)
 				.invokePOST(url, MimeTypes.JSON.mimetype(), new Output() {
 					@Override
@@ -262,9 +263,5 @@ public class UserServiceImpl implements UserService{
 		} catch (IOException e) {
 			LOGGER.error("unable to get response content, user: " + userName, e);
 		}
-
-
 	}
-
-
 }

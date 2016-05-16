@@ -10,7 +10,6 @@ define(['jquery', 'cnr/cnr.ui', 'json!common', 'i18n', 'json!cache'], function (
         person: "rest/proxy" + "?url=service/cnr/person/autocomplete-person",
         permissions: 'rest/proxy' + '?url=service/cnr/nodes/permissions/$node',
         people: 'rest/proxy' + '?url=service/cnr/person/person/$user_id',
-        peopleFilter: 'rest/proxy' + '?url=service/api/people',
         peopleSearch: 'rest/proxy' + '?url=service/cnr/person/people',
         disableAccount: 'rest/proxy' + '?url=service/cnr/person/disable-account',
         changePassword: 'rest/proxy' + '?url=service/api/person/changepassword/$userid',
