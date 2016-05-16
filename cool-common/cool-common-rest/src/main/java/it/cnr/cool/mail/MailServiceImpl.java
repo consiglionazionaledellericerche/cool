@@ -53,7 +53,7 @@ public class MailServiceImpl implements MailService, InitializingBean {
 
 	private String mailFromDefault;
 
-	private String mailToAdmin, mailToProtocollo, mailToErrorMessage, mailToHelpDesk;
+	private String mailToAdmin, mailToErrorMessage, mailToHelpDesk;
 
 	private boolean mailErrorEnabled = true;
 
@@ -117,15 +117,6 @@ public class MailServiceImpl implements MailService, InitializingBean {
 
 	public void setMailToAdmin(String mailToAdmin) {
 		this.mailToAdmin = mailToAdmin;
-	}
-
-	@Override
-	public String getMailToProtocollo() {
-		return mailToProtocollo;
-	}
-
-	public void setMailToProtocollo(String mailToProtocollo) {
-		this.mailToProtocollo = mailToProtocollo;
 	}
 
 	@Override

@@ -52,7 +52,6 @@
     <bean id="mailService" class="it.cnr.cool.mail.MailServiceImpl" depends-on="mailSender">
         <property name="mailFromDefault" value="${mail.from.default}"/>
         <property name="mailToAdmin" value="${mail.admin}"/>
-        <property name="mailToProtocollo" value="${mail.protocollo}"/>
         <property name="mailToHelpDesk" value="${mail.helpdesk}"/>
         <property name="mailToErrorMessage" value="${mail.to.error.message}"/>
         <property name="mailErrorEnabled" value="${mail.error.enabled}"/>
