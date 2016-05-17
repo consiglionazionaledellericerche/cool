@@ -84,7 +84,7 @@ public class CacheConfiguration {
 
 
         config.setProperty(GroupProperty.ENABLE_JMX, Boolean.TRUE.toString());
-        config.setProperty(GroupProperty.ENABLE_JMX_DETAILED, Boolean.FALSE.toString());
+        config.setProperty(GroupProperty.ENABLE_JMX_DETAILED, Boolean.TRUE.toString());
 
         config.getMapConfigs().put("default", initializeDefaultMapConfig());
 
