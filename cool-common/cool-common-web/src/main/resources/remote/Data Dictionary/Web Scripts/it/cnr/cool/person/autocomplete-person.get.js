@@ -10,7 +10,7 @@ if (filter !== null) {
 	  var filter = filter.substring(separatorIndex + 1);
 	  luceneQuery = luceneQuery + "AND (@cm\\:" + field + ":\"" + filter + "\")";
 	} else {
-	  luceneQuery = luceneQuery + "AND (@cm\\:userName:\"" + filter + "\")";
+	  luceneQuery = luceneQuery + "AND ((@cm\\:userName:\"" + filter + "\") OR (@cm\\:firstName:\"" + filter + "\") OR (@cm\\:lastName:\"" + filter + "\") OR (@cm\\:email:\"" + filter + "\"))";
 	}
 }
 // Get the collection of people
