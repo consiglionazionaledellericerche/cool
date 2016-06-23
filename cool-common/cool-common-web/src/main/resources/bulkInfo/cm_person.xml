@@ -3,7 +3,7 @@
 	<fieldProperty class="input-large" inputType="TEXT" label="cm.firstName" labelClass="control-label" name="firstName" nullable="false" property="cm:firstName"/>
 	<fieldProperty class="input-large" inputType="TEXT" label="cm.lastName" labelClass="control-label" name="lastName" nullable="false" property="cm:lastName"/>
 	<fieldProperty class="input-xlarge" inputType="TEXT" label="cm.email" labelClass="control-label" name="email" nullable="false" property="cm:email"/>
-	<fieldProperty class="input-xlarge" inputType="TEXT" label="cm.codfis" labelClass="control-label" name="codfis" nullable="false" property="cm:companyaddress1"/>
+	<fieldProperty class="input-xlarge" inputType="TEXT" label="cm.codfis" labelClass="control-label" name="codfis" nullable="false" property="cnrperson:codicefiscale"/>
 	<fieldProperty class="input-large" inputType="TEXT" label="cm.mobile" labelClass="control-label" name="mobile" nullable="false" property="cm:mobile"/>
 
 	<formFieldProperty name="name"/>
