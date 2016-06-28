@@ -10,7 +10,6 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 
 import org.apache.chemistry.opencmis.client.api.CmisObject;
-import org.apache.chemistry.opencmis.client.api.Session;
 import org.apache.chemistry.opencmis.commons.definitions.PropertyDefinition;
 
 import com.google.gson.Gson;

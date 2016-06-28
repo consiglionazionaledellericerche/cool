@@ -10,7 +10,6 @@ import it.cnr.bulkinfo.exception.BulkinfoKindException;
 import it.cnr.bulkinfo.exception.BulkinfoNameException;
 import it.cnr.cool.BulkInfoRepository;
 import it.cnr.cool.cmis.service.ACLService;
-import it.cnr.cool.cmis.service.CMISService;
 import it.cnr.cool.cmis.service.VersionService;
 
 import org.apache.chemistry.opencmis.client.api.ObjectType;
