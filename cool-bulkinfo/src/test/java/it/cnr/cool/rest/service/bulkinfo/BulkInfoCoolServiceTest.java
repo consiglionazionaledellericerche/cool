@@ -7,6 +7,7 @@ import it.cnr.bulkinfo.exception.BulkinfoNameException;
 import it.cnr.cool.cmis.service.CMISService;
 import it.cnr.cool.service.BulkInfoCoolService;
 import org.apache.chemistry.opencmis.client.api.Session;
+import org.apache.chemistry.opencmis.client.bindings.spi.BindingSession;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,7 +37,8 @@ public class BulkInfoCoolServiceTest {
 	public void testHappyCaseFromCmisType() {
 		try {
 			Session cmisSession = cmisService.createAdminSession();
-			bulkInfoCoolService.getView(cmisSession, DEFAULT_RESOURCE_CMIS_TYPE, "form", "default", null);
+            BindingSession bindingSession = cmisService.getAdminSession();
+			bulkInfoCoolService.getView(cmisSession, bindingSession, DEFAULT_RESOURCE_CMIS_TYPE, "form", "default", null);
 		} catch (Exception e) {
 			e.printStackTrace();
 			fail(e.getMessage());
@@ -47,7 +49,8 @@ public class BulkInfoCoolServiceTest {
 	public void testHappyCaseWithAspects() { // for coverage
 		try {
 			Session cmisSession = cmisService.createAdminSession();
-			bulkInfoCoolService.getView(cmisSession, DEFAULT_RESOURCE_BULKINFO_XML, "form", "default", null);
+            BindingSession bindingSession = cmisService.getAdminSession();
+			bulkInfoCoolService.getView(cmisSession, bindingSession, DEFAULT_RESOURCE_BULKINFO_XML, "form", "default", null);
 		} catch (Exception e) {
 			e.printStackTrace();
 			fail(e.getMessage());
@@ -58,7 +61,8 @@ public class BulkInfoCoolServiceTest {
 	public void testHappyCaseWithExtends() { //for coverage
 		try {
 			Session cmisSession = cmisService.createAdminSession();
-			bulkInfoCoolService.getView(cmisSession, "D_jconon_attachment_document_mono", "form", "default", null);
+            BindingSession bindingSession = cmisService.getAdminSession();
+			bulkInfoCoolService.getView(cmisSession, bindingSession, "D_jconon_attachment_document_mono", "form", "default", null);
 		} catch (Exception e) {
 			e.printStackTrace();
 			fail(e.getMessage());
@@ -68,7 +72,8 @@ public class BulkInfoCoolServiceTest {
 	@Test
 	public void testGetWrongName() throws BulkInfoException, BulkinfoKindException, BulkinfoNameException {
 			Session cmisSession = cmisService.createAdminSession();
-			Map<String, Object> view = bulkInfoCoolService.getView(cmisSession, "wrong", "form", "default", null);
+            BindingSession bindingSession = cmisService.getAdminSession();
+			Map<String, Object> view = bulkInfoCoolService.getView(cmisSession, bindingSession, "wrong", "form", "default", null);
 			assertNull(view.get("bulkInfo"));
 			assertNull(bulkInfoCoolService.find("wrong"));
 	}
@@ -76,8 +81,9 @@ public class BulkInfoCoolServiceTest {
 	@Test
 	public void testGetDefaultFormKindWrong() {
 		Session cmisSession = cmisService.createAdminSession();
+        BindingSession bindingSession = cmisService.getAdminSession();
 		try {
-			bulkInfoCoolService.getView(cmisSession, "F:jconon_call:folder", "wrong", "default", null);
+			bulkInfoCoolService.getView(cmisSession, bindingSession, "F:jconon_call:folder", "wrong", "default", null);
 			fail();
 		} catch(Exception e) {
 			assertTrue(e instanceof BulkinfoKindException);
@@ -87,8 +93,9 @@ public class BulkInfoCoolServiceTest {
 	@Test
 	public void testGetDefaultFormNameNull() {
 		Session cmisSession = cmisService.createAdminSession();
+        BindingSession bindingSession = cmisService.getAdminSession();
 		try {
-			bulkInfoCoolService.getView(cmisSession, DEFAULT_RESOURCE_BULKINFO_XML, "form", null, null);
+			bulkInfoCoolService.getView(cmisSession, bindingSession, DEFAULT_RESOURCE_BULKINFO_XML, "form", null, null);
 			fail(); //exception expected
 		} catch(Exception e) {
 			assertTrue(e instanceof BulkinfoNameException);
@@ -98,8 +105,9 @@ public class BulkInfoCoolServiceTest {
 	@Test
 	public void testGetDefaultFormNameEmpty() {
 		Session cmisSession = cmisService.createAdminSession();
+        BindingSession bindingSession = cmisService.getAdminSession();
 		try {
-			bulkInfoCoolService.getView(cmisSession, DEFAULT_RESOURCE_BULKINFO_XML, "form", "", null);
+			bulkInfoCoolService.getView(cmisSession, bindingSession, DEFAULT_RESOURCE_BULKINFO_XML, "form", "", null);
 			fail();
 		} catch(Exception e) {
 			assertTrue(e instanceof BulkinfoNameException);
@@ -109,8 +117,9 @@ public class BulkInfoCoolServiceTest {
 	@Test
 	public void testGetDefaultFormKindNull() {
 		Session cmisSession = cmisService.createAdminSession();
+        BindingSession bindingSession = cmisService.getAdminSession();
 		try {
-			bulkInfoCoolService.getView(cmisSession, DEFAULT_RESOURCE_BULKINFO_XML, null, "default", null);
+			bulkInfoCoolService.getView(cmisSession, bindingSession, DEFAULT_RESOURCE_BULKINFO_XML, null, "default", null);
 			fail(); //exception expected
 		} catch(Exception e) {
 			assertTrue(e instanceof BulkinfoKindException);
@@ -121,7 +130,8 @@ public class BulkInfoCoolServiceTest {
 	public void testGetDefaultFormNotNull() {
 		try {
 			Session cmisSession = cmisService.createAdminSession();
-			Map<String, Object> biMap = bulkInfoCoolService.getView(cmisSession, DEFAULT_RESOURCE_BULKINFO_XML, "form", "default", null);
+            BindingSession bindingSession = cmisService.getAdminSession();
+			Map<String, Object> biMap = bulkInfoCoolService.getView(cmisSession, bindingSession, DEFAULT_RESOURCE_BULKINFO_XML, "form", "default", null);
 			assertTrue(biMap != null);
 			BulkInfoCool bi = (BulkInfoCool) biMap.get("bulkInfo");
 			assertTrue( bi != null);
@@ -135,7 +145,8 @@ public class BulkInfoCoolServiceTest {
 	public void testGetDefaultFormFromCmisType() {
 		try {
 			Session cmisSession = cmisService.createAdminSession();
-			Map<String, Object> biMap = bulkInfoCoolService.getView(cmisSession, DEFAULT_RESOURCE_CMIS_TYPE, "form", "default", null);
+            BindingSession bindingSession = cmisService.getAdminSession();
+			Map<String, Object> biMap = bulkInfoCoolService.getView(cmisSession, bindingSession, DEFAULT_RESOURCE_CMIS_TYPE, "form", "default", null);
 			BulkInfoCool bi = (BulkInfoCool) biMap.get("bulkInfo");
 			assertTrue( bi != null);
 			assertEquals(DEFAULT_RESOURCE_CMIS_TYPE, bi.getCmisTypeName());
@@ -166,7 +177,8 @@ public class BulkInfoCoolServiceTest {
 	public void testGetDefaultFormTestValues() {
 		try {
 			Session cmisSession = cmisService.createAdminSession();
-			Map<String, Object> biMap = bulkInfoCoolService.getView(cmisSession, DEFAULT_RESOURCE_BULKINFO_XML, "form", "default", null);
+            BindingSession bindingSession = cmisService.getAdminSession();
+			Map<String, Object> biMap = bulkInfoCoolService.getView(cmisSession, bindingSession, DEFAULT_RESOURCE_BULKINFO_XML, "form", "default", null);
 			BulkInfoCool bi = (BulkInfoCool) biMap.get("bulkInfo");
 			assertTrue( bi != null);
 			assertEquals("F:jconon_call:folder", bi.getCmisTypeName());
@@ -203,7 +215,8 @@ public class BulkInfoCoolServiceTest {
 	public void testGetDefaultColumn() {
 		try {
 			Session cmisSession = cmisService.createAdminSession();
-			Map<String, Object> biMap = bulkInfoCoolService.getView(cmisSession, DEFAULT_RESOURCE_BULKINFO_XML, "column", "default", null);
+			BindingSession bindingSession = cmisService.getAdminSession();
+			Map<String, Object> biMap = bulkInfoCoolService.getView(cmisSession, bindingSession, DEFAULT_RESOURCE_BULKINFO_XML, "column", "default", null);
 			BulkInfoCool bi = (BulkInfoCool) biMap.get("bulkInfo");
 			assertTrue( bi != null);
 			assertEquals("F:jconon_call:folder", bi.getCmisTypeName());
@@ -223,7 +236,8 @@ public class BulkInfoCoolServiceTest {
 	public void testGetDefaultFind() {
 		try {
 			Session cmisSession = cmisService.createAdminSession();
-			Map<String, Object> biMap = bulkInfoCoolService.getView(cmisSession, DEFAULT_RESOURCE_BULKINFO_XML, "find", "default", null);
+			BindingSession bindingSession = cmisService.getAdminSession();
+			Map<String, Object> biMap = bulkInfoCoolService.getView(cmisSession, bindingSession, DEFAULT_RESOURCE_BULKINFO_XML, "find", "default", null);
 			BulkInfoCool bi = (BulkInfoCool) biMap.get("bulkInfo");
 			assertTrue( bi != null);
 			assertEquals("F:jconon_call:folder", bi.getCmisTypeName());
@@ -243,7 +257,8 @@ public class BulkInfoCoolServiceTest {
 	public void testGetDefaultFreeSearchSet() {
 		try {
 			Session cmisSession = cmisService.createAdminSession();
-			Map<String, Object> biMap = bulkInfoCoolService.getView(cmisSession, DEFAULT_RESOURCE_BULKINFO_XML, "find", "default", null);
+			BindingSession bindingSession = cmisService.getAdminSession();
+			Map<String, Object> biMap = bulkInfoCoolService.getView(cmisSession, bindingSession, DEFAULT_RESOURCE_BULKINFO_XML, "find", "default", null);
 			BulkInfoCool bi = (BulkInfoCool) biMap.get("bulkInfo");
 			assertTrue( bi != null);
 			assertEquals("F:jconon_call:folder", bi.getCmisTypeName());
@@ -260,12 +275,13 @@ public class BulkInfoCoolServiceTest {
 	public void testGetFromChache() {
 		try {
 			Session cmisSession = cmisService.createAdminSession();
-			Map<String, Object> biMap = bulkInfoCoolService.getView(cmisSession, "F:jconon_call:folder", "find", "default", null);
+			BindingSession bindingSession = cmisService.getAdminSession();
+			Map<String, Object> biMap = bulkInfoCoolService.getView(cmisSession, bindingSession, "F:jconon_call:folder", "find", "default", null);
 			assertNotNull(biMap.get("bulkInfo"));
 			
 			// accertarsi che nell'output debug, la costruzione di F_jconon_call_folder sia presente una sola volta
 			System.out.println("No output after this point");
-			biMap = bulkInfoCoolService.getView(cmisSession, "F:jconon_call:folder", "find", "default", null);
+			biMap = bulkInfoCoolService.getView(cmisSession, bindingSession, "F:jconon_call:folder", "find", "default", null);
 			System.out.println("Bulkinfo retrieved. There should be NO output after the previous statement");
 
 		} catch (Exception e) {

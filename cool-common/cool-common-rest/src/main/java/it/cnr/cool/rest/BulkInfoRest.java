@@ -7,6 +7,7 @@ import it.cnr.cool.rest.util.Util;
 import it.cnr.cool.service.BulkInfoCoolSerializer;
 import it.cnr.cool.service.BulkInfoCoolService;
 import org.apache.chemistry.opencmis.client.api.Session;
+import org.apache.chemistry.opencmis.client.bindings.spi.BindingSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,10 +50,10 @@ public class BulkInfoRest {
 		Map<String, Object> model;
 
 		Session session = cmisService.getCurrentCMISSession(req);
-
+		BindingSession bindingSession = cmisService.getCurrentBindingSession(req);
 		try {
 			model = bulkInfoCoolService
-					.getView(session, type, kind, name, objectId);
+					.getView(session, bindingSession, type, kind, name, objectId);
 
 			// String json = Util.processTemplate(model, TEMPLATE_PATH_VIEW);
 			String json = bulkInfoCoolSerializer.serialize(model).toString();

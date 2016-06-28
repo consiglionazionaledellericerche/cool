@@ -7,12 +7,10 @@ import it.cnr.bulkinfo.cool.BulkInfoCool;
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.Iterator;
-import java.util.Map;
+import java.util.*;
 
 import org.apache.chemistry.opencmis.client.api.CmisObject;
+import org.apache.chemistry.opencmis.client.api.Session;
 import org.apache.chemistry.opencmis.commons.definitions.PropertyDefinition;
 
 import com.google.gson.Gson;
@@ -64,9 +62,13 @@ public class BulkInfoCoolSerializer extends BulkInfoSerializer {
 
 		BulkInfoCool bulkInfo = (BulkInfoCool) model.get("bulkInfo");
 		CmisObject cmisObject = (CmisObject) model.get("cmisObject");
-
+		String inheritedPermission = Optional.ofNullable(model.get("inheritedPermission")).map(Object::toString).orElse("");
 		if(cmisObject != null) {
-			fpJson.add("val", gson.toJsonTree(propJSONCMISValue(fieldProperty, bulkInfo, cmisObject)) );
+			if (fieldProperty.getName().equals("inheritedPermission")) {
+				fpJson.add("val", gson.toJsonTree(inheritedPermission) );
+			} else {
+				fpJson.add("val", gson.toJsonTree(propJSONCMISValue(fieldProperty, bulkInfo, cmisObject)) );
+			}
 		}
 	}
 

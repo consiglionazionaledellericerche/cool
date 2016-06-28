@@ -1,5 +1,6 @@
 package it.cnr.cool.service;
 
+import com.google.gson.JsonObject;
 import it.cnr.bulkinfo.BulkInfoImpl.FieldProperty;
 import it.cnr.bulkinfo.cool.BulkInfoCool;
 import it.cnr.bulkinfo.cool.BulkInfoCoolImpl;
@@ -8,10 +9,13 @@ import it.cnr.bulkinfo.exception.BulkInfoNotFoundException;
 import it.cnr.bulkinfo.exception.BulkinfoKindException;
 import it.cnr.bulkinfo.exception.BulkinfoNameException;
 import it.cnr.cool.BulkInfoRepository;
+import it.cnr.cool.cmis.service.ACLService;
+import it.cnr.cool.cmis.service.CMISService;
 import it.cnr.cool.cmis.service.VersionService;
 
 import org.apache.chemistry.opencmis.client.api.ObjectType;
 import org.apache.chemistry.opencmis.client.api.Session;
+import org.apache.chemistry.opencmis.client.bindings.spi.BindingSession;
 import org.apache.chemistry.opencmis.commons.data.CmisExtensionElement;
 import org.apache.chemistry.opencmis.commons.definitions.PropertyDefinition;
 import org.apache.chemistry.opencmis.commons.enums.BaseTypeId;
@@ -36,6 +40,8 @@ public class BulkInfoCoolService {
     @Autowired
     private VersionService versionService;
 
+	@Autowired
+	private ACLService aclService;
 
     @Autowired
     private BulkInfoRepository bulkInfoRepository;
@@ -57,8 +63,8 @@ public class BulkInfoCoolService {
 	 * @throws BulkinfoKindException
 	 * @throws BulkinfoNameException
 	 */
-	public Map<String, Object> getView(Session cmisSession, String type,
-			String kind, String name, String objectId) throws BulkInfoException, BulkinfoKindException, BulkinfoNameException {
+	public Map<String, Object> getView(Session cmisSession, BindingSession bindingSession, String type,
+                                       String kind, String name, String objectId) throws BulkInfoException, BulkinfoKindException, BulkinfoNameException {
 
 		Map<String, Object> model = new HashMap<String, Object>();
 
@@ -88,6 +94,10 @@ public class BulkInfoCoolService {
 
 			if (objectId != null && !objectId.equals("")) {
 				model.put("cmisObject", cmisSession.getObject(objectId));
+                if (bi.getFieldProperties().containsKey("inheritedPermission")) {
+                    JsonObject permission = aclService.getPermission(bindingSession, objectId);
+                    model.put("inheritedPermission", permission.get("isInherited").getAsBoolean());
+                }
 			}
 		}
 		return model;

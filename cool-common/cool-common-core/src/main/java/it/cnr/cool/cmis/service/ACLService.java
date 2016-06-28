@@ -1,9 +1,12 @@
 package it.cnr.cool.cmis.service;
 
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import it.cnr.cool.cmis.model.ACLType;
 import it.cnr.cool.exception.CoolException;
 import it.cnr.cool.util.MimeTypes;
 
+import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.util.List;
 import java.util.Map;
@@ -121,5 +124,22 @@ public class ACLService {
 				|| status == HttpStatus.SC_INTERNAL_SERVER_ERROR)
 			throw new CoolException("Create user error. Exception: "
 					+ resp.getErrorContent());
+	}
+
+	public JsonObject getPermission(BindingSession cmisSession, String objectId) {
+		String link = cmisService.getBaseURL()
+				.concat("service/cnr/nodes/permissions/")
+				.concat(objectId.replace(":/", ""));
+		UrlBuilder url = new UrlBuilder(link);
+		Response resp = cmisService.getHttpInvoker(cmisSession).invokeGET(url, cmisSession);
+		int status = resp.getResponseCode();
+		if (status == HttpStatus.SC_NOT_FOUND
+				|| status == HttpStatus.SC_BAD_REQUEST
+				|| status == HttpStatus.SC_INTERNAL_SERVER_ERROR)
+			throw new CoolException("Find permission error. Exception: "
+					+ resp.getErrorContent());
+		InputStreamReader responseReader = new InputStreamReader(resp.getStream());
+		return new JsonParser().parse(responseReader)
+				.getAsJsonObject();
 	}
 }
