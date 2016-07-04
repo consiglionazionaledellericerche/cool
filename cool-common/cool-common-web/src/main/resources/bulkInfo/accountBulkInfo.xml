@@ -2,6 +2,8 @@
 	<fieldProperty inputType="TEXT" label="label.account.firstName" name="firstName" property="firstName"><jsonvalidator required="true"/></fieldProperty>
 	<fieldProperty inputType="TEXT" label="label.account.lastName" labelClass="control-label" name="lastName" property="lastName"><jsonvalidator required="true"/></fieldProperty>
 	<fieldProperty inputType="TEXT" label="label.account.email" name="email" nullable="false" property="email" tooltip="tooltip.account.email"><jsonvalidator email="true" required="true"/></fieldProperty>
+	<fieldProperty inputType="TEXT" label="label.account.confirm.email" name="confirm-email" nullable="false" property="email" tooltip="tooltip.account.email"><jsonvalidator email="true" required="true" equalTo="#email"/></fieldProperty>
+
 	<fieldProperty class="input-xlarge" inputType="TEXT" name="emailForgotPass" placeholder="label.account.email" property="email"><jsonvalidator email="true" required="true"/></fieldProperty>
 	<fieldProperty inputType="TEXT" label="label.account.userName" name="userName" property="userName" tooltip="tooltip.account.userName"><jsonvalidator controlloUserId="true" maxlength="18" minlength="6" required="true"/></fieldProperty>
 	<fieldProperty inputType="HIDDEN" name="hiddenUsername" property="userName"/>
@@ -56,6 +58,7 @@
 		<formFieldProperty name="firstName"/>
 		<formFieldProperty name="lastName"/>
 		<formFieldProperty name="email"/>
+		<formFieldProperty name="confirm-email"/>		
 		<formFieldProperty name="userName"/>
 		<formFieldProperty name="password"/>
 		<formFieldProperty name="confirmPassword"/>
