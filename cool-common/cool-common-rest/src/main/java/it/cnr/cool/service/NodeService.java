@@ -53,7 +53,7 @@ public class NodeService {
 		oc.setFilterString(PropertyIds.OBJECT_ID);
 		String objectId = req.getParameter(PropertyIds.OBJECT_ID);
 		MultipartHttpServletRequest mRequest;
-		if (req.getParameter("maxUploadSize") != null && Boolean.valueOf(req.getParameter("maxUploadSize")))
+		if (req.getParameter("maxUploadSize") != null && (Boolean.valueOf(req.getParameter("maxUploadSize")) || req.getParameter("maxUploadSize").equals("1")))
 			mRequest = multipartResolverMax.resolveMultipart(req);			
 		else
 			mRequest = resolver.resolveMultipart(req);
