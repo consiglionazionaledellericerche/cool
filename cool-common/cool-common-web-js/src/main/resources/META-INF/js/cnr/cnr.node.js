@@ -11,7 +11,7 @@ define(['jquery', 'cnr/cnr', 'cnr/cnr.ui', 'cnr/cnr.bulkinfo', 'i18n', 'cnr/cnr.
   }
 
   // operations on documents: insert, update and delete
-  function manageNode(nodeRef, operation, input, rel, forbidArchives) {
+  function manageNode(nodeRef, operation, input, rel, forbidArchives, maxUploadSize) {
 
     var httpMethod = "GET",
       fd = new CNR.FormData();
@@ -48,7 +48,10 @@ define(['jquery', 'cnr/cnr', 'cnr/cnr.ui', 'cnr/cnr.bulkinfo', 'i18n', 'cnr/cnr.
         data: fd.getData(),
         contentType: fd.contentType,
         processData: false,
-        type: httpMethod
+        type: httpMethod,
+        placeholder :{
+          maxUploadSize : maxUploadSize | false          
+        }
       });
     }
   }
@@ -157,7 +160,7 @@ define(['jquery', 'cnr/cnr', 'cnr/cnr.ui', 'cnr/cnr.bulkinfo', 'i18n', 'cnr/cnr.
    * write the file name in .data('value')
    *
    */
-  function inputWidget(folder, crudStatus, rel, forbidArchives) {
+  function inputWidget(folder, crudStatus, rel, forbidArchives, maxUploadSize) {
 
     var container = $('<div class="fileupload fileupload-new" data-provides="fileupload"></div>'),
       input = $('<div class="input-append"></div>'),
@@ -185,11 +188,11 @@ define(['jquery', 'cnr/cnr', 'cnr/cnr.ui', 'cnr/cnr.bulkinfo', 'i18n', 'cnr/cnr.
 
     if (isExplorer) {
       inputFile.attr('name', 'file-0');
-      submitFn = manageIE(folder, crudStatus, inputFile, setValue, rel, forbidArchives);
+      submitFn = manageIE(folder, crudStatus, inputFile, setValue, rel, forbidArchives, maxUploadSize);
     } else {
       input.append('<a href="#" class="btn fileupload-exists" data-dismiss="fileupload">Rimuovi</a>'); //remove cannot be use in IE-compatible mode
       submitFn = function (nodeRef, status, success, relationship) {
-        var xhr = manageNode(nodeRef || folder, status || crudStatus, inputFile, relationship || rel, forbidArchives);
+        var xhr = manageNode(nodeRef || folder, status || crudStatus, inputFile, relationship || rel, forbidArchives, maxUploadSize);
         xhr.done(function (data) {
           if (success) {
             success(data);
@@ -242,14 +245,14 @@ define(['jquery', 'cnr/cnr', 'cnr/cnr.ui', 'cnr/cnr.bulkinfo', 'i18n', 'cnr/cnr.
     }
 
     addFileUploadInput = function () {
-      var w = inputWidget(null, "UPDATE", (opts.input ? opts.input.rel : undefined), opts.forbidArchives);
+      var w = inputWidget(null, "UPDATE", (opts.input ? opts.input.rel : undefined), opts.forbidArchives, opts.maxUploadSize);
       fileInputs.push(w);
       addPlusButton(w.item);
       content.append(w.item);
     };
 
     if (opts.showFile !== false) {
-      fileInputs.push(inputWidget(null, "UPDATE", undefined, opts.forbidArchives));
+      fileInputs.push(inputWidget(null, "UPDATE", undefined, opts.forbidArchives, opts.maxUploadSize));
       if (opts.multiple) {
         addPlusButton(fileInputs[0].item);
       }

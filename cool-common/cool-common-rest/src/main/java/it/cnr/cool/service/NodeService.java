@@ -43,6 +43,8 @@ public class NodeService {
 
 	@Autowired
 	private CommonsMultipartResolver resolver;
+	@Autowired
+	private CommonsMultipartResolver multipartResolverMax;
 
 	public List<CmisObject> manageRequest(HttpServletRequest req,
 			boolean isPOST, boolean isDELETE) {
@@ -50,8 +52,11 @@ public class NodeService {
 		OperationContext oc = new OperationContextImpl(cmisSession.getDefaultContext());
 		oc.setFilterString(PropertyIds.OBJECT_ID);
 		String objectId = req.getParameter(PropertyIds.OBJECT_ID);
-
-		MultipartHttpServletRequest mRequest = resolver.resolveMultipart(req);
+		MultipartHttpServletRequest mRequest;
+		if (req.getParameter("maxUploadSize") != null && Boolean.valueOf(req.getParameter("maxUploadSize")))
+			mRequest = multipartResolverMax.resolveMultipart(req);			
+		else
+			mRequest = resolver.resolveMultipart(req);
 		if (objectId == null) {
 			objectId = mRequest.getParameter(PropertyIds.OBJECT_ID);
 		}

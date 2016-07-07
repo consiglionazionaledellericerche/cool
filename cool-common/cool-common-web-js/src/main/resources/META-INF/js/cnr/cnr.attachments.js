@@ -16,7 +16,9 @@ define(['jquery', 'cnr/cnr.node', 'cnr/cnr.ui.select', 'i18n', 'cnr/cnr.search',
         requiresFile: true,
         showFile: true,
         externalData: []
-      }
+      },
+      forbidArchives : true,
+      maxUploadSize : false
     };
 
   function determinateType(settings) {
@@ -213,7 +215,8 @@ define(['jquery', 'cnr/cnr.node', 'cnr/cnr.ui.select', 'i18n', 'cnr/cnr.search',
           success: function () {
             criteria.list(search);
           },
-          forbidArchives: true
+          forbidArchives: settings.forbidArchives,
+          maxUploadSize: settings.maxUploadSize
         });
       });
     if (settings.otherButtons) {

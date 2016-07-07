@@ -26,12 +26,18 @@
     </bean>
 
     <!-- Configures Apache Commons Fileupload -->
-    <bean id="multipartResolver"
+    <bean id="resolver"
           class="it.cnr.cool.web.multipart.commons.CustomMultipartResolver">
         <property name="maxUploadSize" value="15360000"/>
         <property name="characterEncoding" value="UTF-8"/>
     </bean>
-
+    
+    <bean id="multipartResolverMax"
+          class="it.cnr.cool.web.multipart.commons.CustomMultipartResolver">
+        <property name="maxUploadSize" value="150360000"/>
+        <property name="characterEncoding" value="UTF-8"/>
+    </bean>
+    
     <!-- Mail service -->
     <bean id="mailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl">
         <property name="host" value="${mail.host}"/>
