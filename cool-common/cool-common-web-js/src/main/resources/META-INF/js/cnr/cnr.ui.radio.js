@@ -9,7 +9,7 @@ define(['jquery', 'i18n'], function ($, i18n) {
       parent = $('<div class="control-group widget"></div>').addClass(item.parentGroupClass)
         .append(labelText ? label : null)
         .append(controls),
-      input = $('<div class="btn-group radio-tick" data-toggle="buttons-radio"></div>').attr('id', id).appendTo(controls);
+      input = $('<div class="btn-group radio-tick" data-toggle="buttons-radio"></div>').addClass(item.parentGroupClass).attr('id', id).appendTo(controls);
 
     if (item.jsonlist) {
       $.each(item.jsonlist, function (index, fieldvalue) {
@@ -19,6 +19,9 @@ define(['jquery', 'i18n'], function ($, i18n) {
           '</button>').appendTo(input);
         if (item['class']) {
           btn.addClass(item['class']);
+        }
+        if (fieldvalue['class']) {
+          btn.addClass(fieldvalue['class']);
         }
         if (String(item.val) === String(fieldvalue.key) || (item.val === undefined && (String(item['default'] && String(item['default'])) === String(fieldvalue.key)))) {
           btn.addClass('active default');
