@@ -146,7 +146,7 @@ public class CreateAccountService {
 					&& user.getCodicefiscale().length() > 0) {
 				CMISUser userCodfis = userService.findUserByCodiceFiscale(
 						user.getCodicefiscale(), cmisService.getAdminSession());
-				if (userCodfis != null) {
+				if (userCodfis != null && !userCodfis.isNoMail()) {
 					userCodfis = userService.loadUserForConfirm(userCodfis.getUserName());
 					model.put("error", i18nService.getLabel("message.taxcode.alredy.exists", locale, userCodfis.getUserName(), (userCodfis.getImmutability() == null || userCodfis.getImmutability().isEmpty()? "" : i18nService.getLabel("message.user.cnr", locale))));					
 					return model;

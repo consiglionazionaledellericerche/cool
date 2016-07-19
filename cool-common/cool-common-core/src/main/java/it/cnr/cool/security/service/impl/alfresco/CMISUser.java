@@ -122,8 +122,11 @@ public class CMISUser implements java.security.Principal, Serializable {
 		this.mobile = mobile;
 	}
 
+	public boolean isNoMail() {
+		return email.equalsIgnoreCase("nomail");
+	}
 	public String getEmail() {
-		if (email.equalsIgnoreCase("nomail"))
+		if (isNoMail())
 			if (emailesterno != null)
 				return emailesterno;
 			else if (emailcertificatoperpuk != null)
