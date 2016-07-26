@@ -339,7 +339,7 @@ define(['jquery', 'cnr/cnr', 'cnr/cnr.ui', 'cnr/cnr.bulkinfo', 'i18n', 'cnr/cnr.
                         return f.fn(opts.nodeRef, "INSERT", function (attachmentsData) {
                           close();
                           if (typeof opts.success === 'function') {
-                            opts.success(attachmentsData);
+                            opts.success(attachmentsData, data);
                           }
                         }, {
                           "cmis:sourceId" : data['cmis:objectId'],
@@ -349,7 +349,7 @@ define(['jquery', 'cnr/cnr', 'cnr/cnr.ui', 'cnr/cnr.bulkinfo', 'i18n', 'cnr/cnr.
                         return f.fn(data['cmis:objectId'], null, function (attachmentsData) {
                           close();
                           if (typeof opts.success === 'function') {
-                            opts.success(attachmentsData);
+                            opts.success(attachmentsData, data);
                           }
                         });
                       }

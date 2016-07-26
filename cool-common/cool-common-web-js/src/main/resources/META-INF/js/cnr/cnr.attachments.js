@@ -15,7 +15,8 @@ define(['jquery', 'cnr/cnr.node', 'cnr/cnr.ui.select', 'i18n', 'cnr/cnr.search',
       submission: {
         requiresFile: true,
         showFile: true,
-        externalData: []
+        externalData: [],
+        callback : function (attachmentsData, data) {}
       },
       forbidArchives : true,
       maxUploadSize : false
@@ -212,7 +213,8 @@ define(['jquery', 'cnr/cnr.node', 'cnr/cnr.ui.select', 'i18n', 'cnr/cnr.search',
           bigmodal: settings.submission.bigmodal,
           modalTitle: i18n[selectObjectType.data('value')],
           input: settings.input,
-          success: function () {
+          success: function (attachmentsData, data) {
+            settings.submission.callback(attachmentsData, data);
             criteria.list(search);
           },
           forbidArchives: settings.forbidArchives,
