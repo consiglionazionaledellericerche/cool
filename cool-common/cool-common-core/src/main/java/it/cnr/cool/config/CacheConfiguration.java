@@ -1,6 +1,7 @@
 package it.cnr.cool.config;
 
 import com.hazelcast.config.*;
+import com.hazelcast.core.Cluster;
 import com.hazelcast.core.Hazelcast;
 import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.instance.GroupProperty;
@@ -93,6 +94,17 @@ public class CacheConfiguration {
         return new HazelcastCacheManager(hazelcastInstance);
     }
 
+
+    @Bean
+    public HazelcastInstance hazelcastInstance(CacheManager cacheManager) {
+        HazelcastCacheManager hazelcastCacheManager = (HazelcastCacheManager) cacheManager;
+        return hazelcastCacheManager.getHazelcastInstance();
+    }
+
+    @Bean
+    public Cluster cluster(HazelcastInstance hazelcastInstance) {
+        return hazelcastInstance.getCluster();
+    }
 
 
     private MapConfig initializeDefaultMapConfig() {
