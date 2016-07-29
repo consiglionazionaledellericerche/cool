@@ -3,7 +3,7 @@
   <modelVersion>4.0.0</modelVersion>
   <artifactId>cool-parent</artifactId>
   <groupId>it.cnr.si.cool</groupId>
-  <version>3.0.19</version>
+  <version>3.0.20-SNAPSHOT</version>
   <name>Cool Platform</name>
   <packaging>pom</packaging>
 
@@ -177,7 +177,7 @@
   <scm>
     <connection>scm:git:ssh://git@git.si.cnr.it/documentale/cool.git</connection>
     <developerConnection>scm:git:ssh://git@git.si.cnr.it/documentale/cool.git</developerConnection>
-    <tag>cool-parent-3.0.19</tag>
+    <tag>HEAD</tag>
   </scm>
 
 
