@@ -214,7 +214,9 @@ define(['jquery', 'cnr/cnr.node', 'cnr/cnr.ui.select', 'i18n', 'cnr/cnr.search',
           modalTitle: i18n[selectObjectType.data('value')],
           input: settings.input,
           success: function (attachmentsData, data) {
-            settings.submission.callback(attachmentsData, data);
+            if (settings.submission.callback) {
+              settings.submission.callback(attachmentsData, data);
+            }
             criteria.list(search);
           },
           forbidArchives: settings.forbidArchives,
