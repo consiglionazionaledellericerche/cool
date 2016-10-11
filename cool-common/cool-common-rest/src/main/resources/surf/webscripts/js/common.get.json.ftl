@@ -23,9 +23,12 @@
 	  <#if context.user.sesso??>
 	  "sesso": "${context.user.sesso}",
 	  </#if>
-	  </#if>
 	  <#if context.user.email??>
 	  "email": "${context.user.email}",
+	  </#if>	  
+	  </#if>
+	  <#if context.user.homeFolder??>
+	  "homeFolder": "${context.user.homeFolder}",
 	  </#if>
 	  <#if context.user.codicefiscale??>
 	  "codiceFiscale": "${context.user.codicefiscale}",
