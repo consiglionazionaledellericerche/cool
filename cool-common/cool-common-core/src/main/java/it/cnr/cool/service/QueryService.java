@@ -353,10 +353,17 @@ public class QueryService {
 		String parentId = result
 				.getPropertyValueById(PropertyIds.PARENT_ID);		
 		try {
-			if (parentId == null) {
-				parentId = cmisSession.getObject(objectId).getPropertyValue(PropertyIds.PARENT_ID);
-			}				
 			CmisObject parent;
+			if (parentId == null) {
+				CmisObject cmisObject = cmisSession.getObject(objectId);
+				parentId = cmisObject.getPropertyValue(PropertyIds.PARENT_ID);
+				if (parentId == null && cmisObject.getBaseTypeId().equals(BaseTypeId.CMIS_DOCUMENT)) {
+					List<Folder> parentsFolder = ((Document)cmisObject).getParents();
+					if (parentsFolder.size() > 1)
+						LOGGER.warn("Object {} have multiple parents", objectId);						
+					parentId = parentsFolder.get(0).getId();					
+				}
+			}
 			if (parents.containsKey(parentId))
 				parent = parents.get(parentId);
 			else {
