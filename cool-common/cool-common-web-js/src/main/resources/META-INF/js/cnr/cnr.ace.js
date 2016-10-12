@@ -111,7 +111,7 @@ define(['jquery', 'cnr/cnr', 'cnr/cnr.ui', 'cnr/cnr.ui.authority', 'i18n', 'cnr/
             bulkInfo = 'accountBulkInfo';
           if (dataPeopleUser.email === 'nomail') {
             dataPeopleUser.email = dataPeopleUser.emailesterno || dataPeopleUser.emailcertificatoperpuk;
-          }  
+          }
           dataPeopleUser.email = '<a href="mailto:' + dataPeopleUser.email + '">' + dataPeopleUser.email + '</a>';
           new BulkInfo({
             handlebarsId: 'zebra',
@@ -123,7 +123,7 @@ define(['jquery', 'cnr/cnr', 'cnr/cnr.ui', 'cnr/cnr.ui.authority', 'i18n', 'cnr/
             var content = $('<div></div>').addClass('modal-inner-fix').append(html),
               title = i18n.prop("modal.title.view." + bulkInfo, 'Propriet&agrave;');
             UI.modal(title, content);
-          });          
+          });
         },
         error: function () {
           UI.error(i18n['message.user.not.found']);
