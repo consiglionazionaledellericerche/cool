@@ -64,6 +64,15 @@
 		<formFieldProperty name="confirmPassword"/>
 		<formFieldProperty name="nazionalita"/>
 	</form>
+
+	<columnSet name="displayUser">
+		<columnFieldProperty name="userName"
+			label="cm.userName"/>
+		<columnFieldProperty name="firstName"/>
+		<columnFieldProperty name="lastName"/>
+		<columnFieldProperty name="email"/>
+		<columnFieldProperty name="codicefiscale"/>
+	</columnSet>
 	
 	<form name="editUser">
 		<formFieldProperty name="hiddenUsername"/>

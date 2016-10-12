@@ -1,4 +1,4 @@
-define(['jquery', 'cnr/cnr', 'cnr/cnr.ui', 'cnr/cnr.ui.authority', 'i18n', 'cnr/cnr.node', 'cnr/cnr.url'], function ($, CNR, UI, Authority, i18n, Node, URL) {
+define(['jquery', 'cnr/cnr', 'cnr/cnr.ui', 'cnr/cnr.ui.authority', 'i18n', 'cnr/cnr.node', 'cnr/cnr.url', 'cnr/cnr.bulkinfo'], function ($, CNR, UI, Authority, i18n, Node, URL, BulkInfo) {
   "use strict";
 
   var regex = /\{.*\}cmobject\.([a-zA-Z]+)/g,
@@ -100,16 +100,35 @@ define(['jquery', 'cnr/cnr', 'cnr/cnr.ui', 'cnr/cnr.ui.authority', 'i18n', 'cnr/
     }, specificSettings;
 
     if (authority.indexOf("GROUP_") === -1) {
-      specificSettings = {
-        success: function (users) {
-          if (users.people[0]) {
-            Node.displayMetadata('cm:person', users.people[0].nodeRef);
-          } else {
-            UI.alert("No information found for: " + authority);
-          }
+      URL.Data.proxy.people({
+        type: 'GET',
+        contentType: 'application/json',
+        placeholder: {
+          user_id: authority
+        },
+        success: function (data) {
+          var dataPeopleUser = data,
+            bulkInfo = 'accountBulkInfo';
+          if (dataPeopleUser.email === 'nomail') {
+            dataPeopleUser.email = dataPeopleUser.emailesterno || dataPeopleUser.emailcertificatoperpuk;
+          }  
+          dataPeopleUser.email = '<a href="mailto:' + dataPeopleUser.email + '">' + dataPeopleUser.email + '</a>';
+          new BulkInfo({
+            handlebarsId: 'zebra',
+            kind: 'column',
+            name: 'displayUser',
+            path: bulkInfo,
+            metadata: dataPeopleUser
+          }).handlebars().done(function (html) {
+            var content = $('<div></div>').addClass('modal-inner-fix').append(html),
+              title = i18n.prop("modal.title.view." + bulkInfo, 'Propriet&agrave;');
+            UI.modal(title, content);
+          });          
+        },
+        error: function () {
+          UI.error(i18n['message.user.not.found']);
         }
-      };
-      URL.Data.proxy.person($.extend({}, commonSettings, specificSettings));
+      });
     } else {
       specificSettings = {
         success: function (groups) {
