@@ -20,10 +20,13 @@
 	  <#case "nomail">
 	     <#if p['cnrperson:emailesterno']??>
 	     	"${p['cnrperson:emailesterno']}"
-	     </#if>
-	     <#if p['cnrperson:emailcertificatoperpuk']??>
-	     	"${p['cnrperson:emailcertificatoperpuk']}"
-	     </#if>	     
+	     <#else>
+		     <#if p['cnrperson:emailcertificatoperpuk']??>
+		     	"${p['cnrperson:emailcertificatoperpuk']}"
+		     <#else>
+		     	""	
+		     </#if>
+		 </#if>    	     
 	     <#break>
 	  <#default>
 	     "${p.email}"
