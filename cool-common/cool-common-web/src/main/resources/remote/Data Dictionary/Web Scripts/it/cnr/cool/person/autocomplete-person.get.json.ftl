@@ -15,7 +15,19 @@
 	"userName": "${p.userName}",
 	"firstName": <#if p.firstName??>"${p.firstName}"<#else>null</#if>,
 	"lastName": <#if p.lastName??>"${p.lastName}"<#else>null</#if>,
-	"email": <#if p.email??>"${p.email}"<#else>null</#if>,
+	"email": 
+	<#switch p.email>
+	  <#case "nomail">
+	     <#if p['cnrperson:emailesterno']??>
+	     	"${p['cnrperson:emailesterno']}"
+	     </#if>
+	     <#if p['cnrperson:emailcertificatoperpuk']??>
+	     	"${p['cnrperson:emailcertificatoperpuk']}"
+	     </#if>	     
+	     <#break>
+	  <#default>
+	     "${p.email}"
+	</#switch>,
 	"nodeRef": <#if person.nodeRef??>"${person.nodeRef}"<#else>null</#if>
 </#escape>
 </#macro>
