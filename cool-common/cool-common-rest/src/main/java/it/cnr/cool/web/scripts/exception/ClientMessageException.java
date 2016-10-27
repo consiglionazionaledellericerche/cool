@@ -9,6 +9,10 @@ public class ClientMessageException extends RuntimeException {
 	
 	private String keyMessage;
 
+	public ClientMessageException(String message, Throwable cause) {
+		super(message, cause);
+	}
+
 	public ClientMessageException(String message) {
 		super(message);
 	}
