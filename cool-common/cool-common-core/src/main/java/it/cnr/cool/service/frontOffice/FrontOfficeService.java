@@ -298,7 +298,7 @@ public class FrontOfficeService{
 	 *
 	 * @return now
 	 */
-	private static String getNowUTC(){
+	public static String getNowUTC(){
 		Calendar ora = Calendar.getInstance();
 		return FORMATTER_ALFRESCO.format(ora.getTime());
 	}
