@@ -32,6 +32,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Node resource
+ */
 @Path("node")
 @Component
 @Produces(MediaType.APPLICATION_JSON)
@@ -96,7 +99,8 @@ public class Node {
 			LOGGER.error("Max Upload Size Exceeded", _ex);
 			Map<String, Object> model = new HashMap<String, Object>();
 			String readableFileSize = readableFileSize(request.getContentLength());
-			model.put("message", "Il file ( " + readableFileSize + ") supera la dimensione massima consentita (" + readableFileSize(_ex.getMaxUploadSize()) + ")");
+			String message = "Il file ( " + readableFileSize + ") supera la dimensione massima consentita (" + readableFileSize(_ex.getMaxUploadSize()) + ")";
+			model.put("message", message);
 			rb = Response.status(Status.INTERNAL_SERVER_ERROR).entity(model);			
 		} catch(CmisUnauthorizedException _ex) {
 			LOGGER.error("unauthorized", _ex);
@@ -209,7 +213,8 @@ public class Node {
 	    if(size <= 0) return "0";
 	    final String[] units = new String[] { "B", "kB", "MB", "GB", "TB" };
 	    int digitGroups = (int) (Math.log10(size)/Math.log10(1000));
-	    return new DecimalFormat("#,##0.#").format(size/Math.pow(1000, digitGroups)) + " " + units[digitGroups];
+		double number = size / Math.pow(1000, digitGroups);
+		return new DecimalFormat("#,##0.#").format(number) + " " + units[digitGroups];
 	}
 	
 	private String serializeJson(List<CmisObject> l) {
