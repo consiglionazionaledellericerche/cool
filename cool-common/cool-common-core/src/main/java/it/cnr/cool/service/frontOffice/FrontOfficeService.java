@@ -292,7 +292,13 @@ public class FrontOfficeService{
 		return criteria.executeQuery(cmisSession, false, frontOfficeOperationContext);
 	}
 
-	public static String getNowUTC(){
+	/**
+	 *
+	 * get now
+	 *
+	 * @return now
+	 */
+	private static String getNowUTC(){
 		Calendar ora = Calendar.getInstance();
 		return FORMATTER_ALFRESCO.format(ora.getTime());
 	}
