@@ -30,10 +30,12 @@ import java.util.*;
 
 /**
  * Remote Resource Deploy Service
+ *
  * @author mspasiano
  *
  */
 public class RRDService implements InitializingBean {
+
     private static final Logger LOGGER= LoggerFactory.getLogger(RRDService.class);
 
     @Autowired
@@ -53,6 +55,8 @@ public class RRDService implements InitializingBean {
 	public void setDictionaryTypeId(String dictionaryTypeId) {
 		this.dictionaryTypeId = dictionaryTypeId;
 	}
+
+
 	@Override
 	public void afterPropertiesSet() throws Exception {
 		if (!versionService.isProduction()) {
