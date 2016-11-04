@@ -65,7 +65,10 @@ public class Node {
 			rb = Response.ok(html);
 		} catch(MaxUploadSizeExceededException _ex) {
 			LOGGER.error("max size exceeded", _ex);
-			throw new ClientMessageException("Il file ( " + readableFileSize(request.getContentLength()) + ") supera la dimensione massima consentita (" + readableFileSize(_ex.getMaxUploadSize()) + ")");
+			String readableFileSize = readableFileSize(request.getContentLength());
+			String maxFileSize = readableFileSize(_ex.getMaxUploadSize());
+			String message = "Il file ( " + readableFileSize + ") supera la dimensione massima consentita (" + maxFileSize + ")";
+			throw new ClientMessageException(message);
 		} catch (Exception e) {
 			if (e instanceof ClientMessageException)
 				throw e;
@@ -92,7 +95,8 @@ public class Node {
 		} catch(MaxUploadSizeExceededException _ex) {
 			LOGGER.error("Max Upload Size Exceeded", _ex);
 			Map<String, Object> model = new HashMap<String, Object>();
-			model.put("message", "Il file ( " + readableFileSize(request.getContentLength()) + ") supera la dimensione massima consentita (" + readableFileSize(_ex.getMaxUploadSize()) + ")");			
+			String readableFileSize = readableFileSize(request.getContentLength());
+			model.put("message", "Il file ( " + readableFileSize + ") supera la dimensione massima consentita (" + readableFileSize(_ex.getMaxUploadSize()) + ")");
 			rb = Response.status(Status.INTERNAL_SERVER_ERROR).entity(model);			
 		} catch(CmisUnauthorizedException _ex) {
 			LOGGER.error("unauthorized", _ex);
