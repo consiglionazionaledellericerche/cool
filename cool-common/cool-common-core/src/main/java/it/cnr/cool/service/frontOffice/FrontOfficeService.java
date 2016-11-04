@@ -29,7 +29,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
-
+/**
+ *
+ * FrontOffice service
+ *
+ */
 public class FrontOfficeService{
 
 	@Autowired
