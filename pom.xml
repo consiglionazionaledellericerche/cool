@@ -10,12 +10,12 @@
   <parent>
     <artifactId>archetype</artifactId>
     <groupId>it.cnr.si</groupId>
-    <version>1.0.3</version>
+    <version>1.0.5</version>
   </parent>
 
   <properties>
-    <opencmis.version>0.13.0</opencmis.version>
-    <spring.version>4.2.6.RELEASE</spring.version>
+    <opencmis.version>1.0.0</opencmis.version>
+    <spring.version>4.3.3.RELEASE</spring.version>
     <jslint4java.version>2.0.2</jslint4java.version>
     <junit.version>4.12</junit.version>
     <slf4j.version>1.7.21</slf4j.version>
