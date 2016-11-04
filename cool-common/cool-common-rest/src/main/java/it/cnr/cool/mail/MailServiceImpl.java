@@ -25,6 +25,11 @@ import javax.mail.internet.MimeMessage;
 import java.io.*;
 import java.util.*;
 
+/**
+ *
+ * Mail service
+ *
+ */
 public class MailServiceImpl implements MailService, InitializingBean {
     private static final Logger LOGGER = LoggerFactory.getLogger(MailServiceImpl.class);
 
