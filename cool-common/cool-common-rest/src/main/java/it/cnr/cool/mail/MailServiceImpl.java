@@ -81,8 +81,12 @@ public class MailServiceImpl implements MailService, InitializingBean {
 
 			MimeMessageHelper message = new MimeMessageHelper(mimeMessage, true, "UTF-8");
 
-			message.setFrom(emailMessage.getSender()!=null?emailMessage.getSender():mailFromDefault);
-			message.setTo(emailMessage.getRecipients().toArray(new String[emailMessage.getRecipients().size()]));
+			String from = emailMessage.getSender() != null ? emailMessage.getSender() : mailFromDefault;
+			message.setFrom(from);
+
+			String[] to = emailMessage.getRecipients().toArray(new String[emailMessage.getRecipients().size()]);
+			message.setTo(to);
+
 			message.setSubject(emailMessage.getSubject());
 			message.setText(bodyMessage.toString(), emailMessage.isHtmlBody());
 
@@ -129,7 +133,8 @@ public class MailServiceImpl implements MailService, InitializingBean {
 	public void send(final String to, final String subject, final String text) throws MailException{
 		EmailMessage message = new EmailMessage();
 		message.setSender(mailFromDefault);
-		message.setRecipients(Arrays.asList(to!=null?to:mailToAdmin));
+		List<String> recipients = Arrays.asList(to != null ? to : mailToAdmin);
+		message.setRecipients(recipients);
 		message.setSubject(subject);
 	    message.setBody(text);
 	    send(message);
