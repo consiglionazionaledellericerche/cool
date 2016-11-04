@@ -1,10 +1,8 @@
 package it.cnr.cool.mail.model;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+
 /**
  * Astrazione di un messaggio di posta elettronica
  * 
@@ -15,7 +13,7 @@ public class EmailMessage implements Serializable {
 	private String subject;
 	private StringBuffer body;
 	private String templateBody;
-	private Map<String, Object> templateModel;
+	private HashMap<String, Serializable> templateModel;
 	private List<String> recipients;
 	private List<String> ccRecipients;
 	private List<String> bccRecipients;
@@ -109,10 +107,10 @@ public class EmailMessage implements Serializable {
 	public void setTemplateBody(String templateBody) {
 		this.templateBody = templateBody;
 	}
-	public Map<String, Object> getTemplateModel() {
+	public HashMap<String, Serializable> getTemplateModel() {
 		return templateModel;
 	}
-	public void setTemplateModel(Map<String, Object> templateModel) {
+	public void setTemplateModel(HashMap<String, Serializable> templateModel) {
 		this.templateModel = templateModel;
 	}
 	public boolean isHtmlBody() {

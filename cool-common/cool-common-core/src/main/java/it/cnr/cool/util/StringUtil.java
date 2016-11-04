@@ -3,10 +3,8 @@ package it.cnr.cool.util;
 import it.cnr.cool.exception.CoolException;
 import org.apache.commons.io.IOUtils;
 
-import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -17,26 +15,16 @@ public final class StringUtil {
 	public static final SimpleDateFormat DATETIMEFORMAT = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss.SSS", Locale.ITALY);
 	public static final String MD5 = "MD5";
 
+	@Deprecated
 	public static String convertStreamToString(InputStream is) {
-        BufferedReader reader = new BufferedReader(new InputStreamReader(is));
-        StringBuilder sb = new StringBuilder();
- 
-        String line = null;
-        try {
-            while ((line = reader.readLine()) != null) {
-                sb.append(line + "\n");
-            }
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        } finally {
-            try {
-                is.close();
-            } catch (IOException e) {
-            	throw new RuntimeException(e);
-            }
-        }
-        return sb.toString();
-    }		
+
+		try {
+			return IOUtils.toString(is);
+		} catch (IOException e) {
+			throw new RuntimeException("unable to convert stream to string", e);
+		}
+
+    }
 	
 	public static String readableFileSize(long size) {
 	    if(size <= 0) return "0";

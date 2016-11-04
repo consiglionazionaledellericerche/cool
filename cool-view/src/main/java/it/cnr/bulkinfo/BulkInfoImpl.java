@@ -932,9 +932,9 @@ public class BulkInfoImpl implements BulkInfo {
 		}
 	}
 
-	public class FieldPropertySet implements Cloneable, Serializable {
+	public class FieldPropertySet implements Serializable {
 		private String name;
-		private final Map<String, FieldProperty> properties;
+		private final HashMap<String, FieldProperty> properties;
 		private BulkInfo bulkInfo;
 		private String label;
 		private String key;

@@ -1,35 +1,12 @@
 package it.cnr.cool.mail;
 
-import freemarker.template.Template;
-import freemarker.template.TemplateDateModel;
-import freemarker.template.TemplateException;
-import freemarker.template.TemplateMethodModelEx;
-import freemarker.template.TemplateModelException;
-import freemarker.template.TemplateNumberModel;
-import freemarker.template.TemplateScalarModel;
+import freemarker.template.*;
 import it.cnr.cool.mail.model.AttachmentBean;
 import it.cnr.cool.mail.model.EmailMessage;
 import it.cnr.cool.rest.util.Util;
 import it.cnr.cool.service.I18nService;
-
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.StringWriter;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.GregorianCalendar;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
-import java.util.StringTokenizer;
-
-import javax.activation.CommandMap;
-import javax.activation.MailcapCommandMap;
-import javax.mail.internet.MimeMessage;
-
 import org.apache.chemistry.opencmis.commons.exceptions.CmisBaseException;
+import org.apache.commons.collections.map.HashedMap;
 import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -41,6 +18,12 @@ import org.springframework.mail.MailSendException;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.mail.javamail.MimeMessagePreparator;
+
+import javax.activation.CommandMap;
+import javax.activation.MailcapCommandMap;
+import javax.mail.internet.MimeMessage;
+import java.io.*;
+import java.util.*;
 
 public class MailServiceImpl implements MailService, InitializingBean {
     private static final Logger LOGGER = LoggerFactory.getLogger(MailServiceImpl.class);
@@ -212,13 +195,13 @@ public class MailServiceImpl implements MailService, InitializingBean {
 		mc.addMailcap("application/pdf;; x-java-content-handler=com.sun.mail.handlers.text_html");
 	}
 
-	protected Map<String, Object> addToTemplateModel(Map<String, Object> templateModel){
-		if (templateModel==null) templateModel=new HashMap<String, Object>();
+	protected HashMap<String, Serializable> addToTemplateModel(HashMap<String, Serializable> templateModel){
+		if (templateModel==null) templateModel=new HashMap();
 		templateModel.put("message", new EmailMessageMethod());
         return templateModel;
 	}
 
-	public class EmailMessageMethod implements TemplateMethodModelEx{
+	public class EmailMessageMethod implements TemplateMethodModelEx, Serializable{
 		/**
 	     * @see freemarker.template.TemplateMethodModel#exec(java.util.List)
 	     */
@@ -286,13 +269,18 @@ public class MailServiceImpl implements MailService, InitializingBean {
 		final StringWriter htmlWriter = new StringWriter();
 		if (message != null && message.getTemplateBody() != null) {
 			String templateBody = message.getTemplateBody().toString();
-			Map<String, Object> model = addToTemplateModel(message.getTemplateModel());
+			HashMap<String, Serializable> templateModel = message.getTemplateModel();
+			HashMap<String, Serializable> model = addToTemplateModel(templateModel);
 
 			InputStream is = new ByteArrayInputStream(templateBody.getBytes());
 
 			try {
 				Template t = Util.getTemplate("mailTemplate", is);
-				String content = Util.processTemplate(model, t);
+
+				Map<String, Object> tempMap = new HashedMap();
+				tempMap.putAll(model);
+
+				String content = Util.processTemplate(tempMap, t);
 				InputStream contentStream = IOUtils.toInputStream(content);
 				IOUtils.copy(contentStream, htmlWriter);
 			} catch (TemplateException e) {

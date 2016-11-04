@@ -10,7 +10,7 @@ import java.io.Serializable;
 /**
  * Utility class for containing two things that aren't like each other
  */
-public final class Pair<F extends Comparable<F>, S> implements Serializable, Comparable<Pair<F, S>>
+public final class Pair<F extends Comparable<F> & Serializable, S extends Serializable> implements Serializable, Comparable<Pair<F, S>>
 {
     @SuppressWarnings({ "unchecked", "rawtypes" })
     public static final Pair NULL_PAIR = new Pair(null, null);

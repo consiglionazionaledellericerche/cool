@@ -1,6 +1,8 @@
 package it.cnr.cool.web.scripts.exception;
 
-public class Status {
+import java.io.Serializable;
+
+public class Status implements Serializable {
 
 	private int code;
 	private String message;

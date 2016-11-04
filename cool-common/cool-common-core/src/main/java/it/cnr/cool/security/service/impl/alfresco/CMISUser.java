@@ -30,10 +30,10 @@ public class CMISUser implements java.security.Principal, Serializable {
 
 	public static String PROP_MIDDLE_NAME = "middleName";
 
-	protected final Map<String, Serializable> map = new HashMap<String, Serializable>(
+	private final Map<String, Serializable> map = new HashMap<String, Serializable>(
 			32);
 
-	protected final Map<String, Boolean> capabilities = new HashMap<String, Boolean>();
+	private final Map<String, Boolean> capabilities = new HashMap();
 
 	/** Attributi CNR */
 	@SerializedName("cnrperson:matricola")

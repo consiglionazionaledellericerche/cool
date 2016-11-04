@@ -3,11 +3,12 @@ package it.cnr.bulkinfo;
 import it.cnr.bulkinfo.BulkInfoImpl.FieldProperty;
 import it.cnr.bulkinfo.BulkInfoImpl.FieldPropertySet;
 
+import java.io.Serializable;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
-public interface BulkInfo {
+public interface BulkInfo extends Serializable {
 	// type
 	String TYPE_ID = "bulkInfo";
 
