@@ -10,11 +10,22 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
+/**
+ * String Utils
+ */
 public final class StringUtil {
 	public static final SimpleDateFormat DATEFORMAT = new SimpleDateFormat("dd/MM/yyyy", Locale.ITALY);
 	public static final SimpleDateFormat DATETIMEFORMAT = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss.SSS", Locale.ITALY);
 	public static final String MD5 = "MD5";
 
+	/**
+	 *
+	 * convert InputStream to String.
+	 * @deprecated use IOUtils.toString
+	 *
+	 * @param is input stream
+	 * @return string
+	 */
 	@Deprecated
 	public static String convertStreamToString(InputStream is) {
 
@@ -25,7 +36,8 @@ public final class StringUtil {
 		}
 
     }
-	
+
+
 	public static String readableFileSize(long size) {
 	    if(size <= 0) return "0";
 	    final String[] units = new String[] { "B", "KB", "MB", "GB", "TB" };
