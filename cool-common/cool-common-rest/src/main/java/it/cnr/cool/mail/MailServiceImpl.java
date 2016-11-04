@@ -170,7 +170,7 @@ public class MailServiceImpl implements MailService, InitializingBean {
 		message.setRecipients(mailErrorRecipients);
 		message.setSubject("Error inside application for user:"+currentUser+" and server: "+ serverPath);
 		StringWriter sw = new StringWriter();
-		we.printStackTrace(new java.io.PrintWriter(sw));
+		we.printStackTrace(new PrintWriter(sw));
 		StringBuffer sb = new StringBuffer();
 		sb.append("Request URL is: "+ url);
 		if (we.getCause() instanceof CmisBaseException){
