@@ -6,16 +6,7 @@ import it.spasia.opencmis.criteria.Criteria;
 import it.spasia.opencmis.criteria.CriteriaFactory;
 import it.spasia.opencmis.criteria.Order;
 import it.spasia.opencmis.criteria.restrictions.Restrictions;
-
-import java.util.HashMap;
-import java.util.Map;
-import java.util.regex.Pattern;
-
-import org.apache.chemistry.opencmis.client.api.Folder;
-import org.apache.chemistry.opencmis.client.api.ItemIterable;
-import org.apache.chemistry.opencmis.client.api.OperationContext;
-import org.apache.chemistry.opencmis.client.api.QueryResult;
-import org.apache.chemistry.opencmis.client.api.Session;
+import org.apache.chemistry.opencmis.client.api.*;
 import org.apache.chemistry.opencmis.commons.PropertyIds;
 import org.apache.chemistry.opencmis.commons.enums.BaseTypeId;
 import org.apache.chemistry.opencmis.commons.exceptions.CmisContentAlreadyExistsException;
@@ -23,6 +14,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
+
+import java.util.HashMap;
+import java.util.Map;
+import java.util.regex.Pattern;
 
 public class FolderServiceImpl implements FolderService {
 	private static final Logger LOGGER = LoggerFactory
@@ -123,6 +118,7 @@ public class FolderServiceImpl implements FolderService {
 			newFolder = sourceFolder.createFolder(properties);
 			return newFolder;
 		} catch (CmisContentAlreadyExistsException e) {
+			LOGGER.debug("content already exists: {} {}", path, name, e);
 			newFolder = (Folder) session.getObjectByPath(sourceFolder.getPath()
 					.concat("/").concat(name));
 		}

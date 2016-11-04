@@ -102,9 +102,9 @@ public class NodeService {
 											(Folder)cmisSession.getObject(objectId, oc),
 											originalFilename, cmisType));
 								}catch (CmisInvalidArgumentException e) {
-									throw new ClientMessageException(e.getMessage());
+									throw new ClientMessageException(e.getMessage(), e);
 								}catch (CmisBaseException e) {
-									throw new ClientMessageException(e.getMessage());
+									throw new ClientMessageException(e.getMessage(), e);
 								}
 							}
 						}
@@ -126,9 +126,9 @@ public class NodeService {
                         attachments.add(upgradeDocument(file,
                                 (Document)cmisSession.getLatestDocumentVersion(objectId)));
 					} catch (CmisObjectNotFoundException e) {
-						throw new ClientMessageException("message.document.not.found");
+						throw new ClientMessageException("message.document.not.found", e);
 					} catch (CmisBaseException e) {
-						throw new ClientMessageException(e.getMessage());
+						throw new ClientMessageException(e.getMessage(), e);
 					}
 				}
 

@@ -1,5 +1,6 @@
 package it.cnr.cool.rest;
 
+import com.google.gson.GsonBuilder;
 import it.cnr.cool.cmis.service.CMISService;
 import it.cnr.cool.cmis.service.NodeMetadataService;
 import it.cnr.cool.rest.util.Util;
@@ -8,27 +9,6 @@ import it.cnr.cool.web.scripts.exception.ClientMessageException;
 import it.cnr.mock.ISO8601DateFormatMethod;
 import it.cnr.mock.JSONUtils;
 import it.cnr.mock.RequestUtils;
-
-import java.text.DecimalFormat;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.ws.rs.Consumes;
-import javax.ws.rs.DELETE;
-import javax.ws.rs.GET;
-import javax.ws.rs.POST;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
-import javax.ws.rs.core.CacheControl;
-import javax.ws.rs.core.Context;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.MultivaluedMap;
-import javax.ws.rs.core.Response;
-import javax.ws.rs.core.Response.ResponseBuilder;
-import javax.ws.rs.core.Response.Status;
-
 import org.apache.chemistry.opencmis.client.api.CmisObject;
 import org.apache.chemistry.opencmis.client.api.OperationContext;
 import org.apache.chemistry.opencmis.client.api.Session;
@@ -42,7 +22,15 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MaxUploadSizeExceededException;
 
-import com.google.gson.GsonBuilder;
+import javax.servlet.http.HttpServletRequest;
+import javax.ws.rs.*;
+import javax.ws.rs.core.*;
+import javax.ws.rs.core.Response.ResponseBuilder;
+import javax.ws.rs.core.Response.Status;
+import java.text.DecimalFormat;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @Path("node")
 @Component
@@ -75,7 +63,8 @@ public class Node {
 			String json = serializeJson(l);
 			String html = "<textarea>" + json + "</textarea>";
 			rb = Response.ok(html);
-		} catch(MaxUploadSizeExceededException _ex) {		
+		} catch(MaxUploadSizeExceededException _ex) {
+			LOGGER.error("max size exceeded", _ex);
 			throw new ClientMessageException("Il file ( " + readableFileSize(request.getContentLength()) + ") supera la dimensione massima consentita (" + readableFileSize(_ex.getMaxUploadSize()) + ")");
 		} catch (Exception e) {
 			if (e instanceof ClientMessageException)
@@ -101,10 +90,12 @@ public class Node {
 			String json = serializeJson(l);
 			rb = Response.ok(json);
 		} catch(MaxUploadSizeExceededException _ex) {
+			LOGGER.error("Max Upload Size Exceeded", _ex);
 			Map<String, Object> model = new HashMap<String, Object>();
 			model.put("message", "Il file ( " + readableFileSize(request.getContentLength()) + ") supera la dimensione massima consentita (" + readableFileSize(_ex.getMaxUploadSize()) + ")");			
 			rb = Response.status(Status.INTERNAL_SERVER_ERROR).entity(model);			
 		} catch(CmisUnauthorizedException _ex) {
+			LOGGER.error("unauthorized", _ex);
 			rb = Response.status(Status.UNAUTHORIZED);			
 		} catch (Exception e) {
 			LOGGER.error("Exception: " + e.getMessage(), e);

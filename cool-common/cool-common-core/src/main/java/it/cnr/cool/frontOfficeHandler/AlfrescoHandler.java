@@ -78,8 +78,9 @@ public class AlfrescoHandler implements ILoggerHandler {
 		}
 		try {
 			parent = (Folder) adminSession.getObjectByPath(path);
-		} catch (CmisObjectNotFoundException ex) {// se nn esiste la cartella la
-													// creo
+		} catch (CmisObjectNotFoundException ex) {
+			// se non esiste la cartella la creo
+			LOGGER.debug("folder {} does not exist", path, ex);
 			String folderName = path.substring(path.lastIndexOf("/") + 1);
 			String rootPath = path.substring(0, path.lastIndexOf("/"));
 			CmisObject source = adminSession.getObjectByPath(rootPath);
@@ -93,7 +94,7 @@ public class AlfrescoHandler implements ILoggerHandler {
 				parent = (Folder) adminSession.getObject(foderId);
 			} catch (CmisObjectNotFoundException ex1) {
 				LOGGER.error("Errore nella creazione della cartella "
-						+ folderName);
+						+ folderName, ex1);
 			}
 		}
 		String name = null;
@@ -344,6 +345,7 @@ public class AlfrescoHandler implements ILoggerHandler {
 			max = ((BigInteger) resultMax.getPropertyValueById(property))
 					.intValue();
 		} catch (NullPointerException e) {
+			LOGGER.error("error while performing get max {} {}", queryName, property, e);
 			// se nn trovo nessun avviso:number / faq:number parto da 0 (quindi
 			// restituisco 1)
 			max = 0;

@@ -65,6 +65,7 @@ public class SecurityRest {
 		try {
 			return Response.ok(createAccountService.create(values, I18nService.getLocale(request, cookieLang) ,getUrl(request))).build();
 		} catch (Exception e) {
+			LOGGER.error("create user exception {}", form, e);
 			return Response.serverError().entity(Collections.singletonMap("message", e.getMessage())).build();
 		}
 	}
@@ -87,6 +88,7 @@ public class SecurityRest {
 			return Response.ok(data).build();
 
 		} catch (Exception e) {
+			LOGGER.error("update user exception: {}", form, e);
 			return Response.serverError().entity(Collections.singletonMap("message", e.getMessage())).build();
 		}
 	}
@@ -241,7 +243,7 @@ public class SecurityRest {
 				error = "user-not-found";
 			}
 		} catch (CoolUserFactoryException e) {
-			LOGGER.error("unable to change password for user: " + userName);
+			LOGGER.error("unable to change password for user: " + userName, e);
 			error = "user-not-found";
 		}
 

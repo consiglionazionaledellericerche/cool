@@ -61,6 +61,7 @@ public class PermissionRepositoryImpl implements PermissionRepository {
             Session session = cmisService.createAdminSession();
             updateDocument(session, rbacPath, json);
         } catch (Exception e) {
+            LOGGER.error("update issue {}", json, e);
             return false;
         }
 

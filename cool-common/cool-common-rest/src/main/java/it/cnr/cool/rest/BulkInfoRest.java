@@ -101,6 +101,7 @@ public class BulkInfoRest {
 	    builder.cacheControl(Util.getCache(1800));
 
 		} catch (Exception e) {
+			LOGGER.error("bulkinfo exception {} {}", type, prefix, e);
 			builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(DEFAULT_ERROR);
 		}
 

@@ -1,12 +1,19 @@
 package it.cnr.cool.rest;
 
 import it.cnr.cool.cmis.service.CMISService;
-
-import java.util.HashMap;
-import java.util.Map;
+import org.apache.chemistry.opencmis.client.api.CmisObject;
+import org.apache.chemistry.opencmis.client.api.ObjectId;
+import org.apache.chemistry.opencmis.client.api.Session;
+import org.apache.chemistry.opencmis.client.runtime.ObjectIdImpl;
+import org.apache.chemistry.opencmis.commons.PropertyIds;
+import org.apache.chemistry.opencmis.commons.exceptions.CmisContentAlreadyExistsException;
+import org.apache.chemistry.opencmis.commons.exceptions.CmisInvalidArgumentException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import javax.servlet.http.HttpServletRequest;
-
 import javax.ws.rs.FormParam;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
@@ -16,21 +23,15 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.ResponseBuilder;
 import javax.ws.rs.core.Response.Status;
-
-import org.apache.chemistry.opencmis.client.api.CmisObject;
-import org.apache.chemistry.opencmis.client.api.ObjectId;
-import org.apache.chemistry.opencmis.client.api.Session;
-import org.apache.chemistry.opencmis.client.runtime.ObjectIdImpl;
-import org.apache.chemistry.opencmis.commons.PropertyIds;
-import org.apache.chemistry.opencmis.commons.exceptions.CmisContentAlreadyExistsException;
-import org.apache.chemistry.opencmis.commons.exceptions.CmisInvalidArgumentException;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+import java.util.HashMap;
+import java.util.Map;
 
 @Path("folder")
 @Component
 @Produces(MediaType.APPLICATION_JSON)
 public class Folder {
+
+	private static final Logger LOGGER = LoggerFactory.getLogger(Folder.class);
 
 	@Autowired
 	private CMISService cmisService;
@@ -62,9 +63,11 @@ public class Folder {
 
 			rb = Response.ok(model);
 		} catch (CmisContentAlreadyExistsException e) {
+			LOGGER.error("content already exists {} {} {}", objectTypeId, parentId, name, e);
 			model.put("message", e.getMessage());
 			rb = Response.status(Status.INTERNAL_SERVER_ERROR).entity(model);
 		} catch (CmisInvalidArgumentException e) {
+			LOGGER.error("folder creation failed {} {} {}", objectTypeId, parentId, name, e);
 			model.put("message", e.getMessage());
 			rb = Response.status(Status.INTERNAL_SERVER_ERROR).entity(model);
 		}

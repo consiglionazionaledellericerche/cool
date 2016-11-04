@@ -82,7 +82,7 @@ public class Content {
 			inputStream.close();
 			outputStream.close();
 		} catch(CmisUnauthorizedException e) {
-            LOGGER.debug("unauthorized to get " + nodeRef);
+            LOGGER.debug("unauthorized to get " + nodeRef, e);
             String redirect = "/" + Page.LOGIN_URL;
             redirect = redirect.concat("?redirect=rest/content");
 			if (path != null && !path.isEmpty())

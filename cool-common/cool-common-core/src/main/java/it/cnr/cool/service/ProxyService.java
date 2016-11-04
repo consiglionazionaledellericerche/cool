@@ -227,9 +227,10 @@ public class ProxyService {
             // apart from a little error message
             if (LOGGER.isInfoEnabled())
                 LOGGER.info("Client aborted stream read:\n\tcontent: "
-                                    + e1.getMessage());
+                                    + e1.getMessage(), e1);
         } catch (IOException e) {
 
+            LOGGER.error("IO exception", e);
             res.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             IOUtils.copy(new ByteArrayInputStream(e.getMessage().getBytes()),
                          outputStream);

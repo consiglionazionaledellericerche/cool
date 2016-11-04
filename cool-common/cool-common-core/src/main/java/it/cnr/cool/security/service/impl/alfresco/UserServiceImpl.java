@@ -8,15 +8,6 @@ import it.cnr.cool.util.MimeTypes;
 import it.cnr.cool.util.StringUtil;
 import it.cnr.cool.util.UriUtils;
 import it.cnr.cool.util.format.GsonParser;
-
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.io.StringReader;
-import java.util.ArrayList;
-import java.util.List;
-
 import org.apache.chemistry.opencmis.client.bindings.impl.CmisBindingsHelper;
 import org.apache.chemistry.opencmis.client.bindings.spi.BindingSession;
 import org.apache.chemistry.opencmis.client.bindings.spi.http.Output;
@@ -34,6 +25,10 @@ import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+
+import java.io.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class UserServiceImpl implements UserService{
 	private static final String SERVICE_CNR_PERSON_DISABLE_ACCOUNT = "service/cnr/person/disable-account",
@@ -118,6 +113,7 @@ public class UserServiceImpl implements UserService{
 				result.add(jsonArray.getString(i));
 			}
 		} catch (JSONException e) {
+			LOGGER.error("json exception", e);
 			return result;
 		}
 		return result;
@@ -143,6 +139,7 @@ public class UserServiceImpl implements UserService{
 			else
 				return gsonParser.fromJson( new StringReader(jsonArray.getJSONObject(0).toString()), CMISUser.class);
 		} catch (JSONException e) {
+			LOGGER.error("json exception", e);
 			return null;
 		}
 	}
@@ -169,6 +166,7 @@ public class UserServiceImpl implements UserService{
 				throw new CoolUserFactoryException("For this tax code "+codicefiscale+" found user: "+ jsonArray.length());
 			}
 		} catch (JSONException e) {
+			LOGGER.error("json exception", e);
 			return null;
 		}
 	}

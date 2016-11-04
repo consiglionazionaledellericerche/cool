@@ -2,17 +2,6 @@ package it.cnr.cool.cmis.service;
 
 import it.cnr.cool.mail.MailService;
 import it.cnr.cool.util.StringUtil;
-
-import java.io.InputStream;
-import java.math.BigInteger;
-import java.net.InetAddress;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.StringTokenizer;
-
 import org.apache.chemistry.opencmis.client.api.CmisObject;
 import org.apache.chemistry.opencmis.client.api.Document;
 import org.apache.chemistry.opencmis.client.api.Session;
@@ -33,6 +22,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 import org.springframework.mail.MailException;
+
+import java.io.InputStream;
+import java.math.BigInteger;
+import java.net.InetAddress;
+import java.util.*;
 
 /**
  * Remote Resource Deploy Service
@@ -92,6 +86,7 @@ public class RRDService implements InitializingBean {
 				}
 
 			}catch(CmisObjectNotFoundException _ex){
+				LOGGER.debug("object not found: {}", resource, _ex);
 				String fileName = cmisPath.substring(cmisPath.lastIndexOf("/") + 1);
 				boolean createFolder = !fileName.equalsIgnoreCase("bulkInfoMapping.js");
 				CmisObject source = createPath(cmisSession, cmisPath.substring(0, cmisPath.lastIndexOf("/")), createFolder);
@@ -130,7 +125,7 @@ public class RRDService implements InitializingBean {
 						properties.put("cm:modelActive", Boolean.TRUE);
 						doc.updateProperties(properties);
 					} catch (Exception ex) {
-						LOGGER.error("Cannot activate Model:"+fileName);
+						LOGGER.error("Cannot activate Model:" + fileName, ex);
 						documentsToBeActive.add(doc);
 					}
 				}
@@ -150,7 +145,7 @@ public class RRDService implements InitializingBean {
 					document.updateProperties(properties);
 					iterator.remove();
 				} catch (Exception ex) {
-					LOGGER.warn("Cannot activate Model:" + document.getName());
+					LOGGER.warn("Cannot activate Model:" + document.getName(), ex);
 				}
 			}
 		}

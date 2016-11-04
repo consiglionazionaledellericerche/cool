@@ -178,7 +178,7 @@ public class BulkInfoCoolService {
 
 		} catch (CmisObjectNotFoundException ex) {
 			LOGGER.error("Object type " + bulkInfoName + " not found. Il l'xml "
-					+ "del BulkInfo "+ bulkInfoName +" e' sbagliato e va corretto");
+					+ "del BulkInfo "+ bulkInfoName +" e' sbagliato e va corretto", ex);
 		}
 		return bulkObjectType;
 	}
@@ -328,7 +328,7 @@ public class BulkInfoCoolService {
 				properties.addAll(
 						getPropertyWithChoice(getObjectType(cmisImplementsName), bulkInfo));
 			} catch (CmisObjectNotFoundException _ex) {
-				LOGGER.warn("Type :" + cmisImplementsName + " not found!");
+				LOGGER.warn("Type :" + cmisImplementsName + " not found!", _ex);
 			}
 		}
 
