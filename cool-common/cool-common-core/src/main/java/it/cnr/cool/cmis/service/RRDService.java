@@ -74,7 +74,8 @@ public class RRDService implements InitializingBean {
 				continue;
 			String urlPath = resource.getURL().toString();
 
-			String folderName = urlPath.split("!")[1].split("/")[1];
+			String[] split = urlPath.split("!");
+			String folderName = split[split.length - 1].split("/")[1];
 			int beginIndex = urlPath.indexOf("/" + folderName + "/") + folderName.length() + 1;
 			String substring = urlPath.substring(beginIndex);
 
