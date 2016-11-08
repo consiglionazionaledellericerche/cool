@@ -39,7 +39,7 @@ if (!groupName) {
     }
   }
   if (json.extraProperty) {
-    for (key in json.extraProperty) {  
+    for (key in json.extraProperty) {
       group.properties[key] = json.extraProperty[key];
     }
     group.save();
