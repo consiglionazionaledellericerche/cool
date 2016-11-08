@@ -73,7 +73,12 @@ public class RRDService implements InitializingBean {
 			if (!resource.isReadable())
 				continue;
 			String urlPath = resource.getURL().toString();
-			String cmisPath = URIUtil.decode(urlPath.substring(urlPath.indexOf("/remote/") + 7));
+
+			String folderName = urlPath.split("!")[1].split("/")[1];
+			int beginIndex = urlPath.indexOf("/" + folderName + "/") + folderName.length() + 1;
+			String substring = urlPath.substring(beginIndex);
+
+			String cmisPath = URIUtil.decode(substring);
 			LOGGER.debug(urlPath);
 			try{
 				CmisObject doc = cmisSession.getObjectByPath(cmisPath);
