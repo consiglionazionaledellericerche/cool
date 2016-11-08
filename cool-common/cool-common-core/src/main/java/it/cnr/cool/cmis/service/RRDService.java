@@ -75,7 +75,7 @@ public class RRDService implements InitializingBean {
 			if (!resource.isReadable())
 				continue;
 			String urlPath = resource.getURL().toString();
-			String cmisPath = URIUtil.decode(urlPath.substring(urlPath.indexOf("remote/") + 6));
+			String cmisPath = URIUtil.decode(urlPath.substring(urlPath.indexOf("/remote/") + 7));
 			LOGGER.debug(urlPath);
 			try{
 				CmisObject doc = cmisSession.getObjectByPath(cmisPath);
@@ -92,6 +92,8 @@ public class RRDService implements InitializingBean {
 			}catch(CmisObjectNotFoundException _ex){
 				LOGGER.debug("object not found: {}", resource, _ex);
 				String fileName = cmisPath.substring(cmisPath.lastIndexOf("/") + 1);
+				if (fileName.length() == 0)
+					continue;
 				boolean createFolder = !fileName.equalsIgnoreCase("bulkInfoMapping.js");
 				CmisObject source = createPath(cmisSession, cmisPath.substring(0, cmisPath.lastIndexOf("/")), createFolder);
 				if (source == null)
@@ -129,7 +131,7 @@ public class RRDService implements InitializingBean {
 						properties.put("cm:modelActive", Boolean.TRUE);
 						doc.updateProperties(properties);
 					} catch (Exception ex) {
-						LOGGER.error("Cannot activate Model:" + fileName, ex);
+						LOGGER.debug("Cannot activate Model:" + fileName, ex);
 						documentsToBeActive.add(doc);
 					}
 				}

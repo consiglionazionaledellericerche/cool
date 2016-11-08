@@ -1,7 +1,9 @@
 package it.cnr.cool;
 
 import it.cnr.cool.cmis.service.CMISService;
+
 import org.apache.chemistry.opencmis.client.api.ObjectType;
+import org.apache.chemistry.opencmis.commons.exceptions.CmisObjectNotFoundException;
 import org.apache.commons.io.IOUtils;
 import org.dom4j.Document;
 import org.dom4j.DocumentException;
@@ -33,7 +35,12 @@ public class BulkInfoRepository {
     @Cacheable("bulkinfo-object-type")
     public ObjectType getObjectType(String bulkTypeName) {
         LOGGER.info("loading from CMIS server type: " + bulkTypeName);
-        return cmisService.createAdminSession().getTypeDefinition(bulkTypeName);
+        try {
+            return cmisService.createAdminSession().getTypeDefinition(bulkTypeName);        	
+        } catch (CmisObjectNotFoundException _ex) {
+        	 LOGGER.info("Type: {} not found!",bulkTypeName);
+        	return null;
+        }
     }
 
 

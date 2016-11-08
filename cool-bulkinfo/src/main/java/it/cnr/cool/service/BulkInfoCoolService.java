@@ -325,8 +325,8 @@ public class BulkInfoCoolService {
 
 		for (String cmisImplementsName : bulkInfo.getCmisImplementsName().keySet()) {
 			try {
-				properties.addAll(
-						getPropertyWithChoice(getObjectType(cmisImplementsName), bulkInfo));
+				Optional.ofNullable(getObjectType(cmisImplementsName)).map(objectType -> properties.addAll(
+						getPropertyWithChoice(objectType, bulkInfo)));
 			} catch (CmisObjectNotFoundException _ex) {
 				LOGGER.warn("Type :" + cmisImplementsName + " not found!", _ex);
 			}
