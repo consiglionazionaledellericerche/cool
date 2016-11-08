@@ -246,10 +246,10 @@ public class BulkInfoCoolService {
 		try {
 			ObjectType bulkObjectType = getObjectType(bulkTypeName);
 
-			LOGGER.debug("successfully retrieved type definition for type: "
-					+ bulkObjectType.getId());
-
 			if (bulkObjectType != null) {
+				LOGGER.debug("successfully retrieved type definition for type: "
+						+ bulkObjectType.getId());
+				
 				LOGGER.debug("Searching bulkInfo in Cmis : " + bulkTypeName);
 
 				String xml = "<bulkInfo></bulkInfo>";
