@@ -1,4 +1,4 @@
-/*global cnrutils, person, model, args, argsM, search*/
+/*global person, model, args, argsM, search*/
 
 var filters = argsM.filter,
 	i = 0;

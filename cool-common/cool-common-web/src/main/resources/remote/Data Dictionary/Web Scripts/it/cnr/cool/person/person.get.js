@@ -1,4 +1,4 @@
-/*global cnrutils, person, model, args, argsM, search, url, people, status, utils*/
+/*global person, model, args, argsM, search, url, people, status, utils*/
 // Get the user name of the person to get
 var userName = url.extension;
 

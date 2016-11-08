@@ -1,4 +1,4 @@
-/*global cnrutils, person, model, args, argsM, search, url, people, status, utils, json, logger*/
+/*global person, model, args, argsM, search, url, people, status, utils, json, logger*/
 // Get the person details and ensure they exist for update
 function main() {
   "use strict";

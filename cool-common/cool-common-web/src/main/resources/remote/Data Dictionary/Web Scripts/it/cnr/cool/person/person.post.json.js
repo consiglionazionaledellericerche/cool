@@ -1,4 +1,4 @@
-/*global cnrutils, person, model, args, argsM, search, url, people, status, utils, json, logger*/
+/*global person, model, args, argsM, search, url, people, status, utils, json, logger*/
 function main() {
   "use strict";
   if ((json.isNull("userName")) || (json.get("userName").length() === 0)) {

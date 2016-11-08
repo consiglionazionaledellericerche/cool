@@ -1,4 +1,4 @@
-/*global jsonUtils,requestbody,logger,status,groupAuthority,model,_,cnrutils,url,args,groups */
+/*global jsonUtils,requestbody,logger,status,groupAuthority,model,_,url,args,groups */
 /**
  * Get group
  */
