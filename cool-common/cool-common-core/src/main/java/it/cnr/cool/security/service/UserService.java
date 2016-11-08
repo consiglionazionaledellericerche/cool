@@ -19,5 +19,6 @@ public interface UserService {
 	InputStream findUser(String term, BindingSession cmisSession) throws CoolUserFactoryException;
 	CMISUser changeUserPassword(final CMISUser user, String newPassword) throws CoolUserFactoryException;
 	void disableAccount(String userName) throws CoolUserFactoryException;
+	void enableAccount(String userName) throws CoolUserFactoryException;
 	List<String> findMembers(String groupName, BindingSession cmisSession) throws CoolUserFactoryException;
 }

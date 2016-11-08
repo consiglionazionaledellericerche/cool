@@ -8,6 +8,15 @@ import it.cnr.cool.util.MimeTypes;
 import it.cnr.cool.util.StringUtil;
 import it.cnr.cool.util.UriUtils;
 import it.cnr.cool.util.format.GsonParser;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.io.StringReader;
+import java.util.ArrayList;
+import java.util.List;
+
 import org.apache.chemistry.opencmis.client.bindings.impl.CmisBindingsHelper;
 import org.apache.chemistry.opencmis.client.bindings.spi.BindingSession;
 import org.apache.chemistry.opencmis.client.bindings.spi.http.Output;
@@ -25,10 +34,6 @@ import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-
-import java.io.*;
-import java.util.ArrayList;
-import java.util.List;
 
 public class UserServiceImpl implements UserService{
 	private static final String SERVICE_CNR_PERSON_DISABLE_ACCOUNT = "service/cnr/person/disable-account",
@@ -232,15 +237,22 @@ public class UserServiceImpl implements UserService{
 
 		return user;
 	}
-
+	
+	@Override
+	public void enableAccount(String userName) throws CoolUserFactoryException {
+		manageAccount(userName, false);
+	}	
 	@Override
 	public void disableAccount(String userName) throws CoolUserFactoryException {
+		manageAccount(userName, true);
+	}
 
+	private void manageAccount(String userName, boolean disable) throws CoolUserFactoryException {
 		String link = cmisService.getBaseURL().concat(SERVICE_CNR_PERSON_DISABLE_ACCOUNT);
 		UrlBuilder url = new UrlBuilder(link);
 		BindingSession cmisSession = cmisService.getAdminSession();
 		final String respJson = "{\"userName\":\"" + userName
-				+ "\", \"disableUser\": true}";
+				+ "\", \"disableUser\": " + disable + "}";
 		Response resp = CmisBindingsHelper.getHttpInvoker(cmisSession)
 				.invokePOST(url, MimeTypes.JSON.mimetype(), new Output() {
 					@Override
