@@ -1,4 +1,5 @@
 /*global jsonUtils,requestbody,logger,status,groupAuthority,model */
+/*jslint forin:true */
 /**
  * Post children
  */
