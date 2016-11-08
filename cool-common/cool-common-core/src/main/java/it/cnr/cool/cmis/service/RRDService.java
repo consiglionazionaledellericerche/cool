@@ -23,10 +23,12 @@ import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 import org.springframework.mail.MailException;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.math.BigInteger;
 import java.net.InetAddress;
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * Remote Resource Deploy Service
@@ -50,12 +52,9 @@ public class RRDService implements InitializingBean {
 	@Autowired
 	private VersionService versionService;
 
+	private String rrdPath;
+
 	private String dictionaryTypeId;
-
-	public void setDictionaryTypeId(String dictionaryTypeId) {
-		this.dictionaryTypeId = dictionaryTypeId;
-	}
-
 
 	@Override
 	public void afterPropertiesSet() throws Exception {
@@ -65,8 +64,7 @@ public class RRDService implements InitializingBean {
 		} else {
 			LOGGER.info("production mode");
 		}
-		PathMatchingResourcePatternResolver resolver = new PathMatchingResourcePatternResolver();
-		Resource[] resources = resolver.getResources("classpath*:remote/**");
+		List<Resource> resources = getResources();
 		Session cmisSession = cmisService.createAdminSession();
 		Boolean webscriptCreated = Boolean.FALSE;
 		List<Document> documentsToBeActive = new ArrayList<Document>();
@@ -184,6 +182,30 @@ public class RRDService implements InitializingBean {
 
 	}
 
+
+	List<Resource> getResources() throws IOException {
+		PathMatchingResourcePatternResolver resolver = new PathMatchingResourcePatternResolver();
+
+		String[] paths = rrdPath.split(",");
+
+		return Arrays
+				.stream(paths)
+				.map(path -> "classpath*:" + path + "/**")
+				.peek(path -> LOGGER.info("looking for resources in {}", path))
+				.flatMap(locationPattern -> {
+					try {
+						Resource[] resources = resolver.getResources(locationPattern);
+						return Arrays.stream(resources);
+					} catch (IOException e) {
+						throw new RuntimeException("unable to add resource from " + locationPattern, e);
+					}
+				})
+				.peek(resource -> LOGGER.info("resource: {}", resource))
+				.collect(Collectors.toList());
+
+
+	}
+
 	private CmisObject createPath(Session cmisSession, String cmisPath, boolean createFolder) {
 		StringTokenizer tokens = new StringTokenizer(cmisPath, "/");
 		StringBuffer relativePath = new StringBuffer();
@@ -205,5 +227,13 @@ public class RRDService implements InitializingBean {
 			}
 		}
 		return cmisObject;
+	}
+
+	public void setRrdPath(String rrdPath) {
+		this.rrdPath = rrdPath;
+	}
+
+	public void setDictionaryTypeId(String dictionaryTypeId) {
+		this.dictionaryTypeId = dictionaryTypeId;
 	}
 }

@@ -9,6 +9,7 @@
 
 	<bean id="RRDService" class="it.cnr.cool.cmis.service.RRDService"  depends-on="mailService,application.version">
 		<property name="dictionaryTypeId" value="D:cm:dictionaryModel" />
+		<property name="rrdPath" value="${rrd.path}" />
 	</bean>
 
 
