@@ -58,16 +58,18 @@ public class BulkInfoCoolImpl extends BulkInfoImpl implements BulkInfoCool {
 							.concat("\"}"));
 			fieldProperty.addAttribute("visible", String.valueOf(Boolean.TRUE));
 			fieldProperty.addAttribute("generated", String.valueOf(Boolean.TRUE));
-			if (propertyDefinition.getDescription().startsWith("class:")) {
-				fieldProperty.addAttribute("class", propertyDefinition.getDescription().substring(6) + " input-xxlarge");				
+			boolean isDateTime = propertyDefinition.getPropertyType().equals(PropertyType.DATETIME);
+			if (propertyDefinition.getDescription().indexOf("class:") != -1) {
+				fieldProperty.addAttribute("class", propertyDefinition.getDescription().substring(propertyDefinition.getDescription().indexOf("class:") + 6) + 
+						(isDateTime ? " input-large" : " input-xxlarge"));
 			} else {
-				fieldProperty.addAttribute("class", "input-xxlarge");				
+				fieldProperty.addAttribute("class", isDateTime ? "input-large" : "input-xxlarge");				
 			}
 			if (propertyDefinition.getCardinality().equals(Cardinality.MULTI)) {
 				fieldProperty.addAttribute("multiple", "multiple");
 			}
 			if (propertyDefinition.getPropertyType().equals(PropertyType.BOOLEAN)) {
-				if (propertyDefinition.getDescription().equals("ui.radio")) {
+				if (propertyDefinition.getDescription().contains("ui.radio")) {
 					fieldProperty.addAttribute("inputType", "RADIOGROUP");
 					fieldProperty.addAttribute("widget", "ui.radio");
 					fieldProperty.addAttribute("class", "check");
@@ -87,7 +89,8 @@ public class BulkInfoCoolImpl extends BulkInfoImpl implements BulkInfoCool {
 					fieldProperty.addSubProperty("jsonlist", field);
 				} else {					
 					fieldProperty.addAttribute("inputType", "CHECKBOX");
-					fieldProperty.addAttribute("widget", "ui.checkbox");					
+					fieldProperty.addAttribute("widget", "ui.checkbox");
+					
 				}
 			} else {
 				fieldProperty.addAttribute("inputType", "TEXT");
@@ -95,8 +98,8 @@ public class BulkInfoCoolImpl extends BulkInfoImpl implements BulkInfoCool {
 			if (propertyDefinition.getLocalName().contains("stato_estero")) {
 				fieldProperty.addAttribute("widget", "ui.country");
 			}
-			if (propertyDefinition.getPropertyType().equals(PropertyType.DATETIME)) {
-				fieldProperty.addAttribute("widget", "ui.datepicker");
+			if (isDateTime) {
+				fieldProperty.addAttribute("widget", "ui.datepicker");				
 			}
 			if (propertyDefinition.getDefaultValue() != null && !propertyDefinition.getDefaultValue().isEmpty()) {
 				fieldProperty.addAttribute("default", String.valueOf(propertyDefinition.getDefaultValue().get(0)));

@@ -281,7 +281,7 @@ public class BulkInfoCoolService {
 					LOGGER.debug("added property (inherited=" + inherited
 							+ ") " + property.getId());
 				}
-
+				Collections.sort(properties, (PropertyDefinition<?> p1, PropertyDefinition<?> p2) -> p1.getDescription().compareTo(p2.getDescription()));
 			}
 		} catch (CmisObjectNotFoundException exp) { // log error, return null
 			LOGGER.error("CmisObjectNotFoundException with bulkInfo :" + bulkTypeName,
