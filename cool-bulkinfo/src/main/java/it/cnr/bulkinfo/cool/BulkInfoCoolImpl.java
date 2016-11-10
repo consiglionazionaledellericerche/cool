@@ -62,7 +62,7 @@ public class BulkInfoCoolImpl extends BulkInfoImpl implements BulkInfoCool {
 			if (propertyDefinition.getDescription().indexOf("class:") != -1) {
 				String classValue = propertyDefinition.getDescription().substring(propertyDefinition.getDescription().indexOf("class:") + 6);
 				if (!classValue.contains("input-"))
-					classValue.concat((isDateTime ? " input-large" : " input-xxlarge"));
+					classValue = classValue.concat((isDateTime ? " input-large" : " input-xxlarge"));
 				fieldProperty.addAttribute("class", classValue);
 			} else {
 				fieldProperty.addAttribute("class", isDateTime ? "input-large" : "input-xxlarge");				
