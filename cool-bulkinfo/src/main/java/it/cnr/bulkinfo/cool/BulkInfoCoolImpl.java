@@ -60,8 +60,10 @@ public class BulkInfoCoolImpl extends BulkInfoImpl implements BulkInfoCool {
 			fieldProperty.addAttribute("generated", String.valueOf(Boolean.TRUE));
 			boolean isDateTime = propertyDefinition.getPropertyType().equals(PropertyType.DATETIME);
 			if (propertyDefinition.getDescription().indexOf("class:") != -1) {
-				fieldProperty.addAttribute("class", propertyDefinition.getDescription().substring(propertyDefinition.getDescription().indexOf("class:") + 6) + 
-						(isDateTime ? " input-large" : " input-xxlarge"));
+				String classValue = propertyDefinition.getDescription().substring(propertyDefinition.getDescription().indexOf("class:") + 6);
+				if (!classValue.contains("input-"))
+					classValue.concat((isDateTime ? " input-large" : " input-xxlarge"));
+				fieldProperty.addAttribute("class", classValue);
 			} else {
 				fieldProperty.addAttribute("class", isDateTime ? "input-large" : "input-xxlarge");				
 			}
@@ -93,7 +95,14 @@ public class BulkInfoCoolImpl extends BulkInfoImpl implements BulkInfoCool {
 					
 				}
 			} else {
-				fieldProperty.addAttribute("inputType", "TEXT");
+				if (propertyDefinition.getDescription().indexOf("inputType:") != -1) {
+					String inputType = propertyDefinition.getDescription().substring(propertyDefinition.getDescription().indexOf("inputType:") + 10);
+					if (inputType.indexOf("class:") != -1)
+						inputType = inputType.substring(0, inputType.indexOf("class:") -1);
+					fieldProperty.addAttribute("inputType", inputType);
+				} else {
+					fieldProperty.addAttribute("inputType", "TEXT");					
+				}
 			}
 			if (propertyDefinition.getLocalName().contains("stato_estero")) {
 				fieldProperty.addAttribute("widget", "ui.country");
