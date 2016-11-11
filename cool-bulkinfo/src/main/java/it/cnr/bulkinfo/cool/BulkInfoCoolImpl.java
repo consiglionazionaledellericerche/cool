@@ -49,13 +49,12 @@ public class BulkInfoCoolImpl extends BulkInfoImpl implements BulkInfoCool {
 			FieldProperty fieldProperty = new FieldProperty();
 			fieldProperty.addAttribute("name", propertyDefinition.getLocalName());
 			fieldProperty.addAttribute("property", propertyDefinition.getId());
-			fieldProperty.addAttribute(
-					"jsonlabel",
-					"{ \"key\" : \"label."
-							.concat(propertyDefinition.getId().replaceAll(":",
-									".")).concat("\", \"default\":\"")
-							.concat(propertyDefinition.getDisplayName())
-							.concat("\"}"));
+
+			FieldProperty fieldPropertyLabel = new FieldProperty();
+			fieldPropertyLabel.addAttribute("key", "label.".concat(propertyDefinition.getId().replaceAll(":",".")));
+			fieldPropertyLabel.addAttribute("default", propertyDefinition.getDisplayName());
+			fieldProperty.addSubProperty("jsonlabel", fieldPropertyLabel);
+			
 			fieldProperty.addAttribute("visible", String.valueOf(Boolean.TRUE));
 			fieldProperty.addAttribute("generated", String.valueOf(Boolean.TRUE));
 			boolean isDateTime = propertyDefinition.getPropertyType().equals(PropertyType.DATETIME);
