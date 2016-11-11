@@ -10,7 +10,7 @@ import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 /**
  * Created by francesco on 08/11/16.
@@ -36,7 +36,7 @@ public class RRDServiceTest {
                 .peek(LOGGER::info)
                 .count();
 
-        assertEquals(3, count);
+        assertTrue(count >= 3);
 
     }
 
