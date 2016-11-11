@@ -119,7 +119,7 @@
 	</bean>
 
 	<bean id="i18nService" class="it.cnr.cool.service.I18nService"/>
-	<bean class="it.cnr.cool.service.I18nServiceLocation">
+	<bean class="it.cnr.cool.service.I18nServiceLocation" name="coolI18nServiceLocation">
 		<property name="location" value="surf.webscripts.messages.cool-common"/>
 	</bean>
 
