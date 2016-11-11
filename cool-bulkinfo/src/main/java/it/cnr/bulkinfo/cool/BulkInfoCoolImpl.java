@@ -51,6 +51,7 @@ public class BulkInfoCoolImpl extends BulkInfoImpl implements BulkInfoCool {
 			fieldProperty.addAttribute("property", propertyDefinition.getId());
 
 			FieldProperty fieldPropertyLabel = new FieldProperty();
+			fieldPropertyLabel.addAttribute("name", "jsonlabel");
 			fieldPropertyLabel.addAttribute("key", "label.".concat(propertyDefinition.getId().replaceAll(":",".")));
 			fieldPropertyLabel.addAttribute("default", propertyDefinition.getDisplayName());
 			fieldProperty.addSubProperty("jsonlabel", fieldPropertyLabel);
