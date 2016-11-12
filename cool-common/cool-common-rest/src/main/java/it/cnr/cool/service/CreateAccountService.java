@@ -9,9 +9,11 @@ import it.cnr.cool.rest.util.Util;
 import it.cnr.cool.security.service.UserService;
 import it.cnr.cool.security.service.impl.alfresco.CMISUser;
 import it.cnr.cool.util.CalendarUtil;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
 
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
@@ -35,6 +37,8 @@ public class CreateAccountService {
 	@Autowired
 	private I18nService i18nService;
 
+	@Autowired
+	private ApplicationContext applicationContext;
 
 	public Map<String, Object> update(Map<String,List<String>> form, Locale locale) {
 		return manage(form, locale, false, null);
@@ -166,11 +170,14 @@ public class CreateAccountService {
 
 	private void sendConfirmMail(Map<String, Object> model, Locale locale) {
 		CMISUser user = (CMISUser) model.get("account");
-
+		Map<String, Object> modelMail = new HashMap<String, Object>();
+		modelMail.putAll(model);
+		modelMail.put("message", applicationContext.getBean("messageMethod", locale));
+		
 		String templatePath = i18nService.getTemplate(FTL_PATH, locale);
 
 		try {
-			String content = Util.processTemplate(model, templatePath);
+			String content = Util.processTemplate(modelMail, templatePath);
 			LOGGER.debug(content);
 			String subject = i18nService.getLabel("subject-confirm-account", locale);
 			mailService.send(user.getEmail(), subject, content);
