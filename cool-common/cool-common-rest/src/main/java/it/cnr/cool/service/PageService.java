@@ -7,18 +7,6 @@ import it.cnr.cool.dto.CoolPage.Authentication;
 import it.cnr.cool.security.service.impl.alfresco.CMISUser;
 import it.cnr.cool.web.PermissionService;
 import it.cnr.mock.CnrRegion;
-
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
-
-import javax.servlet.http.HttpServletRequest;
-
 import org.apache.commons.io.IOUtils;
 import org.dom4j.Document;
 import org.dom4j.DocumentException;
@@ -28,6 +16,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
+
+import javax.servlet.http.HttpServletRequest;
+import java.io.IOException;
+import java.util.*;
 
 public class PageService {
 
@@ -62,6 +54,8 @@ public class PageService {
 
 	@Autowired
 	private ApplicationContext applicationContext;
+
+	private String overrideLang;
 
 	public Map<String, CoolPage> loadPages() {
 		return pages;
@@ -261,4 +255,11 @@ public class PageService {
 		return context;
 	}
 
+	public String getOverrideLang() {
+		return overrideLang;
+	}
+
+	public void setOverrideLang(String overrideLang) {
+		this.overrideLang = overrideLang;
+	}
 }
