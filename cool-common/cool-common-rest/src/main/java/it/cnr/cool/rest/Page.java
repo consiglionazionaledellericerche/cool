@@ -12,7 +12,6 @@ import it.cnr.cool.web.PermissionService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import javax.servlet.http.Cookie;
@@ -54,14 +53,12 @@ public class Page {
 	@Autowired
 	private CMISService cmisService;
 
-	@Value("${override.lang:#{null}}")
-	private String overrideLang;
-
 
 	@GET
 	@Path("{id}")
 	public Response html(@Context HttpServletRequest req, @Context HttpServletResponse res,
 			@PathParam("id") String id, @CookieParam("__lang") String cookieLang, @QueryParam("lang") String reqLang) {
+		String overrideLang = pageService.getOverrideLang();
 		String language = Optional.ofNullable(overrideLang).orElse(reqLang);
 		return processRequest(req, res, id, null, cookieLang, language);
 	}
