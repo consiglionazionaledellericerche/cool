@@ -2,6 +2,8 @@ package it.cnr.bulkinfo.cool;
 
 import it.cnr.bulkinfo.BulkInfoImpl;
 
+import java.io.Serializable;
+
 import org.apache.chemistry.opencmis.client.api.CmisObject;
 import org.apache.chemistry.opencmis.client.api.ObjectType;
 import org.apache.chemistry.opencmis.client.api.Session;
@@ -17,9 +19,9 @@ import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class BulkInfoCoolImpl extends BulkInfoImpl implements BulkInfoCool {
+public class BulkInfoCoolImpl extends BulkInfoImpl implements BulkInfoCool, Serializable {
 
-
+	private static final long serialVersionUID = 1L;
 	public static final String DEFAULT_VERSION = "1.5";
 	public static final String VERSION_2_0 = "2.0";
 

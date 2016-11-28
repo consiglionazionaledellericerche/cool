@@ -1,6 +1,12 @@
 package it.cnr.cool;
 
+import it.cnr.bulkinfo.cool.BulkInfoCool;
+import it.cnr.bulkinfo.exception.BulkInfoNotFoundException;
 import it.cnr.cool.cmis.service.CMISService;
+import it.cnr.cool.service.BulkInfoCoolService;
+
+import java.io.IOException;
+import java.io.InputStream;
 
 import org.apache.chemistry.opencmis.client.api.ObjectType;
 import org.apache.chemistry.opencmis.commons.exceptions.CmisObjectNotFoundException;
@@ -13,9 +19,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Repository;
-
-import java.io.IOException;
-import java.io.InputStream;
 
 /**
  * Created by francesco on 13/02/15.
@@ -75,6 +78,23 @@ public class BulkInfoRepository {
         return doc;
 
     }
-
-
+    
+	/**
+	 * Questo metodo publico e' solo un livello di indirezione per costruire la
+	 * cache guava. La magia succede nel build()
+	 *
+	 * @param bulkInfoName
+	 * @return
+	 */
+    @Cacheable(value="bulkinfo-name", key="#bulkInfoName")
+	public BulkInfoCool find(String bulkInfoName, BulkInfoCoolService bulkInfoCoolService ) {
+        BulkInfoCool bi = null;
+        LOGGER.debug("building bulkinfo " + bulkInfoName);
+        try {
+            bi = bulkInfoCoolService.build(bulkInfoName);
+        } catch (BulkInfoNotFoundException e) {
+            LOGGER.error("Error finding Bulkinfo " + bulkInfoName, e);
+        }
+        return bi;
+	}	
 }

@@ -1,6 +1,5 @@
 package it.cnr.cool.service;
 
-import com.google.gson.JsonObject;
 import it.cnr.bulkinfo.BulkInfoImpl.FieldProperty;
 import it.cnr.bulkinfo.cool.BulkInfoCool;
 import it.cnr.bulkinfo.cool.BulkInfoCoolImpl;
@@ -11,6 +10,14 @@ import it.cnr.bulkinfo.exception.BulkinfoNameException;
 import it.cnr.cool.BulkInfoRepository;
 import it.cnr.cool.cmis.service.ACLService;
 import it.cnr.cool.cmis.service.VersionService;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 
 import org.apache.chemistry.opencmis.client.api.ObjectType;
 import org.apache.chemistry.opencmis.client.api.Session;
@@ -27,7 +34,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 
-import java.util.*;
+import com.google.gson.JsonObject;
 
 public class BulkInfoCoolService {
 
@@ -109,23 +116,8 @@ public class BulkInfoCoolService {
 	 * @param bulkInfoName
 	 * @return
 	 */
-    //TODO: cacharlo a livello HTTP!!!
 	public BulkInfoCool find(String bulkInfoName) {
-
-        BulkInfoCool bi = null;
-
-        LOGGER.debug("building bulkinfo " + bulkInfoName);
-
-        try {
-            bi = build(bulkInfoName);
-        } catch (BulkInfoNotFoundException e) {
-            LOGGER.error("Error finding Bulkinfo " + bulkInfoName, e);
-        }
-
-        return bi;
-
-
-
+		return bulkInfoRepository.find(bulkInfoName, this);
 	}
 
 	/**
@@ -143,7 +135,7 @@ public class BulkInfoCoolService {
 	 * @return BulkInfoNew or null
 	 * @throws BulkInfoNotFoundException
 	 */
-	private BulkInfoCool build(String bulkInfoName) throws BulkInfoNotFoundException {
+	public BulkInfoCool build(String bulkInfoName) throws BulkInfoNotFoundException {
 		LOGGER.debug("Building BulkInfo " + bulkInfoName + " for cache");
 
 		List<PropertyDefinition<?>> properties = new ArrayList<PropertyDefinition<?>>();

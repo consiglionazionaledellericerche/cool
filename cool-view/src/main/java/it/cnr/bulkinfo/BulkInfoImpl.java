@@ -795,7 +795,9 @@ public class BulkInfoImpl implements BulkInfo {
 		return override;
 	}
 
-	public class FieldProperty {
+	public class FieldProperty implements Serializable{
+
+		private static final long serialVersionUID = 1L;
 		private final Map<String, String> attributes;
 		private BulkInfo bulkInfo;
 		private Map<String, FieldProperty> subProperties;
