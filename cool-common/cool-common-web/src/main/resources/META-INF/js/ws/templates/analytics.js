@@ -29,7 +29,6 @@ require(['json!common', 'modernizr'], function (common, Modernizr) {
       s = document.getElementsByTagName('script')[0];
       s.parentNode.insertBefore(ga, s);
     }());
-    
   }
 
 });
