@@ -38,6 +38,9 @@
 	  "isGuest": ${context.user.guest?string("true", "false")}
 	},
 	"now": "${cmisDateFormat.format(.now)}",
+	<#if ga??>
+          "ga": "${ga}",
+	</#if>
 	<#if pageId??>
 		"pageId": "${pageId}",
 	</#if>	
