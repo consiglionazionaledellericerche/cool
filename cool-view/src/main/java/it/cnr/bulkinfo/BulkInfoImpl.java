@@ -33,7 +33,7 @@ public class BulkInfoImpl implements BulkInfo {
 	private Map<String, FieldPropertySet> printForms;
 
 	private Map<String, FieldProperty> fieldProperties;
-	private Map<String, Serializable> fieldPropertiesByProperty;
+	private Map<String, Object> fieldPropertiesByProperty;
 
 	private Map<String, Boolean> cmisImplementsNameJoin;
 
