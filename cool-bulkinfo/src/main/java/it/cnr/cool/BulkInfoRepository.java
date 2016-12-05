@@ -4,10 +4,6 @@ import it.cnr.bulkinfo.cool.BulkInfoCool;
 import it.cnr.bulkinfo.exception.BulkInfoNotFoundException;
 import it.cnr.cool.cmis.service.CMISService;
 import it.cnr.cool.service.BulkInfoCoolService;
-
-import java.io.IOException;
-import java.io.InputStream;
-
 import org.apache.chemistry.opencmis.client.api.ObjectType;
 import org.apache.chemistry.opencmis.commons.exceptions.CmisObjectNotFoundException;
 import org.apache.commons.io.IOUtils;
@@ -19,6 +15,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Repository;
+
+import java.io.IOException;
+import java.io.InputStream;
 
 /**
  * Created by francesco on 13/02/15.
@@ -41,7 +40,7 @@ public class BulkInfoRepository {
         try {
             return cmisService.createAdminSession().getTypeDefinition(bulkTypeName);        	
         } catch (CmisObjectNotFoundException _ex) {
-        	 LOGGER.info("Type: {} not found!",bulkTypeName);
+        	 LOGGER.info("Type: {} not found!", bulkTypeName, _ex);
         	return null;
         }
     }
