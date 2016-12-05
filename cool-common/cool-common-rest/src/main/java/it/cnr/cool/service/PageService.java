@@ -7,6 +7,18 @@ import it.cnr.cool.dto.CoolPage.Authentication;
 import it.cnr.cool.security.service.impl.alfresco.CMISUser;
 import it.cnr.cool.web.PermissionService;
 import it.cnr.mock.CnrRegion;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
+
 import org.apache.commons.io.IOUtils;
 import org.dom4j.Document;
 import org.dom4j.DocumentException;
@@ -14,14 +26,13 @@ import org.dom4j.DocumentHelper;
 import org.dom4j.tree.DefaultElement;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
+import org.springframework.stereotype.Service;
 
-import javax.servlet.http.HttpServletRequest;
-import java.io.IOException;
-import java.util.*;
-
-public class PageService {
+@Service
+public class PageService implements InitializingBean{
 
 	private static final String PATH = "path";
 
@@ -61,7 +72,6 @@ public class PageService {
 		return pages;
 	}
 
-	@SuppressWarnings("unused")
 	/**
 	 * 
 	 * Initialization of a collection of CoolPages
@@ -178,7 +188,7 @@ public class PageService {
 
 		Map<String, Object> args = new HashMap<String, Object>();
 
-		Map paramz = req.getParameterMap();
+		Map<String, String[]> paramz = req.getParameterMap();
 		for (Object key : paramz.keySet()) {
 			String[] valuez = (String[]) paramz.get(key);
 			if (valuez.length > 0) {
@@ -261,5 +271,10 @@ public class PageService {
 
 	public void setOverrideLang(String overrideLang) {
 		this.overrideLang = overrideLang;
+	}
+
+	@Override
+	public void afterPropertiesSet() throws Exception {
+		init();
 	}
 }
