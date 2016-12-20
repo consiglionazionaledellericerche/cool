@@ -3,6 +3,9 @@ package it.cnr.bulkinfo.cool;
 import it.cnr.bulkinfo.BulkInfoImpl;
 
 import java.io.Serializable;
+import java.util.Collection;
+import java.util.Optional;
+import java.util.stream.Stream;
 
 import org.apache.chemistry.opencmis.client.api.CmisObject;
 import org.apache.chemistry.opencmis.client.api.ObjectType;
@@ -21,6 +24,9 @@ import org.slf4j.LoggerFactory;
 
 public class BulkInfoCoolImpl extends BulkInfoImpl implements BulkInfoCool, Serializable {
 
+	private static final String CLASS = "class";
+	private static final String REQUIRED_WIDGET = "requiredWidget";
+	private static final String JSONVALIDATOR = "jsonvalidator";
 	private static final long serialVersionUID = 1L;
 	public static final String DEFAULT_VERSION = "1.5";
 	public static final String VERSION_2_0 = "2.0";
@@ -65,9 +71,9 @@ public class BulkInfoCoolImpl extends BulkInfoImpl implements BulkInfoCool, Seri
 				String classValue = propertyDefinition.getDescription().substring(propertyDefinition.getDescription().indexOf("class:") + 6);
 				if (!classValue.contains("input-"))
 					classValue = classValue.concat((isDateTime ? " input-large" : " input-xxlarge"));
-				fieldProperty.addAttribute("class", classValue);
+				fieldProperty.addAttribute(CLASS, classValue);
 			} else {
-				fieldProperty.addAttribute("class", isDateTime ? "input-large" : "input-xxlarge");				
+				fieldProperty.addAttribute(CLASS, isDateTime ? "input-large" : "input-xxlarge");				
 			}
 			if (propertyDefinition.getCardinality().equals(Cardinality.MULTI)) {
 				fieldProperty.addAttribute("multiple", "multiple");
@@ -76,7 +82,7 @@ public class BulkInfoCoolImpl extends BulkInfoImpl implements BulkInfoCool, Seri
 				if (propertyDefinition.getDescription().contains("ui.radio")) {
 					fieldProperty.addAttribute("inputType", "RADIOGROUP");
 					fieldProperty.addAttribute("widget", "ui.radio");
-					fieldProperty.addAttribute("class", "check");
+					fieldProperty.addAttribute(CLASS, "check");
 					
 					FieldProperty field = new FieldProperty();
 					field.setElementName("jsonlist");
@@ -121,13 +127,13 @@ public class BulkInfoCoolImpl extends BulkInfoImpl implements BulkInfoCool, Seri
 			}
 			if (propertyDefinition.isRequired()) {
 				if (fieldProperty.getAttribute("widget") != null)
-					jsonvalidator.put("requiredWidget", true);
+					jsonvalidator.put(REQUIRED_WIDGET, true);
 				else
 					jsonvalidator.put("required", true);
 			}
 						
 			if (jsonvalidator.length() > 0 ) {
-				fieldProperty.addAttribute("jsonvalidator", jsonvalidator.toString());				
+				fieldProperty.addAttribute(JSONVALIDATOR, jsonvalidator.toString());				
 			}
 			fieldProperty.setBulkInfo(this);
 			if (!propertyDefinition.getUpdatability().equals(Updatability.READONLY)) {
@@ -150,8 +156,21 @@ public class BulkInfoCoolImpl extends BulkInfoImpl implements BulkInfoCool, Seri
 						}
 						fieldProperty.addAttribute("jsonlist", json.toString());
 						fieldProperty.addAttribute("widget", "ui.select");
+						putClassValue(propertyDefinition, fieldProperty);
 						if (propertyDefinition.isRequired()) {
-							fieldProperty.addAttribute("jsonvalidator", "{\"requiredWidget\": true}");
+							FieldProperty fieldPropertyValidator = new FieldProperty();
+							fieldPropertyValidator.setElementName(JSONVALIDATOR);
+							fieldPropertyValidator.addAttribute(REQUIRED_WIDGET, Boolean.TRUE.toString());
+							fieldProperty.getSubProperties().remove(JSONVALIDATOR);
+							fieldProperty.addSubProperty(JSONVALIDATOR, fieldPropertyValidator);
+
+							Optional<Collection<FieldProperty>> ofNullable = Optional.ofNullable(fieldProperty.getBulkInfo().getForm(fieldProperty.getBulkInfo().getCmisTypeName()));
+							Optional<Stream<FieldProperty>> map2 = ofNullable.map(map -> map.stream().filter(field -> field.getName().equalsIgnoreCase(fieldProperty.getName())));
+							map2.ifPresent(x -> x.forEach(a -> {
+								a.getSubProperties().remove(JSONVALIDATOR);
+								a.addSubProperty(JSONVALIDATOR, fieldPropertyValidator);
+								putClassValue(propertyDefinition, a);
+							}));
 						}
 					} catch (JSONException e) {
 						LOGGER.error(e.getMessage(), e);
@@ -165,7 +184,16 @@ public class BulkInfoCoolImpl extends BulkInfoImpl implements BulkInfoCool, Seri
 			}
 		}
 	}
-
+	
+	private final void putClassValue(PropertyDefinition<?> propertyDefinition, FieldProperty fieldProperty) {
+		String classValue = null;
+		if (propertyDefinition.getDescription().indexOf("class:") != -1) {							
+			classValue = propertyDefinition.getDescription().substring(propertyDefinition.getDescription().indexOf("class:") + 6);							
+			classValue = classValue.substring(0, Optional.of(classValue.indexOf(" ")).filter(x -> x != -1).orElse(classValue.length()));
+			fieldProperty.addAttribute(CLASS, Optional.ofNullable(fieldProperty.getAttribute(CLASS)).orElse("").concat(" ").concat(classValue));
+		}
+	}
+	
 	@Override
 	public PropertyDefinition<?> getPropertyDefinition(Session session,
 			CmisObject cmisObject, FieldProperty fieldProperty) {
