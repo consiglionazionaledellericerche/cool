@@ -115,6 +115,9 @@ public class BulkInfoCoolImpl extends BulkInfoImpl implements BulkInfoCool, Seri
 			if (propertyDefinition.getLocalName().contains("stato_estero")) {
 				fieldProperty.addAttribute("widget", "ui.country");
 			}
+			if (propertyDefinition.getLocalName().contains("comune")) {
+				fieldProperty.addAttribute("widget", "ui.city");
+			}
 			if (isDateTime) {
 				fieldProperty.addAttribute("widget", "ui.datepicker");				
 			}
