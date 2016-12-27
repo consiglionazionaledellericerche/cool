@@ -60,7 +60,7 @@ define(['jquery', 'bootstrap'], function ($) {
       });
     },
     confirm: function (text, callback) {
-      modal(null, '<i class="icon-question-sign icon-4x"></i> ' + text, callback);
+      modal(null, '<i class="icon-question-sign icon-4x text-info"></i> ' + text, callback);
     },
     alert: alert,
     success: function (text, callback) {
