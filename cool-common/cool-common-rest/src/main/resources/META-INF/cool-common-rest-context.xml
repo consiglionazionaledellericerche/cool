@@ -34,7 +34,7 @@
     
     <bean id="multipartResolverMax"
           class="it.cnr.cool.web.multipart.commons.CustomMultipartResolver">
-        <property name="maxUploadSize" value="150360000"/>
+        <property name="maxUploadSize" value="262144000"/>
         <property name="characterEncoding" value="UTF-8"/>
     </bean>
     
