@@ -229,7 +229,7 @@ define(['jquery', 'json!common', 'cnr/cnr', 'cnr/cnr.ui', 'cnr/cnr.node', 'cnr/c
     criteria.list(versioni);
   }
   // returns a new "actions button"
-  function actionButton(obj, customPermission, customButtons, customIcons, refreshFn) {
+  function actionButton(obj, customPermission, customButtons, customIcons, refreshFn, nodropdown) {
     var name = obj.name || "",
       nodeRef = obj.nodeRef ? obj.nodeRef.split(';')[0] : obj.nodeRef,
       baseTypeId = obj.baseTypeId || 'cmis:document',
@@ -396,7 +396,11 @@ define(['jquery', 'json!common', 'cnr/cnr', 'cnr/cnr.ui', 'cnr/cnr.node', 'cnr/c
     addActions(customButtons);
 
     buttons = populateDropdown(dropdown, buttons, icons);
-
+    if (nodropdown) {
+      dropdown.css('display', 'block').css('position', 'static');
+      dropdown.addClass('pull-right');
+      return dropdown;
+    }
     splitButton = $('<div class="btn-group btn-prevent-fade"></div>')
       .addClass(myClass)
       .append((buttons[choice] || buttons[defaultChoice] || buttons[Object.keys(buttons)[0]]).clone(true).addClass("btn btn-mini").addClass(warningClass))
