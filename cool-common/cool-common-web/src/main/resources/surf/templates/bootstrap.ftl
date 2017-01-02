@@ -1,8 +1,8 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="it">
   <head>
     <meta charset="utf-8">
-
+    <meta name="google" content="notranslate" />
   <title>
     ${message("main.title")}
     <#if message("page."+page.id)??>
