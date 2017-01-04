@@ -4,6 +4,7 @@ import it.cnr.cool.cmis.service.impl.ObjectTypeCacheImpl;
 import it.cnr.cool.dto.Credentials;
 import it.cnr.cool.security.CMISAuthenticatorFactory;
 import it.cnr.cool.security.service.impl.alfresco.CMISUser;
+
 import org.apache.chemistry.opencmis.client.api.OperationContext;
 import org.apache.chemistry.opencmis.client.api.Session;
 import org.apache.chemistry.opencmis.client.api.SessionFactory;
@@ -23,9 +24,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.xml.bind.DatatypeConverter;
+
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Optional;
 
 public class CMISService implements InitializingBean, CMISSessionManager {
 
@@ -291,7 +294,7 @@ public class CMISService implements InitializingBean, CMISSessionManager {
                 for (Cookie cookie : cookies) {
                     if (cookie.getName().equals(COOKIE_TICKET_NAME)) {
                         LOGGER.info("using ticket given by cookie");
-                        ticket = cookie.getValue();
+                        ticket = Optional.of(cookie.getValue()).filter(x -> x.length() > 0).orElse(null);
                     }
                 }
             }
