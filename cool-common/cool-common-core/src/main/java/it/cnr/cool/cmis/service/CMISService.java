@@ -203,10 +203,10 @@ public class CMISService implements InitializingBean, CMISSessionManager {
 
         if (ticket == null) {
             bindingSession = createBindingSession();
-            LOGGER.info("empty ticket, returning guest binding session");
+            LOGGER.debug("empty ticket, returning guest binding session");
         } else {
             bindingSession = cmisAuthRepository.getBindingSession(ticket);
-            LOGGER.info("retrieved binding session: " + bindingSession);
+            LOGGER.debug("retrieved binding session: " + bindingSession);
         }
 
 
@@ -220,10 +220,10 @@ public class CMISService implements InitializingBean, CMISSessionManager {
         String ticket = extractTicketFromRequest(req);
 
         if (ticket == null) {
-            LOGGER.info("cmis session nulla, returning guest session");
+            LOGGER.debug("cmis session nulla, returning guest session");
             return createGuestSession();
         } else {
-            LOGGER.info("sessione: " + ticket);
+            LOGGER.debug("sessione: " + ticket);
 
             Session session = cmisAuthRepository.getSession(ticket);
             return session;
@@ -248,7 +248,7 @@ public class CMISService implements InitializingBean, CMISSessionManager {
 
 
         if (user == null) {
-            LOGGER.info("user is null, assuming a guest");
+            LOGGER.debug("user is null, assuming a guest");
             user = new CMISUser("guest");
 
             Map<String, Boolean> capabilities = new HashMap<String, Boolean>();
@@ -256,7 +256,7 @@ public class CMISService implements InitializingBean, CMISSessionManager {
             user.setCapabilities(capabilities);
 
         } else {
-            LOGGER.info("retrieved user " + user.getId());
+            LOGGER.info("retrieved user: {} with ticket: {} ", user.getId(), ticket);
         }
         return user;
     }
@@ -293,8 +293,8 @@ public class CMISService implements InitializingBean, CMISSessionManager {
             if (cookies != null && cookies.length > 0) {
                 for (Cookie cookie : cookies) {
                     if (cookie.getName().equals(COOKIE_TICKET_NAME)) {
-                        LOGGER.info("using ticket given by cookie");
                         ticket = Optional.of(cookie.getValue()).filter(x -> x.length() > 0).orElse(null);
+                        LOGGER.info("using ticket {} given by cookie", ticket);
                     }
                 }
             }
