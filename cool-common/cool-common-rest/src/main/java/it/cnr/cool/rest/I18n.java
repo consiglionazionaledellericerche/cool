@@ -41,13 +41,13 @@ public class I18n {
 			@QueryParam("uri") String uri,
 			@CookieParam("__lang") String __lang) {
 
-		LOGGER.info(method + " " + uri);
+		LOGGER.debug(method + " " + uri);
 
 		Locale locale = I18nService.getLocale(request, __lang);
 
 		Properties labels = i18nService.getLabels(locale, uri);
 		labels.put("locale", locale.getLanguage());
-		LOGGER.info("loaded " + labels.keySet().size() + " "
+		LOGGER.debug("loaded " + labels.keySet().size() + " "
 				+ locale.getLanguage() + " labels " + " uri " + uri);
 
 		ResponseBuilder rb = Response.ok(labels);

@@ -256,7 +256,7 @@ public class CMISService implements InitializingBean, CMISSessionManager {
             user.setCapabilities(capabilities);
 
         } else {
-            LOGGER.info("retrieved user: {} with ticket: {} ", user.getId(), ticket);
+            LOGGER.info("User: {} with ticket: {} IP: {} Path: {}", user.getId(), ticket, request.getRemoteAddr(), request.getPathInfo());
         }
         return user;
     }
@@ -294,7 +294,7 @@ public class CMISService implements InitializingBean, CMISSessionManager {
                 for (Cookie cookie : cookies) {
                     if (cookie.getName().equals(COOKIE_TICKET_NAME)) {
                         ticket = Optional.of(cookie.getValue()).filter(x -> x.length() > 0).orElse(null);
-                        LOGGER.info("using ticket {} given by cookie", ticket);
+                        LOGGER.debug("using ticket {} given by cookie", ticket);
                     }
                 }
             }
