@@ -1,6 +1,5 @@
 package it.cnr.cool.service;
 
-import it.cnr.cool.cmis.service.CMISService;
 import it.cnr.cool.cmis.service.VersionService;
 import it.cnr.cool.dto.CoolPage;
 import it.cnr.cool.dto.CoolPage.Authentication;
@@ -59,9 +58,6 @@ public class PageService implements InitializingBean{
 
 	@Autowired
 	private VersionService versionService;
-
-	@Autowired
-	private CMISService cmisService;
 
 	@Autowired
 	private ApplicationContext applicationContext;
