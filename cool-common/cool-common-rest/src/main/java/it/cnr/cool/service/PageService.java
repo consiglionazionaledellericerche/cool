@@ -148,7 +148,7 @@ public class PageService implements InitializingBean{
 	 * @return
 	 */
 	public Map<String, Object> getModel(HttpServletRequest req, String pageId,
-			String urlContext, final Locale locale) {
+			String urlContext, final Locale locale, CMISUser user) {
 		Map<String, Object> model = new HashMap<String, Object>();
 		model.put("message", applicationContext.getBean("messageMethod", locale, pageId));
 
@@ -160,7 +160,6 @@ public class PageService implements InitializingBean{
 		url.put("context", urlContext);
 		model.put("url", url);
 
-		CMISUser user = cmisService.getCMISUserFromSession(req);
 		Map<String, Object> context = getContext(user);
 
 		context.put("properties", new HashMap<String, Object>());

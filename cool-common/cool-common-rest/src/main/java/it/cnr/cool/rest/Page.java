@@ -9,27 +9,35 @@ import it.cnr.cool.service.I18nService;
 import it.cnr.cool.service.PageService;
 import it.cnr.cool.util.GroupsUtils;
 import it.cnr.cool.web.PermissionService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 
-import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.ws.rs.*;
-import javax.ws.rs.core.Context;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.MultivaluedMap;
-import javax.ws.rs.core.Response;
-import javax.ws.rs.core.Response.ResponseBuilder;
-import javax.ws.rs.core.Response.Status;
 import java.io.IOException;
 import java.net.URI;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.ws.rs.CookieParam;
+import javax.ws.rs.GET;
+import javax.ws.rs.POST;
+import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
+import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
+import javax.ws.rs.core.Context;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.MultivaluedMap;
+import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.ResponseBuilder;
+import javax.ws.rs.core.Response.Status;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 @Path("page")
 @Component
@@ -87,15 +95,15 @@ public class Page {
 		ResponseBuilder rb;
 		String lang = i18nCookie(res, cookieLang, reqLang);
 		CoolPage page = pageService.loadPages().get(id);
-
+		CMISUser user = cmisService.getCMISUserFromSession(req);
 		if (page == null) {
 			rb = Response
 					.status(Status.NOT_FOUND)
 					.entity("page not found: " + id);
-		} else if (!isAuthorized(page, id, cmisService.getCMISUserFromSession(req), formParams != null)) {
+		} else if (!isAuthorized(page, id, user, formParams != null)) {
 			String baseURI = req.getContextPath() + "/"
 					+ LOGIN_URL + "?redirect=" + id;
-			Map paramz = req.getParameterMap();
+			Map<?, ?> paramz = req.getParameterMap();
 			for (Object key : paramz.keySet()) {
 				String [] valuez =  (String[]) paramz.get(key);
 				if (valuez.length > 0) {
@@ -107,7 +115,7 @@ public class Page {
 		} else {
 
 			Map<String, Object> model = pageService.getModel(req, id,
-					req.getContextPath(), I18nService.getLocale(req, lang));
+					req.getContextPath(), I18nService.getLocale(req, lang), user);
 
 			try {
 

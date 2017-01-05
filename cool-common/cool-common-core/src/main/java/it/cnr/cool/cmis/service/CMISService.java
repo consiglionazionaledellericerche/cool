@@ -256,7 +256,7 @@ public class CMISService implements InitializingBean, CMISSessionManager {
             user.setCapabilities(capabilities);
 
         } else {
-            LOGGER.info("User: {} with ticket: {} IP: {} Path: {}", user.getId(), ticket, request.getRemoteAddr(), request.getPathInfo());
+            LOGGER.info("User: {} with ticket: {} IP: {} Path: {} {}", user.getId(), ticket, request.getRemoteAddr(), request.getMethod(), request.getPathInfo());
         }
         return user;
     }
