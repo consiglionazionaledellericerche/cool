@@ -301,26 +301,21 @@ public class SecurityRest {
 	@GET
 	@Path(Page.LOGOUT_URL)
 	public Response logout(@Context HttpServletRequest req) {
-
-		String ticket = cmisService.extractTicketFromRequest(req);
-
-		LOGGER.info("logout " + ticket);
-		BindingSession bindingSession = cmisService.getCurrentBindingSession(req);
-		String link = cmisService.getBaseURL().concat("service/api/login/ticket/" + ticket);
-		UrlBuilder url = new UrlBuilder(link);
-		int status = CmisBindingsHelper.getHttpInvoker(bindingSession).invokeDELETE(url, bindingSession).getResponseCode();
-
-		if (status == HttpStatus.OK.value()) {
-			LOGGER.info("logout ok");
-		} else {
-			LOGGER.warn("error while logout");
-		}
-
-
+		Optional.ofNullable(cmisService.extractTicketFromRequest(req)).ifPresent(ticket -> {
+			LOGGER.info("logout {}", ticket);
+			BindingSession bindingSession = cmisService.getCurrentBindingSession(req);
+			String link = cmisService.getBaseURL().concat("service/api/login/ticket/" + ticket);
+			UrlBuilder url = new UrlBuilder(link);
+			int status = CmisBindingsHelper.getHttpInvoker(bindingSession).invokeDELETE(url, bindingSession).getResponseCode();
+			if (status == HttpStatus.OK.value()) {
+				LOGGER.debug("logout ok");
+			} else {
+				LOGGER.warn("error while logout");
+			}			
+		});
 		URI uri = URI.create("../" + Page.LOGIN_URL);
         NewCookie cookie = getCookie(null);
         return Response.seeOther(uri).cookie(cookie).build();
-
 	}
 
 	static String getUrl(HttpServletRequest req) {

@@ -70,7 +70,7 @@ public class NodeService {
 			boolean isStatusToBeInsert = crudStatus == null
 					|| STATUS_TO_BE_INSERT.equalsIgnoreCase(crudStatus);
 
-			LOGGER.info("POST, processing MultipartHttpServletRequest");
+			LOGGER.debug("POST, processing MultipartHttpServletRequest");
 
 			objectId = mRequest.getParameter(PropertyIds.OBJECT_ID);
 
