@@ -18,13 +18,13 @@ define(['jquery', 'i18n', 'select2', 'select2-i18n', 'cnr/cnr'], function ($, i1
         return el.key;
       });
       if (item.val && item.multiple) {
-       item.jsonlist.sort(function (a, b) {
-         function orderValue(a) {
-           var p = item.val.indexOf(a.key);
-           return p >= 0 ? p : (keys.length + keys.indexOf(a));
-         }
-         return orderValue(a) - orderValue(b);
-       });
+        item.jsonlist.sort(function (a, b) {
+          function orderValue(a) {
+            var p = item.val.indexOf(a.key);
+            return p >= 0 ? p : (keys.length + keys.indexOf(a));
+          }
+          return orderValue(a) - orderValue(b);
+        });
       }
       options = $.map([].concat(item.jsonlist), function (el) {
         var opt = $('<option data-title="' + (i18n.prop(el.key + '.title', i18n.prop(el.label, el.defaultLabel)))  + '" value="' + el.key + '">' + i18n.prop(el.label, el.defaultLabel) + '</option>');
