@@ -25,7 +25,7 @@ define(['jquery', 'json!common', 'cnr/cnr', 'cnr/cnr.ui', 'cnr/cnr.node', 'cnr/c
         li = $('<li></li>'),
         title = i18n['actions.' + action];
 
-      btn = $(simpleButton ? '<a></a>' : '<span class="dropdown-parent"></span>')
+      btn = $(simpleButton ? '<a href="#"></a>' : '<span class="dropdown-parent"></span>')
         .attr('data-name', action)
         .append('<i class="' + icons[action] + '"></i> ')
         .append(title)
@@ -34,7 +34,10 @@ define(['jquery', 'json!common', 'cnr/cnr', 'cnr/cnr.ui', 'cnr/cnr.node', 'cnr/c
       if (simpleButton) {
         dropdown.append(li);
         if (typeof fn === 'function') {
-          btn.on('click', fn);
+          btn.on('click', function () {
+            fn();
+            return false;
+          });
         }
       } else {
 
