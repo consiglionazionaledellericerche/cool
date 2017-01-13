@@ -190,12 +190,12 @@ public class QueryService {
 					totalNumItems = getTotalNumItems(cmisSession, queryResult, statement);
 					Long maxItemsPerPage = Long.valueOf(operationContext.getMaxItemsPerPage());
 
-
-					if (totalNumItems.equals(maxItemsPerPage) && hasMoreItems) {
+					boolean isEven = s + maxItemsPerPage == totalNumItems;
+					if (isEven && hasMoreItems) {
 						totalNumItems = Long.MIN_VALUE;
 					}
 
-			if (calculateTotalNumItems && totalNumItems == Long.MIN_VALUE) {
+					if (calculateTotalNumItems && totalNumItems == Long.MIN_VALUE) {
 						totalNumItems = getQuickTotalNumItems(cmisSession, statement);
 					}
 					if (LOGGER.isDebugEnabled())
