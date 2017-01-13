@@ -78,6 +78,7 @@ define(['jquery', 'cnr/cnr.node', 'cnr/cnr.ui.select', 'i18n', 'cnr/cnr.search',
         disableRequestReplay: settings.search.type + '_' + settings.search.join,
         type: determinateType(settings),
         fetchCmisObject: settings.search.fetchCmisObject,
+        calculateTotalNumItems: settings.search.calculateTotalNumItems,
         maxItems: settings.search.maxItems,
         refreshFn : settings.refreshFn,
         display : {

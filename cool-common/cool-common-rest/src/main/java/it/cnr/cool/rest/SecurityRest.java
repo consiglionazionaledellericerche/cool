@@ -332,12 +332,15 @@ public class SecurityRest {
 		ResponseBuilder rb;
 
 		try {
-			CMISUser user = userService.loadUserForConfirm(userId);
+			Optional.ofNullable(pin).orElseThrow(CoolUserFactoryException::new);
+			CMISUser user = Optional.ofNullable(
+					userService.loadUserForConfirm(Optional.ofNullable(userId).
+							orElseThrow(CoolUserFactoryException::new))).orElseThrow(CoolUserFactoryException::new);			
 			if (pin.equals(user.getPin())) {
 				user.setDisableAccount(false);
 				user.setPin("");
 				user = userService.updateUser(user);
-				LOGGER.info("user enabled");
+				LOGGER.info("user {} are now enabled", userId);
 				rb = Response.seeOther(new URI(getUrl(req) + "/login"));
 				LOGGER.debug("User created " + user.getFullName());
 			} else {
