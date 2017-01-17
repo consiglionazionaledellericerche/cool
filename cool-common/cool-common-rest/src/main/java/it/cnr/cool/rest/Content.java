@@ -2,15 +2,14 @@ package it.cnr.cool.rest;
 
 import it.cnr.cool.cmis.service.CMISService;
 import it.cnr.cool.security.SecurityChecked;
-import org.apache.chemistry.opencmis.client.api.Document;
-import org.apache.chemistry.opencmis.client.api.Session;
-import org.apache.chemistry.opencmis.commons.exceptions.CmisUnauthorizedException;
-import org.apache.commons.httpclient.HttpStatus;
-import org.apache.commons.io.IOUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.net.SocketException;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.util.Optional;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -19,12 +18,17 @@ import javax.ws.rs.Path;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.net.SocketException;
-import java.net.URI;
-import java.net.URISyntaxException;
+
+import org.apache.chemistry.opencmis.client.api.Document;
+import org.apache.chemistry.opencmis.client.api.Session;
+import org.apache.chemistry.opencmis.commons.data.ContentStream;
+import org.apache.chemistry.opencmis.commons.exceptions.CmisUnauthorizedException;
+import org.apache.commons.httpclient.HttpStatus;
+import org.apache.commons.io.IOUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 @Path("content")
 @Component
@@ -46,7 +50,7 @@ public class Content {
 
 		Document document = null;
 		try {
-
+			
 			if (path != null && !path.isEmpty()) {
 				String cleanPath = path.replaceAll("\\?.*", "");
 				LOGGER.debug("get content for path: " + cleanPath);
@@ -57,7 +61,7 @@ public class Content {
 			} else {
 				return Response.status(Response.Status.BAD_REQUEST).build();
 			}
-
+			final String id = document.getId();
 			res.setContentType(document.getContentStreamMimeType());
 
 			String attachFileName = document.getContentStreamFileName();
@@ -69,16 +73,9 @@ public class Content {
 			}
 			res.setHeader("Content-Disposition", headerValue);
 			OutputStream outputStream = res.getOutputStream();
-			InputStream inputStream = document.getContentStream().getStream();
-
+			InputStream inputStream = Optional.ofNullable(document.getContentStream()).map(ContentStream::getStream).orElseThrow(() -> new IOException("document with id " + id + " has no content"));
 			IOUtils.copy(inputStream, outputStream);
-
-
-
-			// TODO: caching ??
-
 			outputStream.flush();
-
 			inputStream.close();
 			outputStream.close();
 		} catch(CmisUnauthorizedException e) {
