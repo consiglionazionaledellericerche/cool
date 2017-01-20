@@ -1,7 +1,9 @@
 package it.cnr.cool.rest;
 
 import com.google.gson.JsonObject;
+
 import it.cnr.cool.cmis.service.CMISService;
+import it.cnr.cool.exception.CoolException;
 import it.cnr.cool.exception.CoolUserFactoryException;
 import it.cnr.cool.mail.MailService;
 import it.cnr.cool.rest.util.Util;
@@ -11,6 +13,7 @@ import it.cnr.cool.security.service.impl.alfresco.CMISUser;
 import it.cnr.cool.service.CreateAccountService;
 import it.cnr.cool.service.I18nService;
 import it.cnr.cool.service.UserFactoryException;
+
 import org.apache.chemistry.opencmis.client.bindings.impl.CmisBindingsHelper;
 import org.apache.chemistry.opencmis.client.bindings.spi.BindingSession;
 import org.apache.chemistry.opencmis.commons.impl.UrlBuilder;
@@ -25,6 +28,7 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.*;
 import javax.ws.rs.core.Response.ResponseBuilder;
 import javax.ws.rs.core.Response.Status;
+
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.*;
@@ -64,6 +68,9 @@ public class SecurityRest {
 		values.putAll(form);
 		try {
 			return Response.ok(createAccountService.create(values, I18nService.getLocale(request, cookieLang) ,getUrl(request))).build();
+		} catch(CoolException e) {
+			LOGGER.warn("Create user exception {}", e.getMessage(), e);
+			return Response.serverError().entity(Collections.singletonMap("message", e.getMessage())).build();
 		} catch (Exception e) {
 			LOGGER.error("create user exception {}", form, e);
 			return Response.serverError().entity(Collections.singletonMap("message", e.getMessage())).build();
