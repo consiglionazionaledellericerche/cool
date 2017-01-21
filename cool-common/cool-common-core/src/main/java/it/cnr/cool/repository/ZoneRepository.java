@@ -1,8 +1,11 @@
 package it.cnr.cool.repository;
 
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+
 import it.cnr.cool.cmis.service.CMISService;
+
 import org.apache.chemistry.opencmis.client.bindings.impl.CmisBindingsHelper;
 import org.apache.chemistry.opencmis.client.bindings.spi.http.Response;
 import org.apache.chemistry.opencmis.commons.impl.UrlBuilder;
@@ -13,6 +16,9 @@ import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Repository;
 
 import java.io.InputStreamReader;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Map.Entry;
 
 @Repository
 public class ZoneRepository {
@@ -27,7 +33,7 @@ public class ZoneRepository {
 	private CMISService cmisService;
 
 	@Cacheable(ZONES)
-	public String get() {
+	public Map<String,String> get() {
 
 		LOGGER.debug("loading zones from alfresco");
 
@@ -39,7 +45,11 @@ public class ZoneRepository {
 			JsonObject jsonZones = new JsonParser().parse(responseReader)
 					.getAsJsonObject();
 			LOGGER.debug("zones " + jsonZones);
-			return jsonZones.toString();
+			Map<String,String> result = new HashMap<String, String>();
+			for (Entry<String, JsonElement> iterable_element : jsonZones.entrySet()) {
+				result.put(iterable_element.getKey(), iterable_element.getValue().getAsString());
+			}			
+			return result;
 		} else {
 			return null;
 		}

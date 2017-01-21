@@ -1,12 +1,11 @@
-/*global cnrutils,model,search*/
-var zoneContainer = cnrutils.getBean("GroupAuthorityService").getZoneContainer();
-var nodeRefs = cnrutils.getBean("NodeService").getChildAssocs(zoneContainer);
+/*global search*/
+var luceneQuery = "TYPE:\"{http://www.alfresco.org/model/content/1.0}zone\"";
+var nodeRefs = search.luceneSearch("workspace://SpacesStore", luceneQuery);
 var zones = [];
 var i = 0;
-while (i < nodeRefs.size()) {
-  var nodeRef = nodeRefs.get(i).getChildRef();
-  var key = search.findNode(nodeRef).getProperties()["{http://www.alfresco.org/model/content/1.0}name"];
-  zones[key] = nodeRef.toString();
+while (i < nodeRefs.length) {
+  var zone = nodeRefs[i];
+  zones[zone.name] = zone.nodeRef.toString();
   i++;
 }
 model.zones = zones;
