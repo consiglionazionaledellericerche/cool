@@ -47,5 +47,12 @@
 	<#list cmisObject.properties as property>
 		"${property.id}":<@generatePropertyCMISValue cmisObject property/><#if property_has_next>,</#if>
 	</#list>
+	<#if cmisObject.allowableActions??>
+		,"allowableActions":[
+		<#list cmisObject.allowableActions.allowableActions as action>
+			"${action}"<#if action_has_next>,</#if>
+		</#list>
+		]
+	</#if>	
 	,"secondaryTypes":[<#list cmisObject.secondaryTypes as secondaryType>"${secondaryType.id}"<#if secondaryType_has_next>,</#if></#list>]
 }
