@@ -27,6 +27,7 @@ define(['jquery', 'i18n', 'moment', 'datepicker-i18n'], function ($, i18n, momen
         language: i18n.locale,
         autoclose: true,
         todayHighlight: true,
+        startDate: '-100y',
         todayBtn: 'linked'
       }, item.jsonsettings))
       .on('changeDate change', function (eventType) {
