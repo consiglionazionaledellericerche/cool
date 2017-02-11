@@ -22,9 +22,6 @@ import org.springframework.stereotype.Component;
 public class CommonRestService {
 
 	@Autowired
-	private PageService pageService;
-
-	@Autowired
 	private VersionService versionService;
 
 	private static final Logger LOGGER = LoggerFactory
