@@ -1,6 +1,9 @@
 package it.cnr.cool.security.service.impl.alfresco;
 
+import it.cnr.cool.util.StringUtil;
+
 import java.io.Serializable;
+import java.text.ParseException;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
@@ -351,7 +354,10 @@ public class CMISUser implements java.security.Principal, Serializable {
 			else if (name.equalsIgnoreCase("codicefiscale"))
 				setCodicefiscale((String) value);
 			else if (name.equalsIgnoreCase("dataDiNascita"))
-				setDataDiNascita((Date) value);
+				try {
+					setDataDiNascita(StringUtil.CMIS_DATEFORMAT.parse((String)value));
+				} catch (ParseException e) {
+				}
 			else if (name.equalsIgnoreCase("straniero"))
 				setStraniero((Boolean) value);
 			else if (name.equalsIgnoreCase("sesso"))
