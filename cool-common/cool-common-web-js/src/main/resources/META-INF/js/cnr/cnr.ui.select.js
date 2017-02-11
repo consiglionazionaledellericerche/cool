@@ -15,7 +15,7 @@ define(['jquery', 'i18n', 'select2', 'select2-i18n', 'cnr/cnr'], function ($, i1
     if (item.jsonlist) {
 
       keys = $.map(item.jsonlist, function (el) {
-        return el.key;
+        return el.key||el;
       });
       if (item.val && item.multiple) {
         item.jsonlist.sort(function (a, b) {
@@ -27,11 +27,14 @@ define(['jquery', 'i18n', 'select2', 'select2-i18n', 'cnr/cnr'], function ($, i1
         });
       }
       options = $.map([].concat(item.jsonlist), function (el) {
-        var opt = $('<option data-title="' + (i18n.prop(el.key + '.title', i18n.prop(el.label, el.defaultLabel)))  + '" value="' + el.key + '">' + i18n.prop(el.label, el.defaultLabel) + '</option>');
-        if (item.val && el.key !== "" && [].concat(item.val).indexOf(el.key) >= 0) {
+        var label = el.label||el,
+          defaultLabel = el.defaultLabel||el,
+          key = el.key||el,
+          opt = $('<option data-title="' + (i18n.prop(key + '.title', i18n.prop(label, el.defaultLabel)))  + '" value="' + key + '">' + i18n.prop(label, defaultLabel) + '</option>');
+        if (item.val && key !== "" && [].concat(item.val).indexOf(key) >= 0) {
           opt.attr('selected', 'true');
         }
-        if (item.val && el.key !== "" && [].concat(item.val).indexOf(el.key) >= 0) {
+        if (item.val && key !== "" && [].concat(item.val).indexOf(key) >= 0) {
           opt.attr('selected', 'true');
         }
         return opt;

@@ -1,4 +1,4 @@
-define(['cnr/cnr.ui.widgets', 'jquery', 'cnr/cnr', 'cnr/cnr.style', 'handlebars', 'i18n', 'cnr/cnr.ui', 'cnr/cnr.ui.priority', 'cnr/cnr.ui.duedate', 'cnr/cnr.validator', 'cnr/cnr.url', 'json!common', 'datepicker-i18n', 'datetimepicker-i18n'], function (Widgets, $, CNR, Style, Handlebars, i18n, UI, Priority, DueDate, Validator, URL, common) {
+define(['cnr/cnr.ui.widgets', 'jquery', 'cnr/cnr', 'cnr/cnr.style', 'handlebars', 'i18n', 'cnr/cnr.ui', 'cnr/cnr.ui.priority', 'cnr/cnr.ui.duedate', 'cnr/cnr.validator', 'cnr/cnr.url', 'json!common', 'json!cache', 'datepicker-i18n', 'datetimepicker-i18n'], function (Widgets, $, CNR, Style, Handlebars, i18n, UI, Priority, DueDate, Validator, URL, common, cache) {
   "use strict";
 
   /**
@@ -200,6 +200,10 @@ define(['cnr/cnr.ui.widgets', 'jquery', 'cnr/cnr', 'cnr/cnr.style', 'handlebars'
       label.attr("class", item.labelClass || "control-label");
       labelText = getLabelText(item, metadata);
       label.append(labelText);
+
+      if (typeof item.jsonlist == "string") {
+        item.jsonlist = eval(item.jsonlist);
+      }
 
       // if the field has a widget add it here
       if (item.widget) {

@@ -1,12 +1,18 @@
 package it.cnr.cool.security.service.impl.alfresco;
 
-import com.google.gson.annotations.SerializedName;
-
 import java.io.Serializable;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
+import java.util.stream.Collectors;
+
+import org.codehaus.jackson.annotate.JsonAnyGetter;
+import org.codehaus.jackson.annotate.JsonAnySetter;
+
+import com.google.gson.annotations.SerializedName;
 
 public class CMISUser implements java.security.Principal, Serializable {
 
@@ -32,8 +38,9 @@ public class CMISUser implements java.security.Principal, Serializable {
 
 	private final Map<String, Serializable> map = new HashMap<String, Serializable>(
 			32);
-
-	private final Map<String, Boolean> capabilities = new HashMap();
+	private Map<String, Object> other = new HashMap<String, Object>();
+	
+	private final Map<String, Boolean> capabilities = new HashMap<String, Boolean>();
 
 	/** Attributi CNR */
 	@SerializedName("cnrperson:matricola")
@@ -58,6 +65,7 @@ public class CMISUser implements java.security.Principal, Serializable {
 	private Boolean ldapuser;
 
 	private Boolean disableAccount;
+	
 	private List<CMISGroup> groups;
 
 	public CMISUser() {
@@ -123,8 +131,9 @@ public class CMISUser implements java.security.Principal, Serializable {
 	}
 
 	public boolean isNoMail() {
-		return email.equalsIgnoreCase("nomail");
+		return Optional.ofNullable(email).filter(x -> x.equalsIgnoreCase("nomail")).isPresent();
 	}
+
 	public String getEmail() {
 		if (isNoMail())
 			if (emailesterno != null)
@@ -155,11 +164,18 @@ public class CMISUser implements java.security.Principal, Serializable {
 	public void setPassword(String password) {
 		this.password = password;
 	}
-
 	public List<CMISGroup> getGroups() {
 		return groups;
 	}
-
+	
+	public List<String> getGroupsArray() {
+		return Optional.ofNullable(groups)
+				.map(x -> x.stream()
+						.map(group -> group.getGroup_name())
+						.collect(Collectors.toList()))
+				.orElse(Collections.emptyList());
+	}
+	
 	public void setGroups(List<CMISGroup> groups) {
 		this.groups = groups;
 	}
@@ -353,5 +369,18 @@ public class CMISUser implements java.security.Principal, Serializable {
 	public String toString() {
 		return userName;
 	}
+	@JsonAnyGetter
+	public Map<String, Object> getOther() {
+		return other;
+	}
 
+	@JsonAnySetter
+	public void setOther(String name, Object value) {
+	   other.put(name, value);
+	}
+
+	
+	public boolean hasUnknowProperties() {
+		return !other.isEmpty();
+	}
 }

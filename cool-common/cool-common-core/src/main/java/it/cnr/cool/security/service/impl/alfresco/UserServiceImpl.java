@@ -73,8 +73,6 @@ public class UserServiceImpl implements UserService{
 		}
 		ObjectMapper mapper = new ObjectMapper();
 		try {
-			mapper.configure(
-				    DeserializationConfig.Feature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 			return mapper.readValue(new InputStreamReader(resp.getStream()), CMISUser.class);
 		} catch (JsonParseException e) {
 			throw new CoolUserFactoryException("Exception for user "+userId, e);

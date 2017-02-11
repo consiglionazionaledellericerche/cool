@@ -8,6 +8,12 @@
 	"${xmldate(value)}"	
   <#elseif value?is_string>
 	"${jsonUtils.encodeJSONString(value?string)}"
+  <#else>
+	[
+	<#list value as singleValue>
+	"${jsonUtils.encodeJSONString(singleValue)}"<#if singleValue_has_next>,</#if>	
+    </#list>
+	]
   </#if>
 </#macro>
 

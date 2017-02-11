@@ -35,7 +35,7 @@ define(['jquery', 'json!common', 'cnr/cnr', 'cnr/cnr.ui', 'cnr/cnr.node', 'cnr/c
         dropdown.append(li);
         if (typeof fn === 'function') {
           btn.on('click', function () {
-            fn();
+            fn($(this));
             return false;
           });
         }
