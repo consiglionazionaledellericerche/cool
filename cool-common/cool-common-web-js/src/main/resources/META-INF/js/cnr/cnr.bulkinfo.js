@@ -201,7 +201,7 @@ define(['cnr/cnr.ui.widgets', 'jquery', 'cnr/cnr', 'cnr/cnr.style', 'handlebars'
       labelText = getLabelText(item, metadata);
       label.append(labelText);
 
-      if (typeof item.jsonlist == "string") {
+      if (typeof item.jsonlist === "string") {
         item.jsonlist = eval(item.jsonlist);
       }
 
