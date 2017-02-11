@@ -357,6 +357,7 @@ public class CMISUser implements java.security.Principal, Serializable {
 				try {
 					setDataDiNascita(StringUtil.CMIS_DATEFORMAT.parse((String)value));
 				} catch (ParseException e) {
+					setDataDiNascita(null);
 				}
 			else if (name.equalsIgnoreCase("straniero"))
 				setStraniero((Boolean) value);
