@@ -27,6 +27,7 @@ import org.apache.commons.io.IOUtils;
 import org.codehaus.jackson.JsonParseException;
 import org.codehaus.jackson.map.JsonMappingException;
 import org.codehaus.jackson.map.ObjectMapper;
+import org.codehaus.jackson.map.annotate.JsonSerialize.Inclusion;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -45,6 +46,8 @@ public class UserServiceImpl implements UserService{
 	@Autowired
 	private CMISService cmisService;
 
+	private	ObjectMapper mapper = new ObjectMapper();
+ 
 	private static final Logger LOGGER = LoggerFactory.getLogger(UserServiceImpl.class);
 
 	@Override
@@ -70,7 +73,6 @@ public class UserServiceImpl implements UserService{
 			//In questo caso sono l'utente guest
 			return new CMISUser(userId);
 		}
-		ObjectMapper mapper = new ObjectMapper();
 		try {
 			return mapper.readValue(new InputStreamReader(resp.getStream()), CMISUser.class);
 		} catch (JsonParseException e) {
@@ -178,21 +180,25 @@ public class UserServiceImpl implements UserService{
 		String link = cmisService.getBaseURL().concat(SERVICE_CNR_PERSON_PERSON);
 		user.setDisableAccount(true);
         UrlBuilder url = new UrlBuilder(link);
-        BindingSession cmisSession = cmisService.getAdminSession();
-        final byte[] userJson = gsonParser.toJson(user).getBytes();
-		Response resp = CmisBindingsHelper.getHttpInvoker(cmisSession).invokePOST(url, MimeTypes.JSON.mimetype(),
-				new Output() {
-					@Override
-					public void write(OutputStream out) throws Exception {
-            			out.write(userJson);
-            		}
-        		}, cmisSession);
-		int status = resp.getResponseCode();
-		if (status == HttpStatus.SC_NOT_FOUND|| status == HttpStatus.SC_BAD_REQUEST|| status == HttpStatus.SC_INTERNAL_SERVER_ERROR)
-			throw new CoolUserFactoryException("Create user error. Exception: "+resp.getErrorContent());
-		if (status == HttpStatus.SC_CONFLICT)
-			throw new CoolUserFactoryException("User name already exists: "+user.getId());
-
+        BindingSession cmisSession = cmisService.getAdminSession();        
+		try {
+	        user.clearForPersist();
+			byte[] userJson = mapper.setSerializationInclusion(Inclusion.NON_NULL).writeValueAsBytes(user);
+			Response resp = CmisBindingsHelper.getHttpInvoker(cmisSession).invokePOST(url, MimeTypes.JSON.mimetype(),
+					new Output() {
+						@Override
+						public void write(OutputStream out) throws Exception {
+	            			out.write(userJson);
+	            		}
+	        		}, cmisSession);
+			int status = resp.getResponseCode();
+			if (status == HttpStatus.SC_NOT_FOUND|| status == HttpStatus.SC_BAD_REQUEST|| status == HttpStatus.SC_INTERNAL_SERVER_ERROR)
+				throw new CoolUserFactoryException("Create user error. Exception: "+resp.getErrorContent());
+			if (status == HttpStatus.SC_CONFLICT)
+				throw new CoolUserFactoryException("User name already exists: "+user.getId());
+		} catch (IOException e) {
+			throw new CoolUserFactoryException("Create user error.", e);
+		}
 		return loadUser(user.getId(), cmisSession);
 	}
 
@@ -201,16 +207,22 @@ public class UserServiceImpl implements UserService{
 		String link = cmisService.getBaseURL().concat(SERVICE_CNR_PERSON_PERSON + "/").concat(UriUtils.encode(user.getId()));
         UrlBuilder url = new UrlBuilder(link);
         BindingSession cmisSession = cmisService.getAdminSession();
-		Response resp = CmisBindingsHelper.getHttpInvoker(cmisSession).invokePUT(url, MimeTypes.JSON.mimetype(), null,
-				new Output() {
-					@Override
-					public void write(OutputStream out) throws Exception {
-            			out.write(gsonParser.toJson(user).getBytes());
-            		}
-        		}, cmisSession);
-		int status = resp.getResponseCode();
-		if (status == HttpStatus.SC_NOT_FOUND|| status == HttpStatus.SC_BAD_REQUEST|| status == HttpStatus.SC_INTERNAL_SERVER_ERROR)
-			throw new CoolUserFactoryException("Update user error. Exception: "+resp.getErrorContent());
+		try {
+	        user.clearForPersist();
+	        byte[] userJson = mapper.setSerializationInclusion(Inclusion.NON_NULL).writeValueAsBytes(user);
+	        Response resp = CmisBindingsHelper.getHttpInvoker(cmisSession).invokePUT(url, MimeTypes.JSON.mimetype(), null,
+					new Output() {
+						@Override
+						public void write(OutputStream out) throws Exception {
+	            			out.write(userJson);
+	            		}
+	        		}, cmisSession);
+			int status = resp.getResponseCode();
+			if (status == HttpStatus.SC_NOT_FOUND|| status == HttpStatus.SC_BAD_REQUEST|| status == HttpStatus.SC_INTERNAL_SERVER_ERROR)
+				throw new CoolUserFactoryException("Update user error. Exception: "+resp.getErrorContent());
+		} catch (IOException e) {
+			throw new CoolUserFactoryException("Create user error.", e);
+		}
 
 		return loadUser(user.getId(), cmisSession);
 	}

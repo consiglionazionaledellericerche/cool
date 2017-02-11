@@ -1,6 +1,7 @@
 package it.cnr.cool.security.service.impl.alfresco;
 
 import java.io.Serializable;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
@@ -11,8 +12,8 @@ import java.util.stream.Collectors;
 
 import org.codehaus.jackson.annotate.JsonAnyGetter;
 import org.codehaus.jackson.annotate.JsonAnySetter;
-
-import com.google.gson.annotations.SerializedName;
+import org.codehaus.jackson.annotate.JsonIgnore;
+import org.codehaus.jackson.annotate.JsonProperty;
 
 public class CMISUser implements java.security.Principal, Serializable {
 
@@ -36,37 +37,35 @@ public class CMISUser implements java.security.Principal, Serializable {
 
 	public static String PROP_MIDDLE_NAME = "middleName";
 
-	private final Map<String, Serializable> map = new HashMap<String, Serializable>(
-			32);
-	private Map<String, Object> other = new HashMap<String, Object>();
-	
+	private final Map<String, Object> other = new HashMap<String, Object>();
 	private final Map<String, Boolean> capabilities = new HashMap<String, Boolean>();
 
 	/** Attributi CNR */
-	@SerializedName("cnrperson:matricola")
+	@JsonProperty("cnrperson:matricola")
 	private Integer matricola;
-	@SerializedName("cnrperson:emailesterno")
+	@JsonProperty("cnrperson:emailesterno")
 	private String emailesterno;
-	@SerializedName("cnrperson:emailcertificatoperpuk")
+	@JsonProperty("cnrperson:emailcertificatoperpuk")
 	private String emailcertificatoperpuk;
-	@SerializedName("cnrperson:codicefiscale")
+	@JsonProperty("cnrperson:codicefiscale")
 	private String codicefiscale;
-	@SerializedName("cnrperson:dataDiNascita")
+	@JsonProperty("cnrperson:dataDiNascita")
 	private Date dataDiNascita;
-	@SerializedName("cnrperson:straniero")
+	@JsonProperty("cnrperson:straniero")
 	private Boolean straniero;
-	@SerializedName("cnrperson:sesso")
+	@JsonProperty("cnrperson:sesso")
 	private String sesso;
-	@SerializedName("cnrperson:statoestero")
+	@JsonProperty("cnrperson:statoestero")
 	private String statoestero;
-	@SerializedName("cnrperson:pin")
+	@JsonProperty("cnrperson:pin")
 	private String pin;
 
 	private Boolean ldapuser;
 
 	private Boolean disableAccount;
-	
+
 	private List<CMISGroup> groups;
+	private List<String> groupsArray;
 
 	public CMISUser() {
 	}
@@ -74,11 +73,15 @@ public class CMISUser implements java.security.Principal, Serializable {
 	public CMISUser(String userName) {
 		this.userName = userName;
 	}
+	
+	public Map<String, Boolean> getCapabilities() {
+		return capabilities;
+	}
 
 	public void setUserName(String userName) {
 		this.userName = userName;
 	}
-
+	
 	public void setCapabilities(Map<String, Boolean> capabilities) {
 		this.capabilities.putAll(capabilities);
 	}
@@ -86,7 +89,8 @@ public class CMISUser implements java.security.Principal, Serializable {
 	public Map<String, Boolean> getImmutability() {
 		return immutability;
 	}
-
+	
+	@JsonIgnore
 	public void setImmutability(Map<String, Boolean> immutability) {
 		this.immutability = immutability;
 	}
@@ -130,6 +134,7 @@ public class CMISUser implements java.security.Principal, Serializable {
 		this.mobile = mobile;
 	}
 
+	@JsonIgnore
 	public boolean isNoMail() {
 		return Optional.ofNullable(email).filter(x -> x.equalsIgnoreCase("nomail")).isPresent();
 	}
@@ -164,20 +169,22 @@ public class CMISUser implements java.security.Principal, Serializable {
 	public void setPassword(String password) {
 		this.password = password;
 	}
+	
 	public List<CMISGroup> getGroups() {
 		return groups;
 	}
-	
+
 	public List<String> getGroupsArray() {
-		return Optional.ofNullable(groups)
-				.map(x -> x.stream()
-						.map(group -> group.getGroup_name())
-						.collect(Collectors.toList()))
-				.orElse(Collections.emptyList());
+		return groupsArray;
 	}
 	
 	public void setGroups(List<CMISGroup> groups) {
 		this.groups = groups;
+		this.groupsArray = Optional.ofNullable(groups)
+				.map(x -> x.stream()
+						.map(group -> group.getGroup_name())
+						.collect(Collectors.toList()))
+						.orElse(Collections.emptyList());
 	}
 
 	public String getCodicefiscale() {
@@ -282,28 +289,19 @@ public class CMISUser implements java.security.Principal, Serializable {
 		return value == null ? false : value;
 	}
 
-	/**
-	 * Provides the full name for the user. This makes a best attempt at
-	 * building the full name based on what it knows about the user.
-	 *
-	 * If a first name is not known, the returned name will be the user id of
-	 * the user.
-	 *
-	 * If a first name is known, then the first name will be returned. If a
-	 * first and middle name are known, then the first and middle name will be
-	 * returned.
-	 *
-	 * Valid full names are therefore:
-	 *
-	 * jsmith Joe Joe D Joe Smith Joe D Smith
-	 *
-	 * @return A valid full name
-	 */
+
+	public String getHomeFolder() {
+		return homeFolder;
+	}
+	@JsonIgnore
+	public void setHomeFolder(String homeFolder) {
+		this.homeFolder = homeFolder;
+	}
+
+	@JsonIgnore
 	public String getFullName() {
 		if (this.fullName == null) {
 			boolean hasFirstName = getFirstName() != null && getFirstName()
-					.length() != 0;
-			boolean hasMiddleName = getMiddleName() != null && getMiddleName()
 					.length() != 0;
 			boolean hasLastName = getLastName() != null && getLastName()
 					.length() != 0;
@@ -313,47 +311,14 @@ public class CMISUser implements java.security.Principal, Serializable {
 			if (hasFirstName) {
 				this.fullName = getFirstName();
 
-				if (hasMiddleName) {
-					this.fullName += " " + getMiddleName();
-				}
-
 				if (hasLastName) {
 					this.fullName += " " + getLastName();
 				}
 			}
 		}
-
 		return this.fullName;
 	}
 
-	public String getHomeFolder() {
-		return homeFolder;
-	}
-
-	public void setHomeFolder(String homeFolder) {
-		this.homeFolder = homeFolder;
-	}
-
-	/**
-	 * Gets the middle name.
-	 *
-	 * @return the middle name
-	 */
-	public String getMiddleName() {
-		return getStringProperty(PROP_MIDDLE_NAME);
-	}
-
-	/**
-	 * Gets the string property.
-	 *
-	 * @param key
-	 *            the key
-	 *
-	 * @return the string property
-	 */
-	public String getStringProperty(String key) {
-		return (String) map.get(key);
-	}
 
 	/**
 	 * Checks if is admin.
@@ -369,6 +334,7 @@ public class CMISUser implements java.security.Principal, Serializable {
 	public String toString() {
 		return userName;
 	}
+	
 	@JsonAnyGetter
 	public Map<String, Object> getOther() {
 		return other;
@@ -376,11 +342,39 @@ public class CMISUser implements java.security.Principal, Serializable {
 
 	@JsonAnySetter
 	public void setOther(String name, Object value) {
-	   other.put(name, value);
+		/** Attributi CNR */
+		if (value != null) {
+			if (name.equalsIgnoreCase("matricola"))
+				setMatricola((Integer) value);
+			else if (name.equalsIgnoreCase("emailesterno"))
+				setEmailesterno((String) value);
+			else if (name.equalsIgnoreCase("emailcertificatoperpuk"))
+				setEmailcertificatoperpuk((String) value);		
+			else if (name.equalsIgnoreCase("codicefiscale"))
+				setCodicefiscale((String) value);
+			else if (name.equalsIgnoreCase("dataDiNascita"))
+				setDataDiNascita((Date) value);
+			else if (name.equalsIgnoreCase("straniero"))
+				setStraniero((Boolean) value);
+			else if (name.equalsIgnoreCase("sesso"))
+				setSesso((String) value);
+			else if (name.equalsIgnoreCase("statoestero"))
+				setStatoestero((String) value);
+			else if (name.equalsIgnoreCase("pin"))
+				setPin((String) value);			
+		}
+		if (Arrays.asList("admin", "name", "id", "guest", "locale").stream().noneMatch(x -> x.equals(name)))
+			Optional.ofNullable(value).map(x -> other.put(name, x));
 	}
 
-	
 	public boolean hasUnknowProperties() {
 		return !other.isEmpty();
+	}
+	
+	public void clearForPersist(){
+		Optional.ofNullable(groups).ifPresent(List::clear);
+		Optional.ofNullable(groupsArray).ifPresent(List::clear);
+		Optional.ofNullable(other).ifPresent(Map::clear);
+		Optional.ofNullable(capabilities).ifPresent(Map::clear);
 	}
 }
