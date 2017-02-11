@@ -37,8 +37,8 @@ public class CMISUser implements java.security.Principal, Serializable {
 
 	public static String PROP_MIDDLE_NAME = "middleName";
 
-	private final Map<String, Object> other = new HashMap<String, Object>();
-	private final Map<String, Boolean> capabilities = new HashMap<String, Boolean>();
+	private Map<String, Object> other = new HashMap<String, Object>();
+	private Map<String, Boolean> capabilities = new HashMap<String, Boolean>();
 
 	/** Attributi CNR */
 	@JsonProperty("cnrperson:matricola")
@@ -285,8 +285,7 @@ public class CMISUser implements java.security.Principal, Serializable {
 	 * @return <code>true</code> if this user is a guest user
 	 */
 	public boolean isGuest() {
-		Boolean value = this.capabilities.get(CAPABILITY_GUEST);
-		return value == null ? false : value;
+		return Optional.ofNullable(capabilities).map(x -> x.get(CAPABILITY_GUEST)).orElse(true);
 	}
 
 
@@ -326,8 +325,7 @@ public class CMISUser implements java.security.Principal, Serializable {
 	 * @return the isAdmin
 	 */
 	public boolean isAdmin() {
-		Boolean value = this.capabilities.get(CAPABILITY_ADMIN);
-		return value == null ? false : value;
+		return Optional.ofNullable(capabilities).map(x -> x.get(CAPABILITY_ADMIN)).orElse(false);
 	}
 
 	@Override
@@ -372,9 +370,9 @@ public class CMISUser implements java.security.Principal, Serializable {
 	}
 	
 	public void clearForPersist(){
-		Optional.ofNullable(groups).ifPresent(List::clear);
-		Optional.ofNullable(groupsArray).ifPresent(List::clear);
-		Optional.ofNullable(other).ifPresent(Map::clear);
-		Optional.ofNullable(capabilities).ifPresent(Map::clear);
+		groups = null;
+		groupsArray = null;
+		other = null;
+		capabilities = null;
 	}
 }
