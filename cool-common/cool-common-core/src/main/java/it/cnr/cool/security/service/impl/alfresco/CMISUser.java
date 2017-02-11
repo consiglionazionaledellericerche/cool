@@ -21,7 +21,6 @@ import org.codehaus.jackson.annotate.JsonProperty;
 public class CMISUser implements java.security.Principal, Serializable {
 
 	public static final long serialVersionUID = 1L;
-	private Map<String, Boolean> immutability;
 	private String userName;
 	private String password;
 	private String firstName;
@@ -39,7 +38,8 @@ public class CMISUser implements java.security.Principal, Serializable {
 	protected String fullName = null;
 
 	public static String PROP_MIDDLE_NAME = "middleName";
-
+	
+	private Map<String, Boolean> immutability;
 	private Map<String, Object> other = new HashMap<String, Object>();
 	private Map<String, Boolean> capabilities = new HashMap<String, Boolean>();
 
@@ -93,7 +93,6 @@ public class CMISUser implements java.security.Principal, Serializable {
 		return immutability;
 	}
 	
-	@JsonIgnore
 	public void setImmutability(Map<String, Boolean> immutability) {
 		this.immutability = immutability;
 	}
@@ -381,5 +380,6 @@ public class CMISUser implements java.security.Principal, Serializable {
 		groupsArray = null;
 		other = null;
 		capabilities = null;
+		immutability = null;
 	}
 }
