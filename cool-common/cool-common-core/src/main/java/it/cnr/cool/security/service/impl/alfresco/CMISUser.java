@@ -294,7 +294,7 @@ public class CMISUser implements java.security.Principal, Serializable {
 	public String getHomeFolder() {
 		return homeFolder;
 	}
-	@JsonIgnore
+
 	public void setHomeFolder(String homeFolder) {
 		this.homeFolder = homeFolder;
 	}
@@ -381,5 +381,6 @@ public class CMISUser implements java.security.Principal, Serializable {
 		other = null;
 		capabilities = null;
 		immutability = null;
+		homeFolder = null;
 	}
 }
