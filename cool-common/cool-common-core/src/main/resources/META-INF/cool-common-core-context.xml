@@ -29,6 +29,8 @@
 			<map>
 				<entry key="org.apache.chemistry.opencmis.binding.atompub.url"
 					value="${org.apache.chemistry.opencmis.binding.atompub.url}" />
+				<entry key="org.apache.chemistry.opencmis.binding.browser.url"
+					value="${org.apache.chemistry.opencmis.binding.browser.url}" />
 				<entry key="org.apache.chemistry.opencmis.binding.spi.type"
 					value="${org.apache.chemistry.opencmis.binding.spi.type}" />
 				<entry key="org.apache.chemistry.opencmis.binding.connecttimeout"
