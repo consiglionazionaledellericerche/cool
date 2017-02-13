@@ -119,6 +119,8 @@ define(['jquery', 'cnr/cnr.node', 'cnr/cnr.ui.select', 'i18n', 'cnr/cnr.search',
     var settings = $.extend({}, defaults, opts),
       buttonUpload = $('<button type="button" class="btn btn-small"><i class="icon-circle-arrow-up"></i> ' + settings.buttonUploadLabel + '</button>'),
       buttonRefresh = $('<button type="button" class="btn btn-small"><i class="icon-refresh"></i></button>'),
+      divSimpleControl = $('<div class="control-group">'),
+      defaultObjectType,
       selectObjectType = Select.Widget(null, 'Tipologia', {
         jsonlist : settings.objectTypes,
         width : settings.selectWidth,
@@ -186,12 +188,22 @@ define(['jquery', 'cnr/cnr.node', 'cnr/cnr.ui.select', 'i18n', 'cnr/cnr.search',
       .find('.controls')
       .trigger('setData', ['value', selectObjectType.data('value'), true])
       .append(' ')
-      .append(buttonRefresh)
+      .append(buttonUpload)
       .append(' ')
+      .append(buttonRefresh);
+
+    if (settings.objectTypes.length > 1) {
+      settings.affix.find('hr:first').after(selectObjectType);
+    } else {
+      defaultObjectType = settings.objectTypes[0].key;
+      buttonUpload.attr('disabled', null).removeClass('disabled');
+      divSimpleControl
+      .append('&nbsp;')
+      .append(buttonRefresh)
+      .append('&nbsp;')
       .append(buttonUpload);
-
-
-    settings.affix.find('hr:first').after(selectObjectType);
+      settings.affix.find('hr:first').after(divSimpleControl);
+    }
     buttonRefresh
       .click(function () {
         criteria.list(search);
@@ -202,7 +214,7 @@ define(['jquery', 'cnr/cnr.node', 'cnr/cnr.ui.select', 'i18n', 'cnr/cnr.search',
           UI.alert('Prima di iniziare la compilazione della sezione &egrave; necessario effettuare il salvataggio!');
           return;
         }
-        var type = selectObjectType.data('value');
+        var type = defaultObjectType || selectObjectType.data('value');
         Node.submission({
           nodeRef: settings.cmisObjectId,
           objectType: type,
