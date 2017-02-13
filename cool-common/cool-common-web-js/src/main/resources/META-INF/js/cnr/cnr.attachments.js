@@ -198,10 +198,10 @@ define(['jquery', 'cnr/cnr.node', 'cnr/cnr.ui.select', 'i18n', 'cnr/cnr.search',
       defaultObjectType = settings.objectTypes[0].key;
       buttonUpload.attr('disabled', null).removeClass('disabled');
       divSimpleControl
-      .append(' ')
-      .append(buttonRefresh)
-      .append(' ')
-      .append(buttonUpload);
+        .append(' ')
+        .append(buttonRefresh)
+        .append(' ')
+        .append(buttonUpload);
       settings.affix.find('hr:first').after(divSimpleControl);
     }
     buttonRefresh
