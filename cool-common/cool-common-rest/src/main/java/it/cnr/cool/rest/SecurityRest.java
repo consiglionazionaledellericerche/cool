@@ -311,11 +311,13 @@ public class SecurityRest {
 		Optional.ofNullable(cmisService.extractTicketFromRequest(req)).ifPresent(ticket -> {
 			LOGGER.info("logout {}", ticket);
 			BindingSession bindingSession = cmisService.getCurrentBindingSession(req);
+			String userId = Optional.ofNullable(cmisService.getCMISUserFromSession(req)).map(CMISUser::getUserName).orElse(null);
 			String link = cmisService.getBaseURL().concat("service/api/login/ticket/" + ticket);
 			UrlBuilder url = new UrlBuilder(link);
 			int status = CmisBindingsHelper.getHttpInvoker(bindingSession).invokeDELETE(url, bindingSession).getResponseCode();
 			if (status == HttpStatus.OK.value()) {
 				LOGGER.debug("logout ok");
+				userService.logout(userId);
 			} else {
 				LOGGER.warn("error while logout");
 			}			

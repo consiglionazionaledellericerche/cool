@@ -2,6 +2,7 @@ package it.cnr.cool.security.service;
 
 
 import it.cnr.cool.exception.CoolUserFactoryException;
+import it.cnr.cool.listener.LogoutListener;
 import it.cnr.cool.security.service.impl.alfresco.CMISUser;
 
 import java.io.InputStream;
@@ -21,4 +22,6 @@ public interface UserService {
 	void disableAccount(String userName) throws CoolUserFactoryException;
 	void enableAccount(String userName) throws CoolUserFactoryException;
 	List<String> findMembers(String groupName, BindingSession cmisSession) throws CoolUserFactoryException;
+	public boolean addLogoutListener(LogoutListener logoutListener);
+	public void logout(String userId);
 }

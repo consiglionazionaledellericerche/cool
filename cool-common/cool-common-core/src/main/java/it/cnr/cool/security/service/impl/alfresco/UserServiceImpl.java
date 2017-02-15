@@ -3,6 +3,7 @@ package it.cnr.cool.security.service.impl.alfresco;
 
 import it.cnr.cool.cmis.service.CMISService;
 import it.cnr.cool.exception.CoolUserFactoryException;
+import it.cnr.cool.listener.LogoutListener;
 import it.cnr.cool.security.service.UserService;
 import it.cnr.cool.util.MimeTypes;
 import it.cnr.cool.util.StringUtil;
@@ -45,6 +46,8 @@ public class UserServiceImpl implements UserService{
 	private GsonParser gsonParser;
 	@Autowired
 	private CMISService cmisService;
+	
+	private List<LogoutListener> logutListener = new ArrayList<LogoutListener>();
 
 	private	ObjectMapper mapper = new ObjectMapper();
  
@@ -282,5 +285,12 @@ public class UserServiceImpl implements UserService{
 		} catch (IOException e) {
 			LOGGER.error("unable to get response content, user: " + userName, e);
 		}
+	}
+	public boolean addLogoutListener(LogoutListener logoutListener) {
+		return logutListener.add(logoutListener);
+	}
+	
+	public void logout(String userId) {
+		logutListener.stream().forEach(listener -> listener.logout(userId));
 	}
 }
