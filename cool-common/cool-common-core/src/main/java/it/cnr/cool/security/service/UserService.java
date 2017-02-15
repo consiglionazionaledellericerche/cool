@@ -22,6 +22,6 @@ public interface UserService {
 	void disableAccount(String userName) throws CoolUserFactoryException;
 	void enableAccount(String userName) throws CoolUserFactoryException;
 	List<String> findMembers(String groupName, BindingSession cmisSession) throws CoolUserFactoryException;
-	public boolean addLogoutListener(LogoutListener logoutListener);
-	public void logout(String userId);
+	boolean addLogoutListener(LogoutListener logoutListener);
+	void logout(String userId);
 }
