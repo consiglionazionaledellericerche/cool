@@ -192,9 +192,7 @@ define(['jquery', 'cnr/cnr.node', 'cnr/cnr.ui.select', 'i18n', 'cnr/cnr.search',
       .append(' ')
       .append(buttonRefresh);
 
-    if (settings.objectTypes.length > 1) {
-      settings.affix.find('hr:first').after(selectObjectType);
-    } else {
+    if (settings.objectTypes.length === 1) {
       defaultObjectType = settings.objectTypes[0].key;
       buttonUpload.attr('disabled', null).removeClass('disabled');
       divSimpleControl
@@ -203,6 +201,8 @@ define(['jquery', 'cnr/cnr.node', 'cnr/cnr.ui.select', 'i18n', 'cnr/cnr.search',
         .append(' ')
         .append(buttonUpload);
       settings.affix.find('hr:first').after(divSimpleControl);
+    } else {
+      settings.affix.find('hr:first').after(selectObjectType);
     }
     buttonRefresh
       .click(function () {
