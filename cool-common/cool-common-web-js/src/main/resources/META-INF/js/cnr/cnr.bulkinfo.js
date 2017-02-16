@@ -431,7 +431,7 @@ define(['cnr/cnr.ui.widgets', 'jquery', 'cnr/cnr', 'cnr/cnr.style', 'handlebars'
       Handlebars.registerHelper('displayValue', function (value) {
         if (this.prop.widget === 'ui.datepicker') {
           return Handlebars.helpers.date.call(this, value, this.prop.format || 'DD/MM/YYYY');
-        } else if (this.prop.jsonlist) {
+        } else if (this.prop.jsonlist && $.isArray(this.prop.jsonlist)) {
           var filtered = this.prop.jsonlist.filter(function (el, index) {
             return el.key === String(value);
           })[0];
