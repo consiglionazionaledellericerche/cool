@@ -49,6 +49,9 @@ public class CMISAuthenticatorFactory {
     return null;
   }
 
+  public CMISUser getCMISUser(String ticket) {
+      return  cmisAuthRepository.getCachedCMISUser(ticket, cmisAuthRepository.getBindingSession(ticket));
+  }
 
   public String getTicket(String username, String password) throws LoginException {
 

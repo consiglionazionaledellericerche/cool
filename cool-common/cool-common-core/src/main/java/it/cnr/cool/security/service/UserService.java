@@ -6,6 +6,7 @@ import it.cnr.cool.listener.LogoutListener;
 import it.cnr.cool.security.service.impl.alfresco.CMISUser;
 
 import java.io.InputStream;
+import java.net.URI;
 import java.util.List;
 
 import org.apache.chemistry.opencmis.client.bindings.spi.BindingSession;
@@ -24,4 +25,5 @@ public interface UserService {
 	List<String> findMembers(String groupName, BindingSession cmisSession) throws CoolUserFactoryException;
 	boolean addLogoutListener(LogoutListener logoutListener);
 	void logout(String userId);
+	URI getRedirect(CMISUser cmisUser, URI uri);
 }

@@ -283,7 +283,7 @@ public class SecurityRest {
 			else
 				uri = URI.create(redirect);
 
-            rb = Response.seeOther(uri);
+            rb = Response.seeOther(userService.getRedirect(cmisAuthenticatorFactory.getCMISUser(ticket), uri));
 
             NewCookie cookie = getCookie(ticket);
 
