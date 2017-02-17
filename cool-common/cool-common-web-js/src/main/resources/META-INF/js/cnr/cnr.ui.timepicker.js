@@ -18,7 +18,7 @@ define(['jquery', 'i18n', 'moment', 'datetimepicker-i18n'], function ($, i18n, m
     controls
       .datetimepicker({
         language: i18n.locale,
-         pickDate: false
+        pickDate: false
       })
       .on('changeDate', function (eventType, initialization) {
         if (!initialization) {
