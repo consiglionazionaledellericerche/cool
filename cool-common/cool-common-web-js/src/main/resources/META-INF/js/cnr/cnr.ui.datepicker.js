@@ -21,6 +21,9 @@ define(['jquery', 'i18n', 'moment', 'datepicker-i18n'], function ($, i18n, momen
     if (item['class']) {
       input.addClass(item['class']);
     }
+    if (item.parentGroupClass) {
+      parent.addClass(item.parentGroupClass);
+    }
 
     input
       .datepicker($.extend({}, {

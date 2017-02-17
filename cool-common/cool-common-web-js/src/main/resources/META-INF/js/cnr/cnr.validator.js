@@ -100,6 +100,13 @@ define(['jquery', 'bootstrap', 'i18n', 'validate', 'json!common'], function ($, 
       return this.optional(element) || length <= param;
     }, $.validator.format(i18n.prop('message.max.length')));
 
+    $.validator.addMethod('minlengthAlfresco', function (value, element, param) {
+      // do not trim the value
+      var length = typeof value === 'string' ? value.length : 0;
+      return this.optional(element) || length >= param;
+    }, $.validator.format(i18n.prop('message.min.length')));
+
+
     $.validator.addMethod('digitsAlfresco', function (value, element, param) {
       // do not allow spaces
       return typeof value === 'string' && (value.length === 0 || /^\d+$/.test(value));
