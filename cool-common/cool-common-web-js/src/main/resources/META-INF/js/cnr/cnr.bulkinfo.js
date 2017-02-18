@@ -168,7 +168,7 @@ define(['cnr/cnr.ui.widgets', 'jquery', 'cnr/cnr', 'cnr/cnr.style', 'handlebars'
     function getFormControlObject(item, labelText, label, input) {
       var obj = $("<div></div>").addClass(classes.group).addClass(item.parentGroupClass),
         currency = $('<div class="input-prepend input-append">').
-          append('<span class="add-on">€</span>').
+          append('<span class="add-on">&euro;</span>').
           append(input).
           append('<span class="add-on">.00</span>');
       if (labelText) {
