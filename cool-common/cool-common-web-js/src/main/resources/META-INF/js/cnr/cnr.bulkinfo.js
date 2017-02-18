@@ -94,6 +94,8 @@ define(['cnr/cnr.ui.widgets', 'jquery', 'cnr/cnr', 'cnr/cnr.style', 'handlebars'
         input = $('<input type="text" />');
       } else if (item.inputType === "PASSWORD") {
         input = $('<input type="password" />');
+      } else if (item.inputType === "CURRENCY") {
+        input = $('<input type="number" />');
       } else if (item.inputType === "ROTEXT") {
         input = $('<input type="text" disabled />');
       } else if (item.inputType === "BUTTON") {
@@ -164,15 +166,22 @@ define(['cnr/cnr.ui.widgets', 'jquery', 'cnr/cnr', 'cnr/cnr.style', 'handlebars'
     }
 
     function getFormControlObject(item, labelText, label, input) {
-      var obj;
-      obj = $("<div></div>").addClass(classes.group).addClass(item.parentGroupClass);
+      var obj = $("<div></div>").addClass(classes.group).addClass(item.parentGroupClass),
+        currency = $('<div class="input-prepend input-append">').
+          append('<span class="add-on">€</span>').
+          append(input).
+          append('<span class="add-on">.00</span>');
       if (labelText) {
         obj.append(label);
       }
       if (item['class'] && item['class'].indexOf('no-controls') > -1) {
         obj.append(input);
       } else {
-        $("<div class='controls'></div>").addClass(item.parentClass).appendTo(obj).append(input);
+        if (item.inputType === "CURRENCY") {
+          $("<div class='controls'></div>").addClass(item.parentClass).appendTo(obj).append(currency);
+        } else {
+          $("<div class='controls'></div>").addClass(item.parentClass).appendTo(obj).append(input);
+        }
       }
 
       // E' stato aggiunto nella versione 3, e per adesso funziona solo con la 3

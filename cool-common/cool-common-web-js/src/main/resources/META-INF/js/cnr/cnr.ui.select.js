@@ -92,6 +92,10 @@ define(['jquery', 'i18n', 'select2', 'select2-i18n', 'cnr/cnr'], function ($, i1
     var controls = $('<div class="controls"></div>'),
       parent = $('<div class="control-group widget"></div>').append('<label class="control-label">' + labelText + '</label>').append(controls);
 
+    if (item.parentGroupClass) {
+      parent.addClass(item.parentGroupClass);
+    }
+
     if (!async) {
       init(item, id, parent, controls);
     }
