@@ -362,18 +362,18 @@ public class PermissionServiceImpl implements PermissionService {
 		}
 
 		// check permission specific for group
-		if (w != null && w.has(GROUP)) {
-			for (String group : groups) {
-				if (contains(w.getAsJsonArray(GROUP), group)) {
-					return true;
-				}
-			}
-		}
-
 		if (b != null && b.has(GROUP)) {
 			for (String group : groups) {
 				if (contains(b.getAsJsonArray(GROUP), group)) {
 					return false;
+				}
+			}
+		}
+
+		if (w != null && w.has(GROUP)) {
+			for (String group : groups) {
+				if (contains(w.getAsJsonArray(GROUP), group)) {
+					return true;
 				}
 			}
 		}
