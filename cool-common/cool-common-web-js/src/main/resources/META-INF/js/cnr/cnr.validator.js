@@ -85,7 +85,8 @@ define(['jquery', 'bootstrap', 'i18n', 'validate', 'json!common'], function ($, 
     $.validator.addMethod('currency',
       function (value) {
         if (value !== "") {
-          return /^\d+(\.\d{3})*,\d{2}$/.test(value);
+          var regex =/^\d+(\.\d{3})*,\d{2}$/;
+          return regex.test(value);
         }
         return true;
       }, i18n['message.currency.valid']
