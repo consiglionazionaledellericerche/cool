@@ -82,6 +82,15 @@ define(['jquery', 'bootstrap', 'i18n', 'validate', 'json!common'], function ($, 
       }, i18n['message.userid.valido']
       );
 
+    $.validator.addMethod('currency',
+      function (value) {
+        if (value !== "") {
+          return /^\d+(\.\d{3})*,\d{2}$/.test(value);
+        }
+        return true;
+      }, i18n['message.currency.valid']
+      );
+
     $.validator.addMethod('requiredWidget', function (value, element, enabled) {
       function isValid(e) {
         var widgetValue = e.data('value');

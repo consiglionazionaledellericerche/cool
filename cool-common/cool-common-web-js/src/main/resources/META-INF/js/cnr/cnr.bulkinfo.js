@@ -95,7 +95,7 @@ define(['cnr/cnr.ui.widgets', 'jquery', 'cnr/cnr', 'cnr/cnr.style', 'handlebars'
       } else if (item.inputType === "PASSWORD") {
         input = $('<input type="password" />');
       } else if (item.inputType === "CURRENCY") {
-        input = $('<input type="number" />');
+        input = $('<input type="text" />');
       } else if (item.inputType === "ROTEXT") {
         input = $('<input type="text" disabled />');
       } else if (item.inputType === "BUTTON") {
@@ -170,7 +170,7 @@ define(['cnr/cnr.ui.widgets', 'jquery', 'cnr/cnr', 'cnr/cnr.style', 'handlebars'
         currency = $('<div class="input-prepend input-append">').
           append('<span class="add-on">&euro;</span>').
           append(input).
-          append('<span class="add-on">.00</span>');
+          append(item.decimal ? '' : '<span class="add-on">.00</span>');
       if (labelText) {
         obj.append(label);
       }

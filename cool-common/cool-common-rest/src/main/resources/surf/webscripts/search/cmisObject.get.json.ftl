@@ -14,7 +14,7 @@
 				<#elseif prop.type.value() == "integer">
 		${value?string('0')}
 				<#elseif prop.type.value() == "decimal">
-		${value?string('0')}
+		"${value?string[",##0.00"]}"
 				<#elseif prop.type.value() == "boolean">
 		${value?string}
 				</#if>
@@ -33,7 +33,7 @@
 			<#elseif prop.type.value() == "integer">
 	${cmisObject.getPropertyValue(prop.definition.id)?string('0')}
 			<#elseif prop.type.value() == "decimal">
-		${cmisObject.getPropertyValue(prop.definition.id)?string('0')}
+		"${cmisObject.getPropertyValue(prop.definition.id)?string[",##0.00"]}"
 			<#elseif prop.type.value() == "boolean">
 	${cmisObject.getPropertyValue(prop.definition.id)?string}
 			</#if>
