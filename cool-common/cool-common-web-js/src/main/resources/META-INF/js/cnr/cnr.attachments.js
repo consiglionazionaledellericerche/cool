@@ -119,17 +119,18 @@ define(['jquery', 'cnr/cnr.node', 'cnr/cnr.ui.select', 'i18n', 'cnr/cnr.search',
     var settings = $.extend({}, defaults, opts),
       buttonUpload = $('<button type="button" class="btn btn-small"><i class="icon-circle-arrow-up"></i> ' + settings.buttonUploadLabel + '</button>'),
       buttonRefresh = $('<button type="button" class="btn btn-small"><i class="icon-refresh"></i></button>'),
-      divSimpleControl = $('<div class="control-group">'),
+      divSimpleControl = $('<div class="control-group">').addClass(settings.selectGroupClass),
       defaultObjectType,
       selectObjectType = Select.Widget(null, 'Tipologia', {
         jsonlist : settings.objectTypes,
         width : settings.selectWidth,
         placeholder : 'Selezionare tipologia',
         'class': 'input-xlarge'
-      }),
+      }).addClass(settings.selectGroupClass),
       allegati = buildAllegati(settings),
       search = allegati.search,
-      criteria = allegati.criteria;
+      criteria = allegati.criteria,
+      hr = settings.affix.find('hr:first');
     buttonRefresh
       .tooltip({
         html: true,
@@ -200,9 +201,17 @@ define(['jquery', 'cnr/cnr.node', 'cnr/cnr.ui.select', 'i18n', 'cnr/cnr.search',
         .append(buttonRefresh)
         .append(' ')
         .append(buttonUpload);
-      settings.affix.find('hr:first').after(divSimpleControl);
+      if (hr.length !== 0) {
+        hr.after(divSimpleControl);
+      } else {
+        settings.affix.prepend(divSimpleControl);
+      }
     } else {
-      settings.affix.find('hr:first').after(selectObjectType);
+      if (hr.length !== 0) {
+        hr.after(selectObjectType);
+      } else {
+        settings.affix.prepend(selectObjectType);
+      }
     }
     buttonRefresh
       .click(function () {
