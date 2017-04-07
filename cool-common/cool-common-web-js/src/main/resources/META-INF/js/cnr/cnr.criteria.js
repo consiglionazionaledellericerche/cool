@@ -29,8 +29,28 @@ define(['jquery'], function ($) {
 
     var s, j = [], condiz = "";
 
-    if (criteria.type === "criteria") {
-
+    if (criteria.type === "open_parenthesis") {
+      s = "(";
+    } else if (criteria.type === "close_parenthesis") {
+      s = ")";
+    } else if (criteria.type === "complex") {
+      $.map(criteria.conditions, function (el) {
+        var s = analyzeCriteria(el, prefix);
+        if (el.boolOpAfter) {
+          s += ' ' + el.boolOpAfter + ' ';
+        }
+        if (el.boolOpBefore) {
+          s = ' ' + el.boolOpBefore + ' ' + s;
+        }
+        j.push(s);
+      });
+      $.map(j, function (el, idx) {
+        condiz += el;
+      });
+      if (condiz !== "") {
+        s = "(" + condiz + ")";
+      }
+    } else if (criteria.type === "criteria") {
       $.map(criteria.conditions, function (el) {
         var s = analyzeCriteria(el, prefix);
         j.push(s);
@@ -42,7 +62,6 @@ define(['jquery'], function ($) {
       if (condiz !== "") {
         s = "(" + condiz + ")";
       }
-
     } else if (criteria.type === "=") {
       s = criteria.what +  ' = ' + parseValue(criteria.to, criteria.valueType);
     } else if (criteria.type === "<>") {
@@ -213,6 +232,13 @@ define(['jquery'], function ($) {
         c.conditions.push({
           type: 'criteria',
           boolOp: 'OR',
+          conditions: arguments
+        });
+        return this;
+      },
+      complex: function () {
+        c.conditions.push({
+          type: 'complex',
           conditions: arguments
         });
         return this;
