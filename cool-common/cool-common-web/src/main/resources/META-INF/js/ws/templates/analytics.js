@@ -8,7 +8,7 @@ require(['json!common', 'modernizr'], function (common, Modernizr) {
     window._gaq.push(['_trackPageview']);
 
     // CNR custom variables
-    window._gaq.push(['_setCustomVar', 1, 'artifact_version', common.version, 1]);
+    window._gaq.push(['_setCustomVar', 1, 'artifact_version', common.artifact_version, 1]);
     if (!common.User.isGuest) {
       window._gaq.push(['_setCustomVar', 2, 'username', common.User.id, 1]);
     }

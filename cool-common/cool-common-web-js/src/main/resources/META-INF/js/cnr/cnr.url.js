@@ -33,8 +33,8 @@ define(['jquery', 'cnr/cnr.ui', 'json!common', 'i18n', 'json!cache'], function (
       countries: 'rest/static/json/paesi.json',
       cities: 'rest/static/json/comuni.json',
       rbac: 'rest/rbac',
-      bulkInfo: "rest/bulkInfo/view/$path/$kind/$name?v=" + common.version,
-      bulkInfoForms: "rest/bulkInfo/structure/$path?v=" + common.version,
+      bulkInfo: "rest/bulkInfo/view/$path/$kind/$name?v=" + common.artifact_version,
+      bulkInfoForms: "rest/bulkInfo/structure/$path?v=" + common.artifact_version,
       frontOffice : {
         document: 'rest/frontOffice/$type_document',
         log: 'rest/frontOffice/log',

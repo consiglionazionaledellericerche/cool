@@ -500,7 +500,7 @@ define(['cnr/cnr.ui.widgets', 'jquery', 'cnr/cnr', 'cnr/cnr.style', 'handlebars'
         dataType: 'html',
         placeholder: {
           id: settings.handlebarsId + '.handlebars',
-          v: common.version
+          v: common.artifact_version
         }
       });
 
