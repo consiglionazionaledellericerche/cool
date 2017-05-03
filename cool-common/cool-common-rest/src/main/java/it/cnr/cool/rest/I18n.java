@@ -3,25 +3,20 @@ package it.cnr.cool.rest;
 
 import it.cnr.cool.rest.util.Util;
 import it.cnr.cool.service.I18nService;
-
-import java.util.Locale;
-import java.util.Properties;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.ws.rs.CookieParam;
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
-import javax.ws.rs.QueryParam;
-import javax.ws.rs.core.Context;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
-import javax.ws.rs.core.Response.ResponseBuilder;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.ws.rs.*;
+import javax.ws.rs.core.Context;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.ResponseBuilder;
+import java.util.Locale;
+import java.util.Optional;
+import java.util.Properties;
 
 @Path("i18n")
 @Component
@@ -37,13 +32,16 @@ public class I18n {
 
 	@GET
 	public Response i18n(@Context HttpServletRequest request,
-			@QueryParam("method") String method,
-			@QueryParam("uri") String uri,
-			@CookieParam("__lang") String __lang) {
+						 @QueryParam("method") String method,
+						 @QueryParam("uri") String uri,
+						 @QueryParam("lang") String lang,
+						 @CookieParam("__lang") String __lang) {
 
 		LOGGER.debug(method + " " + uri);
 
-		Locale locale = I18nService.getLocale(request, __lang);
+		String actualLanguage = Optional.ofNullable(lang).orElse(__lang);
+		LOGGER.info("actual language: {}", actualLanguage);
+		Locale locale = I18nService.getLocale(request, actualLanguage);
 
 		Properties labels = i18nService.getLabels(locale, uri);
 		labels.put("locale", locale.getLanguage());
