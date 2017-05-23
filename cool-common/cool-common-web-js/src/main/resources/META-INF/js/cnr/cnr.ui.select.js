@@ -53,7 +53,7 @@ define(['jquery', 'i18n', 'select2', 'select2-i18n', 'cnr/cnr'], function ($, i1
           })));
           optionsGroup.push($('<optgroup>').attr('label', 'Non raggruppato').append(options.filter(function(opt) {
             return opt[0].attributes['data-optgroup'] === undefined;
-          })));          
+          })));
         });
         options = optionsGroup;
       } else {
