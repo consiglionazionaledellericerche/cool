@@ -48,7 +48,7 @@ define(['jquery', 'i18n', 'select2', 'select2-i18n', 'cnr/cnr'], function ($, i1
       });
       if (optgroup.length > 0) {
         $.each(optgroup, function (index) {
-          optionsGroup.push($('<optgroup>').attr('label', optgroup[index]).append(options.filter(function (opt) {          
+          optionsGroup.push($('<optgroup>').attr('label', optgroup[index]).append(options.filter(function (opt) {
             return opt[0].attributes['data-optgroup'] && opt[0].attributes['data-optgroup'].value === optgroup[index];
           })));
           optionsGroup.push($('<optgroup>').attr('label', 'Non raggruppato').append(options.filter(function (opt) {
