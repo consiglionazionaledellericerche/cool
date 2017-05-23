@@ -5,12 +5,14 @@ define(['jquery', 'i18n', 'select2', 'select2-i18n', 'cnr/cnr'], function ($, i1
 
     var select = $('<select></select>').attr("id", id).attr("name", item.property),
       options,
+      optionsGroup = [],
       s2,
       select2opts = {
         allowClear: true,
         placeholder: item.placeholder || ""
       },
-      keys;
+      keys,
+      optgroup = [];
 
     if (item.jsonlist) {
 
@@ -36,10 +38,30 @@ define(['jquery', 'i18n', 'select2', 'select2-i18n', 'cnr/cnr'], function ($, i1
         if (item.val && key !== "" && [].concat(item.val).indexOf(key) >= 0) {
           opt.attr('selected', 'true');
         }
+        if (el.group) {
+          if ($.inArray(el.group, optgroup) == -1) {
+            optgroup.push(el.group);
+          }
+          opt.attr('data-optgroup', el.group);
+        }
         return opt;
       });
-      options = [$('<option></option>')].concat(options);
+      if (optgroup.length > 0) {
+        $.each(optgroup, function (index) {
+          optionsGroup.push($('<optgroup>').attr('label', optgroup[index]).append(options.filter(function(opt) {            
+            return opt[0].attributes['data-optgroup'] && opt[0].attributes['data-optgroup'].value == optgroup[index];
+          })));
+          optionsGroup.push($('<optgroup>').attr('label', 'Non raggruppato').append(options.filter(function(opt) {
+            return opt[0].attributes['data-optgroup'] === undefined;
+          })));          
+        });
+        options = optionsGroup;
+      } else {
+        options = [$('<option></option>')].concat(options);
+      }
     }
+
+
     if (item.multiple) {
       select.attr('multiple', 'multiple');
     }
