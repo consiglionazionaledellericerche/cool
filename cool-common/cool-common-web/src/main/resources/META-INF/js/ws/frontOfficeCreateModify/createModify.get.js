@@ -95,9 +95,7 @@ define(['jquery', 'header', 'cnr/cnr.bulkinfo', 'cnr/cnr', 'cnr/cnr.ui', 'cnr/cn
           type_document: typeWriter
         },
         success: function (data) {
-          UI.success(typeWriter + azione + 'correttamente', function () {
-            window.location = URL.urls.root + 'frontOffice';
-          });
+          UI.success(typeWriter + azione + 'correttamente');
         },
         fail: function () {
           if (azione === 'creato') {
