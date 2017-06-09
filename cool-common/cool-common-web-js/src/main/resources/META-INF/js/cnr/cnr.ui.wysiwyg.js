@@ -14,7 +14,7 @@ define(['jquery', 'i18n', 'ckeditor-jquery'], function ($, i18n) {
     var controls = $('<div class="controls"></div>'),
       parent = $('<div class="control-group widget"></div>').append('<label class="control-label">' + labelText + '</label>').append(controls),
       ck = $('<textarea></textarea>').attr('id', id).appendTo(controls).ckeditor(config);
-    
+
     if (item.parentGroupClass) {
       parent.addClass(item.parentGroupClass);
     }
