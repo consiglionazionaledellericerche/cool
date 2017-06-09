@@ -96,6 +96,8 @@ define(['cnr/cnr.ui.widgets', 'jquery', 'cnr/cnr', 'cnr/cnr.style', 'handlebars'
         input = $('<input type="password" />');
       } else if (item.inputType === "CURRENCY") {
         input = $('<input type="text" />');
+      } else if (item.inputType === "FILE") {
+        input = $('<input type="file" />');
       } else if (item.inputType === "ROTEXT") {
         input = $('<input type="text" disabled />');
       } else if (item.inputType === "BUTTON") {
@@ -160,6 +162,20 @@ define(['cnr/cnr.ui.widgets', 'jquery', 'cnr/cnr', 'cnr/cnr.style', 'handlebars'
 
         if (item.className) {
           input.addClass(classes[item.className] || item.className);
+        }
+        if (item.inputType === "FILE") {
+          input.off('change').on('change', function () {
+            $(this)
+              .parents('div.input-append')
+              .find('input:text')
+              .val($(this).val().replace(/C:\\fakepath\\/i, ''));
+          });
+          input.css("display", "none");
+          return $('<div class="input-append">')
+            .append($('<input type="text" class="form-control input-xlarge" disabled id="name-' + item.name + '">'))
+            .append($('<label class="btn btn-primary" for="' + item.name + '">')
+              .append(input)
+              .append($('<i class="icon-upload">  Upload</i>')));
         }
       }
       return input;
