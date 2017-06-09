@@ -11,8 +11,6 @@ define(['jquery', 'i18n', 'ckeditor-jquery'], function ($, i18n) {
   };
 
   function widget(id, labelText, item) {
-
-
     var controls = $('<div class="controls"></div>'),
       parent = $('<div class="control-group widget"></div>').append('<label class="control-label">' + labelText + '</label>').append(controls),
       ck = $('<textarea></textarea>').attr('id', id).appendTo(controls).ckeditor(config);
@@ -22,7 +20,7 @@ define(['jquery', 'i18n', 'ckeditor-jquery'], function ($, i18n) {
     }
     if (item.parentClass) {
       controls.addClass(item.parentClass);
-    }    
+    }
     ck.val(item.val);
 
     ck.editor.on('change', function () {
