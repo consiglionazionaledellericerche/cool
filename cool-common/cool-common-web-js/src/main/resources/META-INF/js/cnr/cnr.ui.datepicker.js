@@ -29,7 +29,8 @@ define(['jquery', 'i18n', 'moment', 'datepicker-i18n'], function ($, i18n, momen
       .datepicker($.extend({}, {
         language: i18n.locale,
         autoclose: true,
-        startDate: item.startDate || '-100y'
+        startDate: item.startDate || '-100y',
+        endDate: item.endDate || '+1000y'
       }, item.jsonsettings))
       .on('changeDate change', function (eventType) {
         var d = moment(input.val() + ' 12:00 +0000', dateFormat + ' HH:mm ZZ'); // hack to prevent wrong birth date using different time zones
