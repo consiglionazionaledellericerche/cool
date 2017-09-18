@@ -234,6 +234,7 @@ define(['jquery', 'cnr/cnr', 'cnr/cnr.ui', 'cnr/cnr.bulkinfo', 'i18n', 'cnr/cnr.
     var content = $("<div></div>").addClass('modal-inner-fix'),
       bulkinfo,
       fileInputs = [],
+      modal,
       isInsert = opts.crudStatus === 'INSERT',
       addFileUploadInput,
       regex = /^.*:([^:]*)/gi;
@@ -265,7 +266,7 @@ define(['jquery', 'cnr/cnr', 'cnr/cnr.ui', 'cnr/cnr.bulkinfo', 'i18n', 'cnr/cnr.
       objectId: isInsert ? null : opts.nodeRef,
       callback: {
         afterCreateForm: function () {
-          UI.modal(opts.modalTitle || (isInsert ? 'Inserimento allegato' : 'Aggiornamento allegato'), content, function () {
+          modal = UI.modal(opts.modalTitle || (isInsert ? 'Inserimento allegato' : 'Aggiornamento allegato'), content, function () {
             if (!bulkinfo.validate()) {
               UI.alert("alcuni campi non sono corretti");
               return false;
@@ -374,6 +375,9 @@ define(['jquery', 'cnr/cnr', 'cnr/cnr.ui', 'cnr/cnr.bulkinfo', 'i18n', 'cnr/cnr.
               });
             }
           }, undefined, opts.bigmodal);
+          if (opts.callbackModal) {
+            opts.callbackModal(modal);
+          }
         }
       }
     });

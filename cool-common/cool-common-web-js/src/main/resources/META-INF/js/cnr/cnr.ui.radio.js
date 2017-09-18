@@ -37,7 +37,8 @@ define(['jquery', 'i18n'], function ($, i18n) {
       parent.data('value', value);
       if (parsedValue !== undefined) {
         $('[class*="' + id + '"]').parents('.control-group').hide();
-        $('[class*="' + id + '"]:not(".' + id + '_' + parsedValue + '")').val('').removeClass("active").trigger('change');
+        $('[class*="' + id + '"]:not(".' + id + '_' + parsedValue + '")').val('');
+        $('[class*="' + id + '"]:not(".' + id + '_' + parsedValue + '")').removeClass("active").trigger('change');
         $('.btn-group.radio-tick [class*="' + id + '"]:not(".' + id + '_' + parsedValue + '")').parents('.control-group').data('value', '');
         $('.' + id + '_' + parsedValue).parents('.control-group').show();
       }
