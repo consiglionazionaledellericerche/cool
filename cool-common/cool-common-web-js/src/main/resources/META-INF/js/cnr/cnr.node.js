@@ -370,7 +370,7 @@ define(['jquery', 'cnr/cnr', 'cnr/cnr.ui', 'cnr/cnr.bulkinfo', 'i18n', 'cnr/cnr.
                     });
                 } else {
                   UI.success('Dato inserito correttamente.');
-                  opts.success();
+                  opts.success(undefined, data);
                 }
               });
             }
