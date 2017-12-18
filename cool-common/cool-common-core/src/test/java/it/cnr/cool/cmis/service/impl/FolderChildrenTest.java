@@ -61,14 +61,6 @@ public class FolderChildrenTest {
 								"/" + folderStateClosed).getId()));
 				assertTrue(folder.getAttr().get("rel").equals("folder"));
 			}
-			if (folder.getData().equals(folderStateNull)) {
-				assertTrue(folder.getState() == null);
-				folder.getAttr()
-						.get("id")
-						.equals(cmisSession.getObjectByPath(
-								"/" + folderStateNull).getId());
-				assertTrue(folder.getAttr().get("rel").equals("folder"));
-			}
 		}
 	}
 }
