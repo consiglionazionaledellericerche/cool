@@ -15,10 +15,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 public class FolderChildrenService {
-
 	@Autowired
 	private FolderService folderService;
-	private static Long MAX_FEATCH_LEAF = Long.valueOf(10000);
 
     private static final Logger LOGGER = LoggerFactory
             .getLogger(FolderChildrenService.class);
@@ -30,28 +28,8 @@ public class FolderChildrenService {
 		if (parentFolderId != null) {
 			ItemIterable<QueryResult> children = folderService.getFolderTree(
 					cmisSession, parentFolderId, true);
-			ItemIterable<QueryResult> page = children
-					.getPage(Integer.MAX_VALUE);
-			Long totalNumItems = page.getTotalNumItems();
-
-			String userHomes = null;
-
-			for (QueryResult result : page) {
-				String nodeRef = (String) result
-						.getPropertyById(PropertyIds.OBJECT_ID).getValues()
-						.get(0);
-				if (nodeRef.equals(userHomes)) {
-					// exclude "User Homes" from resultset
-					continue;
-				}
-				if (totalNumItems < MAX_FEATCH_LEAF) {
-                    LOGGER.debug("asked if " + nodeRef + " is leaf. This information could be already cached.");
-					model.add(new AlfrescoFolder(result, folderService
-							.cachedIsLeaf(nodeRef, cmisSession)));
-				} else {
-					model.add(new AlfrescoFolder(result, false));
-				}
-
+			for (QueryResult result : children.getPage(Integer.MAX_VALUE)) {
+				model.add(new AlfrescoFolder(result, false));
 			}
 		}
 		return model;
