@@ -74,7 +74,7 @@ define(['jquery', 'json!common', 'cnr/cnr', 'cnr/cnr.ui', 'cnr/cnr.node', 'cnr/c
 
 
   // update document content
-  function updateDocument(nodeRef, mimeType, refreshFn) {
+  function updateDocument(nodeRef, mimeType, refreshFn, maxUploadSize) {
     // inline editor requires Blob object and a compatible mimetype
     if (window.Blob && ["application/json", "text/plain", "text/csv"].indexOf(mimeType) >= 0) {
       URL.Data.search.content({
@@ -90,7 +90,8 @@ define(['jquery', 'json!common', 'cnr/cnr', 'cnr/cnr.ui', 'cnr/cnr.node', 'cnr/c
         nodeRef: nodeRef,
         crudStatus: 'UPDATE',
         requiresFile: false,
-        success: refreshFn
+        success: refreshFn,
+        maxUploadSize: maxUploadSize
       });
     }
   }
@@ -232,7 +233,7 @@ define(['jquery', 'json!common', 'cnr/cnr', 'cnr/cnr.ui', 'cnr/cnr.node', 'cnr/c
     criteria.list(versioni);
   }
   // returns a new "actions button"
-  function actionButton(obj, customPermission, customButtons, customIcons, refreshFn, nodropdown) {
+  function actionButton(obj, customPermission, customButtons, customIcons, refreshFn, nodropdown, maxUploadSize) {
     var name = obj.name || "",
       nodeRef = obj.nodeRef ? obj.nodeRef.split(';')[0] : obj.nodeRef,
       baseTypeId = obj.baseTypeId || 'cmis:document',
@@ -388,7 +389,7 @@ define(['jquery', 'json!common', 'cnr/cnr', 'cnr/cnr.ui', 'cnr/cnr.node', 'cnr/c
           Node.displayMetadata(objectTypeId, nodeRef, true);
         },
         update: function () {
-          updateDocument(nodeRef, mimeType, refreshFn);
+          updateDocument(nodeRef, mimeType, refreshFn, maxUploadSize);
         },
         history: function () {
           showHistory(nodeRef);
