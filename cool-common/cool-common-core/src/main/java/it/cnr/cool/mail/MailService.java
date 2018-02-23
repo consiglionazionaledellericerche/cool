@@ -6,6 +6,7 @@ import org.springframework.mail.MailException;
 
 public interface MailService {
 	void send(String to, String subject, String text) throws MailException;
+	void send(String to, String cc, String bcc, String subject, String text) throws MailException;
 	void send(String subject, String text) throws MailException;
 	void send(EmailMessage emailMessage) throws MailException;
 	void sendErrorMessage(final String currentUser, String url, String serverPath, final Exception we) throws MailException;

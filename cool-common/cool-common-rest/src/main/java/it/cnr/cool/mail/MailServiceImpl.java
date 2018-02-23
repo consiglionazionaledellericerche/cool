@@ -130,14 +130,22 @@ public class MailServiceImpl implements MailService, InitializingBean {
 	}
 
 	@Override
-	public void send(final String to, final String subject, final String text) throws MailException{
+	public void send(final String to, final String cc, final String bcc, final String subject, final String text) throws MailException{
 		EmailMessage message = new EmailMessage();
 		message.setSender(mailFromDefault);
 		List<String> recipients = Arrays.asList(to != null ? to : mailToAdmin);
 		message.setRecipients(recipients);
+		Optional.ofNullable(cc)
+				.ifPresent(s -> message.addCcRecipient(s));
+		Optional.ofNullable(bcc)
+				.ifPresent(s -> message.addBccRecipient(s));
 		message.setSubject(subject);
-	    message.setBody(text);
-	    send(message);
+		message.setBody(text);
+		send(message);
+	}
+	@Override
+	public void send(final String to, final String subject, final String text) throws MailException{
+		send(to, null, null, subject, text);
 	}
 
 	@Override

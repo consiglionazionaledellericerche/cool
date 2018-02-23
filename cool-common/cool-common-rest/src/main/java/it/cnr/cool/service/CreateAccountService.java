@@ -13,6 +13,7 @@ import it.cnr.cool.util.CalendarUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationContext;
 
 import java.io.IOException;
@@ -39,6 +40,9 @@ public class CreateAccountService {
 
 	@Autowired
 	private ApplicationContext applicationContext;
+
+	@Value("${mail.from.default}")
+	private String mailFromDefault;
 
 	public Map<String, Object> update(Map<String,List<String>> form, Locale locale) {
 		return manage(form, locale, false, null);
@@ -180,13 +184,11 @@ public class CreateAccountService {
 			String content = Util.processTemplate(modelMail, templatePath);
 			LOGGER.debug(content);
 			String subject = i18nService.getLabel("subject-confirm-account", locale);
-			mailService.send(user.getEmail(), subject, content);
+			mailService.send(user.getEmail(), null, mailFromDefault, subject, content);
 		} catch (TemplateException e) {
 			LOGGER.error(e.getMessage(), e);
 		} catch (IOException e) {
 			LOGGER.error(e.getMessage(), e);
 		}
-
-
 	}
 }
