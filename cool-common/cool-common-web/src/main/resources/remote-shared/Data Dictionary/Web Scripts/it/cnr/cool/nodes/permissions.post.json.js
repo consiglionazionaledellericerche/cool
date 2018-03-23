@@ -1,9 +1,7 @@
-<import resource="classpath:/alfresco/templates/webscripts/org/alfresco/slingshot/documentlibrary/parse-args.lib.js">
-
 /**
  * Entry point for rmpermissions POST data webscript.
  * Applies supplied permissions to a node.
- * 
+ *
  * @method main
  */
 function main()
@@ -15,16 +13,12 @@ function main()
       storeId = url.templateArgs.store_id,
       id = url.templateArgs.id,
       nodeRef = storeType + "://" + storeId + "/" + id,
-      node = ParseArgs.resolveNode(nodeRef);
-   
+      node = search.findNode(nodeRef);
+
    if (node == null)
    {
-      node = search.findNode(nodeRef);
-      if (node === null)
-      {
-         status.setCode(status.STATUS_NOT_FOUND, "Not a valid nodeRef: '" + nodeRef + "'");
-         return null;
-      }
+      status.setCode(status.STATUS_NOT_FOUND, "Not a valid nodeRef: '" + nodeRef + "'");
+      return null;
    }
 
    
