@@ -40,7 +40,7 @@ public class BulkInfoRepository {
         try {
             return cmisService.createAdminSession().getTypeDefinition(bulkTypeName);        	
         } catch (CmisObjectNotFoundException _ex) {
-        	 LOGGER.info("Type: {} not found!", bulkTypeName, _ex);
+            LOGGER.warn("Type: {} not found!", bulkTypeName);
         	return null;
         }
     }

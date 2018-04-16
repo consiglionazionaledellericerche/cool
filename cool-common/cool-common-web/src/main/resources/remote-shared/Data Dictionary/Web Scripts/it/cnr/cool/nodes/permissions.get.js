@@ -1,5 +1,3 @@
-<import resource="classpath:/alfresco/templates/webscripts/org/alfresco/slingshot/documentlibrary/parse-args.lib.js">
-
 /**
  * Main entry point: Retrieve permissions and associated metadata for given node
  *
@@ -14,16 +12,12 @@ function getPermissions()
       storeId = url.templateArgs.store_id,
       id = url.templateArgs.id,
       nodeRef = storeType + "://" + storeId + "/" + id,
-      node = ParseArgs.resolveNode(nodeRef);
+      node = search.findNode(nodeRef);
    
    if (node == null)
    {
-      node = search.findNode(nodeRef);
-      if (node === null)
-      {
-         status.setCode(status.STATUS_NOT_FOUND, "Not a valid nodeRef: '" + nodeRef + "'");
-         return null;
-      }
+     status.setCode(status.STATUS_NOT_FOUND, "Not a valid nodeRef: '" + nodeRef + "'");
+     return null;
    }
 
    // Get array of settable permissions

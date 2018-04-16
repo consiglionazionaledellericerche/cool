@@ -7,7 +7,9 @@ import org.springframework.stereotype.Repository;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.UnsupportedEncodingException;
+import java.io.InputStreamReader;
+import java.net.URL;
+import java.net.URLConnection;
 import java.util.*;
 
 /**
@@ -16,10 +18,10 @@ import java.util.*;
 @Repository
 public class I18nRepository {
 
+    public static final String UTF_8 = "UTF-8";
     private static final Logger LOGGER = LoggerFactory.getLogger(I18nRepository.class);
 
-
-    @Cacheable(value="labels", key="#locale")
+    @Cacheable(value = "labels", key = "#locale")
     public Properties loadProperties(String locale, List<String> locations) {
 
         Properties labels = new Properties();
@@ -36,49 +38,30 @@ public class I18nRepository {
 
             try {
                 ResourceBundle resourcebundle = ResourceBundle.getBundle(
-                        location, myLocale);
-                Enumeration<String> enumKeys = resourcebundle.getKeys();
-                while (enumKeys.hasMoreElements() == true) {
-                    String key = enumKeys.nextElement();
-                    String val = resourcebundle.getString(key);
-                    String utf8val;
-                    try {
-                        byte[] bytes = val.getBytes("ISO-8859-1");
-                        utf8val = new String(bytes, "UTF-8");
-                    } catch(UnsupportedEncodingException e) {
-                        LOGGER.info("error for string " + key + " = " + val, e);
-                        utf8val = val;
-                    }
-                    labels.put(key, utf8val);
-                }
+                        location, myLocale, new UTF8Control());
+                resourcebundle.keySet().stream()
+                        .forEach(key -> labels.put(key, resourcebundle.getString(key)));
             } catch (MissingResourceException e) {
                 LOGGER.warn("resource bundle not found: " + location + " "
                         + myLocale.getLanguage(), e);
-
             }
-
-
         }
-
         LOGGER.info(labels.size() + " properties loaded for locale " + myLocale);
-
         return labels;
     }
-
-
 
     @Cacheable("labels-uri")
     public Properties getLabelsForUrl(String f) {
 
         Properties result = new Properties();
 
-        String path = "/i18n/" + f +  ".properties";
+        String path = "/i18n/" + f + ".properties";
 
         InputStream is = I18nRepository.class.getResourceAsStream(path);
 
         try {
             if (is != null) {
-                result.load(is);
+                result.load(new InputStreamReader(is, UTF_8));
             } else {
                 LOGGER.debug("lang file " + path + " doesnt exist");
             }
@@ -90,7 +73,38 @@ public class I18nRepository {
 
     }
 
-
+    public class UTF8Control extends ResourceBundle.Control {
+        public ResourceBundle newBundle
+                (String baseName, Locale locale, String format, ClassLoader loader, boolean reload)
+                throws IllegalAccessException, InstantiationException, IOException {
+            // The below is a copy of the default implementation.
+            String bundleName = toBundleName(baseName, locale);
+            String resourceName = toResourceName(bundleName, "properties");
+            ResourceBundle bundle = null;
+            InputStream stream = null;
+            if (reload) {
+                URL url = loader.getResource(resourceName);
+                if (url != null) {
+                    URLConnection connection = url.openConnection();
+                    if (connection != null) {
+                        connection.setUseCaches(false);
+                        stream = connection.getInputStream();
+                    }
+                }
+            } else {
+                stream = loader.getResourceAsStream(resourceName);
+            }
+            if (stream != null) {
+                try {
+                    // Only this line is changed to make it to read properties files as UTF-8.
+                    bundle = new PropertyResourceBundle(new InputStreamReader(stream, UTF_8));
+                } finally {
+                    stream.close();
+                }
+            }
+            return bundle;
+        }
+    }
 
 
 }
