@@ -38,6 +38,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.web.bind.annotation.RequestBody;
 
 @Path("page")
 @Component
@@ -74,7 +75,8 @@ public class Page {
 	@POST
 	@Path("{id}")
 	public Response post(@Context HttpServletRequest req, @PathParam("id") String id,
-			MultivaluedMap<String, String> formParams, @CookieParam("__lang") String cookieLang) {
+						 @RequestBody MultivaluedMap<String, String> formParams, @CookieParam("__lang") String cookieLang) {
+
 		return processRequest(req, null, id, formParams, cookieLang, null);
 	}
 
@@ -91,7 +93,8 @@ public class Page {
 	}
 
 	private Response processRequest(HttpServletRequest req, HttpServletResponse res, String id,
-			MultivaluedMap<String, String> formParams, String cookieLang, String reqLang) {
+									MultivaluedMap<String, String> formParams, String cookieLang, String reqLang) {
+
 		ResponseBuilder rb;
 		String lang = i18nCookie(res, cookieLang, reqLang);
 		CoolPage page = pageService.loadPages().get(id);

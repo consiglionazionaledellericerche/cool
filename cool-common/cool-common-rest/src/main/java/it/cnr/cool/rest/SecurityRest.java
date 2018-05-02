@@ -14,6 +14,7 @@ import it.cnr.cool.service.CreateAccountService;
 import it.cnr.cool.service.I18nService;
 import it.cnr.cool.service.UserFactoryException;
 
+import it.cnr.mock.RequestUtils;
 import org.apache.chemistry.opencmis.client.bindings.impl.CmisBindingsHelper;
 import org.apache.chemistry.opencmis.client.bindings.spi.BindingSession;
 import org.apache.chemistry.opencmis.commons.impl.UrlBuilder;
@@ -22,6 +23,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
+import org.springframework.web.bind.ServletRequestUtils;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.*;
@@ -63,11 +66,13 @@ public class SecurityRest {
 	@POST
 	@Path("create-account")
 	public Response doCreateUser(@Context HttpServletRequest request,
-			MultivaluedMap<String, String> form, @CookieParam("__lang") String cookieLang) {
-		Map<String, List<String>> values = new HashMap<String, List<String>>();
-		values.putAll(form);
+                                 MultivaluedMap<String, String> form, @CookieParam("__lang") String cookieLang) {
+		Map formParamz = new HashMap<>();
+        formParamz.putAll(request.getParameterMap());
+        if (form != null && !form.isEmpty())
+            formParamz.putAll(RequestUtils.extractFormParams(form));
 		try {
-			return Response.ok(createAccountService.create(values, I18nService.getLocale(request, cookieLang) ,getUrl(request))).build();
+			return Response.ok(createAccountService.create(formParamz, I18nService.getLocale(request, cookieLang) ,getUrl(request))).build();
 		} catch(CoolException e) {
 			LOGGER.warn("Create user exception {}", e.getMessage(), e);
 			return Response.serverError().entity(Collections.singletonMap("message", e.getMessage())).build();
@@ -80,11 +85,13 @@ public class SecurityRest {
 	@PUT
 	@Path("create-account")
 	public Response doUpdateUser(@Context HttpServletRequest request,
-			MultivaluedMap<String, String> form, @CookieParam("__lang") String cookieLang) {
-		Map<String, List<String>> values = new HashMap<String, List<String>>();
-		values.putAll(form);
+                                 MultivaluedMap<String, String> form, @CookieParam("__lang") String cookieLang) {
+        Map formParamz = new HashMap<>();
+        formParamz.putAll(request.getParameterMap());
+        if (form != null && !form.isEmpty())
+            formParamz.putAll(RequestUtils.extractFormParams(form));
 		try {
-			Map<String, Object> data = createAccountService.update(values, I18nService.getLocale(request, cookieLang));
+			Map<String, Object> data = createAccountService.update(formParamz, I18nService.getLocale(request, cookieLang));
 			CMISUser currentUser = cmisService.getCMISUserFromSession(request);
 			CMISUser user = (CMISUser) data.get("user");
 			boolean isLoggedUserData = user.getUserName().equalsIgnoreCase(currentUser.getId());
