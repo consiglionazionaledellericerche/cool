@@ -1,16 +1,13 @@
 define(['jquery', 'i18n', 'select2', 'select2-i18n', 'cnr/cnr'], function ($, i18n, CNR) {
   "use strict";
 
-  function init(item, id, parent, controls) {
+  function init(item, id, parent, controls, optionsCustom) {
 
     var select = $('<select></select>').attr("id", id).attr("name", item.property),
       options,
       optionsGroup = [],
       s2,
-      select2opts = {
-        allowClear: true,
-        placeholder: item.placeholder || ""
-      },
+      select2opts = $.extend(true, {}, {allowClear: true,placeholder: item.placeholder || "" }, optionsCustom),
       keys,
       optgroup = [];
 
@@ -98,12 +95,19 @@ define(['jquery', 'i18n', 'select2', 'select2-i18n', 'cnr/cnr'], function ($, i1
     }
 
     select2opts.dropdownAutoWidth = true;
+    if (optionsCustom && "ajax" in optionsCustom) {
+        s2 = $('<input>').attr("id", id).attr("name", item.property).addClass(item['class'])
+              .appendTo(controls)
+              .select2(select2opts)
+              .on('change', setData);
 
-    s2 = select
-      .append(options)
-      .appendTo(controls)
-      .select2(select2opts)
-      .on('change', setData);
+    } else {
+        s2 = select
+          .append(options)
+          .appendTo(controls)
+          .select2(select2opts)
+          .on('change', setData);
+    }
     setData();
     return s2;
   }
@@ -130,14 +134,14 @@ define(['jquery', 'i18n', 'select2', 'select2-i18n', 'cnr/cnr'], function ($, i1
     Widget: function (id, labelText, item) {
       return internalWidget(id, labelText, item).parent;
     },
-    CustomWidget: function (id, labelText, item) {
+    CustomWidget: function (id, labelText, item, optsCustom) {
       var obj = internalWidget(id, labelText, item, true),
         parent = obj.parent;
       return {
         emptyWidget: parent,
         setOptions: function (options) {
           item.jsonlist = options;
-          return init(item, id, parent, obj.controls);
+          return init(item, id, parent, obj.controls, optsCustom);
         }
       };
     }
