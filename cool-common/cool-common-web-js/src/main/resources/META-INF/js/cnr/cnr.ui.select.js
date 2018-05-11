@@ -7,7 +7,7 @@ define(['jquery', 'i18n', 'select2', 'select2-i18n', 'cnr/cnr'], function ($, i1
       options,
       optionsGroup = [],
       s2,
-      select2opts = $.extend(true, {}, {allowClear: true,placeholder: item.placeholder || "" }, optionsCustom),
+      select2opts = $.extend(true, {}, {allowClear: true, placeholder: item.placeholder || "" }, optionsCustom),
       keys,
       optgroup = [];
 
@@ -95,14 +95,14 @@ define(['jquery', 'i18n', 'select2', 'select2-i18n', 'cnr/cnr'], function ($, i1
     }
 
     select2opts.dropdownAutoWidth = true;
-    if (optionsCustom && "ajax" in optionsCustom) {
-        s2 = $('<input>').attr("id", id).attr("name", item.property).addClass(item['class'])
+    if (optionsCustom && optionsCustom.hasOwnProperty('ajax')) {
+      s2 = $('<input>').attr("id", id).attr("name", item.property).addClass(item['class'])
               .appendTo(controls)
               .select2(select2opts)
               .on('change', setData);
 
     } else {
-        s2 = select
+      s2 = select
           .append(options)
           .appendTo(controls)
           .select2(select2opts)
