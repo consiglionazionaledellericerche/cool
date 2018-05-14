@@ -23,7 +23,7 @@ define(['jquery', 'i18n'], function ($, i18n) {
         if (fieldvalue['class']) {
           btn.addClass(fieldvalue['class']);
         }
-        if (String(item.val) === String(fieldvalue.key) || (item.val === undefined && (String(item['default'] && String(item['default'])) === String(fieldvalue.key)))) {
+        if (String(item.val) === String(fieldvalue.key) || ((item.val === undefined || item.val === "") && (String(item['default'] && String(item['default'])) === String(fieldvalue.key)))) {
           btn.addClass('active default');
           parent.data('value', fieldvalue.key);
         }
