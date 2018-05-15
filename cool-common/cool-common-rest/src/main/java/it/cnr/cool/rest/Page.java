@@ -110,7 +110,7 @@ public class Page {
 			for (Object key : paramz.keySet()) {
 				String [] valuez =  (String[]) paramz.get(key);
 				if (valuez.length > 0) {
-					baseURI = baseURI.concat("&"+(String) key + "=" + valuez[0]);
+					baseURI = baseURI.concat("&"+(String) key + "=" + it.cnr.cool.util.UriUtils.encode(valuez[0]));
 				}
 			}
 			URI uri = URI.create(baseURI);

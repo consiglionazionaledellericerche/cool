@@ -15,11 +15,5 @@
 			name="description" 
 			property="tit.cm:description"
 			class="criteria-like"/>
-		<formFieldProperty 
-			name="contenuto" 
-			label="Contenuto"
-			inputType="TEXTAREA" 
-			class="criteria-contains"
-			labelClass="control-label"/>
 	</form>
 </bulkInfo>
