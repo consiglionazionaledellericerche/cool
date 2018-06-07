@@ -1,0 +1,10 @@
+<webscript>
+   <shortname>Delete Person</shortname>
+   <description>Delete person.</description>
+   <url>/cnr/person/person/{userName}</url>
+   <format default="json">argument</format>
+   <authentication>user</authentication>
+   <transaction>required</transaction>
+   <family>CNR</family>
+   <family>person</family>
+</webscript>

@@ -357,6 +357,9 @@ define(['jquery', 'cnr/cnr', 'cnr/cnr.ui', 'cnr/cnr.bulkinfo', 'i18n', 'cnr/cnr.
                     });
                   $.when.apply(this, xhrs)
                     .done(function () {
+                      if (typeof opts.successMetadata === 'function') {
+                        opts.successMetadata(data);
+                      }
                       if (xhrs && xhrs[0]) {
                         close();
                         UI.success((filteredFileInputs.length === 1 ? 'allegato inserito' : 'allegati inseriti') + ' correttamente');
