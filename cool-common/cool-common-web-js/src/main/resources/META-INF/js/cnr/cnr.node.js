@@ -29,7 +29,7 @@ define(['jquery', 'cnr/cnr', 'cnr/cnr.ui', 'cnr/cnr.bulkinfo', 'i18n', 'cnr/cnr.
       fd.data.append("crudStatus", operation);
       if (rel) {
         $.each(rel, function (key, value) {
-             fd.data.append(key, value);
+          fd.data.append(key, value);
         });
       }
       if (forbidArchives) {
