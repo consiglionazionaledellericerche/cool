@@ -28,8 +28,9 @@ define(['jquery', 'cnr/cnr', 'cnr/cnr.ui', 'cnr/cnr.bulkinfo', 'i18n', 'cnr/cnr.
       fd.data.append("cmis:objectTypeDocument", defaultObjectTypeDocument);
       fd.data.append("crudStatus", operation);
       if (rel) {
-        fd.data.append('cmis:sourceId', rel['cmis:sourceId']);
-        fd.data.append('cmis:relObjectTypeId', rel['cmis:relObjectTypeId']);
+        $.each(rel, function (key, value) {
+             fd.data.append(key, value);
+        });
       }
       if (forbidArchives) {
         fd.data.append('forbidArchives', true);
@@ -342,10 +343,9 @@ define(['jquery', 'cnr/cnr', 'cnr/cnr.ui', 'cnr/cnr.bulkinfo', 'i18n', 'cnr/cnr.
                           if (typeof opts.success === 'function') {
                             opts.success(attachmentsData, data);
                           }
-                        }, {
-                          "cmis:sourceId" : data['cmis:objectId'],
-                          "cmis:relObjectTypeId" : opts.input.rel['cmis:relObjectTypeId']
-                        });
+                        },
+                            $.extend({'cmis:sourceId' : data['cmis:objectId']}, opts.input.rel)
+                        );
                       } else {
                         return f.fn(data['cmis:objectId'], null, function (attachmentsData) {
                           close();
