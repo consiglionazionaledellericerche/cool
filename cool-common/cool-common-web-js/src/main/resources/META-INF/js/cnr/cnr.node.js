@@ -345,7 +345,7 @@ define(['jquery', 'cnr/cnr', 'cnr/cnr.ui', 'cnr/cnr.bulkinfo', 'i18n', 'cnr/cnr.
                           }
                         },
                             $.extend({'cmis:sourceId' : data['cmis:objectId']}, opts.input.rel)
-                        );
+                          );
                       } else {
                         return f.fn(data['cmis:objectId'], null, function (attachmentsData) {
                           close();
