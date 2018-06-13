@@ -98,7 +98,11 @@ public class MailServiceImpl implements MailService, InitializingBean {
 			message.getMimeMessage().setHeader("X-Mailer", "JavaMailer");
 			if (emailMessage.getAttachments()!=null && !emailMessage.getAttachments().isEmpty()) {
 				for (AttachmentBean attachment : emailMessage.getAttachments())
-					message.addAttachment(attachment.getFileName(), new ByteArrayResource(attachment.getAttachmentByte()));
+					if (attachment.isInline()) {
+						message.addInline(attachment.getFileName(), new ByteArrayResource(attachment.getAttachmentByte()), attachment.getContentType());
+					} else {
+						message.addAttachment(attachment.getFileName(), new ByteArrayResource(attachment.getAttachmentByte()));
+					}
 			}
 		}
 	}
