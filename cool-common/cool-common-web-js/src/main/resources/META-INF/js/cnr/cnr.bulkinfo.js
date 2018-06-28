@@ -156,7 +156,7 @@ define(['cnr/cnr.ui.widgets', 'jquery', 'cnr/cnr', 'cnr/cnr.style', 'handlebars'
         }
 
         if (!item.val && item['default']) {
-            input.val(item['default']);
+          input.val(item['default']);
         }
 
         if (item.placeholder) {
