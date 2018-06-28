@@ -104,6 +104,8 @@ define(['cnr/cnr.ui.widgets', 'jquery', 'cnr/cnr', 'cnr/cnr.style', 'handlebars'
         input = $('<button class="btn" type="button">' + i18n.prop(item.label, item.label) + '</button>');
       } else if (item.inputType === "SUBMIT") {
         input = $('<input type="submit">');
+      } else if (item.inputType === "NUMBER") {
+        input = $('<input type="number">');
       } else if (item.inputType === "HIDDEN") {
         input = $('<input type="hidden">');
       } else if (item.inputType === "RADIO") {
@@ -151,6 +153,10 @@ define(['cnr/cnr.ui.widgets', 'jquery', 'cnr/cnr', 'cnr/cnr.style', 'handlebars'
 
         if (typeof input.val === 'function') {
           input.val(item.val);
+        }
+
+        if (!item.val && item.default) {
+            input.val(item.default);
         }
 
         if (item.placeholder) {

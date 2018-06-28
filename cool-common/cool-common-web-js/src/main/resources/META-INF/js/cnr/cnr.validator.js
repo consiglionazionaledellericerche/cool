@@ -37,7 +37,21 @@ define(['jquery', 'bootstrap', 'i18n', 'validate', 'json!common'], function ($, 
       defaults = {
         success: function (label, element) {}
       };
-
+    var numberMsg = i18n.prop('message.number', 'number'),
+      validator,
+      defaults = {
+        success: function (label, element) {}
+      };
+    var minlengthMsg = $.validator.format(i18n.prop('message.minlength')),
+      validator,
+      defaults = {
+        success: function (label, element) {}
+    };
+    var maxlengthMsg = $.validator.format(i18n.prop('message.maxlength')),
+      validator,
+      defaults = {
+        success: function (label, element) {}
+    };
     $.validator.addMethod('controlloCodicefiscale',
         function (value) {
         value = value.toUpperCase();
@@ -75,7 +89,7 @@ define(['jquery', 'bootstrap', 'i18n', 'validate', 'json!common'], function ($, 
     $.validator.addMethod('controlloUserId',
       function (value) {
         if (value !== "") {
-          var regex = /^[a-z][a-z0-9\._\-]+$/gi;
+          var regex = /^[a-z][a-z0-9\._\-]+[^\.]$/gi;
           return regex.test(value);
         }
         return true;
@@ -103,6 +117,9 @@ define(['jquery', 'bootstrap', 'i18n', 'validate', 'json!common'], function ($, 
     }, requiredMsg);
 
     $.validator.messages.required = requiredMsg;
+    $.validator.messages.number = numberMsg;
+    $.validator.messages.minlength = minlengthMsg;
+    $.validator.messages.maxlength = maxlengthMsg;
 
     $.validator.addMethod('maxlengthAlfresco', function (value, element, param) {
       // do not trim the value
