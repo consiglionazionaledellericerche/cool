@@ -36,22 +36,10 @@ define(['jquery', 'bootstrap', 'i18n', 'validate', 'json!common'], function ($, 
       validator,
       defaults = {
         success: function (label, element) {}
-      };
-    var numberMsg = i18n.prop('message.number', 'number'),
-      validator,
-      defaults = {
-        success: function (label, element) {}
-      };
-    var minlengthMsg = $.validator.format(i18n.prop('message.minlength')),
-      validator,
-      defaults = {
-        success: function (label, element) {}
-    };
-    var maxlengthMsg = $.validator.format(i18n.prop('message.maxlength')),
-      validator,
-      defaults = {
-        success: function (label, element) {}
-    };
+      },
+      numberMsg = i18n.prop('message.number', 'number'),
+      minlengthMsg = $.validator.format(i18n.prop('message.minlength')),
+      maxlengthMsg = $.validator.format(i18n.prop('message.maxlength'));
     $.validator.addMethod('controlloCodicefiscale',
         function (value) {
         value = value.toUpperCase();

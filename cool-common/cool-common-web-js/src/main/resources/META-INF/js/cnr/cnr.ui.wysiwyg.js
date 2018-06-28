@@ -8,7 +8,7 @@ define(['jquery', 'i18n', 'ckeditor-jquery'], function ($, i18n) {
       { name: 'paragraph', groups: ['list', 'align'] },
       { name: 'insert'}
     ],
-    removeButtons:'Image,Table,HorizontalRule,Smiley,SpecialChar,Flash,Iframe,PageBreak',
+    removeButtons: 'Image,Table,HorizontalRule,Smiley,SpecialChar,Flash,Iframe,PageBreak',
     extraPlugins: 'placeholder',
     removePlugins: 'elementspath'
   };
