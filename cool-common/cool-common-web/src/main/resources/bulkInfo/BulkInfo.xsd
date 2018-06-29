@@ -659,6 +659,7 @@
 					<xsd:enumeration value="ui.country" />
 					<xsd:enumeration value="ui.city" />
 					<xsd:enumeration value="ui.wysiwyg" />
+					<xsd:enumeration value="ui.wysiwyg-placeholder" />
 					<xsd:enumeration value="ui.select" />
 					<xsd:enumeration value="ui.radio" />
 				</xsd:restriction>

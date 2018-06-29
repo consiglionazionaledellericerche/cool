@@ -5,8 +5,11 @@ define(['jquery', 'i18n', 'ckeditor-jquery'], function ($, i18n) {
     toolbarGroups: [
       { name: 'clipboard', groups: ['clipboard'] },
       { name: 'basicstyles', groups: ['basicstyles'] },
-      { name: 'paragraph', groups: ['list', 'align'] },
+      { name: 'paragraph', groups: ['list'] },
+      { name: 'insert'}
     ],
+    removeButtons: 'Image,Table,HorizontalRule,Smiley,SpecialChar,Flash,Iframe,PageBreak',
+    extraPlugins: 'placeholder',
     removePlugins: 'elementspath'
   };
 
