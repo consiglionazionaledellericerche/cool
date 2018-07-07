@@ -6,7 +6,7 @@ define(['jquery'], function ($) {
     var controls = $('<div class="controls"></div>'),
       label = $('<label/>').attr("class", item.labelClass || "control-label").append(labelText),
       parent = $('<div class="control-group widget"></div>').append(label).append(controls),
-      isChecked = item.val || false,
+      isChecked = item.val || item['default'] || false,
       options = {
         y: {
           label: '<i class="icon-ok icon-white"></i>'
