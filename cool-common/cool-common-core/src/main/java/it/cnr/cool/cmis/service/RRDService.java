@@ -56,7 +56,7 @@ public class RRDService implements InitializingBean {
 
     private String dictionaryTypeId;
 
-    private Boolean skipMD5;
+    private Boolean skipMD5 = Boolean.FALSE;
 
     @Override
     public void afterPropertiesSet() throws Exception {
@@ -244,5 +244,9 @@ public class RRDService implements InitializingBean {
 
     public void setDictionaryTypeId(String dictionaryTypeId) {
         this.dictionaryTypeId = dictionaryTypeId;
+    }
+
+    public void setSkipMD5(Boolean skipMD5) {
+        this.skipMD5 = skipMD5;
     }
 }

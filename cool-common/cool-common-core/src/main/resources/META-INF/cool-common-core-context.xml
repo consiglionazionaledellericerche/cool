@@ -10,7 +10,7 @@
 	<bean id="RRDService" class="it.cnr.cool.cmis.service.RRDService"  depends-on="mailService,application.version">
 		<property name="dictionaryTypeId" value="D:cm:dictionaryModel" />
 		<property name="rrdPath" value="${rrd.path}" />
-		<property name="skipMD5" value="${rrd.skipmd5:false}" />
+		<property name="skipMD5" value="${rrd.skipmd5}" />
 	</bean>
 
 
