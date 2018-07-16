@@ -35,217 +35,215 @@ import java.util.stream.Collectors;
  * Remote Resource Deploy Service
  *
  * @author mspasiano
- *
  */
 public class RRDService implements InitializingBean {
 
-    private static final Logger LOGGER= LoggerFactory.getLogger(RRDService.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(RRDService.class);
 
     @Autowired
     private CMISService cmisService;
 
-	@Autowired
-	private ACLService aclService;
+    @Autowired
+    private ACLService aclService;
 
-	@Autowired
-	private MailService mailService;
+    @Autowired
+    private MailService mailService;
 
-	@Autowired
-	private VersionService versionService;
+    @Autowired
+    private VersionService versionService;
 
-	private String rrdPath;
+    private String rrdPath;
 
-	private String dictionaryTypeId;
+    private String dictionaryTypeId;
 
-	@Value("${rrdservice.skipmd5:false}")
-	private boolean skipMD5;
+    @Value("${rrdservice.skipmd5:false}")
+    private boolean skipMD5;
 
-	@Override
-	public void afterPropertiesSet() throws Exception {
-		if (!versionService.isProduction()) {
-			LOGGER.warn("development mode, avoid scan document paths");
-			return;
-		} else {
-			LOGGER.info("production mode");
-		}
-		List<Resource> resources = getResources();
-		Session cmisSession = cmisService.createAdminSession();
-		Boolean webscriptCreated = Boolean.FALSE;
-		List<Document> documentsToBeActive = new ArrayList<Document>();
-		List<String> differentFiles = new ArrayList<String>();
-		for (Resource resource : resources) {
-			if (!resource.isReadable())
-				continue;
-			String urlPath = resource.getURL().toString();
+    @Override
+    public void afterPropertiesSet() throws Exception {
+        if (!versionService.isProduction()) {
+            LOGGER.warn("development mode, avoid scan document paths");
+            return;
+        } else {
+            LOGGER.info("production mode");
+        }
+        List<Resource> resources = getResources();
+        Session cmisSession = cmisService.createAdminSession();
+        Boolean webscriptCreated = Boolean.FALSE;
+        List<Document> documentsToBeActive = new ArrayList<Document>();
+        List<String> differentFiles = new ArrayList<String>();
+        for (Resource resource : resources) {
+            if (!resource.isReadable())
+                continue;
+            String urlPath = resource.getURL().toString();
 
-			String[] split = urlPath.split("!");
-			String folderName = split[split.length - 1].split("/")[1];
-			int beginIndex = urlPath.indexOf("/" + folderName + "/") + folderName.length() + 1;
-			String substring = urlPath.substring(beginIndex);
+            String[] split = urlPath.split("!");
+            String folderName = split[split.length - 1].split("/")[1];
+            int beginIndex = urlPath.indexOf("/" + folderName + "/") + folderName.length() + 1;
+            String substring = urlPath.substring(beginIndex);
 
-			String cmisPath = URIUtil.decode(substring);
-			LOGGER.debug(urlPath);
-			try{
-				CmisObject doc = cmisSession.getObjectByPath(cmisPath);
+            String cmisPath = URIUtil.decode(substring);
+            LOGGER.debug(urlPath);
+            try {
+                CmisObject doc = cmisSession.getObjectByPath(cmisPath);
 
-				if (doc instanceof Document) {
-					InputStream remote = ((Document) doc).getContentStream().getStream();
-					InputStream local = resource.getInputStream();
-					if (!skipMD5) {
-						if (!StringUtil.getMd5(remote).equals(StringUtil.getMd5(local))) {
-							LOGGER.error("different md5 for element " + cmisPath);
-							differentFiles.add(cmisPath);
-						}
-					}
-				}
+                if (doc instanceof Document) {
+                    InputStream remote = ((Document) doc).getContentStream().getStream();
+                    InputStream local = resource.getInputStream();
+                    if (!skipMD5 && !StringUtil.getMd5(remote).equals(StringUtil.getMd5(local))) {
+                        LOGGER.error("different md5 for element " + cmisPath);
+                        differentFiles.add(cmisPath);
+                    }
 
-			}catch(CmisObjectNotFoundException _ex){
-				LOGGER.debug("object not found: {}", resource, _ex);
-				String fileName = cmisPath.substring(cmisPath.lastIndexOf("/") + 1);
-				if (fileName.length() == 0)
-					continue;
-				boolean createFolder = !fileName.equalsIgnoreCase("bulkInfoMapping.js");
-				CmisObject source = createPath(cmisSession, cmisPath.substring(0, cmisPath.lastIndexOf("/")), createFolder);
-				if (source == null)
-					continue;
-				Map<String, Object> properties = new HashMap<String, Object>();
-				properties.put(PropertyIds.NAME, fileName);
-				properties.put(PropertyIds.OBJECT_TYPE_ID, BaseTypeId.CMIS_DOCUMENT.value());
-				String contentType = "text/plain";
-				if (fileName.endsWith(".xml") && cmisPath.contains("Models")){
-					properties.put(PropertyIds.OBJECT_TYPE_ID, dictionaryTypeId);
-					contentType = "text/xml";
-				} else if (fileName.endsWith(".jbpm.xml")) {
-					properties.put(PropertyIds.OBJECT_TYPE_ID, "D:bpm:workflowDefinition");
-					properties.put("bpm:engineId", "jbpm");
-					contentType = "text/xml";
-				} else if (fileName.endsWith(".activiti.xml")) {
-					properties.put(PropertyIds.OBJECT_TYPE_ID, "D:bpm:workflowDefinition");
-					properties.put("bpm:engineId", "activiti");
-					contentType = "text/xml";
-				} else {
-					webscriptCreated = Boolean.TRUE;
-				}
-				InputStream is = resource.getInputStream();
-				ContentStream contentStream = new ContentStreamImpl(
-						fileName,BigInteger.valueOf(is.available()),
-						contentType, is);
-				Document doc = (Document)cmisSession.getObject(cmisSession.createDocument(properties, source,
-					contentStream, VersioningState.MAJOR));
-				if (fileName.endsWith(".jbpm.xml")) {
-					properties.put("bpm:definitionDeployed", Boolean.TRUE);
-					doc.updateProperties(properties);
-				}
-				if (fileName.endsWith(".xml") && cmisPath.contains("Models")){
-					try {
-						properties.put("cm:modelActive", Boolean.TRUE);
-						doc.updateProperties(properties);
-					} catch (Exception ex) {
-						LOGGER.debug("Cannot activate Model:" + fileName, ex);
-						documentsToBeActive.add(doc);
-					}
-				}
-				if (fileName.equalsIgnoreCase("bulkInfoMapping.js")){
-					aclService.setInheritedPermission(
-							cmisService.getAdminSession(),
-							doc.getVersionSeriesId(), false);
-				}
-			}
-		}
-		while (!documentsToBeActive.isEmpty()) {
-			for (Iterator<Document> iterator = documentsToBeActive.iterator(); iterator.hasNext();) {
-				Document document = iterator.next();
-				try {
-					Map<String, Object> properties = new HashMap<String, Object>();
-					properties.put("cm:modelActive", Boolean.TRUE);
-					document.updateProperties(properties);
-					iterator.remove();
-				} catch (Exception ex) {
-					LOGGER.warn("Cannot activate Model:" + document.getName(), ex);
-				}
-			}
-		}
-		/*Reset dei webscript sul repository CMIS*/
-		if (webscriptCreated){
-			String link = cmisService.getBaseURL().concat(
-					"service/index?reset=on");
-			Response resp = CmisBindingsHelper.getHttpInvoker(
-					cmisService.getAdminSession()).invokePOST(
-					new UrlBuilder(link), "text/html", null,
-					cmisService.getAdminSession());
-			LOGGER.debug("Refresh Web Scripts has responded: "+ resp.getResponseMessage());
-		}
+                }
 
-		if (!differentFiles.isEmpty()) {
-			String text = cmisSession.getRepositoryInfo().getProductName()
-					+ " " + cmisSession.getRepositoryInfo().getProductVersion();
+            } catch (CmisObjectNotFoundException _ex) {
+                LOGGER.debug("object not found: {}", resource, _ex);
+                String fileName = cmisPath.substring(cmisPath.lastIndexOf("/") + 1);
+                if (fileName.length() == 0)
+                    continue;
+                boolean createFolder = !fileName.equalsIgnoreCase("bulkInfoMapping.js");
+                CmisObject source = createPath(cmisSession, cmisPath.substring(0, cmisPath.lastIndexOf("/")), createFolder);
+                if (source == null)
+                    continue;
+                Map<String, Object> properties = new HashMap<String, Object>();
+                properties.put(PropertyIds.NAME, fileName);
+                properties.put(PropertyIds.OBJECT_TYPE_ID, BaseTypeId.CMIS_DOCUMENT.value());
+                String contentType = "text/plain";
+                if (fileName.endsWith(".xml") && cmisPath.contains("Models")) {
+                    properties.put(PropertyIds.OBJECT_TYPE_ID, dictionaryTypeId);
+                    contentType = "text/xml";
+                } else if (fileName.endsWith(".jbpm.xml")) {
+                    properties.put(PropertyIds.OBJECT_TYPE_ID, "D:bpm:workflowDefinition");
+                    properties.put("bpm:engineId", "jbpm");
+                    contentType = "text/xml";
+                } else if (fileName.endsWith(".activiti.xml")) {
+                    properties.put(PropertyIds.OBJECT_TYPE_ID, "D:bpm:workflowDefinition");
+                    properties.put("bpm:engineId", "activiti");
+                    contentType = "text/xml";
+                } else {
+                    webscriptCreated = Boolean.TRUE;
+                }
+                InputStream is = resource.getInputStream();
+                ContentStream contentStream = new ContentStreamImpl(
+                        fileName, BigInteger.valueOf(is.available()),
+                        contentType, is);
+                Document doc = (Document) cmisSession.getObject(cmisSession.createDocument(properties, source,
+                        contentStream, VersioningState.MAJOR));
+                if (fileName.endsWith(".jbpm.xml")) {
+                    properties.put("bpm:definitionDeployed", Boolean.TRUE);
+                    doc.updateProperties(properties);
+                }
+                if (fileName.endsWith(".xml") && cmisPath.contains("Models")) {
+                    try {
+                        properties.put("cm:modelActive", Boolean.TRUE);
+                        doc.updateProperties(properties);
+                    } catch (Exception ex) {
+                        LOGGER.debug("Cannot activate Model:" + fileName, ex);
+                        documentsToBeActive.add(doc);
+                    }
+                }
+                if (fileName.equalsIgnoreCase("bulkInfoMapping.js")) {
+                    aclService.setInheritedPermission(
+                            cmisService.getAdminSession(),
+                            doc.getVersionSeriesId(), false);
+                }
+            }
+        }
+        while (!documentsToBeActive.isEmpty()) {
+            for (Iterator<Document> iterator = documentsToBeActive.iterator(); iterator.hasNext(); ) {
+                Document document = iterator.next();
+                try {
+                    Map<String, Object> properties = new HashMap<String, Object>();
+                    properties.put("cm:modelActive", Boolean.TRUE);
+                    document.updateProperties(properties);
+                    iterator.remove();
+                } catch (Exception ex) {
+                    LOGGER.warn("Cannot activate Model:" + document.getName(), ex);
+                }
+            }
+        }
+        /*Reset dei webscript sul repository CMIS*/
+        if (webscriptCreated) {
+            String link = cmisService.getBaseURL().concat(
+                    "service/index?reset=on");
+            Response resp = CmisBindingsHelper.getHttpInvoker(
+                    cmisService.getAdminSession()).invokePOST(
+                    new UrlBuilder(link), "text/html", null,
+                    cmisService.getAdminSession());
+            LOGGER.debug("Refresh Web Scripts has responded: " + resp.getResponseMessage());
+        }
+
+        if (!differentFiles.isEmpty()) {
+            String text = cmisSession.getRepositoryInfo().getProductName()
+                    + " " + cmisSession.getRepositoryInfo().getProductVersion();
 
             for (String s : differentFiles) {
                 text += "<br>" + s;
             }
-			String address = InetAddress.getLocalHost().getHostAddress();
-			try {
-				mailService.send("md5 " + RRDService.class.getSimpleName()
-						+ " " + cmisService.getBaseURL() + " " + address, text);
-			} catch (MailException e) {
-				LOGGER.warn("unable to send mail " + text, e);
-			}
-		}
+            String address = InetAddress.getLocalHost().getHostAddress();
+            try {
+                mailService.send("md5 " + RRDService.class.getSimpleName()
+                        + " " + cmisService.getBaseURL() + " " + address, text);
+            } catch (MailException e) {
+                LOGGER.warn("unable to send mail " + text, e);
+            }
+        }
 
-	}
-
-
-	List<Resource> getResources() throws IOException {
-		PathMatchingResourcePatternResolver resolver = new PathMatchingResourcePatternResolver();
-
-		String[] paths = rrdPath.split(",");
-
-		return Arrays
-				.stream(paths)
-				.map(path -> "classpath*:" + path + "/**")
-				.peek(path -> LOGGER.info("looking for resources in {}", path))
-				.flatMap(locationPattern -> {
-					try {
-						Resource[] resources = resolver.getResources(locationPattern);
-						return Arrays.stream(resources);
-					} catch (IOException e) {
-						throw new RuntimeException("unable to add resource from " + locationPattern, e);
-					}
-				})
-				.peek(resource -> LOGGER.info("resource: {}", resource))
-				.collect(Collectors.toList());
+    }
 
 
-	}
+    List<Resource> getResources() throws IOException {
+        PathMatchingResourcePatternResolver resolver = new PathMatchingResourcePatternResolver();
 
-	private CmisObject createPath(Session cmisSession, String cmisPath, boolean createFolder) {
-		StringTokenizer tokens = new StringTokenizer(cmisPath, "/");
-		StringBuffer relativePath = new StringBuffer();
-		CmisObject cmisObject = null;
-		while(tokens.hasMoreTokens()){
-			String folderName = tokens.nextToken();
-			relativePath.append("/").append(folderName);
-			try{
-				cmisObject = cmisSession.getObjectByPath(relativePath.toString());
-			}catch(CmisObjectNotFoundException _ex){
-				if (!createFolder)
-					return null;
-				Map<String, Object> properties = new HashMap<String, Object>();
-				properties.put(PropertyIds.NAME, folderName);
-				properties.put(PropertyIds.OBJECT_TYPE_ID, BaseTypeId.CMIS_FOLDER.value());
-				if (cmisObject == null)
-					cmisObject = cmisSession.getRootFolder();
-				cmisObject = cmisSession.getObject(cmisSession.createFolder(properties, cmisObject));
-			}
-		}
-		return cmisObject;
-	}
+        String[] paths = rrdPath.split(",");
 
-	public void setRrdPath(String rrdPath) {
-		this.rrdPath = rrdPath;
-	}
+        return Arrays
+                .stream(paths)
+                .map(path -> "classpath*:" + path + "/**")
+                .peek(path -> LOGGER.info("looking for resources in {}", path))
+                .flatMap(locationPattern -> {
+                    try {
+                        Resource[] resources = resolver.getResources(locationPattern);
+                        return Arrays.stream(resources);
+                    } catch (IOException e) {
+                        throw new RuntimeException("unable to add resource from " + locationPattern, e);
+                    }
+                })
+                .peek(resource -> LOGGER.info("resource: {}", resource))
+                .collect(Collectors.toList());
 
-	public void setDictionaryTypeId(String dictionaryTypeId) {
-		this.dictionaryTypeId = dictionaryTypeId;
-	}
+
+    }
+
+    private CmisObject createPath(Session cmisSession, String cmisPath, boolean createFolder) {
+        StringTokenizer tokens = new StringTokenizer(cmisPath, "/");
+        StringBuffer relativePath = new StringBuffer();
+        CmisObject cmisObject = null;
+        while (tokens.hasMoreTokens()) {
+            String folderName = tokens.nextToken();
+            relativePath.append("/").append(folderName);
+            try {
+                cmisObject = cmisSession.getObjectByPath(relativePath.toString());
+            } catch (CmisObjectNotFoundException _ex) {
+                if (!createFolder)
+                    return null;
+                Map<String, Object> properties = new HashMap<String, Object>();
+                properties.put(PropertyIds.NAME, folderName);
+                properties.put(PropertyIds.OBJECT_TYPE_ID, BaseTypeId.CMIS_FOLDER.value());
+                if (cmisObject == null)
+                    cmisObject = cmisSession.getRootFolder();
+                cmisObject = cmisSession.getObject(cmisSession.createFolder(properties, cmisObject));
+            }
+        }
+        return cmisObject;
+    }
+
+    public void setRrdPath(String rrdPath) {
+        this.rrdPath = rrdPath;
+    }
+
+    public void setDictionaryTypeId(String dictionaryTypeId) {
+        this.dictionaryTypeId = dictionaryTypeId;
+    }
 }
