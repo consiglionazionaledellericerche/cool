@@ -19,6 +19,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 import org.springframework.mail.MailException;
@@ -56,6 +57,9 @@ public class RRDService implements InitializingBean {
 
 	private String dictionaryTypeId;
 
+	@Value("${rrdservice.skipmd5:false}")
+	private boolean skipMD5;
+
 	@Override
 	public void afterPropertiesSet() throws Exception {
 		if (!versionService.isProduction()) {
@@ -87,9 +91,11 @@ public class RRDService implements InitializingBean {
 				if (doc instanceof Document) {
 					InputStream remote = ((Document) doc).getContentStream().getStream();
 					InputStream local = resource.getInputStream();
-					if (!StringUtil.getMd5(remote).equals(StringUtil.getMd5(local))) {
-						LOGGER.error("different md5 for element " + cmisPath);
-						differentFiles.add(cmisPath);
+					if (!skipMD5) {
+						if (!StringUtil.getMd5(remote).equals(StringUtil.getMd5(local))) {
+							LOGGER.error("different md5 for element " + cmisPath);
+							differentFiles.add(cmisPath);
+						}
 					}
 				}
 
