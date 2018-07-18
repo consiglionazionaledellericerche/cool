@@ -81,7 +81,7 @@ public class CacheConfiguration {
             config.getNetworkConfig().getJoin().getMulticastConfig().setMulticastPort(hazelcastMulticastPort);
             config.getNetworkConfig().getJoin().getTcpIpConfig().setEnabled(false);
         } else {
-            config.getNetworkConfig().getJoin().getTcpIpConfig().setEnabled(false);
+            config.getNetworkConfig().getJoin().getTcpIpConfig().setEnabled(true);
         }
 
 
