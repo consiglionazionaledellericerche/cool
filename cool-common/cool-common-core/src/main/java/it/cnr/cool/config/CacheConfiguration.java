@@ -16,6 +16,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import javax.annotation.PreDestroy;
+import java.util.Optional;
 
 @Configuration
 @EnableCaching
@@ -70,7 +71,7 @@ public class CacheConfiguration {
         config.getNetworkConfig().getJoin().getMulticastConfig().setEnabled(false);
         config.getNetworkConfig().getJoin().getAwsConfig().setEnabled(false);
 
-        if (members != null) {
+        if (Optional.ofNullable(members).filter(s -> s.length() > 0).isPresent()) {
             LOGGER.info("TCP members: " + members);
             config.getNetworkConfig().getJoin().getTcpIpConfig().setEnabled(true);
             config.getNetworkConfig().getJoin().getTcpIpConfig().addMember(members);
