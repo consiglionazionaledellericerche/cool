@@ -19,6 +19,7 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
 
+import it.cnr.cool.util.UriUtils;
 import org.apache.chemistry.opencmis.client.api.Document;
 import org.apache.chemistry.opencmis.client.api.Session;
 import org.apache.chemistry.opencmis.commons.data.ContentStream;
@@ -83,7 +84,7 @@ public class Content {
             String redirect = "/" + Page.LOGIN_URL;
             redirect = redirect.concat("?redirect=rest/content");
 			if (path != null && !path.isEmpty())
-				redirect = redirect.concat("&path="+path);
+				redirect = redirect.concat("&path=" + UriUtils.encode(path));
 			if (nodeRef != null && !nodeRef.isEmpty())
 				redirect = redirect.concat("&nodeRef="+nodeRef);
 			return Response.seeOther(new URI(getUrl(req) + redirect)).build();
