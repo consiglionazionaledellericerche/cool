@@ -43,7 +43,8 @@ public class Content {
 
 	@GET
 	public Response content(@Context HttpServletRequest req,
-			@Context HttpServletResponse res, @QueryParam("path") String path,
+			@Context HttpServletResponse res,
+			@QueryParam("path") String path,
 			@QueryParam("nodeRef") String nodeRef,
 			@QueryParam("deleteAfterDownload") Boolean deleteAfterDownload,
 			@QueryParam("fileName") String fileName) throws URISyntaxException {
@@ -80,14 +81,7 @@ public class Content {
 			inputStream.close();
 			outputStream.close();
 		} catch(CmisUnauthorizedException e) {
-            LOGGER.debug("unauthorized to get " + nodeRef, e);
-            String redirect = "/" + Page.LOGIN_URL;
-            redirect = redirect.concat("?redirect=rest/content");
-			if (path != null && !path.isEmpty())
-				redirect = redirect.concat("&path=" + UriUtils.encode(path));
-			if (nodeRef != null && !nodeRef.isEmpty())
-				redirect = redirect.concat("&nodeRef="+nodeRef);
-			return Response.seeOther(new URI(getUrl(req) + redirect)).build();
+            return redirect(req, nodeRef, path, "content", e);
 		} catch (SocketException e) {
 			// very frequent errors of type java.net.SocketException: Pipe rotta
 			LOGGER.warn("unable to send content {} {}", path, nodeRef, e);
@@ -107,6 +101,17 @@ public class Content {
 		}
 		return Response.ok().build();
 	}
+
+	public Response redirect(HttpServletRequest req, String nodeRef, String path, String content, CmisUnauthorizedException e) throws URISyntaxException {
+        LOGGER.debug("unauthorized to get {}", nodeRef, e);
+        String redirect = "/" + Page.LOGIN_URL;
+        redirect = redirect.concat("?redirect=rest/").concat(content);
+        if (path != null && !path.isEmpty())
+            redirect = redirect.concat("&path=" + UriUtils.encode(path));
+        if (nodeRef != null && !nodeRef.isEmpty())
+            redirect = redirect.concat("&nodeRef="+nodeRef);
+        return Response.seeOther(new URI(getUrl(req) + redirect)).build();
+    }
 
 	static String getUrl(HttpServletRequest req) {
 		StringBuffer url = req.getRequestURL();
