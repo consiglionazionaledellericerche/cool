@@ -83,7 +83,7 @@ public class SecurityRestTest {
 	@Test
 	public void test1ConfirmAccountFail() throws Exception {
 		MockHttpServletRequest req = new MockHttpServletRequest();
-		Response response = security.confirmAccount(req, NEWUSERNAME, "INVALID_PIN");
+		Response response = security.confirmAccount(req, NEWUSERNAME, "INVALID_PIN", "IT");
 		assertEquals(Status.FORBIDDEN.getStatusCode(), response.getStatus());
 	}
 
@@ -99,7 +99,7 @@ public class SecurityRestTest {
 	public void test3ConfirmAccount() throws Exception {
 		CMISUser user = userService.loadUserForConfirm(NEWUSERNAME);
 		MockHttpServletRequest req = new MockHttpServletRequest();
-		Response response = security.confirmAccount(req, NEWUSERNAME, user.getPin());
+		Response response = security.confirmAccount(req, NEWUSERNAME, user.getPin(), "IT");
 		assertEquals(Status.SEE_OTHER.getStatusCode(), response.getStatus());
 	}
 
