@@ -339,10 +339,10 @@ public class SecurityRest {
     @GET
     @Path("confirm-account")
     public Response confirmAccount(@Context HttpServletRequest req, @QueryParam("userid") String userId,
-                                   @QueryParam("pin") String pin) throws URISyntaxException {
+                                   @QueryParam("pin") String pin, @CookieParam("__lang") String __lang) throws URISyntaxException {
 
         ResponseBuilder rb;
-
+        Locale locale = I18nService.getLocale(req, __lang);
         try {
             Optional.ofNullable(pin).orElseThrow(CoolUserFactoryException::new);
             CMISUser user = Optional.ofNullable(
@@ -357,20 +357,22 @@ public class SecurityRest {
                 LOGGER.debug("User created " + user.getFullName());
             } else {
                 if (user.getEnabled()) {
-                    String msg = "User " + user.getUserName() + " already active.";
+                    String msg = i18nService.getLabel("message.user.alredy.active", locale, user.getUserName());
                     LOGGER.warn(msg);
                     rb = Response.status(Status.BAD_REQUEST).entity(msg);
                 } else {
                     LOGGER.warn("user " + userId + ", PIN is not valid");
                     rb = Response
                             .status(Status.FORBIDDEN)
-                            .entity("Error: Confirm registration failed! PIN is not valid.");
+                            .entity(i18nService.getLabel("message.pin.not.valid", locale));
                 }
             }
 
         } catch (CoolUserFactoryException e) {
             LOGGER.error("Unable to confirm account, user " + userId, e);
-            rb = Response.status(Status.UNAUTHORIZED);
+            rb = Response
+                    .status(Status.FORBIDDEN)
+                    .entity(i18nService.getLabel("message.user.not.found", locale, userId));
         }
 
         return rb.build();

@@ -232,6 +232,17 @@ public class UserServiceImpl implements UserService{
 	}
 
 	@Override
+	public void deleteUser(final CMISUser user) throws CoolUserFactoryException {
+		String link = cmisService.getBaseURL().concat(SERVICE_CNR_PERSON_PERSON + "/").concat(UriUtils.encode(user.getId()));
+		UrlBuilder url = new UrlBuilder(link);
+		BindingSession cmisSession = cmisService.getAdminSession();
+		Response resp = CmisBindingsHelper.getHttpInvoker(cmisSession).invokeDELETE(url, cmisSession);
+		int status = resp.getResponseCode();
+		if (status == HttpStatus.SC_NOT_FOUND|| status == HttpStatus.SC_BAD_REQUEST|| status == HttpStatus.SC_INTERNAL_SERVER_ERROR)
+			throw new CoolUserFactoryException("Update user error. Exception: "+resp.getErrorContent());
+	}
+
+	@Override
 	public CMISUser changeUserPassword(final CMISUser user, final String newPassword) throws CoolUserFactoryException {
 		String link = cmisService.getBaseURL().concat(SERVICE_API_PERSON_CHANGEPASSWORD).concat(UriUtils.encode(user.getId()));
         UrlBuilder url = new UrlBuilder(link);

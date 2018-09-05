@@ -81,8 +81,7 @@ public class CMISAuthenticatorFactory {
       }
 
     } catch (Exception e) {
-      throw new LoginException("unable to create ticket for user "
-        + username, e);
+      throw new LoginException("unable to create ticket for user " + username);
     }
 
   }

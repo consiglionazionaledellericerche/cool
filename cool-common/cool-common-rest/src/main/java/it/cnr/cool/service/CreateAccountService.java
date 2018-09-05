@@ -72,6 +72,11 @@ public class CreateAccountService {
 
 
 			if (create) {
+				user.setUserName(
+						Optional.ofNullable(user.getUserName())
+							.map(s -> s.trim())
+							.orElseThrow(() -> new CoolException("UserName cannot be null"))
+				);
 				model = createUser(user, locale, url);
 			} else {
 				// aggiorna l'utente e se l'utente ha modificato i suoi dati li
@@ -166,11 +171,32 @@ public class CreateAccountService {
 				LOGGER.debug("User created " + newUser.getFullName());
 			model.put("url", url);
 			sendConfirmMail(model, locale);
-		} catch (CoolUserFactoryException e) {
+            Timer timer = new Timer();
+            timer.schedule(new DeleteUserTimerTask(newUser.getUserName()), 1000 * 60 * 60);
+
+        } catch (CoolUserFactoryException e) {
 			throw new UserFactoryException(e.getMessage(), e);
 		}
 		return model;
 	}
+
+    class DeleteUserTimerTask extends TimerTask {
+        private String userName;
+
+        public DeleteUserTimerTask(String userName) {
+            this.userName = userName;
+        }
+
+        @Override
+        public void run() {
+            CMISUser user = Optional.ofNullable(
+                    userService.loadUserForConfirm(Optional.ofNullable(userName).
+                            orElseThrow(CoolUserFactoryException::new))).orElseThrow(CoolUserFactoryException::new);
+            if (!user.getEnabled()) {
+                userService.deleteUser(user);
+            }
+        }
+    }
 
 	private void sendConfirmMail(Map<String, Object> model, Locale locale) {
 		CMISUser user = (CMISUser) model.get("account");
