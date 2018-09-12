@@ -32,6 +32,8 @@ import java.util.Optional;
 
 public class CMISService implements InitializingBean, CMISSessionManager {
 
+    static final Locale DEFAULT_LOCALE = Locale.ITALY;
+
 	private static final Logger LOGGER = LoggerFactory.getLogger(CMISService.class);
 
     public static final String AUTHENTICATION_HEADER = "X-alfresco-ticket";
