@@ -32,8 +32,6 @@ import java.util.Optional;
 
 public class CMISService implements InitializingBean, CMISSessionManager {
 
-    static final Locale DEFAULT_LOCALE = Locale.ITALY;
-
 	private static final Logger LOGGER = LoggerFactory.getLogger(CMISService.class);
 
     public static final String AUTHENTICATION_HEADER = "X-alfresco-ticket";
@@ -98,10 +96,6 @@ public class CMISService implements InitializingBean, CMISSessionManager {
         sessionParameters.put(SessionParameter.USER, username);
         sessionParameters.put(SessionParameter.PASSWORD, password);
         sessionParameters.put(SessionParameter.TYPE_DEFINITION_CACHE_CLASS, ObjectTypeCacheImpl.class.getName());
-        sessionParameters.put(SessionParameter.LOCALE_ISO3166_COUNTRY, DEFAULT_LOCALE.getCountry());
-        sessionParameters.put(SessionParameter.LOCALE_ISO639_LANGUAGE, DEFAULT_LOCALE.getLanguage());
-        sessionParameters.put(SessionParameter.LOCALE_VARIANT, DEFAULT_LOCALE.getVariant());
-
         Session session = sessionFactory.createSession(sessionParameters);
         session.setDefaultContext(cmisDefaultOperationContext);
         return session;
