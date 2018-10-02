@@ -9,8 +9,7 @@ abbiamo ricevuto una richiesta di cambio password per il suo Nome Utente: <b>${a
 
 <p>Questo collegamento funzionerà finchè non cambiera' la password.</p>
 
-<p>Se non aveva richiesto il cambio password, un altro
- utente avrà probabilmente inoltrato questa richiesta per errore.</p>
+<p>Se non aveva richiesto il cambio password, un altro utente avrà probabilmente inoltrato questa richiesta per errore.</p>
 <p>In questo caso ignori questa email e non verrà fatto nessun cambio al suo account.</p>
 <hr/>
 <p></p>

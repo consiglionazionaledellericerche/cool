@@ -82,6 +82,8 @@ define(['jquery'], function ($) {
       s = criteria.what + ' <= ' + parseValue(criteria.to, criteria.valueType);
     } else if (criteria.type === "IN") {
       s = criteria.what + ' IN (' + parseValue(criteria.to, criteria.valueType) + ')';
+    } else if (criteria.type === "NOT_IN") {
+      s = criteria.what + ' NOT IN (' + parseValue(criteria.to, criteria.valueType) + ')';
     } else if (criteria.type === "IN_TREE") {
       if (criteria.to) {
         s = 'IN_TREE (' + criteria.to + ',' + escape(criteria.what) + ')';
@@ -256,6 +258,16 @@ define(['jquery'], function ($) {
       IN: function (property, value, valueType) {
         var item = {
           type: 'IN',
+          what: prefix ? prefix + '.' + property : property,
+          to: value,
+          valueType: valueType
+        };
+        c.conditions.push(item);
+        return this;
+      },
+      notIn: function (property, value, valueType) {
+        var item = {
+          type: 'NOT_IN',
           what: prefix ? prefix + '.' + property : property,
           to: value,
           valueType: valueType

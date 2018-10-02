@@ -10,8 +10,7 @@
 
 <p>This link will work until you change your password.</p>
 
-<p>If you were not required to change passwords, another
-  you will probably have forwarded this request in error.</p>
+<p>If you were not required to change passwords, another you will probably have forwarded this request in error.</p>
 <p>In this case, ignore this email and will not be made ​​any change to your account.</p>
 
 <hr/>
