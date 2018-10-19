@@ -74,8 +74,8 @@ define(['jquery', 'i18n', 'select2', 'select2-i18n', 'cnr/cnr'], function ($, i1
         $('#' + item.ghostName).parents('.control-group').data('value', textValue.length ? textValue : null);
       }
       if (parsedValue) {
-        $('[class*="' + id + '"]').parents('.control-group').hide();
-        $('[class*="' + id + '"]:not(".' + id + '_' + parsedValue.join(',') + '")').val('').trigger('change');
+        $('[class*="' + id + '"]').not('#s2id_' + id).not('#' + id).parents('.control-group').hide();
+        $('[class*="' + id + '"]:not(".' + id + '_' + parsedValue.join(',') + '")').not('#' + id).val('').trigger('change');
         $('.' + id + '_' + parsedValue.join(',')).parents('.control-group').show();
       }
     }
