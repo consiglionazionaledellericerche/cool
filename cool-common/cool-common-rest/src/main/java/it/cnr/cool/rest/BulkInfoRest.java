@@ -1,5 +1,6 @@
 package it.cnr.cool.rest;
 
+import it.cnr.bulkinfo.BulkInfoImpl;
 import it.cnr.bulkinfo.cool.BulkInfoCool;
 import it.cnr.bulkinfo.exception.BulkInfoException;
 import it.cnr.cool.cmis.service.CMISService;
@@ -20,6 +21,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.ResponseBuilder;
 import java.util.Map;
+import java.util.Optional;
 
 @Path("bulkInfo")
 @Component
@@ -89,8 +91,14 @@ public class BulkInfoRest {
 
 			json = "[";
 			boolean coma = false;
-			for(String form : bi.getForms().keySet()) {
-				if(form.contains(prefix)) {
+			final Map<String, BulkInfoImpl.FieldPropertySet> forms = bi.getForms();
+			for(String form : forms.keySet()) {
+				if(form.contains(prefix) &&
+						Optional.ofNullable(forms.get(form))
+							.flatMap(fieldPropertySet -> Optional.ofNullable(fieldPropertySet.getKey()))
+							.map(key -> !key.equals("hidden"))
+							.orElse(Boolean.TRUE)
+				) {
 					json += (coma ? "," : "") + "\""+ form +"\"";
 					coma = true;
 				}
