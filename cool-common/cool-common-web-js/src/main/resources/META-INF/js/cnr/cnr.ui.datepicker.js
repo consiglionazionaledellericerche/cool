@@ -39,13 +39,13 @@ define(['jquery', 'i18n', 'moment', 'datepicker-i18n'], function ($, i18n, momen
         } else {
           parent.data('value', null);
         }
-        if (inputClass.indexOf('datepicker_range') != -1) {
-            if (inputClass.indexOf('datepicker_range_da') != -1) {
-                parent.parents('form').find('.datepicker_range_a').datepicker('setStartDate', eventType.date);
-            }
-            if (inputClass.indexOf('datepicker_range_a') != -1) {
-                parent.parents('form').find('.datepicker_range_da').datepicker('setEndDate', eventType.date);
-            }
+        if (inputClass.indexOf('datepicker_range') !== -1) {
+          if (inputClass.indexOf('datepicker_range_da') !== -1) {
+            parent.parents('form').find('.datepicker_range_a').datepicker('setStartDate', eventType.date);
+          }
+          if (inputClass.indexOf('datepicker_range_a') !== -1) {
+            parent.parents('form').find('.datepicker_range_da').datepicker('setEndDate', eventType.date);
+          }
         }
       })
       .appendTo(controls)
