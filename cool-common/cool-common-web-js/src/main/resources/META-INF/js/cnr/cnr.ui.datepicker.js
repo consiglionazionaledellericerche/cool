@@ -33,11 +33,19 @@ define(['jquery', 'i18n', 'moment', 'datepicker-i18n'], function ($, i18n, momen
         endDate: item.endDate || '+1000y'
       }, item.jsonsettings))
       .on('changeDate change', function (eventType) {
-        var d = moment(input.val() + ' 12:00 +0000', dateFormat + ' HH:mm ZZ'); // hack to prevent wrong birth date using different time zones
+        var d = moment(input.val() + ' 12:00 +0000', dateFormat + ' HH:mm ZZ'), inputClass = input.attr('class'); // hack to prevent wrong birth date using different time zones
         if (d && d.isValid()) {
           parent.data('value', d.format("YYYY-MM-DDTHH:mm:ss.SSSZ"));
         } else {
           parent.data('value', null);
+        }
+        if (inputClass.indexOf('datepicker_range') != -1) {
+            if (inputClass.indexOf('datepicker_range_da') != -1) {
+                parent.parents('form').find('.datepicker_range_a').datepicker('setStartDate', eventType.date);
+            }
+            if (inputClass.indexOf('datepicker_range_a') != -1) {
+                parent.parents('form').find('.datepicker_range_da').datepicker('setEndDate', eventType.date);
+            }
         }
       })
       .appendTo(controls)

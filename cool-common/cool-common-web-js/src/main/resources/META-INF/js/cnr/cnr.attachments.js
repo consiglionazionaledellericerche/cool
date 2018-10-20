@@ -233,6 +233,7 @@ define(['jquery', 'cnr/cnr.node', 'cnr/cnr.ui.select', 'i18n', 'cnr/cnr.search',
           externalData: settings.submission.externalData,
           multiple: settings.submission.multiple,
           bigmodal: settings.submission.bigmodal,
+          callbackModal: settings.submission.callbackModal,
           modalTitle: i18n[selectObjectType.data('value')],
           input: settings.input,
           success: function (attachmentsData, data) {
