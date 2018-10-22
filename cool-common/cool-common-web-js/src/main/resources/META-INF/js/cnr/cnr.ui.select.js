@@ -71,7 +71,8 @@ define(['jquery', 'i18n', 'select2', 'select2-i18n', 'cnr/cnr'], function ($, i1
         parsedValue = value ? String(value).match(/[a-zA-Z0-9-_]+/, '') : value;
       parent.data('value', value.length ? (item.multiple ? value : value[0]) : null);
       if (item.ghostName) {
-        $('#' + item.ghostName).parents('.control-group').data('value', textValue.length ? textValue : null);
+        select.parents('form').find('#' + item.ghostName).parents('.control-group').data('value', textValue.length ? textValue : null);
+        select.parents('form').find('#' + item.ghostName).val(textValue.length ? textValue : null);
       }
       if (parsedValue) {
         $('[class*="' + id + '"]').not('#s2id_' + id).not('#' + id).parents('.control-group').hide();
