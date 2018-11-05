@@ -89,6 +89,38 @@ define(['jquery', 'header', 'cnr/cnr.url', 'cnr/cnr.ui.checkbox', 'cnr/cnr.ui', 
         }, null, {
           select: false,
           history: false,
+          groups: function () {
+            URL.Data.proxy.people({
+              data: {
+                groups: true
+              },
+              placeholder: {
+                user_id: user.userName
+              },
+              success: function (data) {
+                var content = $("<div>").addClass('modal-inner-fix'), ol = $('<ol>');
+                $.each(data.groups, function (index, el) {
+                  var a = $('<a>' + el.displayName + '</a>').attr('href', '#').click(function (eventObject) {
+                    URL.Data.proxy.members({
+                      placeholder: {
+                        group_name: el.itemName
+                      },
+                      success: function (data) {
+                        var contentMembers = $("<div>").addClass('modal-inner-fix'), olMembers = $('<ol>').appendTo(contentMembers);
+                        $.each(data.people, function (index, el) {
+                          $('<li>').append(el).appendTo(olMembers);
+                        });
+                        UI.modal(i18n.prop('label.members', el.displayName), contentMembers);
+                      }
+                    });
+                  });
+                  $('<li>').append(a).appendTo(ol);
+                });
+                content.append(ol);
+                UI.modal(i18n.prop('label.gruppi', user.userName), content);
+              }
+            });
+          },
           edit: function () {
             var content = $("<div>").addClass('modal-inner-fix'),
               bulkinfo = User.renderBulkInfo(user, afterCreateForm, content);
@@ -125,13 +157,13 @@ define(['jquery', 'header', 'cnr/cnr.url', 'cnr/cnr.ui.checkbox', 'cnr/cnr.ui', 
               });
             });
           }
-        });
+        }, {groups: 'icon-group'}, undefined, true);
 
       row.append(flag)
         .append(firstName)
         .append(lastName)
         .append(email)
-        .append(actionButton)
+        .append($('<td>').append(actionButton))
         .appendTo(tableBody)
         .tooltip({
           placement: "right",
