@@ -91,7 +91,7 @@ define(['jquery', 'cnr/cnr', 'cnr/cnr.ui', 'cnr/cnr.ui.authority', 'i18n', 'cnr/
     });
   }
 
-  function showMetadata(authority) {
+  function showMetadata(authority, displayGroups) {
     var commonSettings = {
       data: {
         filter: authority,
@@ -103,6 +103,9 @@ define(['jquery', 'cnr/cnr', 'cnr/cnr.ui', 'cnr/cnr.ui.authority', 'i18n', 'cnr/
       URL.Data.proxy.people({
         type: 'GET',
         contentType: 'application/json',
+        data: {
+          groups: displayGroups
+        },
         placeholder: {
           user_id: authority
         },
@@ -122,6 +125,27 @@ define(['jquery', 'cnr/cnr', 'cnr/cnr.ui', 'cnr/cnr.ui.authority', 'i18n', 'cnr/
           }).handlebars().done(function (html) {
             var content = $('<div></div>').addClass('modal-inner-fix').append(html),
               title = i18n.prop("modal.title.view." + bulkInfo, 'Propriet&agrave;');
+            if (displayGroups) {
+              var ol = $('<ol>');
+              $.each(dataPeopleUser.groups, function (index, el) {
+                var a = $('<a>' + el.displayName + '</a>').attr('href', '#').click(function (eventObject) {
+                  URL.Data.proxy.members({
+                    placeholder: {
+                      group_name: el.itemName
+                    },
+                    success: function (data) {
+                      var contentMembers = $("<div>").addClass('modal-inner-fix'), olMembers = $('<ol>').appendTo(contentMembers);
+                      $.each(data.people, function (index, el) {
+                        $('<li>').append(el).appendTo(olMembers);
+                      });
+                      UI.modal(i18n.prop('label.members', el.displayName), contentMembers);
+                    }
+                  });
+                });
+                $('<li>').append(a).appendTo(ol);
+              });
+              content.append($('<h3>').append(i18n.prop('page.groups'))).append($('<hr>')).append(ol);
+            }
             UI.modal(title, content);
           });
         },
