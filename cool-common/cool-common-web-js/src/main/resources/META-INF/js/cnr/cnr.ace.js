@@ -126,9 +126,9 @@ define(['jquery', 'cnr/cnr', 'cnr/cnr.ui', 'cnr/cnr.ui.authority', 'i18n', 'cnr/
             var content = $('<div></div>').addClass('modal-inner-fix').append(html),
               title = i18n.prop("modal.title.view." + bulkInfo, 'Propriet&agrave;');
             if (displayGroups) {
-              var ol = $('<ol>');
+              var ol = $('<ol>'), a;
               $.each(dataPeopleUser.groups, function (index, el) {
-                var a = $('<a>' + el.displayName + '</a>').attr('href', '#').click(function (eventObject) {
+                a = $('<a>' + el.displayName + '</a>').attr('href', '#').click(function (eventObject) {
                   URL.Data.proxy.members({
                     placeholder: {
                       group_name: el.itemName
