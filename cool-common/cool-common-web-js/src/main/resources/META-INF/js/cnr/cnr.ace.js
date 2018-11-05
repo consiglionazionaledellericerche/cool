@@ -124,9 +124,9 @@ define(['jquery', 'cnr/cnr', 'cnr/cnr.ui', 'cnr/cnr.ui.authority', 'i18n', 'cnr/
             metadata: dataPeopleUser
           }).handlebars().done(function (html) {
             var content = $('<div></div>').addClass('modal-inner-fix').append(html),
-              title = i18n.prop("modal.title.view." + bulkInfo, 'Propriet&agrave;');
+              title = i18n.prop("modal.title.view." + bulkInfo, 'Propriet&agrave;')
+              ol = $('<ol>'), a;
             if (displayGroups) {
-              var ol = $('<ol>'), a;
               $.each(dataPeopleUser.groups, function (index, el) {
                 a = $('<a>' + el.displayName + '</a>').attr('href', '#').click(function (eventObject) {
                   URL.Data.proxy.members({
