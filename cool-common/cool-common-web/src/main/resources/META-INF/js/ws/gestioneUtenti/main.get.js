@@ -1,9 +1,9 @@
-define(['jquery', 'header', 'cnr/cnr.url', 'cnr/cnr.ui.checkbox', 'cnr/cnr.ui', 'i18n', 'cnr/cnr.user', 'cnr/cnr.actionbutton'], function ($, header, URL, Checkbox, UI, i18n, User, ActionButton) {
+define(['jquery', 'header', 'cnr/cnr.url', 'cnr/cnr.ui.checkbox', 'cnr/cnr.ui', 'i18n', 'cnr/cnr.user', 'cnr/cnr.actionbutton', 'json!common', 'cnr/cnr.ace'], function ($, header, URL, Checkbox, UI, i18n, User, ActionButton, common, Ace) {
   "use strict";
 
   var table = $('<table>').addClass('table').addClass('table-hover').attr('id', 'gestione-utenti-table-data'),
     thead = $('<thead>').attr('id', 'gestione-utenti-table-data-head')
-      .append($('<th>').text(i18n['ricercaUtenti.flagEnable']))
+      .append(common.User.admin ? $('<th>').text(i18n['ricercaUtenti.flagEnable']) : '')
       .append($('<th>').text(i18n['ricercaUtenti.nome']))
       .append($('<th>').text(i18n['ricercaUtenti.cognome']))
       .append($('<th>').text(i18n['ricercaUtenti.email']))
@@ -87,7 +87,9 @@ define(['jquery', 'header', 'cnr/cnr.url', 'cnr/cnr.ui.checkbox', 'cnr/cnr.ui', 
           name: 'actionButton',
           allowableActions: ['CAN_UPDATE_PROPERTIES', 'CAN_DELETE_OBJECT']
         }, null, {
-          select: false,
+          select: function () {
+            Ace.showMetadata(user.userName, true);
+          },
           history: false,
           groups: function () {
             URL.Data.proxy.people({
@@ -121,7 +123,7 @@ define(['jquery', 'header', 'cnr/cnr.url', 'cnr/cnr.ui.checkbox', 'cnr/cnr.ui', 
               }
             });
           },
-          edit: function () {
+          edit: common.User.admin ? function () {
             var content = $("<div>").addClass('modal-inner-fix'),
               bulkinfo = User.renderBulkInfo(user, afterCreateForm, content);
 
@@ -140,8 +142,8 @@ define(['jquery', 'header', 'cnr/cnr.url', 'cnr/cnr.ui.checkbox', 'cnr/cnr.ui', 
               content.remove();
             }
             UI.modal(i18n.prop('label.edit', user.userName), content, callback, callbackClose);
-          },
-          remove: function () {
+          } : false,
+          remove: common.User.admin ? function () {
             var message = i18n['ricercaUtenti.confermaEliminaElemento'] + '<br />' + user.userName,
               selectedRow = $(this).parents('tr');
 
@@ -156,11 +158,12 @@ define(['jquery', 'header', 'cnr/cnr.url', 'cnr/cnr.ui.checkbox', 'cnr/cnr.ui', 
                 complete: close
               });
             });
-          }
+          } : false
         }, {groups: 'icon-group'}, undefined, true);
-
-      row.append(flag)
-        .append(firstName)
+      if (common.User.admin) {
+        row.append(flag);
+      }
+      row.append(firstName)
         .append(lastName)
         .append(email)
         .append($('<td>').append(actionButton))
