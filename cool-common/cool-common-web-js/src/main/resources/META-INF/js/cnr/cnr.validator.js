@@ -77,7 +77,7 @@ define(['jquery', 'bootstrap', 'i18n', 'validate', 'json!common'], function ($, 
     $.validator.addMethod('controlloUserId',
       function (value) {
         if (value !== "") {
-          var regex = /[a-z0-9\._\-]+[^\.^\*^\s]$/gmi;
+          var regex = /[a-z0-9\._\-]+[^\.^*^\s]$/gmi;
           return regex.test(value);
         }
         return true;
