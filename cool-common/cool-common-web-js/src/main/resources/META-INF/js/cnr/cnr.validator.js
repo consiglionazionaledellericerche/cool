@@ -77,7 +77,6 @@ define(['jquery', 'bootstrap', 'i18n', 'validate', 'json!common'], function ($, 
     $.validator.addMethod('controlloUserId',
       function (value) {
         if (value !== "") {
-          /*eslint no-control-regex: "error"*/
           var regex = /[a-z0-9\._\-]+[^\.^\*^\s]$/gmi;
           return regex.test(value);
         }

@@ -96,6 +96,7 @@
                     <exclude>**/src/main/js/**</exclude>
                     <exclude>**/src/test/**</exclude>
                     <exclude>**/cnr/cool/permissions/**</exclude>
+                    <exclude>**/cnr/cnr.validator.js</exclude>
                     <!-- webscript copiati da alfresco -->
                     <exclude>**/nodes/permissions.*.js</exclude>
                   </excludes>
