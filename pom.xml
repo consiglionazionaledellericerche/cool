@@ -14,7 +14,7 @@
   </parent>
 
   <properties>
-    <opencmis.version>1.0.0</opencmis.version>
+    <opencmis.version>1.1.0</opencmis.version>
     <spring.version>4.3.3.RELEASE</spring.version>
     <jslint4java.version>2.0.2</jslint4java.version>
     <junit.version>4.12</junit.version>

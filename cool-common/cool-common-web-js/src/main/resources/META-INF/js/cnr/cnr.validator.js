@@ -78,7 +78,7 @@ define(['jquery', 'bootstrap', 'i18n', 'validate', 'json!common'], function ($, 
       function (value) {
         if (value !== "") {
           var regex = /[a-z0-9\._\-]+[^\.^*^\s]$/gmi;
-          return regex.test(value);
+          return regex.exec(value) !== null;
         }
         return true;
       }, i18n['message.userid.valido']
