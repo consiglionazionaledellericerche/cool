@@ -45,6 +45,8 @@
 		"${xmldate(value.time)}"
 				<#elseif prop.type.value() == "integer">
 		${value?string('0')}
+		        <#elseif prop.type.value() == "decimal">
+        "${value}"
 				<#elseif prop.type.value() == "boolean">
 		${value?string}
 				</#if>
@@ -56,8 +58,10 @@
 	"${jsonUtils.encodeJSONString(cmisObject.getPropertyValue(prop.definition.id)?string)}"
 			<#elseif prop.type.value() == "datetime">
 	"${xmldate(cmisObject.getPropertyValue(prop.definition.id).time)}"
-			<#elseif prop.type.value() == "integer" || prop.type.value() == "decimal">
+			<#elseif prop.type.value() == "integer">
 	${cmisObject.getPropertyValue(prop.definition.id)?string('0')}
+			<#elseif prop.type.value() == "decimal">
+	"${cmisObject.getPropertyValue(prop.definition.id)}"
 			<#elseif prop.type.value() == "boolean">
 	${cmisObject.getPropertyValue(prop.definition.id)?string}
 			</#if>  
