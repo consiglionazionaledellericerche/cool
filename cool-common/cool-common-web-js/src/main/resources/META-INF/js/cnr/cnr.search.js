@@ -17,10 +17,10 @@ define(['jquery', 'cnr/cnr', 'i18n', 'cnr/cnr.url', 'cnr/cnr.searchfilter', 'cnr
           "nome": "cmis:name",
           "data di creazione": "cmis:creationDate"
         },
-        orderBy: {
+        orderBy: [{
           field: "cmis:lastModificationDate",
           asc: false
-        },
+        }],
         elements: {},
         lastCriteria: {},
         disableRequestReplay: true,
@@ -85,8 +85,18 @@ define(['jquery', 'cnr/cnr', 'i18n', 'cnr/cnr.url', 'cnr/cnr.searchfilter', 'cnr
       executeQuery();
     }
 
+    function removeOrder(order) {
+      settings.orderBy = settings.orderBy.filter(function(elem){
+         return elem.field != order.field;
+      });
+      executeQuery();
+    }
+
     function changeOrder(order) {
-      settings.orderBy = order;
+      settings.orderBy = settings.orderBy.filter(function(elem){
+         return elem.field != order.field;
+      });
+      settings.orderBy.push(order);
       executeQuery();
     }
 
@@ -136,9 +146,19 @@ define(['jquery', 'cnr/cnr', 'i18n', 'cnr/cnr.url', 'cnr/cnr.searchfilter', 'cnr
 
       },
         conditions = settings.lastCriteria.conditions,
-        // FIXME: aggiungere il prefisso anche al sort ???
-        sort = settings.orderBy ? settings.orderBy.field + (settings.orderBy.asc ? " ASC " : " DESC ") : false,
-        query, columns = settings.columns ? baseColumns.concat(settings.columns).join(',') : "*";
+        sort = '',
+        query,
+        columns = settings.columns ? baseColumns.concat(settings.columns).join(',') : "*";
+      if (settings.orderBy.length != 0) {
+        $.each(settings.orderBy, function (index, element) {
+            if (index > 0) {
+                sort += ",";
+            }
+            sort += element.field + (element.asc ? " ASC " : " DESC ");
+        });
+      } else {
+        sort = false;
+      }
 
       if (conditions && conditions.length === 1 && conditions[0].type === "IN_FOLDER" && conditions[0].documentsOnly === false) {
         o.f = conditions[0].what;
@@ -298,20 +318,18 @@ define(['jquery', 'cnr/cnr', 'i18n', 'cnr/cnr.url', 'cnr/cnr.searchfilter', 'cnr
           list.find('li').remove();
 
           $.each(settings.fields, function (field, fieldId) {
-
             if (fieldId) {
-
               var a = $('<a href="#">' + field + '</a>'),
                 item = $('<li></li>').append(a).appendTo(list),
-                isAsc;
+                isAsc = true, element;
 
-              if (settings.orderBy.field === fieldId) {
-                isAsc = !settings.orderBy.asc;
-                $('<i></i>').addClass(isAsc ? 'icon-caret-down' : 'icon-caret-up').appendTo(a);
-              } else {
-                isAsc = true; //asc by default
+              element = settings.orderBy.filter(function(elem){
+                return elem.field === fieldId;
+              });
+              if (element.length != 0) {
+                $('<i></i>').addClass(!element.asc ? 'icon-caret-down' : 'icon-caret-up').appendTo(a);
+                isAsc = element[0].asc == false ? undefined : !element[0].asc;
               }
-
               a
                 .data({
                   field: fieldId,
@@ -322,7 +340,11 @@ define(['jquery', 'cnr/cnr', 'i18n', 'cnr/cnr.url', 'cnr/cnr.searchfilter', 'cnr
           });
 
           list.off('click').on('click', 'a', function (event) {
-            changeOrder($(this).data());
+            if ($(this).data().asc === undefined) {
+                removeOrder($(this).data());
+            } else {
+                changeOrder($(this).data());
+            }
           });
 
           settings.elements.orderBy.fadeIn().css("display", "inline-block");
