@@ -86,15 +86,15 @@ define(['jquery', 'cnr/cnr', 'i18n', 'cnr/cnr.url', 'cnr/cnr.searchfilter', 'cnr
     }
 
     function removeOrder(order) {
-      settings.orderBy = settings.orderBy.filter(function(elem){
-         return elem.field != order.field;
+      settings.orderBy = settings.orderBy.filter(function (elem) {
+        return elem.field !== order.field;
       });
       executeQuery();
     }
 
     function changeOrder(order) {
-      settings.orderBy = settings.orderBy.filter(function(elem){
-         return elem.field != order.field;
+      settings.orderBy = settings.orderBy.filter(function (elem) {
+        return elem.field !== order.field;
       });
       settings.orderBy.push(order);
       executeQuery();
@@ -149,12 +149,12 @@ define(['jquery', 'cnr/cnr', 'i18n', 'cnr/cnr.url', 'cnr/cnr.searchfilter', 'cnr
         sort = '',
         query,
         columns = settings.columns ? baseColumns.concat(settings.columns).join(',') : "*";
-      if (settings.orderBy.length != 0) {
+      if (settings.orderBy.length !== 0) {
         $.each(settings.orderBy, function (index, element) {
-            if (index > 0) {
-                sort += ",";
-            }
-            sort += element.field + (element.asc ? " ASC " : " DESC ");
+          if (index > 0) {
+            sort += ",";
+          }
+          sort += element.field + (element.asc ? " ASC " : " DESC ");
         });
       } else {
         sort = false;
@@ -321,14 +321,15 @@ define(['jquery', 'cnr/cnr', 'i18n', 'cnr/cnr.url', 'cnr/cnr.searchfilter', 'cnr
             if (fieldId) {
               var a = $('<a href="#">' + field + '</a>'),
                 item = $('<li></li>').append(a).appendTo(list),
-                isAsc = true, element;
+                isAsc = true,
+                element;
 
-              element = settings.orderBy.filter(function(elem){
+              element = settings.orderBy.filter(function (elem) {
                 return elem.field === fieldId;
               });
-              if (element.length != 0) {
+              if (element.length !== 0) {
                 $('<i></i>').addClass(!element.asc ? 'icon-caret-down' : 'icon-caret-up').appendTo(a);
-                isAsc = element[0].asc == false ? undefined : !element[0].asc;
+                isAsc = element[0].asc === false ? undefined : !element[0].asc;
               }
               a
                 .data({
@@ -336,14 +337,13 @@ define(['jquery', 'cnr/cnr', 'i18n', 'cnr/cnr.url', 'cnr/cnr.searchfilter', 'cnr
                   asc: isAsc
                 });
             }
-
           });
 
           list.off('click').on('click', 'a', function (event) {
             if ($(this).data().asc === undefined) {
-                removeOrder($(this).data());
+              removeOrder($(this).data());
             } else {
-                changeOrder($(this).data());
+              changeOrder($(this).data());
             }
           });
 
