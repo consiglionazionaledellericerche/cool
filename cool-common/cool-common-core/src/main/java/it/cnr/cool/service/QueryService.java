@@ -376,19 +376,6 @@ public class QueryService {
         }
     }
 
-    @SuppressWarnings("unchecked")
-    private void addToPropertyMap(Map<String, Object> properties, String key,
-                                  Object value) {
-        if (properties.containsKey(key)) {
-            List<Object> values = (List<Object>) properties.get(key);
-            values.add(value);
-        } else {
-            List<Object> values = new ArrayList<Object>();
-            values.add(value);
-            properties.put(key, values);
-        }
-    }
-
     private void addParentToModel(final Session cmisSession,
                                   QueryResult result,
                                   Map<String, List<Map<String, Object>>> relationships,
