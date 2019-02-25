@@ -20,6 +20,9 @@ import org.springframework.test.annotation.DirtiesContext.ClassMode;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import java.util.Map;
+import java.util.Optional;
+
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = { "classpath:/META-INF/cool-common-rest-test-context.xml" })
@@ -46,10 +49,15 @@ public class SearchTest {
 		Response response = search.query(request);
 
 		assertEquals(Status.OK.getStatusCode(), response.getStatus());
+		final Long totalNumItems = Optional.ofNullable(response.getEntity())
+				.filter(Map.class::isInstance)
+				.map(Map.class::cast)
+				.flatMap(map -> Optional.ofNullable(map.get("totalNumItems")))
+				.filter(Long.class::isInstance)
+				.map(Long.class::cast)
+				.orElse(Long.valueOf(0));
 
-		JSONObject json = new JSONObject(response.getEntity().toString());
-		LOGGER.info(json.toString());
-		assertTrue(json.getInt("totalNumItems") > 0);
+		assertTrue(totalNumItems > 0);
 
 	}
 
