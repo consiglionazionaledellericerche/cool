@@ -39,6 +39,8 @@ public class SearchTest {
 	public void testProcessRequest() {
 		MockHttpServletRequest request = new MockHttpServletRequest();
 		request.addParameter("q", "select * from jconon_call:folder");
+		request.addParameter("fetchCmisObject", "false");
+		request.addParameter("relationship", "parent");
 		request.addParameter("calculateTotalNumItems", Boolean.TRUE.toString());
 
 		Response response = search.query(request);

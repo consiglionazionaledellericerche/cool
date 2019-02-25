@@ -1,5 +1,6 @@
 package it.cnr.cool.rest;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import freemarker.template.TemplateException;
 import it.cnr.cool.cmis.service.CMISService;
 import it.cnr.cool.exception.UnauthorizedException;
@@ -10,9 +11,13 @@ import it.cnr.mock.ISO8601DateFormatMethod;
 import it.cnr.mock.JSONUtils;
 
 import java.io.IOException;
-import java.util.Map;
+import java.time.format.DateTimeFormatter;
+import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.swing.text.html.Option;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
@@ -24,7 +29,10 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.ResponseBuilder;
 import javax.ws.rs.core.Response.Status;
 
+import org.apache.chemistry.opencmis.client.api.CmisObject;
+import org.apache.chemistry.opencmis.client.api.QueryResult;
 import org.apache.chemistry.opencmis.client.api.Session;
+import org.apache.chemistry.opencmis.commons.data.AllowableActions;
 import org.apache.chemistry.opencmis.commons.exceptions.CmisUnauthorizedException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -34,9 +42,6 @@ import org.springframework.stereotype.Component;
 @Path("search")
 @Component
 public class Search {
-
-	private static final String FTL_JSON_PATH = "/surf/webscripts/search/query.lib.ftl";
-
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(Search.class);
 
@@ -61,8 +66,7 @@ public class Search {
             throw new UnauthorizedException("unauthorized search", e);
         }
 		try {
-			String json = getJson(model);
-			rb = Response.ok(json);
+			rb = Response.ok(model);
             String cache = request.getParameter("cache");
             CacheControl cacheControl;
             if (cache != null) {
@@ -77,10 +81,7 @@ public class Search {
                 cacheControl.setNoCache(true);
             }
 			rb.cacheControl(cacheControl);
-		} catch (TemplateException e) {
-			LOGGER.error(e.getMessage(), e);
-			rb = Response.status(Status.INTERNAL_SERVER_ERROR);
-		} catch (IOException e) {
+		} catch (Exception e) {
 			LOGGER.error(e.getMessage(), e);
 			rb = Response.status(Status.INTERNAL_SERVER_ERROR);
 		}
@@ -99,38 +100,16 @@ public class Search {
 
 		Map<String, Object> model = queryService.documentVersion(session, nodeRef);
 		try {
-			String json = getJson(model);
-			rb = Response.ok(json);
+			rb = Response.ok(model);
 			CacheControl cacheControl = new CacheControl();
 			cacheControl.setNoCache(true);
 			rb.cacheControl(cacheControl);
-		} catch (TemplateException e) {
-			LOGGER.error(e.getMessage(), e);
-			rb = Response.status(Status.INTERNAL_SERVER_ERROR);
-		} catch (IOException e) {
+		} catch (Exception e) {
 			LOGGER.error(e.getMessage(), e);
 			rb = Response.status(Status.INTERNAL_SERVER_ERROR);
 		}
 
 		return rb.build();
-
-	}
-
-	public static String getJson(Map<String, Object> model) throws TemplateException, IOException {
-		return processTemplate(model, FTL_JSON_PATH);
-	}
-
-
-	private static String processTemplate(Map<String, Object> model, String path) throws TemplateException,
-			IOException {
-
-		model.put("xmldate", new ISO8601DateFormatMethod());
-		model.put("jsonUtils", new JSONUtils());
-		model.put("calendarUtil", new CalendarUtil());
-
-		String json = Util.processTemplate(model, path);
-		LOGGER.debug(json);
-		return json;
 
 	}
 

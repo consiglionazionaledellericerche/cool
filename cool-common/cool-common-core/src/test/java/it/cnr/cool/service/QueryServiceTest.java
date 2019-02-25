@@ -104,7 +104,7 @@ public class QueryServiceTest {
 	private List<QueryResultImpl> getResultSet(MockHttpServletRequest req, Session session) {
         Map<String, Object> m = queryService.query(req, session);
 		List<QueryResultImpl> resultSet = (List<QueryResultImpl>) m
-				.get("models");
+				.get(QueryService.ITEMS);
 		return resultSet;
 	}
 

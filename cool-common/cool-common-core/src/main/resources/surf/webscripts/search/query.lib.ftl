@@ -21,7 +21,11 @@
 	  <#if value?is_boolean>
 		${value?string}
 	  <#elseif value?is_number>
-		${value?string('0')}
+	    <#if value?is_nan>
+	        "${value}"
+	    <#else>
+		    ${value?string('0')}
+		</#if>
 	  <#elseif calendarUtil.isGregorianCalendar(value)>
 		"${xmldate(value.time)}"
 	  <#elseif value?is_string>
