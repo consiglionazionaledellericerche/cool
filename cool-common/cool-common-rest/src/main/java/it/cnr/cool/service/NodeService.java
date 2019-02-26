@@ -172,7 +172,7 @@ public class NodeService {
 		return false;
 	}
 
-	private CmisObject upgradeDocument(MultipartFile mFileDocumento, Document doc){
+	protected CmisObject upgradeDocument(MultipartFile mFileDocumento, Document doc){
 		if (!mFileDocumento.isEmpty()){
 			try {
 				ContentStream contentStream = new ContentStreamImpl(
@@ -196,7 +196,7 @@ public class NodeService {
 		return null;
 	}
 
-	private CmisObject uploadDocument(HttpServletRequest request,
+	protected CmisObject uploadDocument(HttpServletRequest request,
 			MultipartFile mFileDocumento, Session cmisSession, Folder source,
 			String name, String cmisType) {
 		if (!mFileDocumento.isEmpty()){

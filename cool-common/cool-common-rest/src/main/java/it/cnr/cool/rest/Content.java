@@ -23,6 +23,7 @@ import it.cnr.cool.util.UriUtils;
 import org.apache.chemistry.opencmis.client.api.Document;
 import org.apache.chemistry.opencmis.client.api.Session;
 import org.apache.chemistry.opencmis.commons.data.ContentStream;
+import org.apache.chemistry.opencmis.commons.exceptions.CmisObjectNotFoundException;
 import org.apache.chemistry.opencmis.commons.exceptions.CmisUnauthorizedException;
 import org.apache.commons.httpclient.HttpStatus;
 import org.apache.commons.io.IOUtils;
@@ -81,7 +82,14 @@ public class Content {
 			inputStream.close();
 			outputStream.close();
 		} catch(CmisUnauthorizedException e) {
-            return redirect(req, nodeRef, path, "content", e);
+			return redirect(req, nodeRef, path, "content", e);
+		} catch (CmisObjectNotFoundException _ex) {
+			LOGGER.warn("unable to send content {} {}", path, nodeRef, _ex);
+			try {
+				res.getOutputStream().print("unable to send content file not exist");
+			} catch (IOException e) {
+			}
+			res.setStatus(HttpStatus.SC_NOT_FOUND);
 		} catch (SocketException e) {
 			// very frequent errors of type java.net.SocketException: Pipe rotta
 			LOGGER.warn("unable to send content {} {}", path, nodeRef, e);
