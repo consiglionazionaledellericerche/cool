@@ -88,6 +88,7 @@ public class Content {
 			try {
 				res.getOutputStream().print("unable to send content file not exist");
 			} catch (IOException e) {
+				LOGGER.error("unable to send content {} {}", path, nodeRef, _ex);
 			}
 			res.setStatus(HttpStatus.SC_NOT_FOUND);
 		} catch (SocketException e) {
