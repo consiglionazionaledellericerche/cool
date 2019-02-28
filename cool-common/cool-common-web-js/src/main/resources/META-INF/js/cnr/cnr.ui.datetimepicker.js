@@ -12,6 +12,10 @@ define(['jquery', 'i18n', 'moment', 'datetimepicker-i18n'], function ($, i18n, m
       parent.addClass(item.parentGroupClass);
     }
 
+    if (item['class']) {
+      input.addClass(item['class']);
+    }
+
     controls
       .datetimepicker({
         language: i18n.locale
