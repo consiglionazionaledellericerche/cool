@@ -301,7 +301,7 @@ public class NodeMetadataService {
 
 	}
 
-	private CmisObject updateObjectProperties(Session cmisSession, BindingSession bindingSession,
+	protected CmisObject updateObjectProperties(Session cmisSession, BindingSession bindingSession,
 			String objectId, String objectTypeId, String objectParentId, String inheritedPermission,
 			List<String> aspectNames, Map<String, Object> aspectProperties,
 			Map<String, Object> properties) {
