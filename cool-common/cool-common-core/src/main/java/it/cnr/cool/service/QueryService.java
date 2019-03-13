@@ -16,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import javax.servlet.http.HttpServletRequest;
 import java.math.BigInteger;
 import java.time.format.DateTimeFormatter;
+import java.time.format.FormatStyle;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -328,7 +329,7 @@ public class QueryService {
         return Optional.ofNullable(result)
                 .map(o -> {
                     if (Optional.of(o).filter(GregorianCalendar.class::isInstance).isPresent()) {
-                        return DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'").format(
+                        return DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS", Locale.ITALIAN).format(
                                 Optional.of(o)
                                         .filter(GregorianCalendar.class::isInstance)
                                         .map(GregorianCalendar.class::cast)
