@@ -26,7 +26,7 @@ define(['jquery', 'json!common', 'cnr/cnr.bulkinfo', 'i18n', 'cnr/cnr.url', 'cnr
     return false;
   }
 
-  function renderBulkInfo(userData, afterCreateFormFn, content) {
+  function renderBulkInfo(userData, afterCreateFormFn, content, isUserNameShow) {
 
     var bulkinfo,
       settings = {
@@ -45,7 +45,7 @@ define(['jquery', 'json!common', 'cnr/cnr.bulkinfo', 'i18n', 'cnr/cnr.url', 'cnr
     if (userData) {
       settings.metadata = userData;
     }
-    settings.name = (userData ? "editUser" : "createUser") + ",italy,foreign";
+    settings.name = (userData ? "editUser" : isUserNameShow ? "createUser" : "createUserWithoutUsername") + ",italy,foreign";
 
     bulkinfo = new BulkInfo(settings);
     bulkinfo.render();

@@ -20,6 +20,7 @@ public interface UserService {
 	CMISUser findUserByEmail(String email, BindingSession cmisSession) throws CoolUserFactoryException;
 	CMISUser findUserByCodiceFiscale(String codicefiscale, BindingSession cmisSession) throws CoolUserFactoryException;	
 	InputStream findUser(String term, BindingSession cmisSession) throws CoolUserFactoryException;
+	boolean isUserExists(String userId);
 	CMISUser changeUserPassword(final CMISUser user, String newPassword) throws CoolUserFactoryException;
 	void disableAccount(String userName) throws CoolUserFactoryException;
 	void enableAccount(String userName) throws CoolUserFactoryException;

@@ -116,6 +116,15 @@
         <formFieldProperty name="confirmPassword"/>
         <formFieldProperty name="nazionalita"/>
     </form>
+    <form name="createUserWithoutUsername">
+        <formFieldProperty name="firstName"/>
+        <formFieldProperty name="lastName"/>
+        <formFieldProperty name="email"/>
+        <formFieldProperty name="confirmEmail"/>
+        <formFieldProperty name="password"/>
+        <formFieldProperty name="confirmPassword"/>
+        <formFieldProperty name="nazionalita"/>
+    </form>
 
     <columnSet name="displayUser">
         <columnFieldProperty name="userName"

@@ -72,11 +72,23 @@ public class CreateAccountService {
 
 
 			if (create) {
-				user.setUserName(
-						Optional.ofNullable(user.getUserName())
-							.map(s -> s.trim())
-							.orElseThrow(() -> new CoolException("UserName cannot be null"))
-				);
+				if (!Optional.ofNullable(user.getUserName())
+						.map(s -> s.trim()).isPresent()) {
+					String userName = user.getFirstName().toLowerCase()
+							.concat(".")
+							.concat(user.getLastName().toLowerCase());
+					if (!userService.isUserExists(userName)) {
+						user.setUserName(userName);
+					} else {
+						for(int i = 1; i < 20; i++) {
+							final String concatUsername = userName.concat("0").concat(String.valueOf(i));
+							if (!userService.isUserExists(concatUsername)) {
+								user.setUserName(concatUsername);
+								break;
+							}
+						}
+					}
+				}
 				model = createUser(user, locale, url);
 			} else {
 				// aggiorna l'utente e se l'utente ha modificato i suoi dati li

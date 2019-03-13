@@ -60,6 +60,17 @@ public class UserServiceImpl implements UserService{
 		return loadUser(userId, cmisService.getAdminSession());
 	}
 
+	public boolean isUserExists(String userId) {
+		final BindingSession adminSession = cmisService.getAdminSession();
+		String link = cmisService.getBaseURL().concat(SERVICE_CNR_PERSON_PERSON + "/").concat(UriUtils.encode(userId));
+		UrlBuilder url = new UrlBuilder(link);
+		Response resp = CmisBindingsHelper.getHttpInvoker(adminSession).invokeGET(url, adminSession);
+		int status = resp.getResponseCode();
+		if (status == HttpStatus.SC_NOT_FOUND)
+			return false;
+		return true;
+	}
+
 	@Override
 	public CMISUser loadUser(String userId, BindingSession cmisSession)
 			throws CoolUserFactoryException {
