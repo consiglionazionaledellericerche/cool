@@ -18,7 +18,9 @@ import org.springframework.context.ApplicationContext;
 
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
+import java.text.Normalizer;
 import java.util.*;
+import java.util.regex.Pattern;
 
 public class CreateAccountService {
 
@@ -52,6 +54,13 @@ public class CreateAccountService {
 		return manage(form, locale, true, url);
 	}
 
+	private String normalize(String src) {
+		return Normalizer
+				.normalize(src, Normalizer.Form.NFD)
+				.replaceAll("[^\\p{ASCII}]", "")
+				.replaceAll("\\W", "");
+	}
+
 	private Map<String, Object> manage(Map<String,List<String>> form, Locale locale, boolean create, String url) {
 		CMISUser user = new CMISUser();
 		Map<String, Object> model = new HashMap<String, Object>();
@@ -74,9 +83,11 @@ public class CreateAccountService {
 			if (create) {
 				if (!Optional.ofNullable(user.getUserName())
 						.map(s -> s.trim()).isPresent()) {
-					String userName = user.getFirstName().toLowerCase()
+					String userName = normalize(user.getFirstName())
+							.toLowerCase()
 							.concat(".")
-							.concat(user.getLastName().toLowerCase());
+							.concat(normalize(user.getLastName())
+									.toLowerCase());
 					if (!userService.isUserExists(userName)) {
 						user.setUserName(userName);
 					} else {
