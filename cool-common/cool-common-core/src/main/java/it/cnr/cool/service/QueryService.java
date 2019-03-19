@@ -59,7 +59,11 @@ public class QueryService {
     public Map<String, Object> documentVersion(Session cmisSession, String nodeRef) {
         Map<String, Object> model = new HashMap<String, Object>();
         List<Document> versions = ((Document) cmisSession.getObject(nodeRef)).getAllVersions();
-        model.put(ITEMS, versions);
+        List<Map<String, Object>> maps = new ArrayList<Map<String, Object>>();
+        for (Document result : versions) {
+            maps.add(convertToProperties(result));
+        }
+        model.put(ITEMS, maps);
         model.put("hasMoreItems", false);
         model.put("totalNumItems", versions.size());
         model.put("maxItemsPerPage", 1000);
