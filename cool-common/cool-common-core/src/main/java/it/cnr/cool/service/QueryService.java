@@ -18,6 +18,7 @@ import java.math.BigInteger;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class QueryService {
 
@@ -58,19 +59,22 @@ public class QueryService {
 
     public Map<String, Object> documentVersion(Session cmisSession, String nodeRef) {
         Map<String, Object> model = new HashMap<String, Object>();
-        List<Document> versions = ((Document) cmisSession.getObject(nodeRef)).getAllVersions();
-        List<Map<String, Object>> maps = new ArrayList<Map<String, Object>>();
-        for (Document result : versions) {
-            maps.add(convertToProperties(result));
-        }
-        model.put(ITEMS, maps);
+        final List<Map<String, Object>> collect = Optional.ofNullable(cmisSession.getObject(nodeRef))
+                .filter(Document.class::isInstance)
+                .map(Document.class::cast)
+                .map(Document::getAllVersions)
+                .orElse(Collections.emptyList())
+                .stream()
+                .map(document -> convertToProperties(document))
+                .collect(Collectors.toList());
+
+        model.put(ITEMS, collect);
         model.put("hasMoreItems", false);
-        model.put("totalNumItems", versions.size());
+        model.put("totalNumItems", collect.size());
         model.put("maxItemsPerPage", 1000);
         model.put("activePage", 0);
         return model;
     }
-
 
     private Map<String, Object> query(Session cmisSession,
                                       String parameter_relationship,
