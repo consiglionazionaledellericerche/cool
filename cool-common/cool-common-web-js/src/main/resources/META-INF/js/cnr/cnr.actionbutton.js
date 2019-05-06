@@ -410,10 +410,10 @@ define(['jquery', 'json!common', 'cnr/cnr', 'cnr/cnr.ui', 'cnr/cnr.node', 'cnr/c
       .append((buttons[choice] || buttons[defaultChoice] || buttons[Object.keys(buttons)[0]]).clone(true).addClass("btn btn-mini").addClass(warningClass))
       .append($('<button class="btn btn-mini dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></button>').addClass(warningClass));
 
-    splitButton.hover(function() {
-        if(!$(this).hasClass('open')) {
-            $(this).find('.dropdown-toggle').click();
-        }
+    splitButton.hover(function () {
+      if (!$(this).hasClass('open')) {
+        $(this).find('.dropdown-toggle').click();
+      }
     });
 
     dropdown
