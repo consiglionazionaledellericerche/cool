@@ -3,7 +3,7 @@
         "GET": {
             "whitelist": {
                 "user": [
-                    "spaclient"
+                    "admin"
                 ]
             }
         }

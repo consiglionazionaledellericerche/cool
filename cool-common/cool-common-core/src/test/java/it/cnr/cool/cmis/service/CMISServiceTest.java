@@ -32,8 +32,8 @@ public class CMISServiceTest {
 
 	private static final String USER_ADMIN_USERNAME = "user.admin.username";
 
-	private static final String ADMIN_USERNAME = "spaclient";
-	private static final String ADMIN_PASSWORD = "sp@si@n0";
+	private static final String ADMIN_USERNAME = "admin";
+	private static final String ADMIN_PASSWORD = "admin";
 
 
 	@Autowired

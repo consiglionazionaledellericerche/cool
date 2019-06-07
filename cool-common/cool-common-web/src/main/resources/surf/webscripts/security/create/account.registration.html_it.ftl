@@ -11,6 +11,7 @@
 <br/>
 <p>${message('mail.account.registration.5')}</p>
 <p><a href="${url}/login">${url}/login</a></p>
+<p>Trascorsa un'ora dalla ricezione l'utenza viene eliminata, pertanto occorre ripetere ex novo la procedura di registrazione.</p>
 <p>Per richieste di informazioni o assistenza, inviare una segnalazione utilizzando la sezione <a href="${url}/helpdesk">helpdesk</a> del sito.</p>
 <hr/>
 <p>Questo messaggio e' stato generato da un sistema automatico.</p>

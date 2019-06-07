@@ -95,7 +95,7 @@
         "POST": {
             "whitelist": {
                 "user": [
-                    "spaclient",
+                    "admin",
                     "paolo.cirone",
                     "giada.fassone",
                     "marco.spasiano"

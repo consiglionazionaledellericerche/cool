@@ -45,7 +45,7 @@ public class LogTest {
 		String afterString = "2013-07-09";
 		String stackTrace = "{\"codice\":"
 				+ codice
-				+ ",\"mappa\":{\"user\":\"spaclient\",\"url\":\"/doccnr/logger\", \"application\":\""
+				+ ",\"mappa\":{\"user\":\"admin\",\"url\":\"/doccnr/logger\", \"application\":\""
 				+ application
 				+ "\"}, \"testo\":\"Ajax request has employed 1770 msec\",\"user-agent\":\"Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.17 (KHTML, like Gecko) Chrome/24.0.1312.57 Safari/537.17\",\"Date\":\""
 				+ afterString + "\",\"IP\":\"127.0.0.1\"}";

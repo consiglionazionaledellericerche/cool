@@ -30,7 +30,7 @@ public class FolderChildrenTest {
 	@Autowired
 	private CMISService cmisService;
 	private Session cmisSession;
-	private final String username = "spaclient";
+	private final String username = "admin";
 
 
 	@Before

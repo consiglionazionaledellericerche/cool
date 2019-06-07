@@ -29,7 +29,7 @@ import static org.junit.Assert.assertTrue;
 @DirtiesContext(classMode = ClassMode.AFTER_CLASS)
 public class ProxyTest {
 
-    private static final String username = "spaclient";
+    private static final String username = "admin";
 
     private static final String URL = "url";
 

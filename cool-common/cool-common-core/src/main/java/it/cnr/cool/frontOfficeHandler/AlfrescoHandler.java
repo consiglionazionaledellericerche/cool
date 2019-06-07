@@ -312,7 +312,7 @@ public class AlfrescoHandler implements ILoggerHandler {
 			properties.put(CoolPropertyIds.NOTICE_AUTHORITY.value(),
 					groupConsumer);
 			// aggiungo l'utente indicato nel widget come consumatore (oltre a
-			// spaclient come coordinatore (cancellazione, modifica) ereditato
+			// admin come coordinatore (cancellazione, modifica) ereditato
 			// dalla folder)
 			List<String> permissionsConsumer = new ArrayList<String>();
 			permissionsConsumer.add(ACLType.Consumer.name());

@@ -67,12 +67,12 @@ public class PermissionTest {
 	// per-user permission
 	@Test
 	public void testAllowedUser() {
-		assertTrue(p.isAuthorizedCMIS(WORKFLOW_ASSOCIATION, GET, getUser("spaclient")));
+		assertTrue(p.isAuthorizedCMIS(WORKFLOW_ASSOCIATION, GET, getUser("admin")));
 	}
 
 	@Test
 	public void testForbiddenUser() {
-		assertFalse(p.isAuthorizedCMIS(TEST_WEBSCRIPT, GET, getUser("francesco.uliana")));
+		assertFalse(p.isAuthorizedCMIS(TEST_WEBSCRIPT, GET, getUser("marco.spasiano")));
 	}
 
 	@Test
@@ -284,7 +284,7 @@ public class PermissionTest {
 		PermissionServiceImpl.methods method = PermissionServiceImpl.methods.GET;
 		PermissionServiceImpl.lists list = PermissionServiceImpl.lists.whitelist;
 		PermissionServiceImpl.types type = PermissionServiceImpl.types.user;
-		String authority = "spaclient";
+		String authority = "admin";
 
 		assertTrue(p.isAuthorizedCMIS(id, method.toString(), getUser(authority)));
 		assertTrue(p.delete(id, method, list, type, authority));
@@ -299,7 +299,7 @@ public class PermissionTest {
 		PermissionServiceImpl.methods method = PermissionServiceImpl.methods.PUT;
 		PermissionServiceImpl.lists list = PermissionServiceImpl.lists.whitelist;
 		PermissionServiceImpl.types type = PermissionServiceImpl.types.user;
-		String authority = "spaclient";
+		String authority = "admin";
 
 		assertFalse(p.isAuthorizedCMIS(id, method.toString(), getUser(authority)));
 		assertTrue(p.delete(id, method, list, type, authority));

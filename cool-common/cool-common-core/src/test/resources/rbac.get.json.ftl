@@ -19,7 +19,7 @@
         "POST": {
             "whitelist": {
                 "user": [
-                    "spaclient"
+                    "admin"
                 ],
                 "group": [
                     "si"
@@ -53,13 +53,13 @@
         "DELETE": {
             "whitelist": {
                   "user": [
-                    "spaclient"
+                    "admin"
                 ]
             }
         },
         "GET": {
              "user": [
-                    "spaclient"
+                    "admin"
                 ]
         }
     },
@@ -123,7 +123,7 @@
         "GET": {
             "whitelist": {
                 "user": [
-                    "spaclient"
+                    "admin"
                 ]
             }
         }
@@ -132,7 +132,7 @@
         "GET": {
             "whitelist": {
                 "user": [
-                    "spaclient"
+                    "admin"
                 ]
             }
         }
@@ -141,7 +141,7 @@
         "GET": {
             "whitelist": {
                 "user": [
-                    "spaclient"
+                    "admin"
                 ]
             }
         }
@@ -150,7 +150,7 @@
         "GET": {
             "whitelist": {
                 "user": [
-                    "spaclient"
+                    "admin"
                 ]
             }
         }
@@ -159,7 +159,7 @@
         "GET": {
             "whitelist": {
                 "user": [
-                    "spaclient"
+                    "admin"
                 ]
             }
         }
@@ -168,7 +168,7 @@
         "GET": {
             "whitelist": {
                 "user": [
-                    "spaclient"
+                    "admin"
                 ]
             }
         }
@@ -177,7 +177,7 @@
         "GET": {
             "whitelist": {
                 "user": [
-                    "spaclient"
+                    "admin"
                 ]
             }
         }
@@ -186,7 +186,7 @@
         "GET": {
             "whitelist": {
                 "user": [
-                    "spaclient"
+                    "admin"
                 ]
             }
         }
