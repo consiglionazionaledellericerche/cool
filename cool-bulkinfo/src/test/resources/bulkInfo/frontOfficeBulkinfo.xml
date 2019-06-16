@@ -210,7 +210,7 @@
     widget="ui.select"
     jsonvalidator='{"requiredWidget": false}'
     i18n="true"
-    visible="false"
+    visible="true"
     jsonlist='[{
         "defaultLabel" : "Tutti i Bandi",
         "label" : "Tutti i Bandi",
