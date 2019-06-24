@@ -26,6 +26,7 @@ maven-deploy:
   artifacts:
     paths:
       - target/*.jar
+      - target/*.pom
   only:
     - master
     - tags
@@ -37,6 +38,7 @@ maven-install:
   artifacts:
     paths:
       - target/*.war
+      - target/*.pom
   except:
     - tags
     - master
