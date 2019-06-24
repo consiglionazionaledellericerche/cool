@@ -10,8 +10,6 @@ stages:
 variables:
   MAVEN_OPTS: "-Djava.awt.headless=true -Dmaven.repo.local=./.m2/repository -Dsonar.host.url=$SONAR_HOST_URL -Dnexus.url=$NEXUS_URL -Dnexus.login=$NEXUS_USERNAME -Dnexus.pwd=$NEXUS_PASSWORD"
   MAVEN_CLI_OPTS: "-s .m2/settings.xml -Drepository.base.url=$CMIS_BASE_URL --batch-mode --errors --fail-at-end --show-version"
-  CONTAINER_TEST_IMAGE: $CI_PROJECT_PATH:$CI_COMMIT_REF_NAME
-  CONTAINER_RELEASE_IMAGE: $CI_PROJECT_PATH:latest
 
 cache:
   paths:
@@ -26,7 +24,6 @@ maven-deploy:
   artifacts:
     paths:
       - target/*.jar
-      - target/*.pom
   only:
     - master
     - tags
@@ -37,8 +34,7 @@ maven-install:
   script: "mvn clean install $MAVEN_CLI_OPTS"
   artifacts:
     paths:
-      - target/*.war
-      - target/*.pom
+      - target/*.jar
   except:
     - tags
     - master
