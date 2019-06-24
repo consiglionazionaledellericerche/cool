@@ -26,7 +26,6 @@ maven-deploy:
       - target/*.jar
   only:
     - master
-    - tags
 
 maven-install:
   stage: deploy
