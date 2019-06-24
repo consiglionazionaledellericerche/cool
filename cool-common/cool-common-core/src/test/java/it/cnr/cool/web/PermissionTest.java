@@ -1,23 +1,37 @@
+/*
+ * Copyright (C) 2019  Consiglio Nazionale delle Ricerche
+ *
+ *     This program is free software: you can redistribute it and/or modify
+ *     it under the terms of the GNU Affero General Public License as
+ *     published by the Free Software Foundation, either version 3 of the
+ *     License, or (at your option) any later version.
+ *
+ *     This program is distributed in the hope that it will be useful,
+ *     but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *     GNU Affero General Public License for more details.
+ *
+ *     You should have received a copy of the GNU Affero General Public License
+ *     along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */
+
 package it.cnr.cool.web;
 
+import it.cnr.cool.MainTestContext;
 import it.cnr.cool.cmis.service.CMISService;
 import it.cnr.cool.repository.PermissionRepository;
 import it.cnr.cool.security.service.impl.alfresco.CMISGroup;
 import it.cnr.cool.security.service.impl.alfresco.CMISUser;
 import org.junit.After;
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.test.annotation.DirtiesContext;
-import org.springframework.test.annotation.DirtiesContext.ClassMode;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,8 +39,7 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = { "classpath:/META-INF/cool-common-core-test-context.xml" })
-@DirtiesContext(classMode = ClassMode.AFTER_CLASS)
+@ContextConfiguration(classes={MainTestContext.class})
 public class PermissionTest {
 
 	private static final String WORKFLOW_ASSOCIATION = "workflowAssociation";
@@ -72,7 +85,7 @@ public class PermissionTest {
 
 	@Test
 	public void testForbiddenUser() {
-		assertFalse(p.isAuthorizedCMIS(TEST_WEBSCRIPT, GET, getUser("marco.spasiano")));
+		assertFalse(p.isAuthorizedCMIS(TEST_WEBSCRIPT, GET, getUser("mario.rossi")));
 	}
 
 	@Test
@@ -125,7 +138,7 @@ public class PermissionTest {
 		PermissionServiceImpl.methods method = PermissionServiceImpl.methods.GET;
 		PermissionServiceImpl.lists list = PermissionServiceImpl.lists.whitelist;
 		PermissionServiceImpl.types type = PermissionServiceImpl.types.user;
-		String authority = "francesco.uliana";
+		String authority = "mario.rossi";
 
 		assertFalse(p.isAuthorizedCMIS(id, method.toString(), getUser(authority)));
 		assertTrue(p.add(id, method, list, type, authority));
@@ -139,7 +152,7 @@ public class PermissionTest {
 		PermissionServiceImpl.methods method = PermissionServiceImpl.methods.GET;
 		PermissionServiceImpl.lists list = PermissionServiceImpl.lists.whitelist;
 		PermissionServiceImpl.types type = PermissionServiceImpl.types.user;
-		String authority = "francesco.uliana";
+		String authority = "mario.rossi";
 
 		//assertFalse(p.isAuthorizedCMIS(id, method, getUser(authority)));
 		try {
@@ -157,7 +170,7 @@ public class PermissionTest {
 		PermissionServiceImpl.methods method = null;
 		PermissionServiceImpl.lists list = PermissionServiceImpl.lists.whitelist;
 		PermissionServiceImpl.types type = PermissionServiceImpl.types.user;
-		String authority = "francesco.uliana";
+		String authority = "mario.rossi";
 
 		try {
 			assertTrue(p.add(id, method, list, type, authority));
@@ -174,7 +187,7 @@ public class PermissionTest {
 		PermissionServiceImpl.methods method = PermissionServiceImpl.methods.GET;
 		PermissionServiceImpl.lists list = null;
 		PermissionServiceImpl.types type = PermissionServiceImpl.types.user;
-		String authority = "francesco.uliana";
+		String authority = "mario.rossi";
 
 		try {
 			assertTrue(p.add(id, method, list, type, authority));
@@ -191,7 +204,7 @@ public class PermissionTest {
 		PermissionServiceImpl.methods method = PermissionServiceImpl.methods.GET;
 		PermissionServiceImpl.lists list = PermissionServiceImpl.lists.whitelist;
 		PermissionServiceImpl.types type = null;
-		String authority = "francesco.uliana";
+		String authority = "mario.rossi";
 
 		try {
 			assertTrue(p.add(id, method, list, type, authority));
@@ -227,7 +240,7 @@ public class PermissionTest {
 		PermissionServiceImpl.methods method = PermissionServiceImpl.methods.GET;
 		PermissionServiceImpl.lists list = PermissionServiceImpl.lists.whitelist;
 		PermissionServiceImpl.types type = PermissionServiceImpl.types.user;
-		String authority = "francesco.uliana";
+		String authority = "mario.rossi";
 
 		try {
 			assertFalse(p.isAuthorizedCMIS(id, method.toString(), getUser(authority)));
@@ -259,7 +272,7 @@ public class PermissionTest {
 
 		String id = "webscript1";
 		PermissionServiceImpl.methods method = PermissionServiceImpl.methods.GET;
-		String authority = "paolo.cirone";
+		String authority = "mario.rossi";
 		
 		assertTrue(p.enableAll(id, method));
 		assertTrue(p.isAuthorizedCMIS(id, method.toString(), getUser(authority)));
@@ -270,7 +283,7 @@ public class PermissionTest {
 
 		String id = "webscript1";
 		PermissionServiceImpl.methods method = PermissionServiceImpl.methods.GET;
-		String authority = "paolo.cirone";
+		String authority = "mario.rossi";
 
 		assertTrue(p.disableAll(id, method));
 		assertFalse(p.isAuthorizedCMIS(id, method.toString(), getUser(authority)));

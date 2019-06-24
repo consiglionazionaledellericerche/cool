@@ -1,11 +1,28 @@
+/*
+ * Copyright (C) 2019  Consiglio Nazionale delle Ricerche
+ *
+ *     This program is free software: you can redistribute it and/or modify
+ *     it under the terms of the GNU Affero General Public License as
+ *     published by the Free Software Foundation, either version 3 of the
+ *     License, or (at your option) any later version.
+ *
+ *     This program is distributed in the hope that it will be useful,
+ *     but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *     GNU Affero General Public License for more details.
+ *
+ *     You should have received a copy of the GNU Affero General Public License
+ *     along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */
+
 package it.cnr.cool.cmis.service.impl;
 
 import it.cnr.cool.cmis.service.CMISService;
 import it.cnr.cool.cmis.service.FolderService;
-import it.spasia.opencmis.criteria.Criteria;
-import it.spasia.opencmis.criteria.CriteriaFactory;
-import it.spasia.opencmis.criteria.Order;
-import it.spasia.opencmis.criteria.restrictions.Restrictions;
+import it.cnr.si.opencmis.criteria.Criteria;
+import it.cnr.si.opencmis.criteria.CriteriaFactory;
+import it.cnr.si.opencmis.criteria.Order;
+import it.cnr.si.opencmis.criteria.restrictions.Restrictions;
 import org.apache.chemistry.opencmis.client.api.*;
 import org.apache.chemistry.opencmis.commons.PropertyIds;
 import org.apache.chemistry.opencmis.commons.enums.BaseTypeId;
@@ -13,12 +30,14 @@ import org.apache.chemistry.opencmis.commons.exceptions.CmisContentAlreadyExists
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.regex.Pattern;
-
+@Service
 public class FolderServiceImpl implements FolderService {
 	private static final Logger LOGGER = LoggerFactory
 			.getLogger(FolderServiceImpl.class);
@@ -31,6 +50,7 @@ public class FolderServiceImpl implements FolderService {
 
 	private Folder dataDictionary;
 
+	@Value("${dataDictionary.path}")
 	protected String dataDictionaryPath;
 
 	public void setDataDictionaryPath(String dataDictionaryPath) {

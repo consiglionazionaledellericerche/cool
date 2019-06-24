@@ -1,6 +1,24 @@
+/*
+ * Copyright (C) 2019  Consiglio Nazionale delle Ricerche
+ *
+ *     This program is free software: you can redistribute it and/or modify
+ *     it under the terms of the GNU Affero General Public License as
+ *     published by the Free Software Foundation, either version 3 of the
+ *     License, or (at your option) any later version.
+ *
+ *     This program is distributed in the hope that it will be useful,
+ *     but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *     GNU Affero General Public License for more details.
+ *
+ *     You should have received a copy of the GNU Affero General Public License
+ *     along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */
+
 package it.cnr.cool.service;
 
 import it.cnr.cool.cmis.service.CMISService;
+import it.cnr.cool.exception.CoolException;
 import it.cnr.cool.interceptor.ProxyInterceptor;
 import org.apache.chemistry.opencmis.client.bindings.impl.CmisBindingsHelper;
 import org.apache.chemistry.opencmis.client.bindings.spi.BindingSession;
@@ -12,6 +30,7 @@ import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.util.FileCopyUtils;
 
@@ -23,6 +42,7 @@ import java.net.SocketException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 /**
  * Created by francesco on 17/02/15.
@@ -38,6 +58,11 @@ public class ProxyService {
     @Autowired
     private ProxyInterceptor proxyInterceptor;
 
+    @Value("${proxy.url.banned:service/api/solr,s/api/solr,wcservice/api/solr,wcs/api/solr}")
+    private String[] proxyURLBanned;
+
+
+
     /**
      * Process POST or PUT request
      *
@@ -52,7 +77,10 @@ public class ProxyService {
             HttpServletResponse res, boolean isPost) throws IOException {
 
         BindingSession currentBindingSession = cmisService.getCurrentBindingSession(req);
-
+        if (cmisService.getCMISUserFromSession(req).isGuest()) {
+            LOGGER.error("The request url is forbidden");
+            throw new CoolException("The request url is forbidden", HttpStatus.SC_FORBIDDEN);
+        }
         UrlBuilder url = getUrl(req, cmisService.getBaseURL());
         String urlParam = getUrlParam(req);
 
@@ -86,26 +114,32 @@ public class ProxyService {
 
     public void processDelete(HttpServletRequest req, HttpServletResponse res) throws IOException {
 
-        BindingSession currentBindingSession = cmisService.getCurrentBindingSession(req);
+        try {
+            BindingSession currentBindingSession = cmisService.getCurrentBindingSession(req);
+            if (cmisService.getCMISUserFromSession(req).isGuest()) {
+                LOGGER.error("The request url is forbidden");
+                throw new CoolException("The request url is forbidden", HttpStatus.SC_FORBIDDEN);
+            }
+            UrlBuilder url = getUrl(req, cmisService.getBaseURL());
 
-        UrlBuilder url = getUrl(req, cmisService.getBaseURL());
+            Response resp = CmisBindingsHelper
+                    .getHttpInvoker(currentBindingSession).invokeDELETE(url,
+                            currentBindingSession);
 
-        Response resp = CmisBindingsHelper
-                .getHttpInvoker(currentBindingSession).invokeDELETE(url,
-                                                                    currentBindingSession);
+            res.setStatus(resp.getResponseCode());
+            res.setContentType(resp.getContentTypeHeader());
+            res.setCharacterEncoding(resp.getCharset().toUpperCase());
 
-        res.setStatus(resp.getResponseCode());
-        res.setContentType(resp.getContentTypeHeader());
-        res.setCharacterEncoding(resp.getCharset().toUpperCase());
-
-        if (resp.getResponseCode() == HttpStatus.SC_OK) {
-            OutputStream outputStream = res.getOutputStream();
-            IOUtils.copy(resp.getStream(), outputStream);
-            outputStream.flush();
-        } else {
-            LOGGER.info("DELETE failed with code " + resp.getResponseCode());
+            if (resp.getResponseCode() == HttpStatus.SC_OK) {
+                OutputStream outputStream = res.getOutputStream();
+                IOUtils.copy(resp.getStream(), outputStream);
+                outputStream.flush();
+            } else {
+                LOGGER.info("DELETE failed with code " + resp.getResponseCode());
+            }
+        } catch (CoolException _ex) {
+            res.setStatus(_ex.getStatus());
         }
-
     }
 
 
@@ -159,13 +193,15 @@ public class ProxyService {
 
     }
 
-
-
-    // utility methods
-
-
-    public static UrlBuilder getUrl(HttpServletRequest req, String base) {
+    public UrlBuilder getUrl(HttpServletRequest req, String base) {
         String urlParam = getUrlParam(req);
+        final Optional<String> urlBanned = Arrays.asList(proxyURLBanned).stream()
+                .filter(s -> urlParam.indexOf(s) != -1)
+                .findAny();
+        if (urlBanned.isPresent()) {
+            LOGGER.error("The request url {} is forbidden", urlBanned.get());
+            throw new CoolException("The request url " + urlBanned.get() + " is forbidden", HttpStatus.SC_FORBIDDEN);
+        }
         String link = base.concat(urlParam);
         if (req.getQueryString() != null)
             link = link.concat("?").concat(req.getQueryString());

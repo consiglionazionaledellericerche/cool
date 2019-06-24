@@ -1,3 +1,20 @@
+/*
+ * Copyright (C) 2019  Consiglio Nazionale delle Ricerche
+ *
+ *     This program is free software: you can redistribute it and/or modify
+ *     it under the terms of the GNU Affero General Public License as
+ *     published by the Free Software Foundation, either version 3 of the
+ *     License, or (at your option) any later version.
+ *
+ *     This program is distributed in the hope that it will be useful,
+ *     but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *     GNU Affero General Public License for more details.
+ *
+ *     You should have received a copy of the GNU Affero General Public License
+ *     along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */
+
 package it.cnr.cool.frontOfficeHandler;
 
 import com.google.gson.JsonObject;
@@ -10,9 +27,9 @@ import it.cnr.cool.security.PermissionEnum;
 import it.cnr.cool.service.frontOffice.TypeDocument;
 import it.cnr.cool.util.MimeTypes;
 import it.cnr.cool.util.StringUtil;
-import it.spasia.opencmis.criteria.Criteria;
-import it.spasia.opencmis.criteria.CriteriaFactory;
-import it.spasia.opencmis.criteria.Order;
+import it.cnr.si.opencmis.criteria.Criteria;
+import it.cnr.si.opencmis.criteria.CriteriaFactory;
+import it.cnr.si.opencmis.criteria.Order;
 import org.apache.chemistry.opencmis.client.api.*;
 import org.apache.chemistry.opencmis.client.runtime.OperationContextImpl;
 import org.apache.chemistry.opencmis.commons.PropertyIds;
@@ -28,15 +45,18 @@ import org.apache.chemistry.opencmis.commons.impl.dataobjects.AccessControlPrinc
 import org.apache.chemistry.opencmis.commons.impl.dataobjects.ContentStreamImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.math.BigInteger;
 import java.text.ParseException;
 import java.util.*;
-
-public class AlfrescoHandler implements ILoggerHandler {
+@Service
+public class AlfrescoHandler implements ILoggerHandler, InitializingBean {
 
 	@Autowired
 	private CMISService cmisService;
@@ -49,9 +69,10 @@ public class AlfrescoHandler implements ILoggerHandler {
 	private static final Logger LOGGER = LoggerFactory
 			.getLogger(AlfrescoHandler.class);
 
+	@Value("${dataDictionary.path}")
 	private String dataDictionaryPath;
 
-    public void init() {
+    public void afterPropertiesSet() {
 		maxOperationContext = new OperationContextImpl(
 				cmisCountOperationContext);
 		aclOperationContext = new OperationContextImpl(

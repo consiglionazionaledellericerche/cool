@@ -4,7 +4,7 @@
             "blacklist": {
                 "user": [
                     "guest",
-                    "francesco.uliana"
+                    "mario.rossi"
                 ],
                 "group": [
                     "itc"

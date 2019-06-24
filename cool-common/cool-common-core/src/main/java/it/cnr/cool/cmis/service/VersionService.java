@@ -1,18 +1,38 @@
+/*
+ * Copyright (C) 2019  Consiglio Nazionale delle Ricerche
+ *
+ *     This program is free software: you can redistribute it and/or modify
+ *     it under the terms of the GNU Affero General Public License as
+ *     published by the Free Software Foundation, either version 3 of the
+ *     License, or (at your option) any later version.
+ *
+ *     This program is distributed in the hope that it will be useful,
+ *     but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *     GNU Affero General Public License for more details.
+ *
+ *     You should have received a copy of the GNU Affero General Public License
+ *     along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */
+
 package it.cnr.cool.cmis.service;
-
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.Date;
-import java.util.jar.Attributes;
-import java.util.jar.Manifest;
-
-import javax.servlet.ServletContext;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
-public class VersionService {
+import javax.servlet.ServletContext;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Date;
+import java.util.Optional;
+import java.util.jar.Attributes;
+import java.util.jar.Manifest;
+
+@Service
+public class VersionService implements InitializingBean {
 	private static final String PRODUCTION = "PRODUCTION";
 
 	private static final String MANIFEST_PATH = "/META-INF/MANIFEST.MF";
@@ -24,10 +44,14 @@ public class VersionService {
 
 	private boolean production =  false;
 
-	@Autowired
+	@Autowired(required = false)
 	private ServletContext context;
 
-	public void init() {
+	public void afterPropertiesSet() {
+		if (!Optional.ofNullable(context).isPresent()) {
+			version = "UNKNOWN";
+			return;
+		}
 		InputStream is = context.getResourceAsStream(MANIFEST_PATH);
 		if (is != null) {
 			try {

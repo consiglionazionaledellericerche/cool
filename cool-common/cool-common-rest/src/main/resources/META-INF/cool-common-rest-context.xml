@@ -1,11 +1,24 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!--
+  ~ Copyright (C) 2019  Consiglio Nazionale delle Ricerche
+  ~
+  ~     This program is free software: you can redistribute it and/or modify
+  ~     it under the terms of the GNU Affero General Public License as
+  ~     published by the Free Software Foundation, either version 3 of the
+  ~     License, or (at your option) any later version.
+  ~
+  ~     This program is distributed in the hope that it will be useful,
+  ~     but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~     GNU Affero General Public License for more details.
+  ~
+  ~     You should have received a copy of the GNU Affero General Public License
+  ~     along with this program.  If not, see <https://www.gnu.org/licenses/>.
+  -->
+
 <beans xmlns="http://www.springframework.org/schema/beans"
-       xmlns:context="http://www.springframework.org/schema/context"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xmlns:util="http://www.springframework.org/schema/util"
-       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
-    http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd
-    http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-3.0.xsd">
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
 
 
     <import resource="classpath*:META-INF/cool-common-core-context.xml"/>
@@ -25,19 +38,6 @@
         <property name="ignoreUnresolvablePlaceholders" value="true"/>
     </bean>
 
-    <!-- Configures Apache Commons Fileupload -->
-    <bean id="resolver"
-          class="it.cnr.cool.web.multipart.commons.CustomMultipartResolver">
-        <property name="maxUploadSize" value="15360000"/>
-        <property name="characterEncoding" value="UTF-8"/>
-    </bean>
-    
-    <bean id="multipartResolverMax"
-          class="it.cnr.cool.web.multipart.commons.CustomMultipartResolver">
-        <property name="maxUploadSize" value="262144000"/>
-        <property name="characterEncoding" value="UTF-8"/>
-    </bean>
-    
     <!-- Mail service -->
     <bean id="mailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl">
         <property name="host" value="${mail.host}"/>
@@ -98,38 +98,6 @@
         <property name="includeAcls" value="true"/>
     </bean>
 
-
-    <bean class="java.util.ArrayList"></bean>
-
-    <bean id="proxy" class="it.cnr.cool.rest.Proxy">
-        <property name="backends">
-            <map key-type="java.lang.String" value-type="java.lang.String">
-                <entry key="helpdesk">
-                    <map>
-                        <!--<entry key="url" value="https://testsiper.si.cnr.it/siper/json/userinfo"/>-->
-                        <!-- <entry key="url" value="https://testoil.si.cnr.it/helpdesk"/> -->
-<!--                         <entry key="userName" value="app.hdselezioni"/>
-                        <entry key="psw" value="category!dyn!"/> -->
-                        <entry key="url" value="http://gestdoc.cnr.it:90/alfresco"/>
-                        <!-- TODO: modificare prima del rilascio -->
-                        <entry key="userName" value="jconon"/>
-                        <entry key="psw" value="jcononpw"/>
-                    </map>
-                </entry>
-                <entry key="siper">
-                    <map>
-                        <entry key="url" value=""/>
-                    </map>
-                </entry>
-                <entry key="missioni">
-                    <map>
-                        <entry key="url" value="http://as1dock.si.cnr.it:90/elasticsearch/"/>
-                    </map>
-                </entry>
-            </map>
-        </property>
-    </bean>
-
     <bean class="it.cnr.cool.service.ProxyService">
         <property name="proxyInterceptor" ref="proxyInterceptor"/>
     </bean>
@@ -141,9 +109,6 @@
 
 
     <bean name="nodeService" class="it.cnr.cool.service.NodeService"></bean>
-
-    <bean name="cnrRegion" class="it.cnr.mock.CnrRegion"></bean>
-    <bean id="messageMethod" class="it.cnr.mock.MessageMethod" scope="prototype"/>
 
     <bean class="it.cnr.cool.rest.Page"></bean>
     <bean class="it.cnr.cool.service.CommonRestService"></bean>

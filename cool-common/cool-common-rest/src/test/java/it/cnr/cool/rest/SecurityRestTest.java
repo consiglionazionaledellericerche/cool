@@ -1,12 +1,30 @@
+/*
+ * Copyright (C) 2019  Consiglio Nazionale delle Ricerche
+ *
+ *     This program is free software: you can redistribute it and/or modify
+ *     it under the terms of the GNU Affero General Public License as
+ *     published by the Free Software Foundation, either version 3 of the
+ *     License, or (at your option) any later version.
+ *
+ *     This program is distributed in the hope that it will be useful,
+ *     but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *     GNU Affero General Public License for more details.
+ *
+ *     You should have received a copy of the GNU Affero General Public License
+ *     along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */
+
 package it.cnr.cool.rest;
 
+import it.cnr.cool.MainTestContext;
 import it.cnr.cool.cmis.service.CMISService;
 import it.cnr.cool.cmis.service.LoginException;
 import it.cnr.cool.exception.CoolUserFactoryException;
 import it.cnr.cool.security.CMISAuthenticatorFactory;
 import it.cnr.cool.security.service.UserService;
 import it.cnr.cool.security.service.impl.alfresco.CMISUser;
-import it.cnr.cool.test.SpringInstanceTestClassRunner;
+import it.cnr.cool.service.I18nService;
 import org.json.JSONObject;
 import org.junit.FixMethodOrder;
 import org.junit.Test;
@@ -18,23 +36,22 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpServletResponse;
-import org.springframework.test.annotation.DirtiesContext;
-import org.springframework.test.annotation.DirtiesContext.ClassMode;
 import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.core.MultivaluedHashMap;
 import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
+import java.util.Collections;
 import java.util.Locale;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
-@RunWith(SpringInstanceTestClassRunner.class)
-@ContextConfiguration(locations = { "classpath:/META-INF/cool-common-rest-test-context.xml" })
-@DirtiesContext(classMode = ClassMode.AFTER_EACH_TEST_METHOD)
+@RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration(classes = {MainTestContext.class})
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class SecurityRestTest {
 
@@ -58,8 +75,12 @@ public class SecurityRestTest {
     @Autowired
     private CMISAuthenticatorFactory cmisAuthenticatorFactory;
 
+	@Autowired
+	private I18nService i18nService;
+
 	@Test
 	public void test0beforeClassSetup() {
+		i18nService.setLocations(Collections.singletonList("i18n.labels"));
 		MockHttpServletRequest req = new MockHttpServletRequest();
 		req.addPreferredLocale(Locale.ITALIAN);
 		MultivaluedMap<String, String> form = new MultivaluedHashMap<String, String>();

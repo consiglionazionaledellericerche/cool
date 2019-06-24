@@ -1,3 +1,20 @@
+/*
+ * Copyright (C) 2019  Consiglio Nazionale delle Ricerche
+ *
+ *     This program is free software: you can redistribute it and/or modify
+ *     it under the terms of the GNU Affero General Public License as
+ *     published by the Free Software Foundation, either version 3 of the
+ *     License, or (at your option) any later version.
+ *
+ *     This program is distributed in the hope that it will be useful,
+ *     but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *     GNU Affero General Public License for more details.
+ *
+ *     You should have received a copy of the GNU Affero General Public License
+ *     along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */
+
 package it.cnr.cool.rest;
 
 
@@ -15,7 +32,6 @@ import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import java.io.IOException;
-import java.util.HashMap;
 import java.util.Map;
 
 
@@ -23,15 +39,12 @@ import java.util.Map;
 @Component
 public class Proxy {
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(Proxy.class);
     @Autowired
     private ProxyService proxyService;
-
     @Autowired
     private CMISService cmisService;
-
-    private Map<String, Map> backends;
-
-    private static final Logger LOGGER = LoggerFactory.getLogger(Proxy.class);
+    private Map<String, Map<String, String>> backends;
 
     @GET
     public void get(
@@ -61,11 +74,11 @@ public class Proxy {
 
             LOGGER.info(base);
 
-            urlBuilder = ProxyService.getUrl(req, base);
+            urlBuilder = proxyService.getUrl(req, base);
 
         } else {
             bindingSession = cmisService.getCurrentBindingSession(req);
-            urlBuilder = ProxyService.getUrl(req, cmisService.getBaseURL());
+            urlBuilder = proxyService.getUrl(req, cmisService.getBaseURL());
         }
 
         LOGGER.info(urlBuilder.toString());
@@ -96,7 +109,7 @@ public class Proxy {
         proxyService.processDelete(req, res);
     }
 
-    public void setBackends(HashMap<String, Map> backends) {
+    public void setBackends(Map<String, Map<String, String>> backends) {
         this.backends = backends;
     }
 }

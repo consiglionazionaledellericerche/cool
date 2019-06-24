@@ -1,80 +1,41 @@
-# Project info #
+<h1 align="center">
+  <a href="https://github.com/consiglionazionaledellericerche/cool">
+    COOL UI Framework
+  </a>
+</h1>
 
+<p align="center">
+  <strong>Based on <a href="https://chemistry.apache.org/java/opencmis.html">Apache Chemistry</a></strong> <img alt="Maven Central" src="https://img.shields.io/maven-central/v/org.apache.chemistry.opencmis/chemistry-opencmis-client-impl.svg?style=plastic" alt="version on maven central."><br>
+  Build web apps with Cool.
+</p>
+<p align="center">
+  <a href="https://github.com/consiglionazionaledellericerche/cool/blob/master/LICENSE">
+    <img src="https://img.shields.io/badge/License-AGPL%20v3-blue.svg" alt="Cool is released under the GNU AGPL v3 license." />
+  </a>
+  <a href="https://mvnrepository.com/artifact/it.cnr.si/cool-quickstart">
+    <img alt="Maven Central" src="https://img.shields.io/maven-central/v/it.cnr.si/cool.svg?style=flat" alt="Current version on maven central.">
+  </a>
+</p>
 
-SVN repository URL:
-<svn+ssh://scm.cedrc.cnr.it/data/svnroot/svn-alfrescoportal/trunk/cool>
+Cool is the basic UI framework for:
 
-Project Kanban Board
-<https://trello.com/board/cool/50ac9200740893525001931a>
+- [**Selezioni online CNR**][r] Online application system for recruitment of staff and other types of employment and training of the National Research Council of Italy. 
+- [**CNR.Doc**][p]
+- [**Elenco Nazionale OIV**][e]
 
-Jenkins
+Cool is developed and supported by [**Consiglio Nazionale delle Ricerche**][f] and individual core contributors.
 
-* <http://bandt.si.cnr.it:8180/jenkins/job/cool-jconon/>
-* <http://bandt.si.cnr.it:8180/jenkins/job/cool-doccnr/>
-* <http://bandt.si.cnr.it:8180/jenkins/job/cool-jconon-development/>
-* <http://bandt.si.cnr.it:8180/jenkins/job/cool-doccnr-development/>
+[r]: https://selezionionline.cnr.it
+[p]: https://doc-cnr.si.cnr.it
+[e]: https://elenco-oiv.performance.gov.it
+[f]: https://www.cnr.it
 
-Configuration
-**cool-doccnr/src/main/resources/META-INF/spring/default-repository.properties**
+## 👏 How to Contribute
 
-Quick Run
----
+The main purpose of this repository is to continue evolving React Native core. We want to make contributing to this project as easy and transparent as possible, and we are grateful to the community for contributing bugfixes and improvements.
 
-	cd cool-doccnr && mvn tomcat:run
+## 📄 License
 
-per avviare tomcat in ascolto da qualunque indirizzo:
+Cool is GNU AFFERO GENERAL PUBLIC LICENSE licensed, as found in the [LICENSE][l] file.
 
-	tomcat:run -DbindAddress=0.0.0.0
-
-per abilitare il debug remoto:
-
-	set MAVEN_OPTS=-Xdebug -Xnoagent -Djava.compiler=NONE -Xrunjdwp:transport=dt_socket,address=8787,suspend=n,server=y
-
-Release
----
-
-ricordarsi di aggiornare l'RBAC di produzione e le risorse in remote
-
-jconon
----
-gli artefatti vengono generati automaticamente da Jenkins con il comando:
-
-	clean deploy -Pjconon,produzione
-
-e vengono depositati sul repository nexus <http://maven.si.cnr.it/content/groups/public/it/cnr/si/cool/jconon/cool-jconon/>
-
-maven-replacer-plugin
----
-
-	<build>
-	  <plugins>
-	    <plugin>
-	      <groupId>com.google.code.maven-replacer-plugin</groupId>
-	      <artifactId>replacer</artifactId>
-	      <version>1.5.1</version>
-	      <executions>
-	        <execution>
-	          <phase>prepare-package</phase>
-	          <goals>
-	            <goal>replace</goal>
-	          </goals>
-	        </execution>
-	      </executions>
-	      <configuration>
-	        <filesToInclude>cool-common\src\main\resources\META-INF\js\cnr\cnr.js , cool-common\src\main\resources\META-INF\js\cnr\cnr.url.js</filesToInclude>
-	        <replacement>
-	          <token>(var debug =)(.*)</token>
-	          <value>$1 false,</value>
-	        </replacement>
-	        <replacement>
-	          <token>(timeDelayLogger =)(.*)</token>
-	          <value>$1 6000,</value>
-	        </replacement>
-	      </replacements>
-	      <regexFlags>
-	        <regexFlag>MULTILINE</regexFlag>
-	      </regexFlags>
-	    </configuration>
-	  </plugin>
-	</plugins>
-	</build>
+[l]: https://github.com/consiglionazionaledellericerche/cool/blob/master/LICENSE

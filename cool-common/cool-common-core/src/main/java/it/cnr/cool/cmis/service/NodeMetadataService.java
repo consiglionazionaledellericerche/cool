@@ -1,3 +1,20 @@
+/*
+ * Copyright (C) 2019  Consiglio Nazionale delle Ricerche
+ *
+ *     This program is free software: you can redistribute it and/or modify
+ *     it under the terms of the GNU Affero General Public License as
+ *     published by the Free Software Foundation, either version 3 of the
+ *     License, or (at your option) any later version.
+ *
+ *     This program is distributed in the hope that it will be useful,
+ *     but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *     GNU Affero General Public License for more details.
+ *
+ *     You should have received a copy of the GNU Affero General Public License
+ *     along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */
+
 package it.cnr.cool.cmis.service;
 
 import it.cnr.cool.cmis.model.CoolPropertyIds;
@@ -5,46 +22,33 @@ import it.cnr.cool.cmis.model.PolicyType;
 import it.cnr.cool.exception.CoolClientException;
 import it.cnr.cool.exception.CoolException;
 import it.cnr.cool.util.StringUtil;
-
-import java.io.Serializable;
-import java.text.DecimalFormat;
-import java.text.NumberFormat;
-import java.text.ParseException;
-import java.text.ParsePosition;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Calendar;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import javax.servlet.http.HttpServletRequest;
-
 import org.apache.chemistry.opencmis.client.api.CmisObject;
 import org.apache.chemistry.opencmis.client.api.ObjectType;
 import org.apache.chemistry.opencmis.client.api.Session;
 import org.apache.chemistry.opencmis.client.bindings.spi.BindingSession;
 import org.apache.chemistry.opencmis.commons.PropertyIds;
-import org.apache.chemistry.opencmis.commons.definitions.PropertyBooleanDefinition;
-import org.apache.chemistry.opencmis.commons.definitions.PropertyDateTimeDefinition;
-import org.apache.chemistry.opencmis.commons.definitions.PropertyDecimalDefinition;
-import org.apache.chemistry.opencmis.commons.definitions.PropertyDefinition;
-import org.apache.chemistry.opencmis.commons.definitions.PropertyIdDefinition;
-import org.apache.chemistry.opencmis.commons.definitions.PropertyIntegerDefinition;
-import org.apache.chemistry.opencmis.commons.definitions.PropertyStringDefinition;
+import org.apache.chemistry.opencmis.commons.definitions.*;
 import org.apache.chemistry.opencmis.commons.enums.Cardinality;
 import org.apache.chemistry.opencmis.commons.exceptions.CmisContentAlreadyExistsException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
 
+import javax.servlet.http.HttpServletRequest;
+import java.io.Serializable;
+import java.text.*;
+import java.util.*;
+
+@Service
 public class NodeMetadataService {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(NodeMetadataService.class);
 
 	public static final String RE_XML_PROP = "[^\\x09\\x0A\\x0D\\x20-\\xD7FF\\xE000-\\xFFFD\\x10000-x10FFFF\\u2018\\u2019\\u201c\\u201d]";
 
+	@Value("${node.date.pattern:yyyy-MM-dd'T'HH:mm:ss.SSSZ}")
 	private String datePattern;
 	@Autowired
 	private ACLService aclService;

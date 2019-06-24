@@ -1,0 +1,73 @@
+image: docker:latest
+services:
+  - docker:dind
+
+stages:
+  - deploy
+  - build
+  - release
+
+variables:
+  MAVEN_OPTS: "-Djava.awt.headless=true -Drepository.base.url=$CMIS_BASE_URL -Dnexus.url=$NEXUS_URL -Dnexus.login=$NEXUS_USERNAME -Dnexus.pwd=$NEXUS_PASSWORD"
+  MAVEN_CLI_OPTS: "--batch-mode --errors --fail-at-end --show-version"
+  CONTAINER_TEST_IMAGE: $CI_PROJECT_PATH:$CI_COMMIT_REF_NAME
+  CONTAINER_RELEASE_IMAGE: $CI_PROJECT_PATH:latest
+
+cache:
+  paths:
+    - ./.m2/repository
+  # keep cache across branch
+  key: "$CI_BUILD_REF_NAME"
+  
+maven-deploy:
+  stage: deploy
+  image: maven:alpine
+  script: "mvn clean deploy $MAVEN_CLI_OPTS -Pprod"
+  artifacts:
+    paths:
+      - target/*.jar
+  only:
+    - master
+    - tags
+
+maven-install:
+  stage: deploy
+  image: maven:alpine
+  script: "mvn clean install $MAVEN_CLI_OPTS"
+  artifacts:
+    paths:
+      - target/*.war
+  except:
+    - tags
+    - master
+
+#la release è opzionale e manuale.
+Perform Maven Release:
+  stage: release
+  image: maven:alpine
+  script:
+    - 'which git || (apk add --update git && rm -rf /var/cache/apk/*)'
+    # Install ssh-agent if not already installed, it is required by Docker.
+    # (change apt-get to yum if you use a CentOS-based image)
+    - 'which ssh-agent || ( apk add --update openssh-client && rm -rf /var/cache/apk/*)'
+
+    # Run ssh-agent (inside the build environment)
+    - eval $(ssh-agent -s)
+
+    # Add the SSH key stored in GIT_SSH_PRIV_KEY variable to the agent store
+    - ssh-add <(echo "$GIT_SSH_PRIV_KEY")
+
+    # For Docker builds disable host key checking. Be aware that by adding that
+    # you are susceptible to man-in-the-middle attacks.
+    # WARNING: Use this only with the Docker executor, if you use it with shell
+    # you will overwrite your user's SSH config.
+    - mkdir -p ~/.ssh
+    - '[[ -f /.dockerenv ]] && echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config'
+    - git config --global user.email "marco.spasiano@cnr.it"
+    - git config --global user.name "marco.spasiano"
+    - git checkout -B "$CI_BUILD_REF_NAME"
+    - mvn $MAVEN_CLI_OPTS release:prepare -Pprod -B -DskipTests=true
+  only:
+    - master
+  when: manual
+  

@@ -1,3 +1,20 @@
+/*
+ * Copyright (C) 2019  Consiglio Nazionale delle Ricerche
+ *
+ *     This program is free software: you can redistribute it and/or modify
+ *     it under the terms of the GNU Affero General Public License as
+ *     published by the Free Software Foundation, either version 3 of the
+ *     License, or (at your option) any later version.
+ *
+ *     This program is distributed in the hope that it will be useful,
+ *     but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *     GNU Affero General Public License for more details.
+ *
+ *     You should have received a copy of the GNU Affero General Public License
+ *     along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */
+
 package it.cnr.cool.config;
 
 import com.hazelcast.config.*;
@@ -25,17 +42,19 @@ public class CacheConfiguration {
     private final Logger LOGGER = LoggerFactory.getLogger(CacheConfiguration.class);
 
 
-    private @Value("${hazelcast.port}") int hazelcastPort;
+    private @Value("${hazelcast.port:1234}") int hazelcastPort;
 
-    private @Value("${hazelcast.instance.name}") String hazelcastInstanceName;
+    private @Value("${hazelcast.instance.name:#{null}}") String hazelcastInstanceName;
 
-    private @Value("${hazelcast.mancenter}") String mancenter;
+    private @Value("${hazelcast.mancenter:http://localhost:8080}") String mancenter;
 
-    private @Value("${hazelcast.members}") String members;
+    private @Value("${hazelcast.members:localhost}") String members;
 
-    private @Value("${hazelcast.multicast.port}") Integer hazelcastMulticastPort;
+    private @Value("${hazelcast.multicast.port:1235}") Integer hazelcastMulticastPort;
 
     private @Value("${hazelcast.ttl:86400}") int ttl;
+
+    private @Value("${hazelcast.port.autoincrement:false}") boolean portAutoincrement;
 
     @PreDestroy
     public void destroy() {
@@ -63,10 +82,12 @@ public class CacheConfiguration {
           LOGGER.info("no mancenter configured");
         }
 
-
-        config.setInstanceName(hazelcastInstanceName);
+        Optional.ofNullable(hazelcastInstanceName)
+                .ifPresent(s -> {
+                    config.setInstanceName(s);
+                });
         config.getNetworkConfig().setPort(hazelcastPort);
-        config.getNetworkConfig().setPortAutoIncrement(false);
+        config.getNetworkConfig().setPortAutoIncrement(portAutoincrement);
 
         config.getNetworkConfig().getJoin().getMulticastConfig().setEnabled(false);
         config.getNetworkConfig().getJoin().getAwsConfig().setEnabled(false);

@@ -1,8 +1,26 @@
+/*
+ * Copyright (C) 2019  Consiglio Nazionale delle Ricerche
+ *
+ *     This program is free software: you can redistribute it and/or modify
+ *     it under the terms of the GNU Affero General Public License as
+ *     published by the Free Software Foundation, either version 3 of the
+ *     License, or (at your option) any later version.
+ *
+ *     This program is distributed in the hope that it will be useful,
+ *     but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *     GNU Affero General Public License for more details.
+ *
+ *     You should have received a copy of the GNU Affero General Public License
+ *     along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */
+
 package it.cnr.cool.service;
 
 import it.cnr.cool.cmis.service.CMISService;
 import it.cnr.cool.cmis.service.NodeMetadataService;
 import it.cnr.cool.exception.CoolClientException;
+import it.cnr.cool.web.multipart.commons.CustomMultipartResolver;
 import it.cnr.cool.web.scripts.exception.ClientMessageException;
 import org.apache.chemistry.opencmis.client.api.*;
 import org.apache.chemistry.opencmis.client.runtime.OperationContextImpl;
@@ -17,17 +35,19 @@ import org.apache.chemistry.opencmis.commons.impl.dataobjects.ContentStreamImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Bean;
+import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 
 import javax.servlet.http.HttpServletRequest;
-
 import java.io.IOException;
 import java.math.BigInteger;
 import java.text.ParseException;
 import java.util.*;
-
+@Service
 public class NodeService {
 	private static final Logger LOGGER = LoggerFactory.getLogger(NodeService.class);
 
@@ -41,10 +61,30 @@ public class NodeService {
 	private static final String STATUS_TO_BE_INSERT = "INSERT";
 	private static final String STATUS_TO_BE_UPDATE = "UPDATE";
 
-	@Autowired
-	private CommonsMultipartResolver resolver;
-	@Autowired
-	private CommonsMultipartResolver multipartResolverMax;
+	@Value("${multipart.resolver.default.upload.size:15360000}")
+	private Long defaultUploadSize;
+
+	@Value("${multipart.resolver.max.upload.size:262144000}")
+	private Long maxUploadSize;
+
+	@Value("${multipart.resolver.encoding:UTF-8}")
+	private String multipartResolverEncoding;
+
+	@Bean("resolver")
+	public CommonsMultipartResolver getResolver() {
+		CustomMultipartResolver customMultipartResolver = new CustomMultipartResolver();
+		customMultipartResolver.setMaxUploadSize(defaultUploadSize);
+		customMultipartResolver.setCharacterEncoding(multipartResolverEncoding);
+		return customMultipartResolver;
+	}
+
+	@Bean("multipartResolverMax")
+	public CommonsMultipartResolver getResolverMax() {
+		CustomMultipartResolver customMultipartResolver = new CustomMultipartResolver();
+		customMultipartResolver.setMaxUploadSize(maxUploadSize);
+		customMultipartResolver.setCharacterEncoding(multipartResolverEncoding);
+		return customMultipartResolver;
+	}
 
 	public List<CmisObject> manageRequest(HttpServletRequest req,
 			boolean isPOST, boolean isDELETE) {
@@ -54,9 +94,9 @@ public class NodeService {
 		String objectId = req.getParameter(PropertyIds.OBJECT_ID);
 		MultipartHttpServletRequest mRequest;
 		if (req.getParameter("maxUploadSize") != null && (Boolean.valueOf(req.getParameter("maxUploadSize")) || req.getParameter("maxUploadSize").equals("1")))
-			mRequest = multipartResolverMax.resolveMultipart(req);			
+			mRequest = getResolverMax().resolveMultipart(req);
 		else
-			mRequest = resolver.resolveMultipart(req);
+			mRequest = getResolver().resolveMultipart(req);
 		if (objectId == null) {
 			objectId = mRequest.getParameter(PropertyIds.OBJECT_ID);
 		}

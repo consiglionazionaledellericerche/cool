@@ -1073,7 +1073,6 @@
 		_fn : { 
 			_get_node : function (obj, allow_multiple) {
 				if(typeof obj === "undefined" || obj === null) { return allow_multiple ? this.data.ui.selected : this.data.ui.last_selected; }
-				// francesco.uliana
         if(typeof (obj) === "string"){
           var x = obj.match(/#([a-zA-Z]+)[\\]+:[\\/]+([a-zA-Z]+)[\\/]+([0-9a-zA-Z\-]+)/);
           if(x) {

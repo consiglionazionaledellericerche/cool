@@ -1,6 +1,24 @@
+/*
+ * Copyright (C) 2019  Consiglio Nazionale delle Ricerche
+ *
+ *     This program is free software: you can redistribute it and/or modify
+ *     it under the terms of the GNU Affero General Public License as
+ *     published by the Free Software Foundation, either version 3 of the
+ *     License, or (at your option) any later version.
+ *
+ *     This program is distributed in the hope that it will be useful,
+ *     but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *     GNU Affero General Public License for more details.
+ *
+ *     You should have received a copy of the GNU Affero General Public License
+ *     along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */
+
 package it.cnr.cool.rest;
 
 import com.google.gson.JsonParser;
+import it.cnr.cool.MainTestContext;
 import it.cnr.cool.cmis.service.CMISService;
 import it.cnr.cool.cmis.service.LoginException;
 import it.cnr.cool.security.CMISAuthenticatorFactory;
@@ -14,8 +32,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpServletResponse;
-import org.springframework.test.annotation.DirtiesContext;
-import org.springframework.test.annotation.DirtiesContext.ClassMode;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
@@ -25,8 +41,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = {"classpath:/META-INF/cool-common-rest-test-context.xml"})
-@DirtiesContext(classMode = ClassMode.AFTER_CLASS)
+@ContextConfiguration(classes = {MainTestContext.class})
 public class ProxyTest {
 
     private static final String username = "admin";
@@ -102,9 +117,14 @@ public class ProxyTest {
     }
 
     @Test
-    public void testPost() throws IOException {
+    public void testPost() throws IOException, LoginException {
 
         MockHttpServletRequest req = new MockHttpServletRequest();
+
+        String ticket = cmisAuthenticatorFactory.getTicket("admin", "admin");
+
+        req.addHeader(CMISService.AUTHENTICATION_HEADER, ticket);
+
         req.setParameter(URL, "service/cnr/utils/javascript-execution");
         req.setContentType(MimeTypes.JSON.mimetype());
         req.setContent("{\"command\":\"33*3\"}".getBytes());
@@ -131,7 +151,7 @@ public class ProxyTest {
 
         req.setParameter(URL, "service/api/people/" + username);
         req.setContentType(MimeTypes.JSON.mimetype());
-        String cognome = "spasiano";
+        String cognome = "rossi";
         String jsonData = "{\"lastName\":\"" + cognome + "\"}";
         req.setContent(jsonData.getBytes());
 
@@ -151,13 +171,14 @@ public class ProxyTest {
     public void testDelete() throws IOException {
 
         MockHttpServletRequest req = new MockHttpServletRequest();
+
         req.setParameter(URL, "service/api/people/" + username + "_ALTER_EGO");
 
         MockHttpServletResponse res = new MockHttpServletResponse();
 
         proxy.delete(req, res);
 
-        assertEquals(HttpStatus.UNAUTHORIZED.value(), res.getStatus());
+        assertEquals(HttpStatus.FORBIDDEN.value(), res.getStatus());
 
 
     }
