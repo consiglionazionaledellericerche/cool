@@ -25,8 +25,8 @@ maven-deploy:
     paths:
       - target/*.jar
   except:
-    message:
-      - /\[maven-release-plugin\]/
+    variables:
+      - $CI_COMMIT_MESSAGE =~ /\[maven-release-plugin\]/
   only:
     - master
 
