@@ -12,8 +12,8 @@
   <a href="https://github.com/consiglionazionaledellericerche/cool/blob/master/LICENSE">
     <img src="https://img.shields.io/badge/License-AGPL%20v3-blue.svg" alt="Cool is released under the GNU AGPL v3 license." />
   </a>
-  <a href="https://mvnrepository.com/artifact/it.cnr.si/cool">
-    <img alt="Maven Central" src="https://img.shields.io/maven-central/v/it.cnr.si/cool.svg?style=flat" alt="Current version on maven central.">
+  <a href="https://mvnrepository.com/artifact/it.cnr.si.cool/cool-parent">
+    <img alt="Maven Central" src="https://img.shields.io/maven-central/v/it.cnr.si.cool/cool-parent.svg?style=flat" alt="Current version on maven central.">
   </a>
 </p>
 
