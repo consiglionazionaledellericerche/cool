@@ -26,19 +26,10 @@ maven-deploy:
       - target/*.jar
   except:
     variables:
-      - $CI_COMMIT_MESSAGE == "[maven-release-plugin] prepare for next development iteration"
-  only:
-    - master
-
-maven-deploy-tag:
-  stage: deploy
-  image: maven:alpine
-  script: "mvn clean deploy $MAVEN_CLI_OPTS -Pprod"
-  artifacts:
-    paths:
-      - target/*.jar
-  only:
-    - tags
+      - $CI_COMMIT_MESSAGE == "/^[maven-release-plugin]*"
+    refs:
+      - tags
+      - branches
 
 maven-install:
   stage: deploy
