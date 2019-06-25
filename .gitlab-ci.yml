@@ -26,7 +26,7 @@ maven-deploy:
       - target/*.jar
   except:
     variables:
-      - $CI_COMMIT_MESSAGE == /^[maven-release-plugin]*/
+      - $CI_COMMIT_MESSAGE ~= /^[maven-release-plugin]*/
     refs:
       - tags
       - branches
