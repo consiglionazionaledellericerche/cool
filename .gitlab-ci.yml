@@ -26,10 +26,9 @@ maven-deploy:
       - target/*.jar
   except:
     variables:
-      - $CI_COMMIT_MESSAGE =~ /^maven-release-plugin*/
-    refs:
-      - branches
-      - tags
+      - $CI_COMMIT_MESSAGE = "[maven-release-plugin] prepare for next development iteration"
+  only:
+    - master
 
 maven-deploy-tag:
   stage: deploy
