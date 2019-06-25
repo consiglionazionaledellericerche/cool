@@ -74,7 +74,7 @@ public class RRDService implements InitializingBean {
     @Value("${rrd.path}")
     private String rrdPath;
 
-    @Value("${dictionary.model:'D:cm:dictionaryModel'}")
+    @Value("${dictionary.model:D:cm:dictionaryModel}")
     private String dictionaryTypeId;
 
     @Value("${rrd.skipmd5:false}")
