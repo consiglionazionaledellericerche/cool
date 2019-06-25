@@ -27,8 +27,9 @@ maven-deploy:
   except:
     variables:
       - $CI_COMMIT_MESSAGE =~ /^maven-release-plugin*/
-  only:
-    - master
+    refs:
+      - branches
+      - tags
 
 maven-deploy-tag:
   stage: deploy
