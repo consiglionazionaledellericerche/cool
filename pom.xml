@@ -217,21 +217,34 @@
     <developer>
       <id>marco.spasiano</id>
       <name>Marco Spasiano</name>
-      <email>marco.spasiano at cnr.it</email>
+      <email>marco.spasiano@cnr.it</email>
       <organization>Consiglio Nazionale delle Ricerche</organization>
       <organizationUrl>http://www.cnr.it</organizationUrl>
+      <roles>
+        <role>project lead</role>
+        <role>architet</role>
+        <role>developer</role>
+      </roles>
     </developer>
     <developer>
       <id>francesco.uliana</id>
       <name>Francesco Uliana</name>
-      <email>francesco at uliana.it</email>
+      <email>francesco@uliana.it</email>
+      <roles>
+        <role>project lead</role>
+        <role>architet</role>
+        <role>developer</role>
+      </roles>
     </developer>
     <developer>
       <id>raffaele.pagano</id>
       <name>Raffaele Pagano</name>
-      <email>raffaele.pagano at cnr.it</email>
+      <email>raffaele.pagano@cnr.it</email>
       <organization>Consiglio Nazionale delle Ricerche</organization>
       <organizationUrl>http://www.cnr.it</organizationUrl>
+      <roles>
+          <role>developer</role>
+      </roles>
     </developer>
   </developers>
 

@@ -37,8 +37,8 @@ public class MockProxy extends Proxy implements InitializingBean {
         setBackends(Stream.of(
                 new AbstractMap.SimpleEntry<>("helpdesk", Stream.of(
                         new AbstractMap.SimpleEntry<>("url", "https://testoil.si.cnr.it/helpdesk/rest/catg/HDConcorsi"),
-                        new AbstractMap.SimpleEntry<>("userName", "app.hdselezioni"),
-                        new AbstractMap.SimpleEntry<>("psw", "category!dyn!"))),
+                        new AbstractMap.SimpleEntry<>("userName", "admin"),
+                        new AbstractMap.SimpleEntry<>("psw", "admin"))),
                 new AbstractMap.SimpleEntry<>("alfresco", Stream.of(
                         new AbstractMap.SimpleEntry<>("url", "http://as1dock.si.cnr.it:8080/alfresco"),
                         new AbstractMap.SimpleEntry<>("userName", "admin"),
