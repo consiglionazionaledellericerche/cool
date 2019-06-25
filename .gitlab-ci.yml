@@ -26,6 +26,8 @@ maven-deploy:
       - target/*.jar
   only:
     - master
+  except:
+    - tags
 
 maven-install:
   stage: deploy
@@ -63,7 +65,7 @@ Perform Maven Release:
     - git config --global user.email "marco.spasiano@cnr.it"
     - git config --global user.name "marco.spasiano"
     - git checkout -B "$CI_BUILD_REF_NAME"
-    - mvn $MAVEN_CLI_OPTS clean release:prepare -DscmCommentPrefix="[maven-release-plugin] [ci skip]" -Dresume=false -B -Pprod -DskipTests -Darguments="-DskipTests"
+    - mvn $MAVEN_CLI_OPTS clean release:prepare -Dresume=false -B -Pprod -DskipTests -Darguments="-DskipTests"
   only:
     - master
   when: manual
