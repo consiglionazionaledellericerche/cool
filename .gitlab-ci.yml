@@ -25,7 +25,8 @@ maven-deploy:
     paths:
       - target/*.jar
   except:
-    - /^[maven-release-plugin].*$/
+    message:
+      - /\[maven-release-plugin\]/
   only:
     - master
 
