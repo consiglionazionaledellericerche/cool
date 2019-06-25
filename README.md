@@ -20,9 +20,10 @@
 ## MAVEN dependency
 |Artifact| Version |
 |---|---|
-|[Apache Chemistry](https://chemistry.apache.org/java/opencmis.html)| ![Maven Central with version prefix filter](https://img.shields.io/maven-central/v/org.apache.chemistry.opencmis/chemistry-opencmis-client-impl/1.1.0.svg)|
+|[Apache Chemistry](https://chemistry.apache.org/java/opencmis.html)| ![Maven Central](https://img.shields.io/maven-central/v/org.apache.chemistry.opencmis/chemistry-opencmis-client-impl.svg)|
 |[Spring.io](https://spring.io/)| ![Maven Central with version prefix filter](https://img.shields.io/maven-central/v/org.springframework/spring-context/4.3.3.RELEASE.svg) |
-|[Rest](https://mvnrepository.com/artifact/it.cnr.si/rest) | ![Maven Central with version prefix filter](https://img.shields.io/maven-central/v/it.cnr.si/rest/1.0.1.svg)|
+|[Rest](https://mvnrepository.com/artifact/it.cnr.si/rest) | ![Maven Central](https://img.shields.io/maven-central/v/it.cnr.si/rest.svg)|
+|[OpenCMIS Criteria](https://mvnrepository.com/artifact/it.cnr.si/opencmis-criteria) | ![Maven Central](https://img.shields.io/maven-central/v/it.cnr.si/opencmis-criteria.svg)|
 
 Cool is the basic UI framework for:
 
