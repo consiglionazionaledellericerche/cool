@@ -63,6 +63,9 @@ public class RRDService implements InitializingBean {
     private CMISService cmisService;
 
     @Autowired
+    private CMISConfig cmisConfig;
+
+    @Autowired
     private ACLService aclService;
 
     @Autowired
@@ -89,6 +92,13 @@ public class RRDService implements InitializingBean {
             LOGGER.info("production mode");
         }
         List<Resource> resources = getResources();
+        LOGGER.info("Try to connect CMIS server {}",
+                Optional.ofNullable(cmisConfig.getServerParameters())
+                        .map(serverParam ->
+                                Optional.ofNullable(serverParam.get(CMISConfig.CMISSessionParameter.ATOMPUB_URL.value()))
+                                        .orElseGet(() -> serverParam.get(CMISConfig.CMISSessionParameter.BROWSER_URL.value()))
+                        )
+                        .orElse("Cannot find CMIS server URL"));
         Session cmisSession = cmisService.createAdminSession();
         Boolean webscriptCreated = Boolean.FALSE;
         List<Document> documentsToBeActive = new ArrayList<Document>();

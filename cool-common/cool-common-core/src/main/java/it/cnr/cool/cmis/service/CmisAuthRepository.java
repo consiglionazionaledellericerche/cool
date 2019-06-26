@@ -109,8 +109,8 @@ public class CmisAuthRepository {
     public Session getGuestSession() {
         LOGGER.info("creating a new guest session");
         Map<String, String> params = cmisConfig.getServerParameters();
-        String username = params.get(CMISConfig.GUEST_USERNAME);
-        String password = params.get(CMISConfig.GUEST_PASSWORD);
+        String username = params.get(CMISConfig.CMISSessionParameter.GUEST_USERNAME.value());
+        String password = params.get(CMISConfig.CMISSessionParameter.GUEST_PASSWORD.value());
         return createSession(username, password);
     }
 
@@ -118,8 +118,8 @@ public class CmisAuthRepository {
     public Session getAdminSession() {
         LOGGER.info("creating a new admin session");
         Map<String, String> params = cmisConfig.getServerParameters();
-        String username = params.get(CMISConfig.ADMIN_USERNAME);
-        String password = params.get(CMISConfig.ADMIN_PASSWORD);
+        String username = params.get(CMISConfig.CMISSessionParameter.ADMIN_USERNAME.value());
+        String password = params.get(CMISConfig.CMISSessionParameter.ADMIN_PASSWORD.value());
         return createSession(username, password);
     }
 
@@ -133,8 +133,8 @@ public class CmisAuthRepository {
         // it.cnr.cool.cmis.service.CMISService.createBindingSession()
 
         Map<String, String> params = cmisConfig.getServerParameters();
-        String username = params.get(CMISConfig.ADMIN_USERNAME);
-        String password = params.get(CMISConfig.ADMIN_PASSWORD);
+        String username = params.get(CMISConfig.CMISSessionParameter.ADMIN_USERNAME.value());
+        String password = params.get(CMISConfig.CMISSessionParameter.ADMIN_PASSWORD.value());
 
         return cmisService.createBindingSession(username, password);
 
@@ -147,8 +147,8 @@ public class CmisAuthRepository {
         LOGGER.debug("creating a guest binding session");
 
         Map<String, String> params = cmisConfig.getServerParameters();
-        String username = params.get(CMISConfig.GUEST_USERNAME);
-        String password = params.get(CMISConfig.GUEST_PASSWORD);
+        String username = params.get(CMISConfig.CMISSessionParameter.GUEST_USERNAME.value());
+        String password = params.get(CMISConfig.CMISSessionParameter.GUEST_PASSWORD.value());
         return cmisService.createBindingSession(username, password);
 
     }

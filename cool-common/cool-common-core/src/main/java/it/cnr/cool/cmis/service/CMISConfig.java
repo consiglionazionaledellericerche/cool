@@ -32,10 +32,6 @@ import java.util.stream.Collectors;
 
 @Service
 public class CMISConfig implements InitializingBean {
-    public static final String GUEST_USERNAME = "user.guest.username";
-    public static final String GUEST_PASSWORD = "user.guest.password";
-    public static final String ADMIN_USERNAME = "user.admin.username";
-    public static final String ADMIN_PASSWORD = "user.admin.password";
 
     @Autowired
     private Environment env;
@@ -70,7 +66,6 @@ public class CMISConfig implements InitializingBean {
         GUEST_PASSWORD("user.guest.password"),
         ADMIN_USERNAME("user.admin.username"),
         ADMIN_PASSWORD("user.admin.password"),
-
         BINDING_TYPE("org.apache.chemistry.opencmis.binding.spi.type"),
         BINDING_SPI_CLASS("org.apache.chemistry.opencmis.binding.spi.classname"),
         FORCE_CMIS_VERSION("org.apache.chemistry.opencmis.cmisversion"),
