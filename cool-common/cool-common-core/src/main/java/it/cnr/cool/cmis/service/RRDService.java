@@ -17,6 +17,7 @@
 
 package it.cnr.cool.cmis.service;
 
+import it.cnr.cool.cmis.model.CoolPropertyIds;
 import it.cnr.cool.mail.MailService;
 import it.cnr.cool.util.StringUtil;
 import org.apache.chemistry.opencmis.client.api.CmisObject;
@@ -177,7 +178,7 @@ public class RRDService implements InitializingBean {
                 if (fileName.equalsIgnoreCase("bulkInfoMapping.js")) {
                     aclService.setInheritedPermission(
                             cmisService.getAdminSession(),
-                            doc.getVersionSeriesId(), false);
+                            doc.getPropertyValue(CoolPropertyIds.ALFCMIS_NODEREF.value()), false);
                 }
             }
         }

@@ -330,7 +330,7 @@ public class NodeMetadataService {
 			}
 			if (inheritedPermission != null) {
 				aclService.setInheritedPermission(bindingSession, 
-						(String) cmisObject.getPropertyValue(CoolPropertyIds.ALFCMIS_NODEREF.value()), 
+						cmisObject.getPropertyValue(CoolPropertyIds.ALFCMIS_NODEREF.value()),
 						Boolean.valueOf(inheritedPermission));
 			}			
 			return cmisObject;
