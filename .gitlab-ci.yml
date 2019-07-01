@@ -10,7 +10,7 @@ stages:
 variables:
   MAVEN_OPTS: "-Djava.awt.headless=true -Dsonar.host.url=$SONAR_HOST_URL"
   MAVEN_CLI_OPTS: "-s .m2/settings.xml -Dmaven.repo.local=./.m2/repository -Dnexus.url=$NEXUS_URL -Dnexus.login=$NEXUS_USERNAME -Dnexus.pwd=$NEXUS_PASSWORD -Drepository.base.url=$CMIS_BASE_URL --batch-mode --errors --fail-at-end --show-version"
-  MAVEN_CLI_CENTRAL_OPTS: "-s .m2/settings.xml -Dmaven.repo.local=./.m2/repository -Pprod,maven-central -Dsonatype.login=$SONATYPE_USERNAME -Dsonatype.pwd=$SONATYPE_PASSWORD -Dgpg.passphrase=$GPG_PASSPHRASE -DskipTests --batch-mode --errors --fail-at-end --show-version"
+  MAVEN_CLI_CENTRAL_OPTS: "-s .m2/settings.xml -Dmaven.repo.local=./.m2/repository -Pprod,maven-central -Dnexus.url=$NEXUS_URL -Dsonatype.login=$SONATYPE_USERNAME -Dsonatype.pwd=$SONATYPE_PASSWORD -Dgpg.passphrase=$GPG_PASSPHRASE -DskipTests --batch-mode --errors --fail-at-end --show-version"
 
 cache:
   paths:
@@ -56,11 +56,6 @@ Perform Maven Release:
 
     # Add the SSH key stored in GIT_SSH_PRIV_KEY variable to the agent store
     - ssh-add <(echo "$GIT_SSH_PRIV_KEY")
-    # Add gpg private key
-    - 'which gnupg || ( apk add --update gnupg && rm -rf /var/cache/apk/*)'
-    - gpg -v --list-keys
-    - echo "pinentry-mode loopback" > /root/.gnupg/gpg.conf
-    - gpg --batch --import <(echo "$GPG_PRIVATE_KEY")
 
     # For Docker builds disable host key checking. Be aware that by adding that
     # you are susceptible to man-in-the-middle attacks.
@@ -71,6 +66,12 @@ Perform Maven Release:
     - git config --global user.email "marco.spasiano@cnr.it"
     - git config --global user.name "marco.spasiano"
     - git checkout -B "$CI_BUILD_REF_NAME"
+
+    # Add gpg private key
+    - 'which gnupg || ( apk add --update gnupg && rm -rf /var/cache/apk/*)'
+    - gpg -v --list-keys
+    - echo "pinentry-mode loopback" > /root/.gnupg/gpg.conf
+    - gpg --batch --import <(echo "$GPG_PRIVATE_KEY")
     - mvn release:clean release:prepare $MAVEN_CLI_CENTRAL_OPTS -DscmCommentPrefix="[ci skip]"
     - mvn release:perform $MAVEN_CLI_CENTRAL_OPTS
   only:
