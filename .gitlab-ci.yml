@@ -11,6 +11,7 @@ variables:
   MAVEN_OPTS: "-Djava.awt.headless=true -Dsonar.host.url=$SONAR_HOST_URL"
   MAVEN_CLI_OPTS: "-s .m2/settings.xml -Dmaven.repo.local=./.m2/repository -Dnexus.url=$NEXUS_URL -Dnexus.login=$NEXUS_USERNAME -Dnexus.pwd=$NEXUS_PASSWORD -Drepository.base.url=$CMIS_BASE_URL --batch-mode --errors --fail-at-end --show-version"
   MAVEN_CLI_CENTRAL_OPTS: "-s .m2/settings.xml -Dmaven.repo.local=./.m2/repository -Pprod,maven-central -Dnexus.url=$NEXUS_URL -Dsonatype.login=$SONATYPE_USERNAME -Dsonatype.pwd=$SONATYPE_PASSWORD -Dgpg.passphrase=$GPG_PASSPHRASE -DskipTests --batch-mode --errors --fail-at-end --show-version"
+  GPG_OPTS: "--pinentry-mode loopback"
 
 cache:
   paths:
@@ -69,8 +70,9 @@ Perform Maven Release:
 
     # Add gpg private key
     - 'which gnupg || ( apk add --update gnupg && rm -rf /var/cache/apk/*)'
-    #- gpg -v --list-keys
-    #- echo "pinentry-mode loopback" > /root/.gnupg/gpg.conf
+    - gpg -v --list-keys
+    - echo "pinentry-mode loopback" > /root/.gnupg/gpg.conf
+    - echo "allow-loopback-pinentry" > /root/.gnupg/gpg-agent.conf
     - gpg --batch --import <(echo "$GPG_PRIVATE_KEY")
     - mvn release:clean release:prepare $MAVEN_CLI_CENTRAL_OPTS -DscmCommentPrefix="[ci skip]"
     - mvn release:perform $MAVEN_CLI_CENTRAL_OPTS
