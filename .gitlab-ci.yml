@@ -55,7 +55,7 @@ Perform Maven Release:
     - eval $(ssh-agent -s)
 
     # Add the SSH key stored in GIT_SSH_PRIV_KEY variable to the agent store
-    - ssh-add <(echo "$GIT_SSH_PRIV_KEY")
+    - ssh-add --no-tty <(echo "$GIT_SSH_PRIV_KEY")
 
     # For Docker builds disable host key checking. Be aware that by adding that
     # you are susceptible to man-in-the-middle attacks.
