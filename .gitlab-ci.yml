@@ -72,7 +72,6 @@ Perform Maven Release:
     #- gpg -v --list-keys
     #- echo "pinentry-mode loopback" > /root/.gnupg/gpg.conf
     - gpg --batch --import <(echo "$GPG_PRIVATE_KEY")
-    - cat /root/.gnupg/gpg.conf
     - mvn release:clean release:prepare $MAVEN_CLI_CENTRAL_OPTS -DscmCommentPrefix="[ci skip]"
     - mvn release:perform $MAVEN_CLI_CENTRAL_OPTS
   only:
