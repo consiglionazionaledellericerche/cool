@@ -55,7 +55,7 @@ Perform Maven Release:
     - eval $(ssh-agent -s)
 
     # Add the SSH key stored in GIT_SSH_PRIV_KEY variable to the agent store
-    - ssh-add --no-tty <(echo "$GIT_SSH_PRIV_KEY")
+    - ssh-add <(echo "$GIT_SSH_PRIV_KEY")
 
     # For Docker builds disable host key checking. Be aware that by adding that
     # you are susceptible to man-in-the-middle attacks.
@@ -72,6 +72,7 @@ Perform Maven Release:
     - gpg -v --list-keys
     - echo "pinentry-mode loopback" > /root/.gnupg/gpg.conf
     - gpg --batch --import <(echo "$GPG_PRIVATE_KEY")
+    - cat /root/.gnupg/gpg.conf
     - mvn release:clean release:prepare $MAVEN_CLI_CENTRAL_OPTS -DscmCommentPrefix="[ci skip]"
     - mvn release:perform $MAVEN_CLI_CENTRAL_OPTS
   only:
