@@ -69,8 +69,8 @@ Perform Maven Release:
 
     # Add gpg private key
     - 'which gnupg || ( apk add --update gnupg && rm -rf /var/cache/apk/*)'
-    - gpg -v --list-keys
-    - echo "pinentry-mode loopback" > /root/.gnupg/gpg.conf
+    #- gpg -v --list-keys
+    #- echo "pinentry-mode loopback" > /root/.gnupg/gpg.conf
     - gpg --batch --import <(echo "$GPG_PRIVATE_KEY")
     - cat /root/.gnupg/gpg.conf
     - mvn release:clean release:prepare $MAVEN_CLI_CENTRAL_OPTS -DscmCommentPrefix="[ci skip]"
