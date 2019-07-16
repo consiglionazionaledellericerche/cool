@@ -353,7 +353,7 @@ public class QueryService {
         return Optional.ofNullable(result)
                 .map(o -> {
                     if (Optional.of(o).filter(GregorianCalendar.class::isInstance).isPresent()) {
-                        return DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS", Locale.ITALIAN).format(
+                        return DateTimeFormatter.ISO_OFFSET_DATE_TIME.format(
                                 Optional.of(o)
                                         .filter(GregorianCalendar.class::isInstance)
                                         .map(GregorianCalendar.class::cast)
