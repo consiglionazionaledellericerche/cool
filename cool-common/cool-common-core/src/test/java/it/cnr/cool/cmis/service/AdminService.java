@@ -17,14 +17,14 @@
 
 package it.cnr.cool.cmis.service;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import it.cnr.cool.exception.CoolException;
 import org.apache.chemistry.opencmis.client.bindings.impl.CmisBindingsHelper;
 import org.apache.chemistry.opencmis.client.bindings.spi.BindingSession;
 import org.apache.chemistry.opencmis.client.bindings.spi.http.Response;
 import org.apache.chemistry.opencmis.commons.impl.UrlBuilder;
 import org.apache.commons.httpclient.HttpStatus;
-import org.codehaus.jackson.JsonNode;
-import org.codehaus.jackson.map.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -52,7 +52,7 @@ public class AdminService {
 			JsonNode rootNode = mapper.readValue(stream, JsonNode.class);
 			for (Iterator<JsonNode> iterator = rootNode.iterator(); iterator.hasNext();) {
 				JsonNode jsonNode = iterator.next();
-				return jsonNode.get(MBeansNameAttrubite.solrQueryCmisQueryConsistency.value).getTextValue();				
+				return jsonNode.get(MBeansNameAttrubite.solrQueryCmisQueryConsistency.value).asText();
 			}			
 			return null;
 		} catch (IOException e) {

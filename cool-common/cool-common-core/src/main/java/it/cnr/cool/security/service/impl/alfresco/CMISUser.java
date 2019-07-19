@@ -17,11 +17,11 @@
 
 package it.cnr.cool.security.service.impl.alfresco;
 
+import com.fasterxml.jackson.annotation.JsonAnyGetter;
+import com.fasterxml.jackson.annotation.JsonAnySetter;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import it.cnr.cool.util.StringUtil;
-import org.codehaus.jackson.annotate.JsonAnyGetter;
-import org.codehaus.jackson.annotate.JsonAnySetter;
-import org.codehaus.jackson.annotate.JsonIgnore;
-import org.codehaus.jackson.annotate.JsonProperty;
 
 import java.io.Serializable;
 import java.text.ParseException;

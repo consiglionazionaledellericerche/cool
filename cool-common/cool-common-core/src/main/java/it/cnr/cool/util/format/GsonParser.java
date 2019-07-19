@@ -30,30 +30,7 @@ import java.text.ParseException;
 import java.util.Date;
 
 @Service
-public class GsonParser implements InitializingBean {
-
-	public void afterPropertiesSet(){
-		JsonSerializer<Date> ser = new JsonSerializer<Date>() {
-			@Override
-			public JsonElement serialize(Date arg0, Type arg1,
-					JsonSerializationContext arg2) {				
-				return arg0 == null ? null : new JsonPrimitive(StringUtil.CMIS_DATEFORMAT.format(arg0));
-			}			
-		};
-
-		JsonDeserializer<Date> deser = new JsonDeserializer<Date>() {
-			@Override
-			public Date deserialize(JsonElement arg0, Type arg1,
-					JsonDeserializationContext arg2) throws JsonParseException {
-				try {
-					return arg0 == null ? null : StringUtil.CMIS_DATEFORMAT.parse(arg0.getAsString());
-				} catch (ParseException e) {
-					return null;
-				}
-			}
-		}; 
-		gsonBuilder().registerTypeAdapter(Date.class, ser).registerTypeAdapter(Date.class, deser);
-	}
+public class GsonParser {
 	
 	public <T> T fromJson(Reader json, Class<T> classOfT)
 			throws JsonParseException {
@@ -65,6 +42,27 @@ public class GsonParser implements InitializingBean {
 
 	@Bean
 	public GsonBuilder gsonBuilder() {
-		return new com.google.gson.GsonBuilder();
+		final GsonBuilder gsonBuilder = new GsonBuilder();
+		JsonSerializer<Date> ser = new JsonSerializer<Date>() {
+			@Override
+			public JsonElement serialize(Date arg0, Type arg1,
+										 JsonSerializationContext arg2) {
+				return arg0 == null ? null : new JsonPrimitive(StringUtil.CMIS_DATEFORMAT.format(arg0));
+			}
+		};
+
+		JsonDeserializer<Date> deser = new JsonDeserializer<Date>() {
+			@Override
+			public Date deserialize(JsonElement arg0, Type arg1,
+									JsonDeserializationContext arg2) throws JsonParseException {
+				try {
+					return arg0 == null ? null : StringUtil.CMIS_DATEFORMAT.parse(arg0.getAsString());
+				} catch (ParseException e) {
+					return null;
+				}
+			}
+		};
+		gsonBuilder.registerTypeAdapter(Date.class, ser).registerTypeAdapter(Date.class, deser);
+		return gsonBuilder;
 	}
 }

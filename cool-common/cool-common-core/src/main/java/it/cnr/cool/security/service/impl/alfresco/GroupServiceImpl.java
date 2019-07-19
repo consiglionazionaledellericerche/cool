@@ -17,6 +17,9 @@
 
 package it.cnr.cool.security.service.impl.alfresco;
 
+import com.fasterxml.jackson.core.JsonGenerationException;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.*;
 import it.cnr.cool.cmis.service.CMISService;
 import it.cnr.cool.exception.CoolUserFactoryException;
 import it.cnr.cool.security.service.GroupService;
@@ -28,12 +31,6 @@ import org.apache.chemistry.opencmis.client.bindings.spi.http.Output;
 import org.apache.chemistry.opencmis.client.bindings.spi.http.Response;
 import org.apache.chemistry.opencmis.commons.impl.UrlBuilder;
 import org.apache.commons.httpclient.HttpStatus;
-import org.codehaus.jackson.JsonGenerationException;
-import org.codehaus.jackson.JsonNode;
-import org.codehaus.jackson.JsonProcessingException;
-import org.codehaus.jackson.map.DeserializationConfig;
-import org.codehaus.jackson.map.JsonMappingException;
-import org.codehaus.jackson.map.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -120,10 +117,10 @@ public class GroupServiceImpl implements GroupService{
 		}
 		ObjectMapper mapper = new ObjectMapper();
 		mapper.configure(
-			    DeserializationConfig.Feature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+				DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 		try {
-			 JsonNode json = mapper.readTree(resp.getStream());
-			 return mapper.readValue(json.get("data"), mapper.getTypeFactory().constructCollectionType(List.class, CMISAuthority.class));
+			 return mapper.readValue(resp.getStream(),
+					 mapper.getTypeFactory().constructCollectionType(List.class, CMISAuthority.class));
 		} catch (JsonProcessingException e) {
 			throw new CoolUserFactoryException("Exception for group " + group_name, e);
 		} catch (IOException e) {

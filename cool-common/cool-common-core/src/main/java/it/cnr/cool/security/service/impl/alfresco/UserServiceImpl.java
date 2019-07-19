@@ -18,6 +18,9 @@
 package it.cnr.cool.security.service.impl.alfresco;
 
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.core.JsonParseException;
+import com.fasterxml.jackson.databind.JsonMappingException;
 import it.cnr.cool.cmis.service.CMISService;
 import it.cnr.cool.exception.CoolUserFactoryException;
 import it.cnr.cool.listener.LogoutListener;
@@ -33,10 +36,6 @@ import org.apache.chemistry.opencmis.client.bindings.spi.http.Response;
 import org.apache.chemistry.opencmis.commons.impl.UrlBuilder;
 import org.apache.commons.httpclient.HttpStatus;
 import org.apache.commons.io.IOUtils;
-import org.codehaus.jackson.JsonParseException;
-import org.codehaus.jackson.map.JsonMappingException;
-import org.codehaus.jackson.map.ObjectMapper;
-import org.codehaus.jackson.map.annotate.JsonSerialize.Inclusion;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -50,6 +49,7 @@ import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 @Service
 public class UserServiceImpl implements UserService{
 	private static final String SERVICE_CNR_PERSON_DISABLE_ACCOUNT = "service/cnr/person/disable-account",
@@ -212,7 +212,7 @@ public class UserServiceImpl implements UserService{
         BindingSession cmisSession = cmisService.getAdminSession();        
 		try {
 	        user.clearForPersist();
-			byte[] userJson = mapper.setSerializationInclusion(Inclusion.NON_NULL).writeValueAsBytes(user);
+			byte[] userJson = mapper.setSerializationInclusion(JsonInclude.Include.NON_NULL).writeValueAsBytes(user);
 			Response resp = CmisBindingsHelper.getHttpInvoker(cmisSession).invokePOST(url, MimeTypes.JSON.mimetype(),
 					new Output() {
 						@Override
@@ -238,7 +238,7 @@ public class UserServiceImpl implements UserService{
         BindingSession cmisSession = cmisService.getAdminSession();
 		try {
 	        user.clearForPersist();
-	        byte[] userJson = mapper.setSerializationInclusion(Inclusion.NON_NULL).writeValueAsBytes(user);
+	        byte[] userJson = mapper.setSerializationInclusion(JsonInclude.Include.NON_NULL).writeValueAsBytes(user);
 	        Response resp = CmisBindingsHelper.getHttpInvoker(cmisSession).invokePUT(url, MimeTypes.JSON.mimetype(), null,
 					new Output() {
 						@Override

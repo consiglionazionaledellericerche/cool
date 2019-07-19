@@ -77,6 +77,8 @@ public class PageService implements InitializingBean{
 		return pages;
 	}
 
+	private Map<String, List<PageModel>> pageModels;
+
 	/**
 	 * 
 	 * Initialization of a collection of CoolPages
@@ -202,7 +204,13 @@ public class PageService implements InitializingBean{
 
 		model.put("args", args);
 		model.put("RequestParameters", args);
-
+		if (Optional.ofNullable(pageModels)
+				.filter(stringListMap -> stringListMap.containsKey(pageId))
+				.isPresent()) {
+			pageModels.get(pageId)
+					.stream()
+					.forEach(pageModel -> model.putAll(pageModel.addToModel(paramz)));
+		}
 		return model;
 	}
 
@@ -280,5 +288,15 @@ public class PageService implements InitializingBean{
 	@Override
 	public void afterPropertiesSet() throws Exception {
 		init();
+	}
+
+	public void registerPageModels(String pageId, PageModel pageModel) {
+		this.pageModels = Optional.ofNullable(pageModels)
+				.orElse(new HashMap<>());
+		if (pageModels.containsKey(pageId)) {
+			pageModels.get(pageId).add(pageModel);
+		} else {
+			pageModels.put(pageId, Arrays.asList(pageModel));
+		}
 	}
 }

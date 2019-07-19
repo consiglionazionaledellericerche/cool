@@ -17,6 +17,7 @@
 
 package it.cnr.cool.cmis.service;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import it.cnr.cool.security.service.UserService;
 import it.cnr.cool.security.service.impl.alfresco.CMISUser;
 import org.apache.chemistry.opencmis.client.api.Session;
@@ -25,7 +26,6 @@ import org.apache.chemistry.opencmis.client.bindings.spi.BindingSession;
 import org.apache.chemistry.opencmis.client.bindings.spi.http.Response;
 import org.apache.chemistry.opencmis.commons.impl.UrlBuilder;
 import org.apache.commons.httpclient.HttpStatus;
-import org.codehaus.jackson.map.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
