@@ -49,19 +49,14 @@ public class CMISAuthenticatorFactory {
                                String password) {
         try {
             String ticket = getTicket(username, password);
-
             BindingSession bindingSession = cmisAuthRepository.getBindingSession(ticket);
-
             CMISUser user = cmisAuthRepository.getCachedCMISUser(ticket, bindingSession);
-
             if (user != null) {
                 LOGGER.debug("loaded user: " + user.toString());
             }
-
             return ticket;
-
         } catch (LoginException e) {
-            LOGGER.warn("login failed for user: " + username, e);
+            LOGGER.warn("login failed for user: {}", username);
         } catch (Exception e) {
             LOGGER.error("Can't retrieve info, assume not authorized", e);
         }
