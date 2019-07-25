@@ -36,6 +36,7 @@ import java.math.BigInteger;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.stream.Collectors;
+
 @Service
 public class QueryService {
 
@@ -188,7 +189,10 @@ public class QueryService {
                     }
                 }
             }
-            model.put(ITEMS, rels);
+            model.put(ITEMS, rels
+                    .stream()
+                    .map(cmisObject1 -> convertToProperties(cmisObject1))
+                    .collect(Collectors.toList()));
         } else {
             ItemIterable<QueryResult> queryResult = cmisSession.query(
                     statement, false, operationContext);
