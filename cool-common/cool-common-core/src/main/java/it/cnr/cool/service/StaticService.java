@@ -68,6 +68,8 @@ public class StaticService {
             mimeType = "text/html";
         } else if (path.indexOf(".svg") > 0) {
             mimeType = "image/svg+xml";
+        } else if (path.indexOf(".xml") > 0) {
+            mimeType = "text/xml";
         } else {
             mimeType = DEFAULT_MIME_TYPE;
             LOGGER.warn("mimetype not found for path: " + path
