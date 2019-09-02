@@ -96,7 +96,7 @@ public class NoticeTest {
                 cmisSession, cmisSession, Long.toString(after.getTime()),
                 Long.toString(before.getTime()), false, null);
         ArrayList<Notice> docs = (ArrayList<Notice>) responseGet.get("docs");
-        boolean solrQueryCmis = adminService.isEVENTUALsolrQueryCmis(cmisService.getAdminSession());
+        boolean solrQueryCmis = true;
         Notice notice = null;
         /**
          * Se l'avviso non viene recuperato il sistema usa SOLR per le query!!!
