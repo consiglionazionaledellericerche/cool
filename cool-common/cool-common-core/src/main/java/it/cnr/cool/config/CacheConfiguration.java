@@ -42,15 +42,15 @@ public class CacheConfiguration {
     private final Logger LOGGER = LoggerFactory.getLogger(CacheConfiguration.class);
 
 
-    private @Value("${hazelcast.port:1234}") int hazelcastPort;
+    private @Value("${hazelcast.port}") int hazelcastPort;
 
-    private @Value("${hazelcast.instance.name:#{null}}") String hazelcastInstanceName;
+    private @Value("${hazelcast.instance.name}") String hazelcastInstanceName;
 
-    private @Value("${hazelcast.mancenter:http://localhost:8080}") String mancenter;
+    private @Value("${hazelcast.mancenter}") String mancenter;
 
-    private @Value("${hazelcast.members:localhost}") String members;
+    private @Value("${hazelcast.members}") String members;
 
-    private @Value("${hazelcast.multicast.port:1235}") Integer hazelcastMulticastPort;
+    private @Value("${hazelcast.multicast.port}") Integer hazelcastMulticastPort;
 
     private @Value("${hazelcast.ttl:86400}") int ttl;
 
