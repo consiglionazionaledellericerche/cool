@@ -62,6 +62,9 @@ public class CreateAccountService {
     @Value("${mail.from.default}")
     private String mailFromDefault;
 
+    @Value("${mail.create.user.bcc.enabled}")
+    private Boolean mailCreateUserBCCEnabled;
+
     public Map<String, Object> update(Map<String, List<String>> form, Locale locale) {
         return manage(form, locale, false, null);
     }
@@ -230,7 +233,12 @@ public class CreateAccountService {
             String content = Util.processTemplate(modelMail, templatePath);
             LOGGER.debug(content);
             String subject = i18nService.getLabel("subject-confirm-account", locale);
-            mailService.send(user.getEmail(), null, mailFromDefault, subject, content);
+            mailService.send(user.getEmail(), null,
+                    Optional.ofNullable(mailCreateUserBCCEnabled)
+                        .filter(aBoolean -> aBoolean.equals(Boolean.TRUE))
+                        .map(aBoolean -> mailFromDefault)
+                        .orElse(null),
+                    subject, content);
         } catch (TemplateException e) {
             LOGGER.error(e.getMessage(), e);
         } catch (IOException e) {
