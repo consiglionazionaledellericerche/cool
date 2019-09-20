@@ -33,8 +33,10 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 
+import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.util.*;
@@ -56,6 +58,7 @@ public class PageService implements InitializingBean{
 
 	private static final Logger LOGGER = LoggerFactory
 			.getLogger(PageService.class);
+	public static final String SERVER_SERVLET_CONTEXT_PATH = "server.servlet.context-path";
 
 	private Map<String, CoolPage> pages;
 
@@ -70,6 +73,9 @@ public class PageService implements InitializingBean{
 
 	@Autowired
 	private ApplicationContext applicationContext;
+
+	@Inject
+	private Environment env;
 
 	private String overrideLang;
 
@@ -164,7 +170,7 @@ public class PageService implements InitializingBean{
 		model.put("page", pagex);
 
 		HashMap<String, Object> url = new HashMap<String, Object>();
-		url.put("context", urlContext);
+		url.put("context", env.getProperty(SERVER_SERVLET_CONTEXT_PATH));
 		model.put("url", url);
 
 		Map<String, Object> context = getContext(user);
