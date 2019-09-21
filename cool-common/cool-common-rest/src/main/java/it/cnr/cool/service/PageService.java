@@ -170,7 +170,8 @@ public class PageService implements InitializingBean{
 		model.put("page", pagex);
 
 		HashMap<String, Object> url = new HashMap<String, Object>();
-		url.put("context", env.getProperty(SERVER_SERVLET_CONTEXT_PATH));
+		url.put("context", urlContext);
+		url.put("redirect", env.getProperty(SERVER_SERVLET_CONTEXT_PATH));
 		model.put("url", url);
 
 		Map<String, Object> context = getContext(user);
