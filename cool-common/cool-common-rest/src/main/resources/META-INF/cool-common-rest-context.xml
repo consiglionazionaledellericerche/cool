@@ -65,12 +65,6 @@
 
     <!-- End CMIS service Bean -->
 
-
-    <bean id="frontOffice" class="it.cnr.cool.rest.FrontOffice"></bean>
-    <bean class="it.cnr.cool.rest.TypesTree"></bean>
-
-    <bean id="folderChildren" class="it.cnr.cool.rest.FolderChildren"></bean>
-
     <bean id="cmisFindOperationContext"
           class="org.apache.chemistry.opencmis.client.runtime.OperationContextImpl">
         <property name="maxItemsPerPage" value="1000"/>
@@ -101,11 +95,5 @@
     <bean class="it.cnr.cool.service.ProxyService">
         <property name="proxyInterceptor" ref="proxyInterceptor"/>
     </bean>
-
     <bean id="securityCheckInterceptor" class="it.cnr.cool.security.SecurityCheckInterceptor"></bean>
-
-
-
-
-
 </beans>
