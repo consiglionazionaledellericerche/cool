@@ -36,6 +36,7 @@ import org.junit.runner.RunWith;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
@@ -48,9 +49,7 @@ import javax.ws.rs.core.Response.Status;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.Serializable;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 import static org.junit.Assert.*;
 
@@ -75,6 +74,12 @@ public class NodeTest {
 	private Session adminSession;
 	private CmisObject parentObject;
 	private final static Date data = new Date();
+
+	@Value("${user.admin.username}")
+	private String adminUserName;
+	@Value("${user.admin.password}")
+	private String adminPassword;
+
 	@Autowired
 	private Node node;
 
@@ -189,15 +194,14 @@ public class NodeTest {
 
 		assertNotNull(resp);
 
-		JSONObject jsonObj = new JSONObject((String) resp.getEntity());
 
-		assertEquals(jsonObj.getString("jconon_call:requisiti"),
+		assertEquals(getValueFromResponse(resp,"jconon_call:requisiti"),
 				STRINGA);
-		assertEquals(jsonObj.getString("cmis:parentId"), parentObject.getId());
+		assertEquals(getValueFromResponse(resp,PropertyIds.PARENT_ID), parentObject.getId());
         //gli "aspect" sono diventati "secondaryTypes"
-		assertNotNull(jsonObj.getJSONArray("secondaryTypes"));
-		assertNotNull(jsonObj.getString("cmis:objectId"));
-		assertFalse(jsonObj.getBoolean("jconon_call:pubblicato"));
+		assertNotNull(getValueFromResponse(resp,PropertyIds.SECONDARY_OBJECT_TYPE_IDS));
+		assertNotNull(getValueFromResponse(resp,PropertyIds.OBJECT_ID));
+		assertFalse(getValueFromResponse(resp,"jconon_call:pubblicato"));
 
 	}
 
@@ -205,7 +209,7 @@ public class NodeTest {
 	public void testGetCmisObjectCachable() throws LoginException {
 
 		MockHttpServletRequest req = new MockHttpServletRequest();
-        req.addHeader(CMISService.AUTHENTICATION_HEADER, cmisAuthenticatorFactory.getTicket("admin", "admin"));
+        req.addHeader(CMISService.AUTHENTICATION_HEADER, cmisAuthenticatorFactory.getTicket(adminUserName, adminPassword));
 		req.setParameter("cachable", "true");
 		req.setParameter("nodeRef", folder.getId());
 
@@ -213,21 +217,19 @@ public class NodeTest {
 
 		assertNotNull(resp);
 
-		JSONObject jsonObj = new JSONObject((String) resp.getEntity());
-
-		assertEquals(jsonObj.getString("jconon_call:requisiti"),
+		assertEquals(getValueFromResponse(resp,"jconon_call:requisiti"),
 				STRINGA);
-		assertEquals(jsonObj.getString("cmis:parentId"), parentObject.getId());
-		assertNotNull(jsonObj.getJSONArray("secondaryTypes"));
-		assertNotNull(jsonObj.getString("cmis:objectId"));
-		assertFalse(jsonObj.getBoolean("jconon_call:pubblicato"));
+		assertEquals(getValueFromResponse(resp,PropertyIds.PARENT_ID), parentObject.getId());
+		assertNotNull(getValueFromResponse(resp,PropertyIds.SECONDARY_OBJECT_TYPE_IDS));
+		assertNotNull(getValueFromResponse(resp,PropertyIds.OBJECT_ID));
+		assertFalse(getValueFromResponse(resp,"jconon_call:pubblicato"));
 	}
 
 	@Test
 	public void testMetadata() throws LoginException {
 
 		MockHttpServletRequest request = new MockHttpServletRequest();
-        request.addHeader(CMISService.AUTHENTICATION_HEADER, cmisAuthenticatorFactory.getTicket("admin", "admin"));
+        request.addHeader(CMISService.AUTHENTICATION_HEADER, cmisAuthenticatorFactory.getTicket(adminUserName, adminPassword));
 		MultivaluedMap<String, String> formParams = new MultivaluedHashMap<String, String>();
 		formParams.add(PropertyIds.OBJECT_TYPE_ID, CMIS_DOCUMENT);
 		long prefix = data.getTime();
@@ -236,19 +238,11 @@ public class NodeTest {
 		// creazione documento di test
 
 		Response response = node.metadata(request, formParams);
-		LOGGER.debug(response.toString());
-		String content = response.getEntity().toString();
-		LOGGER.info(content);
-		// parsing del contenuto delle response
-		JsonElement json = new JsonParser().parse(content);
-		LOGGER.debug(json.toString());
 		// verifica campi della response
-		assertTrue(json.getAsJsonObject().get(PropertyIds.NAME).getAsString()
+		assertTrue(getValueFromResponse(response, PropertyIds.NAME)
 				.equals(NOME_DOCUMENTO + "-" + prefix));
-		assertTrue(json.getAsJsonObject().get(PropertyIds.OBJECT_TYPE_ID)
-				.getAsString().equals(CMIS_DOCUMENT));
-		String nodeRef = json.getAsJsonObject().get(PropertyIds.OBJECT_ID)
-				.getAsString();
+		assertTrue(getValueFromResponse(response, PropertyIds.OBJECT_TYPE_ID).equals(CMIS_DOCUMENT));
+		String nodeRef = getValueFromResponse(response, PropertyIds.OBJECT_ID);
 		LOGGER.debug(nodeRef);
 		// rimozione del documento creato nel test
 		JsonElement jsonDelete = deleteDocument(nodeRef);
@@ -318,7 +312,7 @@ public class NodeTest {
 		request.setMethod(method);
 		request.setContentType(contentType);
         try {
-            request.addHeader(CMISService.AUTHENTICATION_HEADER, cmisAuthenticatorFactory.getTicket("admin", "admin"));
+            request.addHeader(CMISService.AUTHENTICATION_HEADER, cmisAuthenticatorFactory.getTicket(adminUserName, adminPassword));
         } catch (LoginException e) {
             LOGGER.error("unable to add header auth", e);
         }
@@ -339,4 +333,18 @@ public class NodeTest {
 
 		return request;
 	}
+
+	public <T extends Serializable> T getValueFromResponse(Response response, String key) {
+		final Map<String, T> map = Optional.ofNullable(response.getEntity())
+				.filter(Map.class::isInstance)
+				.map(Map.class::cast)
+				.orElse(Collections.emptyMap());
+		return map.entrySet()
+				.stream()
+				.filter(stringStringEntry -> stringStringEntry.getKey().equals(key))
+				.map(Map.Entry::getValue)
+				.findAny()
+				.orElse(null);
+	}
+
 }

@@ -105,25 +105,7 @@
     <bean id="securityCheckInterceptor" class="it.cnr.cool.security.SecurityCheckInterceptor"></bean>
 
 
-    <bean id="createAccountService" class="it.cnr.cool.service.CreateAccountService"></bean>
 
 
-    <bean name="nodeService" class="it.cnr.cool.service.NodeService"></bean>
 
-    <bean class="it.cnr.cool.rest.Page"></bean>
-    <bean class="it.cnr.cool.service.CommonRestService"></bean>
-    <bean class="it.cnr.cool.rest.StaticResouce"></bean>
-
-    <bean class="it.cnr.cool.rest.I18n"></bean>
-    <bean class="it.cnr.cool.rest.Folder"></bean>
-    <bean class="it.cnr.cool.rest.RBACRest"></bean>
-    <bean class="it.cnr.cool.rest.Content"></bean>
-
-    <bean class="it.cnr.cool.rest.Node"></bean>
-
-    <bean class="it.cnr.cool.rest.Search">
-        <property name="queryService" ref="queryService"/>
-    </bean>
-
-    <bean class="it.cnr.cool.rest.BulkInfoRest"></bean>
 </beans>

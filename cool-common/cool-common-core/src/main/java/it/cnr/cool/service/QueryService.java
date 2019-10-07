@@ -19,6 +19,7 @@ package it.cnr.cool.service;
 
 import it.cnr.cool.cmis.model.CoolPropertyIds;
 import it.cnr.cool.service.model.RelationshipTypeParam;
+import it.cnr.cool.util.CMISUtil;
 import org.apache.chemistry.opencmis.client.api.*;
 import org.apache.chemistry.opencmis.client.runtime.OperationContextImpl;
 import org.apache.chemistry.opencmis.commons.PropertyIds;
@@ -83,7 +84,7 @@ public class QueryService {
                 .map(Document::getAllVersions)
                 .orElse(Collections.emptyList())
                 .stream()
-                .map(document -> convertToProperties(document))
+                .map(document -> CMISUtil.convertToProperties(document))
                 .collect(Collectors.toList());
 
         model.put(ITEMS, collect);
@@ -168,7 +169,7 @@ public class QueryService {
 
             List<Map<String, Object>> result = new ArrayList<Map<String, Object>>();
             for (CmisObject item : items) {
-                result.add(convertToProperties(item));
+                result.add(CMISUtil.convertToProperties(item));
             }
             hasMoreItems = items.getHasMoreItems();
             model.put(ITEMS, result);
@@ -191,7 +192,7 @@ public class QueryService {
             }
             model.put(ITEMS, rels
                     .stream()
-                    .map(cmisObject1 -> convertToProperties(cmisObject1))
+                    .map(cmisObject1 -> CMISUtil.convertToProperties(cmisObject1))
                     .collect(Collectors.toList()));
         } else {
             ItemIterable<QueryResult> queryResult = cmisSession.query(
@@ -223,9 +224,9 @@ public class QueryService {
                 if (fetchCmisObject) {
                     String nodeRef = result.getPropertyValueById(PropertyIds.OBJECT_ID);
                     CmisObject cmisObject = cmisSession.getObject(nodeRef, operationContext);
-                    properties.putAll(convertToProperties(cmisObject));
+                    properties.putAll(CMISUtil.convertToProperties(cmisObject));
                 } else {
-                    properties.putAll(convertToProperties(result));
+                    properties.putAll(CMISUtil.convertToProperties(result));
                 }
                 if (relationshipTypeParam.isSearchRelationship())
                     addRelationshipToModel(operationContext,
@@ -299,7 +300,7 @@ public class QueryService {
                 rel.put(relationship.getType().getLocalName(), new ArrayList());
             List<Map<String, Object>> result = rel.get(relationship.getType().getLocalName());
             CmisObject cmisObject = relationship.getTarget(localOperationContext);
-            result.add(convertToProperties(cmisObject));
+            result.add(CMISUtil.convertToProperties(cmisObject));
             if (relationshipTypeParam.equals(RelationshipTypeParam.cascade))
                 addRelationshipToModel(localOperationContext,
                         cmisObject.getRelationships(), rel,
@@ -307,68 +308,6 @@ public class QueryService {
                         relationshipField);
         }
     }
-
-    private Map<String, Object> convertToProperties(QueryResult queryResult) {
-        final HashMap<String, Object> collect1 = queryResult.getProperties()
-                .stream()
-                .collect(HashMap::new,
-                        (m, c) -> m.put(c.getId(), getValue(c.getValues())),
-                        (m, u) -> {
-                        });
-        collect1.put("allowableActions", Optional.ofNullable(queryResult.getAllowableActions())
-                .map(AllowableActions::getAllowableActions)
-                .orElse(Collections.EMPTY_SET)
-                .stream()
-                .collect(Collectors.toList()));
-        return collect1;
-    }
-
-    private Map<String, Object> convertToProperties(CmisObject cmisObject) {
-        final HashMap<String, Object> collect1 = cmisObject.getProperties()
-                .stream()
-                .collect(HashMap::new,
-                        (m, c) -> m.put(c.getId(), getValue(c.getValues())),
-                        (m, u) -> {
-                        });
-        collect1.put("allowableActions", Optional.ofNullable(cmisObject.getAllowableActions())
-                .map(AllowableActions::getAllowableActions)
-                .orElse(Collections.EMPTY_SET)
-                .stream()
-                .collect(Collectors.toList()));
-        return collect1;
-    }
-
-    private Object getValue(List<?> result) {
-        return Optional.ofNullable(result)
-                .filter(objects -> !objects.isEmpty())
-                .map(objects -> {
-                    if (objects.size() == 1) {
-                        return getValue(objects.get(0));
-                    } else {
-                        return objects
-                                .stream()
-                                .map(o -> getValue(o))
-                                .collect(Collectors.toList());
-                    }
-                }).orElse(null);
-    }
-
-    private Object getValue(Object result) {
-        return Optional.ofNullable(result)
-                .map(o -> {
-                    if (Optional.of(o).filter(GregorianCalendar.class::isInstance).isPresent()) {
-                        return DateTimeFormatter.ISO_OFFSET_DATE_TIME.format(
-                                Optional.of(o)
-                                        .filter(GregorianCalendar.class::isInstance)
-                                        .map(GregorianCalendar.class::cast)
-                                        .map(GregorianCalendar::toZonedDateTime)
-                                        .orElse(null)
-                        );
-                    }
-                    return o;
-                }).orElse(null);
-    }
-
 
     private void addChildToModel(Session cmisSession, QueryResult result,
                                  Map<String, List<Map<String, Object>>> relationships,
@@ -390,9 +329,9 @@ public class QueryService {
                 }
                 if (relationshipName != null && !relationshipName.isEmpty()) {
                     if (relationshipName.contains(child.getType().getId()))
-                        rels.add(convertToProperties(child));
+                        rels.add(CMISUtil.convertToProperties(child));
                 } else {
-                    rels.add(convertToProperties(child));
+                    rels.add(CMISUtil.convertToProperties(child));
                 }
             }
             if (!rels.isEmpty()) {
@@ -440,9 +379,9 @@ public class QueryService {
             }
             if (relationshipName != null && !relationshipName.isEmpty()) {
                 if (relationshipName.contains(parent.getType().getId()))
-                    rels.add(convertToProperties(parent));
+                    rels.add(CMISUtil.convertToProperties(parent));
             } else {
-                rels.add(convertToProperties(parent));
+                rels.add(CMISUtil.convertToProperties(parent));
             }
             if (!rels.isEmpty()) {
                 if (relationships.containsKey("parent")) {

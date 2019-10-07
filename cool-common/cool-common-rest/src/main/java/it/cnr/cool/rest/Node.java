@@ -22,6 +22,7 @@ import it.cnr.cool.cmis.service.CMISService;
 import it.cnr.cool.cmis.service.NodeMetadataService;
 import it.cnr.cool.rest.util.Util;
 import it.cnr.cool.service.NodeService;
+import it.cnr.cool.util.CMISUtil;
 import it.cnr.cool.web.scripts.exception.ClientMessageException;
 import it.cnr.mock.ISO8601DateFormatMethod;
 import it.cnr.mock.JSONUtils;
@@ -58,8 +59,6 @@ import java.util.Map;
 public class Node {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(Node.class);
-	private static final String PATH_FTL = "/surf/webscripts/search/cmisObject.get.json.ftl";
-	private static final String PATH_POST_FTL = "/surf/webscripts/node/cmisObject.post.json.ftl";
 	private static final int MAX_AGE = 60 * 60 * 1; // un'ora
 
 	@Autowired
@@ -175,10 +174,7 @@ public class Node {
 		Session cmisSession = cmisService.getCurrentCMISSession(req);
 		try {
 			CmisObject cmisObject = cmisSession.getObject(nodeRef, operationContext);
-			model = buildModel(cmisObject);
-			String content = Util.processTemplate(model, PATH_FTL);
-			LOGGER.debug(content);
-			builder = Response.ok(content);
+			builder = Response.ok(CMISUtil.convertToProperties(cmisObject));
 			Boolean cachable = Boolean.valueOf(req.getParameter("cachable"));
 			if (cachable) {
 				CacheControl cache = Util.getCache(MAX_AGE);
@@ -209,11 +205,7 @@ public class Node {
 			Session session = cmisService.getCurrentCMISSession(req);
 			CmisObject cmisObject = nodeMetedataService.updateObjectProperties(
 					formParamz, session, req);
-
-			model = buildModel(cmisObject);
-			String content = Util.processTemplate(model, PATH_POST_FTL);
-			LOGGER.debug(content);
-			builder = Response.ok(content);
+			builder = Response.ok(CMISUtil.convertToProperties(cmisObject));
 		} catch(CmisUnauthorizedException _ex) {
 			builder = Response.status(Status.UNAUTHORIZED);
 		} catch (Exception e) {
@@ -250,23 +242,6 @@ public class Node {
 		String json = new GsonBuilder().serializeNulls().create().toJson(model);
 		LOGGER.debug(json);
 		return json;
-	}
-
-	private Map<String, Object> buildModel(CmisObject object) {
-
-		String nodeRef = object.getId();
-		HashMap<String, Object> args = new HashMap<String, Object>();
-		args.put("gest", true);
-		args.put("nodeRef", nodeRef);
-		args.put("ajax", true);
-
-		Map<String, Object> model = new HashMap<String, Object>();
-		model.put("cmisObject", object);
-		model.put("args", args);
-		model.put("jsonUtils", new JSONUtils());
-		model.put("xmldate", new ISO8601DateFormatMethod());
-
-		return model;
 	}
 
 }
