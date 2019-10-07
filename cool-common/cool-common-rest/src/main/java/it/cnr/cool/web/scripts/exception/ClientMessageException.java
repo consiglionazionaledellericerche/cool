@@ -37,4 +37,10 @@ public class ClientMessageException extends RuntimeException {
 	public String getKeyMessage() {
 		return keyMessage;
 	}
+
+	@Override
+	public synchronized Throwable fillInStackTrace() {
+		return this;
+	}
+
 }
