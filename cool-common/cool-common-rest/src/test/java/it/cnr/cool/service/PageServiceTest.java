@@ -19,38 +19,40 @@ package it.cnr.cool.service;
 
 import it.cnr.cool.MainTestContext;
 import it.cnr.cool.dto.CoolPage;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.util.Map;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
-@RunWith(SpringJUnit4ClassRunner.class)
+@ExtendWith(SpringExtension.class)
+@SpringBootTest
 @ContextConfiguration(classes = {MainTestContext.class})
 public class PageServiceTest {
 
-	private static final Logger LOGGER = LoggerFactory
-			.getLogger(PageServiceTest.class);
+    private static final Logger LOGGER = LoggerFactory
+            .getLogger(PageServiceTest.class);
 
-	@Autowired
-	private PageService pageService;
+    @Autowired
+    private PageService pageService;
 
-	@Test
-	public void testLoadPages() {
-		Map<String, CoolPage> map = pageService.loadPages();
-		LOGGER.info(map.keySet().toString());
-		assertTrue(map.keySet().size() > 0);
+    @Test
+    public void testLoadPages() {
+        Map<String, CoolPage> map = pageService.loadPages();
+        LOGGER.info(map.keySet().toString());
+        assertTrue(map.keySet().size() > 0);
 
-		CoolPage page = map.get("home");
-		LOGGER.info(page.toString());
-		assertEquals(CoolPage.Authentication.USER, page.getAuthentication());
-	}
+        CoolPage page = map.get("home");
+        LOGGER.info(page.toString());
+        assertEquals(CoolPage.Authentication.USER, page.getAuthentication());
+    }
 
 }

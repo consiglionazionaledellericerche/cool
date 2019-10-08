@@ -16,159 +16,158 @@
   ~     along with this program.  If not, see <https://www.gnu.org/licenses />.
   -->
 
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
-  <modelVersion>4.0.0</modelVersion>
-  <parent>
-    <groupId>it.cnr.si.cool</groupId>
-    <artifactId>cool-common</artifactId>
-    <version>3.1.72-SNAPSHOT</version>
-  </parent>
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://maven.apache.org/POM/4.0.0"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>it.cnr.si.cool</groupId>
+        <artifactId>cool-common</artifactId>
+        <version>3.1.72-SNAPSHOT</version>
+    </parent>
 
-  <artifactId>cool-common-core</artifactId>
-  <name>Cool Platform - Common - Core</name>
+    <artifactId>cool-common-core</artifactId>
+    <name>Cool Platform - Common - Core</name>
 
-  <properties>
-    <hazelcast.version>3.7.2</hazelcast.version>
-   </properties>
+    <properties>
+        <hazelcast.version>3.7.2</hazelcast.version>
+    </properties>
 
-  <dependencies>
+    <dependencies>
 
-    <!-- Spring dependencies -->
-    <dependency>
-      <groupId>org.springframework</groupId>
-      <artifactId>spring-context</artifactId>
-      <version>${spring.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>org.springframework</groupId>
-      <artifactId>spring-context-support</artifactId>
-      <version>${spring.version}</version>
-    </dependency>
+        <!-- Spring dependencies -->
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-context</artifactId>
+            <version>${spring.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-context-support</artifactId>
+            <version>${spring.version}</version>
+        </dependency>
 
-    <dependency>
-      <groupId>org.apache.chemistry.opencmis</groupId>
-      <artifactId>chemistry-opencmis-client-impl</artifactId>
-      <version>${opencmis.version}</version>
-      <exclusions>
-        <exclusion>
-          <artifactId>stax-ex</artifactId>
-          <groupId>org.jvnet.staxex</groupId>
-        </exclusion>
-        <exclusion>
-          <artifactId>activation</artifactId>
-          <groupId>javax.activation</groupId>
-        </exclusion>
-        <exclusion>
-          <artifactId>jaxws-rt</artifactId>
-          <groupId>com.sun.xml.ws</groupId>
-        </exclusion>
-        <exclusion>
-          <artifactId>commons-logging</artifactId>
-          <groupId>commons-logging</groupId>
-        </exclusion>
-        <exclusion>
-          <artifactId>commons-codec</artifactId>
-          <groupId>commons-codec</groupId>
-        </exclusion>
-      </exclusions>
-    </dependency>
-    <dependency>
-      <groupId>commons-httpclient</groupId>
-      <artifactId>commons-httpclient</artifactId>
-      <version>3.1</version>
-    </dependency>
-    <dependency>
-      <groupId>it.cnr.si</groupId>
-      <artifactId>opencmis-criteria</artifactId>
-      <version>1.2</version>
-      <exclusions>
-        <exclusion>
-          <artifactId>
-            chemistry-opencmis-client-impl
-          </artifactId>
-          <groupId>org.apache.chemistry.opencmis</groupId>
-        </exclusion>
-      </exclusions>
-    </dependency>
+        <dependency>
+            <groupId>org.apache.chemistry.opencmis</groupId>
+            <artifactId>chemistry-opencmis-client-impl</artifactId>
+            <version>${opencmis.version}</version>
+            <exclusions>
+                <exclusion>
+                    <artifactId>stax-ex</artifactId>
+                    <groupId>org.jvnet.staxex</groupId>
+                </exclusion>
+                <exclusion>
+                    <artifactId>activation</artifactId>
+                    <groupId>javax.activation</groupId>
+                </exclusion>
+                <exclusion>
+                    <artifactId>jaxws-rt</artifactId>
+                    <groupId>com.sun.xml.ws</groupId>
+                </exclusion>
+                <exclusion>
+                    <artifactId>commons-logging</artifactId>
+                    <groupId>commons-logging</groupId>
+                </exclusion>
+                <exclusion>
+                    <artifactId>commons-codec</artifactId>
+                    <groupId>commons-codec</groupId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>commons-httpclient</groupId>
+            <artifactId>commons-httpclient</artifactId>
+            <version>3.1</version>
+        </dependency>
+        <dependency>
+            <groupId>it.cnr.si</groupId>
+            <artifactId>opencmis-criteria</artifactId>
+            <version>1.2</version>
+            <exclusions>
+                <exclusion>
+                    <artifactId>
+                        chemistry-opencmis-client-impl
+                    </artifactId>
+                    <groupId>org.apache.chemistry.opencmis</groupId>
+                </exclusion>
+            </exclusions>
+        </dependency>
 
-    <dependency>
-      <groupId>com.google.code.gson</groupId>
-      <artifactId>gson</artifactId>
-      <version>2.2.4</version>
-    </dependency>
-    <dependency>
-      <groupId>com.fasterxml.jackson.core</groupId>
-      <artifactId>jackson-databind</artifactId>
-      <version>2.9.9</version>
-    </dependency>
-    <dependency>
-      <groupId>javax.servlet</groupId>
-      <artifactId>javax.servlet-api</artifactId>
-      <version>${servlet.version}</version>
-      <scope>provided</scope>
-    </dependency>
+        <dependency>
+            <groupId>com.google.code.gson</groupId>
+            <artifactId>gson</artifactId>
+            <version>2.2.4</version>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+            <version>2.9.9</version>
+        </dependency>
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>javax.servlet-api</artifactId>
+            <version>${servlet.version}</version>
+            <scope>provided</scope>
+        </dependency>
 
-    <dependency>
-      <groupId>commons-io</groupId>
-      <artifactId>commons-io</artifactId>
-      <version>2.4</version>
-    </dependency>
-
-
-
-    <dependency>
-      <artifactId>cool-common-api</artifactId>
-      <groupId>it.cnr.si.cool</groupId>
-      <version>${project.version}</version>
-    </dependency>
-
-    <dependency>
-      <groupId>org.json</groupId>
-      <artifactId>json</artifactId>
-      <version>20140107</version>
-    </dependency>
-
-    <dependency>
-      <groupId>org.springframework</groupId>
-      <artifactId>spring-test</artifactId>
-      <version>${spring.version}</version>
-      <scope>test</scope>
-    </dependency>
-
-    <dependency>
-    	<groupId>commons-beanutils</groupId>
-    	<artifactId>commons-beanutils</artifactId>
-    	<version>1.8.2</version>
-    </dependency>
+        <dependency>
+            <groupId>commons-io</groupId>
+            <artifactId>commons-io</artifactId>
+            <version>2.4</version>
+        </dependency>
 
 
+        <dependency>
+            <artifactId>cool-common-api</artifactId>
+            <groupId>it.cnr.si.cool</groupId>
+            <version>${project.version}</version>
+        </dependency>
 
-      <!-- hazelcast -->
-      <dependency>
-          <groupId>com.hazelcast</groupId>
-          <artifactId>hazelcast</artifactId>
-          <version>${hazelcast.version}</version>
-      </dependency>
-      <dependency>
-          <groupId>com.hazelcast</groupId>
-          <artifactId>hazelcast-spring</artifactId>
-          <version>${hazelcast.version}</version>
-      </dependency>
+        <dependency>
+            <groupId>org.json</groupId>
+            <artifactId>json</artifactId>
+            <version>20140107</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-test</artifactId>
+            <version>${spring.version}</version>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>commons-beanutils</groupId>
+            <artifactId>commons-beanutils</artifactId>
+            <version>1.8.2</version>
+        </dependency>
 
 
-      <!-- da togliere, se possibile -->
-      <dependency>
-          <groupId>org.freemarker</groupId>
-          <artifactId>freemarker</artifactId>
-          <version>2.3.22</version>
-      </dependency>
+        <!-- hazelcast -->
+        <dependency>
+            <groupId>com.hazelcast</groupId>
+            <artifactId>hazelcast</artifactId>
+            <version>${hazelcast.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.hazelcast</groupId>
+            <artifactId>hazelcast-spring</artifactId>
+            <version>${hazelcast.version}</version>
+        </dependency>
 
 
-    <dependency>
-      <groupId>org.slf4j</groupId>
-      <artifactId>slf4j-log4j12</artifactId>
-      <version>${slf4j.version}</version>
-      <scope>test</scope>
-    </dependency>
-  </dependencies>
+        <!-- da togliere, se possibile -->
+        <dependency>
+            <groupId>org.freemarker</groupId>
+            <artifactId>freemarker</artifactId>
+            <version>2.3.22</version>
+        </dependency>
+
+
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-log4j12</artifactId>
+            <version>${slf4j.version}</version>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
 </project>

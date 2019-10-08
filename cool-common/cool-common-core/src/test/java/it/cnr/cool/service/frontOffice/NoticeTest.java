@@ -24,13 +24,14 @@ import it.cnr.cool.cmis.service.CMISService;
 import it.cnr.cool.service.util.Notice;
 import org.apache.chemistry.opencmis.client.api.CmisObject;
 import org.apache.chemistry.opencmis.client.api.Session;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.io.IOException;
 import java.text.ParseException;
@@ -39,11 +40,12 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.Map;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
-@RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes={MainTestContext.class})
+@ExtendWith(SpringExtension.class)
+@SpringBootTest
+@ContextConfiguration(classes = {MainTestContext.class})
 public class NoticeTest {
 
     private final String afterString = "2010-07-13";
@@ -61,7 +63,7 @@ public class NoticeTest {
     private Session cmisSession;
     private String nodeRefNotice;
 
-    @Before
+    @BeforeEach
     public void createNotice() throws ParseException {
         SimpleDateFormat formatterEN = new SimpleDateFormat("yyyy-MM-dd");
         after = formatterEN.parse(afterString);
@@ -82,7 +84,7 @@ public class NoticeTest {
         assertTrue(nodeRefNotice != null);
     }
 
-    @After
+    @AfterEach
     public void deleteNotice() {
         frontOfficeService.deleteSingleNode(
                 cmisSession, nodeRefNotice);

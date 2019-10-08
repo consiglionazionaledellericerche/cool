@@ -20,34 +20,34 @@ package it.cnr.cool.rest;
 import it.cnr.cool.MainTestContext;
 import it.cnr.cool.cmis.service.CMISService;
 import it.cnr.cool.security.CMISAuthenticatorFactory;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import javax.ws.rs.core.Response;
 
-import static junit.framework.Assert.assertTrue;
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * Created by francesco on 31/08/15.
  */
 
-@RunWith(SpringJUnit4ClassRunner.class)
+@ExtendWith(SpringExtension.class)
+@SpringBootTest
 @ContextConfiguration(classes = {MainTestContext.class})
 public class ContentTest {
 
+    public static final String PATH = "/Data Dictionary/Email Templates/activities/activities-email_de.ftl";
     private static final Logger LOGGER = LoggerFactory
             .getLogger(ContentTest.class);
-
-    public static final String PATH = "/Data Dictionary/Email Templates/activities/activities-email_de.ftl";
-
     @Autowired
     private Content content;
 
@@ -67,6 +67,7 @@ public class ContentTest {
         LOGGER.info(content);
         assertTrue(content.length() > 0);
     }
+
     @Test
     public void testContentByNodeRefGuest() throws Exception {
         MockHttpServletRequest req = new MockHttpServletRequest();

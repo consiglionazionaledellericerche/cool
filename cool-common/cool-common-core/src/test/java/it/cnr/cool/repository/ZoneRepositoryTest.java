@@ -18,27 +18,29 @@
 package it.cnr.cool.repository;
 
 import it.cnr.cool.MainTestContext;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.util.Map;
 
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
-@RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes={MainTestContext.class})
+@ExtendWith(SpringExtension.class)
+@SpringBootTest
+@ContextConfiguration(classes = {MainTestContext.class})
 public class ZoneRepositoryTest {
 
-	@Autowired
-	private ZoneRepository zoneRepository;
+    @Autowired
+    private ZoneRepository zoneRepository;
 
-	@Test
-	public void testGet() {
-		Map<String, String> zones = zoneRepository.get();
-		assertTrue(zones.containsKey("AUTH.ALF"));
-	}
+    @Test
+    public void testGet() {
+        Map<String, String> zones = zoneRepository.get();
+        assertTrue(zones.containsKey("AUTH.ALF"));
+    }
 
 }

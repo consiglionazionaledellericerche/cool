@@ -20,43 +20,43 @@ package it.cnr.cool.cmis.service;
 import it.cnr.cool.MainTestContext;
 import org.apache.chemistry.opencmis.client.api.Document;
 import org.apache.chemistry.opencmis.client.api.Session;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-@RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes={MainTestContext.class})
+@ExtendWith(SpringExtension.class)
+@SpringBootTest
+@ContextConfiguration(classes = {MainTestContext.class})
 public class NodeVersionServiceTest {
 
-	@Autowired
-	private CMISService cmisService;
+    private static final String OBJECT_PATH = "/Data Dictionary/RSS Templates/RSS_2.0_recent_docs.ftl";
+    @Autowired
+    private CMISService cmisService;
+    @Autowired
+    private NodeVersionService nodeVersionService;
 
-	@Autowired
-	private NodeVersionService nodeVersionService;
+    @Test
+    public void testAddAutoVersionDocument() {
+        Document doc = getDocument();
 
-	private static final String OBJECT_PATH = "/Data Dictionary/RSS Templates/RSS_2.0_recent_docs.ftl";
+        nodeVersionService.addAutoVersion(doc, true);
+        nodeVersionService.addAutoVersion(doc, false);
+    }
 
-	@Test
-	public void testAddAutoVersionDocument() {
-		Document doc = getDocument();
+    @Test
+    public void testAddAutoVersionDocumentBoolean() {
+        Document doc = getDocument();
+        nodeVersionService.addAutoVersion(doc);
+        nodeVersionService.addAutoVersion(doc, false);
+    }
 
-		nodeVersionService.addAutoVersion(doc, true);
-		nodeVersionService.addAutoVersion(doc, false);
-	}
-
-	@Test
-	public void testAddAutoVersionDocumentBoolean() {
-		Document doc = getDocument();
-		nodeVersionService.addAutoVersion(doc);
-		nodeVersionService.addAutoVersion(doc, false);
-	}
-
-	private Document getDocument() {
-		Session cmisSession = cmisService.createAdminSession();
-		Document doc = (Document) cmisSession.getObjectByPath(OBJECT_PATH);
-		return doc;
-	}
+    private Document getDocument() {
+        Session cmisSession = cmisService.createAdminSession();
+        Document doc = (Document) cmisSession.getObjectByPath(OBJECT_PATH);
+        return doc;
+    }
 
 }

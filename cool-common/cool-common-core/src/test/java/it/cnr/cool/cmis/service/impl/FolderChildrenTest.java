@@ -22,59 +22,62 @@ import it.cnr.cool.cmis.service.CMISService;
 import it.cnr.cool.service.FolderChildrenService;
 import it.cnr.cool.service.util.AlfrescoFolder;
 import org.apache.chemistry.opencmis.client.api.Session;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
-@RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes={MainTestContext.class})
+
+@ExtendWith(SpringExtension.class)
+@SpringBootTest
+@ContextConfiguration(classes = {MainTestContext.class})
 public class FolderChildrenTest {
-	private static final String folderStateNull = "Guest Home";
-	private static final String folderStateClosed = "Data Dictionary";
-	@Autowired
-	private FolderChildrenService folderChildrenService;
-	@Autowired
-	private CMISService cmisService;
-	private Session cmisSession;
-	private final String username = "admin";
+    private static final String folderStateNull = "Guest Home";
+    private static final String folderStateClosed = "Data Dictionary";
+    private final String username = "admin";
+    @Autowired
+    private FolderChildrenService folderChildrenService;
+    @Autowired
+    private CMISService cmisService;
+    private Session cmisSession;
 
-	@Before
-	public void setUp() {
-		cmisSession = cmisService.createAdminSession();
-	}
+    @BeforeEach
+    public void setUp() {
+        cmisSession = cmisService.createAdminSession();
+    }
 
-	@Test
-	public void testGet() throws IOException {
+    @Test
+    public void testGet() throws IOException {
 
-		// recupero il noderef di Company Home
-		String parentFolderId = cmisSession.getObjectByPath("/").getId();
-		ArrayList<AlfrescoFolder> json = folderChildrenService.get(
-				cmisSession, parentFolderId, username);
+        // recupero il noderef di Company Home
+        String parentFolderId = cmisSession.getObjectByPath("/").getId();
+        ArrayList<AlfrescoFolder> json = folderChildrenService.get(
+                cmisSession, parentFolderId, username);
 
-		assertTrue(json.size() > 0);
+        assertTrue(json.size() > 0);
 
-		Iterator<AlfrescoFolder> it = json.iterator();
-		// verifico che il json sia ben formato
-		while (it.hasNext()) {
-			AlfrescoFolder folder = it.next();
-			if (folder.getData().equals(folderStateClosed)) {
-				assertTrue(folder.getState().equals("closed"));
-				assertTrue(folder
-						.getAttr()
-						.get("id")
-						.equals(cmisSession.getObjectByPath(
-								"/" + folderStateClosed).getId()));
-				assertTrue(folder.getAttr().get("rel").equals("folder"));
-			}
-		}
-	}
+        Iterator<AlfrescoFolder> it = json.iterator();
+        // verifico che il json sia ben formato
+        while (it.hasNext()) {
+            AlfrescoFolder folder = it.next();
+            if (folder.getData().equals(folderStateClosed)) {
+                assertTrue(folder.getState().equals("closed"));
+                assertTrue(folder
+                        .getAttr()
+                        .get("id")
+                        .equals(cmisSession.getObjectByPath(
+                                "/" + folderStateClosed).getId()));
+                assertTrue(folder.getAttr().get("rel").equals("folder"));
+            }
+        }
+    }
 }

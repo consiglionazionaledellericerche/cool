@@ -22,326 +22,328 @@ import it.cnr.cool.cmis.service.CMISService;
 import it.cnr.cool.repository.PermissionRepository;
 import it.cnr.cool.security.service.impl.alfresco.CMISGroup;
 import it.cnr.cool.security.service.impl.alfresco.CMISUser;
-import org.junit.After;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
-@RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes={MainTestContext.class})
+@ExtendWith(SpringExtension.class)
+@SpringBootTest
+@ContextConfiguration(classes = {MainTestContext.class})
 public class PermissionTest {
 
-	private static final String WORKFLOW_ASSOCIATION = "workflowAssociation";
-	private static final String TEST_WEBSCRIPT = "testWebScript";
+    private static final String WORKFLOW_ASSOCIATION = "workflowAssociation";
+    private static final String TEST_WEBSCRIPT = "testWebScript";
 
-	private static final String POST = "POST";
-	private static final String GET = "GET";
+    private static final String POST = "POST";
+    private static final String GET = "GET";
 
 
     private static final Logger LOGGER = LoggerFactory.getLogger(PermissionTest.class);
 
-	@Autowired
-	private PermissionServiceImpl p;
+    @Autowired
+    private PermissionServiceImpl p;
 
     @Autowired
     private CMISService cmisService;
 
 
     @Autowired
-	private PermissionRepository permissionRepository;
+    private PermissionRepository permissionRepository;
 
     @Value("${rbac.path}")
     private String rbacPath;
 
-    @After
-    public void after () {
-		permissionRepository.update(null);
+    @AfterEach
+    public void after() {
+        permissionRepository.update(null);
     }
 
 
     // guest and unlisted webscript
-	@Test
-	public void testUnlistedFunctionality() {
-		assertFalse(p.isAuthorizedCMIS("unlistedWebScript", GET, getUser("guest")));
-	}
+    @Test
+    public void testUnlistedFunctionality() {
+        assertFalse(p.isAuthorizedCMIS("unlistedWebScript", GET, getUser("guest")));
+    }
 
 
-	// per-user permission
-	@Test
-	public void testAllowedUser() {
-		assertTrue(p.isAuthorizedCMIS(WORKFLOW_ASSOCIATION, GET, getUser("admin")));
-	}
+    // per-user permission
+    @Test
+    public void testAllowedUser() {
+        assertTrue(p.isAuthorizedCMIS(WORKFLOW_ASSOCIATION, GET, getUser("admin")));
+    }
 
-	@Test
-	public void testForbiddenUser() {
-		assertFalse(p.isAuthorizedCMIS(TEST_WEBSCRIPT, GET, getUser("mario.rossi")));
-	}
+    @Test
+    public void testForbiddenUser() {
+        assertFalse(p.isAuthorizedCMIS(TEST_WEBSCRIPT, GET, getUser("mario.rossi")));
+    }
 
-	@Test
-	public void testAllowedUserForbiddenGroup() {
-		List<String> groups = new ArrayList<String>();
-		groups.add("itc");
-		assertTrue(p.isAuthorizedCMIS(TEST_WEBSCRIPT, GET, getUser("abc", groups)));
-	}
+    @Test
+    public void testAllowedUserForbiddenGroup() {
+        List<String> groups = new ArrayList<String>();
+        groups.add("itc");
+        assertTrue(p.isAuthorizedCMIS(TEST_WEBSCRIPT, GET, getUser("abc", groups)));
+    }
 
 
-	// per-group permission
-	@Test
-	public void testForbiddenGroup() {
-		List<String> groups = new ArrayList<String>();
-		groups.add("itc");
-		assertFalse(p.isAuthorizedCMIS(TEST_WEBSCRIPT, GET, getUser("itc", groups)));
-	}
+    // per-group permission
+    @Test
+    public void testForbiddenGroup() {
+        List<String> groups = new ArrayList<String>();
+        groups.add("itc");
+        assertFalse(p.isAuthorizedCMIS(TEST_WEBSCRIPT, GET, getUser("itc", groups)));
+    }
 
-	@Test
-	public void testAllowedGroup() {
-		List<String> groups = new ArrayList<String>();
-		groups.add("si");
-		assertTrue(p.isAuthorizedCMIS(TEST_WEBSCRIPT, POST, getUser("somebody", groups)));
-	}
+    @Test
+    public void testAllowedGroup() {
+        List<String> groups = new ArrayList<String>();
+        groups.add("si");
+        assertTrue(p.isAuthorizedCMIS(TEST_WEBSCRIPT, POST, getUser("somebody", groups)));
+    }
 
-	// multiple groups
-	@Test
-	public void testAllowedMultipleGroup() {
-		List<String> groups = new ArrayList<String>();
-		groups.add("itc");
-		groups.add("si");
-		assertTrue(p.isAuthorizedCMIS(TEST_WEBSCRIPT, POST, getUser("somebody", groups)));
-	}
+    // multiple groups
+    @Test
+    public void testAllowedMultipleGroup() {
+        List<String> groups = new ArrayList<String>();
+        groups.add("itc");
+        groups.add("si");
+        assertTrue(p.isAuthorizedCMIS(TEST_WEBSCRIPT, POST, getUser("somebody", groups)));
+    }
 
-	// all allowed/forbidden
-	@Test
-	public void testAllowedAll(){
-		assertTrue(p.isAuthorizedCMIS("i18n", GET, getUser("somebody")));
-	}
+    // all allowed/forbidden
+    @Test
+    public void testAllowedAll() {
+        assertTrue(p.isAuthorizedCMIS("i18n", GET, getUser("somebody")));
+    }
 
-	@Test
-	public void testForbiddenAll() {
-		assertFalse(p.isAuthorizedCMIS("/private", GET, getUser("somebody")));
-	}
+    @Test
+    public void testForbiddenAll() {
+        assertFalse(p.isAuthorizedCMIS("/private", GET, getUser("somebody")));
+    }
 
-	@Test
-	public void testAdd() {
+    @Test
+    public void testAdd() {
 
-		String id = "webscript1";
-		PermissionServiceImpl.methods method = PermissionServiceImpl.methods.GET;
-		PermissionServiceImpl.lists list = PermissionServiceImpl.lists.whitelist;
-		PermissionServiceImpl.types type = PermissionServiceImpl.types.user;
-		String authority = "mario.rossi";
+        String id = "webscript1";
+        PermissionServiceImpl.methods method = PermissionServiceImpl.methods.GET;
+        PermissionServiceImpl.lists list = PermissionServiceImpl.lists.whitelist;
+        PermissionServiceImpl.types type = PermissionServiceImpl.types.user;
+        String authority = "mario.rossi";
 
-		assertFalse(p.isAuthorizedCMIS(id, method.toString(), getUser(authority)));
-		assertTrue(p.add(id, method, list, type, authority));
-		assertTrue(p.isAuthorizedCMIS(id, method.toString(), getUser(authority)));
-	}
-	
-	@Test
-	public void testAddNullValuesId() {
+        assertFalse(p.isAuthorizedCMIS(id, method.toString(), getUser(authority)));
+        assertTrue(p.add(id, method, list, type, authority));
+        assertTrue(p.isAuthorizedCMIS(id, method.toString(), getUser(authority)));
+    }
 
-		String id = null;
-		PermissionServiceImpl.methods method = PermissionServiceImpl.methods.GET;
-		PermissionServiceImpl.lists list = PermissionServiceImpl.lists.whitelist;
-		PermissionServiceImpl.types type = PermissionServiceImpl.types.user;
-		String authority = "mario.rossi";
+    @Test
+    public void testAddNullValuesId() {
 
-		//assertFalse(p.isAuthorizedCMIS(id, method, getUser(authority)));
-		try {
-			assertTrue(p.add(id, method, list, type, authority));		
-			assertTrue(false); // Exception expected: fail
-		} catch (IllegalArgumentException exp) {
-			// Exception caught: success
-		}
-	}
-	
-	@Test
-	public void testAddNullValuesMethod() {
+        String id = null;
+        PermissionServiceImpl.methods method = PermissionServiceImpl.methods.GET;
+        PermissionServiceImpl.lists list = PermissionServiceImpl.lists.whitelist;
+        PermissionServiceImpl.types type = PermissionServiceImpl.types.user;
+        String authority = "mario.rossi";
 
-		String id = "webscript1";
-		PermissionServiceImpl.methods method = null;
-		PermissionServiceImpl.lists list = PermissionServiceImpl.lists.whitelist;
-		PermissionServiceImpl.types type = PermissionServiceImpl.types.user;
-		String authority = "mario.rossi";
+        //assertFalse(p.isAuthorizedCMIS(id, method, getUser(authority)));
+        try {
+            assertTrue(p.add(id, method, list, type, authority));
+            assertTrue(false); // Exception expected: fail
+        } catch (IllegalArgumentException exp) {
+            // Exception caught: success
+        }
+    }
 
-		try {
-			assertTrue(p.add(id, method, list, type, authority));
-			assertTrue(false);
-		} catch (IllegalArgumentException exp) {
-			// no-action
-		}
-	}
-	
-	@Test
-	public void testAddNullValuesList() {
+    @Test
+    public void testAddNullValuesMethod() {
 
-		String id = "webscript1";
-		PermissionServiceImpl.methods method = PermissionServiceImpl.methods.GET;
-		PermissionServiceImpl.lists list = null;
-		PermissionServiceImpl.types type = PermissionServiceImpl.types.user;
-		String authority = "mario.rossi";
+        String id = "webscript1";
+        PermissionServiceImpl.methods method = null;
+        PermissionServiceImpl.lists list = PermissionServiceImpl.lists.whitelist;
+        PermissionServiceImpl.types type = PermissionServiceImpl.types.user;
+        String authority = "mario.rossi";
 
-		try {
-			assertTrue(p.add(id, method, list, type, authority));
-			assertTrue(false);
-		} catch (IllegalArgumentException exp) {
-			// no-action
-		}
-	}
-	
-	@Test
-	public void testAddNullValuesType() {
+        try {
+            assertTrue(p.add(id, method, list, type, authority));
+            assertTrue(false);
+        } catch (IllegalArgumentException exp) {
+            // no-action
+        }
+    }
 
-		String id = "webscript1";
-		PermissionServiceImpl.methods method = PermissionServiceImpl.methods.GET;
-		PermissionServiceImpl.lists list = PermissionServiceImpl.lists.whitelist;
-		PermissionServiceImpl.types type = null;
-		String authority = "mario.rossi";
+    @Test
+    public void testAddNullValuesList() {
 
-		try {
-			assertTrue(p.add(id, method, list, type, authority));
-			assertTrue(false);
-		} catch (IllegalArgumentException exp) {
-			// no-action
-		}
-	}
-	
-	
-	@Test
-	public void testAddNullValuesAuthority() {
+        String id = "webscript1";
+        PermissionServiceImpl.methods method = PermissionServiceImpl.methods.GET;
+        PermissionServiceImpl.lists list = null;
+        PermissionServiceImpl.types type = PermissionServiceImpl.types.user;
+        String authority = "mario.rossi";
 
-		String id = "webscript1";
-		PermissionServiceImpl.methods method = PermissionServiceImpl.methods.GET;
-		PermissionServiceImpl.lists list = PermissionServiceImpl.lists.whitelist;
-		PermissionServiceImpl.types type = PermissionServiceImpl.types.user;
-		String authority = null;
+        try {
+            assertTrue(p.add(id, method, list, type, authority));
+            assertTrue(false);
+        } catch (IllegalArgumentException exp) {
+            // no-action
+        }
+    }
 
-		try {
-			assertTrue(p.add(id, method, list, type, authority));
-			assertTrue(false);
-		} catch (IllegalArgumentException exp) {
-			// no-action
-		}
+    @Test
+    public void testAddNullValuesType() {
 
-	}
+        String id = "webscript1";
+        PermissionServiceImpl.methods method = PermissionServiceImpl.methods.GET;
+        PermissionServiceImpl.lists list = PermissionServiceImpl.lists.whitelist;
+        PermissionServiceImpl.types type = null;
+        String authority = "mario.rossi";
 
-	@Test
-	public void testAddEmptyStringsId() {
+        try {
+            assertTrue(p.add(id, method, list, type, authority));
+            assertTrue(false);
+        } catch (IllegalArgumentException exp) {
+            // no-action
+        }
+    }
 
-		String id = "";
-		PermissionServiceImpl.methods method = PermissionServiceImpl.methods.GET;
-		PermissionServiceImpl.lists list = PermissionServiceImpl.lists.whitelist;
-		PermissionServiceImpl.types type = PermissionServiceImpl.types.user;
-		String authority = "mario.rossi";
 
-		try {
-			assertFalse(p.isAuthorizedCMIS(id, method.toString(), getUser(authority)));
-			assertTrue(p.add(id, method, list, type, authority));
-		} catch (IllegalArgumentException exp) {
-			// no-action
-		}
-	}
-	
-	@Test
-	public void testAddEmptyStringsAuthority() {
+    @Test
+    public void testAddNullValuesAuthority() {
 
-		String id = "webscript1";
-		PermissionServiceImpl.methods method = PermissionServiceImpl.methods.GET;
-		PermissionServiceImpl.lists list = PermissionServiceImpl.lists.whitelist;
-		PermissionServiceImpl.types type = PermissionServiceImpl.types.user;
-		String authority = "";
+        String id = "webscript1";
+        PermissionServiceImpl.methods method = PermissionServiceImpl.methods.GET;
+        PermissionServiceImpl.lists list = PermissionServiceImpl.lists.whitelist;
+        PermissionServiceImpl.types type = PermissionServiceImpl.types.user;
+        String authority = null;
 
-		try {
-			assertFalse(p.isAuthorizedCMIS(id, method.toString(), getUser(authority)));
-			assertTrue(p.add(id, method, list, type, authority));
-		} catch (IllegalArgumentException exp) {
-			// no-action
-		}
-	}
-	
-	@Test
-	public void testEnableAll() {
+        try {
+            assertTrue(p.add(id, method, list, type, authority));
+            assertTrue(false);
+        } catch (IllegalArgumentException exp) {
+            // no-action
+        }
 
-		String id = "webscript1";
-		PermissionServiceImpl.methods method = PermissionServiceImpl.methods.GET;
-		String authority = "mario.rossi";
-		
-		assertTrue(p.enableAll(id, method));
-		assertTrue(p.isAuthorizedCMIS(id, method.toString(), getUser(authority)));
-	}
+    }
 
-	@Test
-	public void testDisableAll() {
+    @Test
+    public void testAddEmptyStringsId() {
 
-		String id = "webscript1";
-		PermissionServiceImpl.methods method = PermissionServiceImpl.methods.GET;
-		String authority = "mario.rossi";
+        String id = "";
+        PermissionServiceImpl.methods method = PermissionServiceImpl.methods.GET;
+        PermissionServiceImpl.lists list = PermissionServiceImpl.lists.whitelist;
+        PermissionServiceImpl.types type = PermissionServiceImpl.types.user;
+        String authority = "mario.rossi";
 
-		assertTrue(p.disableAll(id, method));
-		assertFalse(p.isAuthorizedCMIS(id, method.toString(), getUser(authority)));
-	}
-	
-	@Test
-	public void testDelete() {
+        try {
+            assertFalse(p.isAuthorizedCMIS(id, method.toString(), getUser(authority)));
+            assertTrue(p.add(id, method, list, type, authority));
+        } catch (IllegalArgumentException exp) {
+            // no-action
+        }
+    }
 
-		String id = WORKFLOW_ASSOCIATION;
+    @Test
+    public void testAddEmptyStringsAuthority() {
 
-		PermissionServiceImpl.methods method = PermissionServiceImpl.methods.GET;
-		PermissionServiceImpl.lists list = PermissionServiceImpl.lists.whitelist;
-		PermissionServiceImpl.types type = PermissionServiceImpl.types.user;
-		String authority = "admin";
+        String id = "webscript1";
+        PermissionServiceImpl.methods method = PermissionServiceImpl.methods.GET;
+        PermissionServiceImpl.lists list = PermissionServiceImpl.lists.whitelist;
+        PermissionServiceImpl.types type = PermissionServiceImpl.types.user;
+        String authority = "";
 
-		assertTrue(p.isAuthorizedCMIS(id, method.toString(), getUser(authority)));
-		assertTrue(p.delete(id, method, list, type, authority));
-		assertFalse(p.isAuthorizedCMIS(id, method.toString(), getUser(authority)));
-	}
+        try {
+            assertFalse(p.isAuthorizedCMIS(id, method.toString(), getUser(authority)));
+            assertTrue(p.add(id, method, list, type, authority));
+        } catch (IllegalArgumentException exp) {
+            // no-action
+        }
+    }
 
-	
-	@Test
-	public void testDeleteNotExisting() {
+    @Test
+    public void testEnableAll() {
 
-		String id = "webscript1";
-		PermissionServiceImpl.methods method = PermissionServiceImpl.methods.PUT;
-		PermissionServiceImpl.lists list = PermissionServiceImpl.lists.whitelist;
-		PermissionServiceImpl.types type = PermissionServiceImpl.types.user;
-		String authority = "admin";
+        String id = "webscript1";
+        PermissionServiceImpl.methods method = PermissionServiceImpl.methods.GET;
+        String authority = "mario.rossi";
 
-		assertFalse(p.isAuthorizedCMIS(id, method.toString(), getUser(authority)));
-		assertTrue(p.delete(id, method, list, type, authority));
-		assertFalse(p.isAuthorizedCMIS(id, method.toString(), getUser(authority)));
-	}
+        assertTrue(p.enableAll(id, method));
+        assertTrue(p.isAuthorizedCMIS(id, method.toString(), getUser(authority)));
+    }
 
-	
-	// utility methods
-	private CMISUser getUser(String username) {
-		return getUser(username, null);
-	}
+    @Test
+    public void testDisableAll() {
 
-	private CMISUser getUser(String username, List<String> groups) {
+        String id = "webscript1";
+        PermissionServiceImpl.methods method = PermissionServiceImpl.methods.GET;
+        String authority = "mario.rossi";
 
-		CMISUser user = new CMISUser(username);
+        assertTrue(p.disableAll(id, method));
+        assertFalse(p.isAuthorizedCMIS(id, method.toString(), getUser(authority)));
+    }
 
-		List<CMISGroup> l = new ArrayList<CMISGroup>();
+    @Test
+    public void testDelete() {
 
-		if (groups != null) {
-			for (String s : groups) {
-				CMISGroup g = new CMISGroup();
-				g.setDisplayName(s);
-				g.setGroupName(s);
-				l.add(g);
-			}
-		}
+        String id = WORKFLOW_ASSOCIATION;
 
-		user.setGroups(l);
+        PermissionServiceImpl.methods method = PermissionServiceImpl.methods.GET;
+        PermissionServiceImpl.lists list = PermissionServiceImpl.lists.whitelist;
+        PermissionServiceImpl.types type = PermissionServiceImpl.types.user;
+        String authority = "admin";
 
-		return user;
-	}
+        assertTrue(p.isAuthorizedCMIS(id, method.toString(), getUser(authority)));
+        assertTrue(p.delete(id, method, list, type, authority));
+        assertFalse(p.isAuthorizedCMIS(id, method.toString(), getUser(authority)));
+    }
+
+
+    @Test
+    public void testDeleteNotExisting() {
+
+        String id = "webscript1";
+        PermissionServiceImpl.methods method = PermissionServiceImpl.methods.PUT;
+        PermissionServiceImpl.lists list = PermissionServiceImpl.lists.whitelist;
+        PermissionServiceImpl.types type = PermissionServiceImpl.types.user;
+        String authority = "admin";
+
+        assertFalse(p.isAuthorizedCMIS(id, method.toString(), getUser(authority)));
+        assertTrue(p.delete(id, method, list, type, authority));
+        assertFalse(p.isAuthorizedCMIS(id, method.toString(), getUser(authority)));
+    }
+
+
+    // utility methods
+    private CMISUser getUser(String username) {
+        return getUser(username, null);
+    }
+
+    private CMISUser getUser(String username, List<String> groups) {
+
+        CMISUser user = new CMISUser(username);
+
+        List<CMISGroup> l = new ArrayList<CMISGroup>();
+
+        if (groups != null) {
+            for (String s : groups) {
+                CMISGroup g = new CMISGroup();
+                g.setDisplayName(s);
+                g.setGroupName(s);
+                l.add(g);
+            }
+        }
+
+        user.setGroups(l);
+
+        return user;
+    }
 }

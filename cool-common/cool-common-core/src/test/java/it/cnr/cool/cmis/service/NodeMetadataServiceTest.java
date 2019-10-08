@@ -21,58 +21,57 @@ import it.cnr.cool.MainTestContext;
 import org.apache.chemistry.opencmis.client.api.CmisObject;
 import org.apache.chemistry.opencmis.client.api.Session;
 import org.apache.chemistry.opencmis.commons.PropertyIds;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import javax.servlet.http.HttpServletRequest;
 import java.text.ParseException;
 import java.util.HashMap;
 import java.util.Map;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
-@RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes={MainTestContext.class})
+@ExtendWith(SpringExtension.class)
+@SpringBootTest
+@ContextConfiguration(classes = {MainTestContext.class})
 public class NodeMetadataServiceTest {
 
-	@Autowired
-	private NodeMetadataService nodeMetadataService;
+    private static final String OBJECT_PATH = "/Data Dictionary/RSS Templates/RSS_2.0_recent_docs.ftl";
+    private static final Logger LOGGER = LoggerFactory
+            .getLogger(NodeMetadataServiceTest.class);
+    @Autowired
+    private NodeMetadataService nodeMetadataService;
+    @Autowired
+    private CMISService cmisService;
 
-	@Autowired
-	private CMISService cmisService;
+    @Test
+    public void testUpdateObjectProperties() throws ParseException {
 
-	private static final String OBJECT_PATH = "/Data Dictionary/RSS Templates/RSS_2.0_recent_docs.ftl";
+        Session cmisSession = cmisService.createAdminSession();
+        CmisObject object = cmisSession.getObjectByPath(OBJECT_PATH);
 
-	private static final Logger LOGGER = LoggerFactory
-			.getLogger(NodeMetadataServiceTest.class);
+        LOGGER.info(object.getId());
 
-	@Test
-	public void testUpdateObjectProperties() throws ParseException {
+        Map<String, Object> reqProperties = new HashMap<String, Object>();
+        reqProperties.put(PropertyIds.OBJECT_ID, object.getId());
+        reqProperties.put(PropertyIds.OBJECT_TYPE_ID, object.getType().getId());
 
-		Session cmisSession = cmisService.createAdminSession();
-		CmisObject object = cmisSession.getObjectByPath(OBJECT_PATH);
+        HttpServletRequest request = new MockHttpServletRequest();
 
-		LOGGER.info(object.getId());
+        CmisObject doc = nodeMetadataService.updateObjectProperties(
+                reqProperties, cmisSession,
+                request);
 
-		Map<String, Object> reqProperties = new HashMap<String, Object>();
-		reqProperties.put(PropertyIds.OBJECT_ID, object.getId());
-		reqProperties.put(PropertyIds.OBJECT_TYPE_ID, object.getType().getId());
+        assertEquals(doc.getId(), object.getId());
 
-		HttpServletRequest request = new MockHttpServletRequest();
-
-		CmisObject doc = nodeMetadataService.updateObjectProperties(
-				reqProperties, cmisSession,
-				request);
-
-		assertEquals(doc.getId(), object.getId());
-
-	}
+    }
 
 
 }
