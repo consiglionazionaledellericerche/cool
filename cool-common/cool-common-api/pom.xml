@@ -24,7 +24,7 @@
   <parent>
     <groupId>it.cnr.si.cool</groupId>
     <artifactId>cool-common</artifactId>
-    <version>3.1.73-SNAPSHOT</version>
+    <version>3.1.73</version>
   </parent>
 
   <dependencies>
