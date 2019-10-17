@@ -76,7 +76,15 @@ function parsePermissions(p_permissions, p_settable)
          // Resolve to group or user as appropriate
          if (authorityId.indexOf("GROUP_") === 0)
          {
-            authority = groups.getGroup(authorityId.replace("GROUP_", ""));
+            if (authorityId === 'GROUP_EVERYONE') {
+               authority = {
+                  avatar: null,
+                  name: authorityId,
+                  displayName: 'EVERYONE'
+               };
+            } else {
+               authority = groups.getGroup(authorityId.replace("GROUP_", ""));
+            }
          }
          else if (authorityId.indexOf("ROLE_") === 0)
          {

@@ -46,7 +46,7 @@ public final class CMISUtil {
         final HashMap<String, Object> collect1 = cmisObject.getProperties()
                 .stream()
                 .collect(HashMap::new,
-                        (m, c) -> m.put(c.getId(), getValue(c.getValues())),
+                        (m, c) -> m.put(c.getId(), getValue(c.getValues(), c.isMultiValued())),
                         (m, u) -> {
                         });
         collect1.put("allowableActions", Optional.ofNullable(cmisObject.getAllowableActions())
@@ -57,11 +57,11 @@ public final class CMISUtil {
         return collect1;
     }
 
-    private static Object getValue(List<?> result) {
+    private static Object getValue(List<?> result, Boolean isMultiValued) {
         return Optional.ofNullable(result)
                 .filter(objects -> !objects.isEmpty())
                 .map(objects -> {
-                    if (objects.size() == 1) {
+                    if (!isMultiValued) {
                         return getValue(objects.get(0));
                     } else {
                         return objects

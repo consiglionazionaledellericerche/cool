@@ -54,7 +54,7 @@ public class CacheConfiguration {
 
     private @Value("${hazelcast.ttl:86400}") int ttl;
 
-    private @Value("${hazelcast.port.autoincrement:false}") boolean portAutoincrement;
+    private @Value("${hazelcast.port.autoincrement}") boolean portAutoincrement;
 
     @PreDestroy
     public void destroy() {
