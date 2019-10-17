@@ -136,6 +136,10 @@ define(['jquery', 'cnr/cnr.ui', 'json!common', 'i18n', 'json!cache'], function (
         jsonError = JSON.parse(jqXHR.responseText);
       } catch (e) {
       }
+      if (jqXHR.status === 303) {
+        window.location = jsonError.location;
+        return;
+      }
       if (jsonError && jsonError.keyMessage) {
         errorMessage = JSON.parse(jqXHR.responseText).keyMessage;
         UI.error(i18n.prop(errorMessage, errorMessage), context.callbackErrorFn);
