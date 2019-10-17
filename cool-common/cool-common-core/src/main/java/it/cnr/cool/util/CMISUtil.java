@@ -31,7 +31,7 @@ public final class CMISUtil {
         final HashMap<String, Object> collect1 = queryResult.getProperties()
                 .stream()
                 .collect(HashMap::new,
-                        (m, c) -> m.put(c.getId(), getValue(c.getValues())),
+                        (m, c) -> m.put(c.getId(), getValue(c.getValues(), c.getValues().size() > 1)),
                         (m, u) -> {
                         });
         collect1.put("allowableActions", Optional.ofNullable(queryResult.getAllowableActions())
