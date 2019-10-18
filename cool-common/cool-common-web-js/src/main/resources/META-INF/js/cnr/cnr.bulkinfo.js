@@ -507,6 +507,16 @@ define(['cnr/cnr.ui.widgets', 'jquery', 'cnr/cnr', 'cnr/cnr.style', 'handlebars'
 
         return i18n.prop.apply(i18n, [text].concat(values));
       });
+
+      Handlebars.registerHelper('i18nConcatArgs', function i18nFn(text) {
+        var args = $(arguments), values = $.makeArray(args.filter(function (index, el) {
+          return index > 0 && index < args.length - 1;
+        }).map(function (index, el) {
+          return hm[el] || el;
+        }));
+        return i18n.prop(text.concat(values.join('.')));
+      });
+
       Handlebars.registerHelper('ifCond', function (v1, v2, options) {
         if (v1 === v2) {
           return options.fn(this);

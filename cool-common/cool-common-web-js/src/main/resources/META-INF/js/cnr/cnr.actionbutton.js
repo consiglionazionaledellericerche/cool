@@ -233,7 +233,7 @@ define(['jquery', 'json!common', 'cnr/cnr', 'cnr/cnr.ui', 'cnr/cnr.node', 'cnr/c
     criteria.list(versioni);
   }
   // returns a new "actions button"
-  function actionButton(obj, customPermission, customButtons, customIcons, refreshFn, nodropdown, maxUploadSize) {
+  function actionButton(obj, customPermission, customButtons, customIcons, refreshFn, nodropdown, maxUploadSize, extendClass) {
     var name = obj.name || "",
       nodeRef = obj.nodeRef ? obj.nodeRef.split(';')[0] : obj.nodeRef,
       baseTypeId = obj.baseTypeId || 'cmis:document',
@@ -376,7 +376,7 @@ define(['jquery', 'json!common', 'cnr/cnr', 'cnr/cnr.ui', 'cnr/cnr.node', 'cnr/c
         remove: false
       });
     } else if (baseTypeId === 'cmis:folder') {
-      myClass = 'btn-actions-folder' + warningClass; //add warningClass to fix bug caused by two different type of applications
+      myClass = 'btn-actions-folder';
       addActions({
         select: function () {
           $(this).parents('tr').find('.openFolder').click();
@@ -406,7 +406,7 @@ define(['jquery', 'json!common', 'cnr/cnr', 'cnr/cnr.ui', 'cnr/cnr.node', 'cnr/c
       return dropdown;
     }
     splitButton = $('<div class="btn-group btn-prevent-fade"></div>')
-      .addClass(myClass)
+      .addClass(myClass + " " + extendClass)
       .append((buttons[choice] || buttons[defaultChoice] || buttons[Object.keys(buttons)[0]]).clone(true).addClass("btn btn-mini").addClass(warningClass))
       .append($('<button class="btn btn-mini dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></button>').addClass(warningClass));
 
