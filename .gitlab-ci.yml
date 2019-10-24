@@ -1,4 +1,4 @@
-image: docker:latest
+image: docker:git
 services:
   - docker:dind
 
@@ -9,26 +9,29 @@ stages:
 
 variables:
   MAVEN_OPTS: "-Djava.awt.headless=true -Dsonar.host.url=$SONAR_HOST_URL"
-  MAVEN_CLI_OPTS: "-s .m2/settings.xml -Dmaven.repo.local=./.m2/repository -Dnexus.url=$NEXUS_URL -Dnexus.login=$NEXUS_USERNAME -Dnexus.pwd=$NEXUS_PASSWORD -Drepository.base.url=$CMIS_BASE_URL --batch-mode --errors --fail-at-end --show-version"
+  MAVEN_CLI_OPTS: "-s .m2/settings.xml -Dmaven.repo.local=./.m2/repository -Dnexus.url=$NEXUS_URL -Dnexus.login=$NEXUS_USERNAME -Dnexus.pwd=$NEXUS_PASSWORD -Drepository.base.url=$CMIS_BASE_URL -Dsiper.url=$SIPER_URL -Dsiper.username=$SIPER_USERNAME -Dsiper.password=$SIPER_PASSWORD -Djava.awt.headless=true --batch-mode --errors --fail-at-end --show-version"
   MAVEN_CLI_CENTRAL_OPTS: "-s .m2/settings.xml -Dmaven.repo.local=./.m2/repository -Pprod,maven-central -Dnexus.url=$NEXUS_URL -Dsonatype.login=$SONATYPE_USERNAME -Dsonatype.pwd=$SONATYPE_PASSWORD -DskipTests --batch-mode --errors --fail-at-end --show-version"
+  CONTAINER_TEST_IMAGE: $CI_PROJECT_PATH:$CI_COMMIT_REF_NAME
+  CONTAINER_RELEASE_IMAGE: $CI_PROJECT_PATH:latest
 
 cache:
   paths:
     - ./.m2/repository
   # keep cache across branch
-  key: "$CI_BUILD_REF_NAME"
-  
+  key: "$CI_PROJECT_PATH"
+
 maven-deploy:
   stage: deploy
   image: maven:alpine
   script: "mvn clean deploy $MAVEN_CLI_OPTS -Pprod"
+  except:
+    variables:
+      - $CI_COMMIT_MESSAGE =~ /^prepare release.*/ || $CI_COMMIT_MESSAGE =~ /^prepare for next development iteration*/
   artifacts:
     paths:
       - target/*.jar
   only:
     - master
-  except:
-    - tags
 
 maven-install:
   stage: deploy
@@ -38,11 +41,21 @@ maven-install:
     paths:
       - target/*.jar
   except:
-    - tags
     - master
+    - tags
+
+maven-deploy-tag:
+  stage: deploy
+  image: maven:alpine
+  script: "mvn clean deploy $MAVEN_CLI_OPTS -Pprod -DskipTests"
+  artifacts:
+    paths:
+      - target/*.jar
+  only:
+    - tags
 
 #la release è opzionale e manuale.
-Perform Maven Release:
+perform-maven-release-maven-central:
   stage: release
   image: maven:alpine
   script:
@@ -50,7 +63,6 @@ Perform Maven Release:
     # Install ssh-agent if not already installed, it is required by Docker.
     # (change apt-get to yum if you use a CentOS-based image)
     - 'which ssh-agent || ( apk add --update openssh-client && rm -rf /var/cache/apk/*)'
-
     # Run ssh-agent (inside the build environment)
     - eval $(ssh-agent -s)
 
@@ -73,8 +85,8 @@ Perform Maven Release:
     - echo "pinentry-mode loopback" > /root/.gnupg/gpg.conf
     - echo "allow-loopback-pinentry" > /root/.gnupg/gpg-agent.conf
     - gpg --batch --import <(echo "$GPG_PRIVATE_KEY")
-    - mvn release:clean release:prepare -Darguments="-Dgpg.passphrase=$GPG_PASSPHRASE -DskipTests" -Dresume=false -B $MAVEN_CLI_CENTRAL_OPTS -DscmCommentPrefix="[ci skip]"
-    - mvn release:perform -Darguments="-Dgpg.passphrase=$GPG_PASSPHRASE -DskipTests" -Dresume=false -B $MAVEN_CLI_CENTRAL_OPTS -DscmCommentPrefix="[ci skip]"
+    - mvn release:clean release:prepare -Darguments="-Dgpg.passphrase=$GPG_PASSPHRASE -DskipTests" -Dresume=false -B $MAVEN_CLI_CENTRAL_OPTS
+    - mvn release:perform -Darguments="-Dgpg.passphrase=$GPG_PASSPHRASE -DskipTests" -Dresume=false -B $MAVEN_CLI_CENTRAL_OPTS
   only:
     - master
   when: manual

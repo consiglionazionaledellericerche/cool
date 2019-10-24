@@ -280,8 +280,6 @@ define(['jquery', 'cnr/cnr', 'cnr/cnr.ui', 'cnr/cnr.bulkinfo', 'i18n', 'cnr/cnr.
               return $.makeArray(filtered);
             }
 
-
-
             var data = bulkinfo.getData(),
               filteredFileInputs = filterFileInputs(),
               inputName,
@@ -310,8 +308,6 @@ define(['jquery', 'cnr/cnr', 'cnr/cnr.ui', 'cnr/cnr.bulkinfo', 'i18n', 'cnr/cnr.
               } else if (displayedFileName && !opts.multiple) {
                 fileName = displayedFileName;
               } else {
-
-
                 if (regex.test(opts.objectType)) {
                   fileName = opts.objectType.replace(regex, "$1");
                 } else {
@@ -319,7 +315,6 @@ define(['jquery', 'cnr/cnr', 'cnr/cnr.ui', 'cnr/cnr.bulkinfo', 'i18n', 'cnr/cnr.
                 }
                 fileName += '_' + (new Date().getTime());
               }
-
               data.push({name: 'cmis:name', value: fileName});
             } else {
               // update object with 'cmis:objectId' === nodeRef
@@ -379,7 +374,7 @@ define(['jquery', 'cnr/cnr', 'cnr/cnr.ui', 'cnr/cnr.bulkinfo', 'i18n', 'cnr/cnr.
             }
           }, undefined, opts.bigmodal);
           if (opts.callbackModal) {
-            opts.callbackModal(modal);
+            opts.callbackModal(modal, content);
           }
         }
       }

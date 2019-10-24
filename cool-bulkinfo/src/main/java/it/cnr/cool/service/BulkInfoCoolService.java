@@ -50,6 +50,8 @@ import java.util.*;
 public class BulkInfoCoolService {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(BulkInfoCoolService.class);
+	public static final String NO_PARENT_TYPE = "no-parent-type";
+	public static final String MANDATORY_ASPECTS = "mandatoryAspects";
 
 	@Autowired
 	private ApplicationContext context;
@@ -261,15 +263,18 @@ public class BulkInfoCoolService {
 
 				bulkInfo.setCmisTypeName(bulkObjectType.getId());
 				bulkInfo.setCmisQueryName(bulkObjectType.getQueryName());
-
-				// parent
-				bulkInfo.setCmisExtendsName(bulkObjectType.getParentTypeId());
-				// aspects
-				if (bulkObjectType.getExtensions() != null){
-					for (CmisExtensionElement cmisExtensionElement : bulkObjectType.getExtensions()) {
-						if (cmisExtensionElement.getName().equals("mandatoryAspects")){
-							for (CmisExtensionElement child : cmisExtensionElement.getChildren()) {
-								bulkInfo.addCmisExtensionElement(child.getValue(), true);
+				if (Optional.ofNullable(bulkObjectType.getDescription())
+						.map(s -> !s.contains(NO_PARENT_TYPE))
+						.orElse(Boolean.TRUE)) {
+					// parent
+					bulkInfo.setCmisExtendsName(bulkObjectType.getParentTypeId());
+					// aspects
+					if (bulkObjectType.getExtensions() != null){
+						for (CmisExtensionElement cmisExtensionElement : bulkObjectType.getExtensions()) {
+							if (cmisExtensionElement.getName().equals(MANDATORY_ASPECTS)){
+								for (CmisExtensionElement child : cmisExtensionElement.getChildren()) {
+									bulkInfo.addCmisExtensionElement(child.getValue(), true);
+								}
 							}
 						}
 					}

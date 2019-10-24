@@ -43,11 +43,15 @@ public class BulkInfoCoolImpl extends BulkInfoImpl implements BulkInfoCool, Seri
 	private static final String CLASS = "class";
 	private static final String REQUIRED_WIDGET = "requiredWidget";
 	private static final String JSONVALIDATOR = "jsonvalidator";
+	private static final String JSONSETTINGS = "jsonsettings";
 	private static final long serialVersionUID = 1L;
 	public static final String DEFAULT_VERSION = "1.5";
 	public static final String VERSION_2_0 = "2.0";
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(BulkInfoCoolImpl.class);
+	public static final String WIDGET = "widget";
+	public static final String JSONLIST = "jsonlist";
+	public static final String UI_SELECT = "ui.select";
 	//private static final String version = DEFAULT_VERSION;
 
 	public BulkInfoCoolImpl(String bulkInfoName, Document doc) {
@@ -70,6 +74,7 @@ public class BulkInfoCoolImpl extends BulkInfoImpl implements BulkInfoCool, Seri
 				|| getFieldPropertyByProperty(propertyDefinition.getId()).isEmpty()) {
 			 
 			JSONObject jsonvalidator = new JSONObject();
+			JSONObject jsonsettings = new JSONObject();
 			FieldProperty fieldProperty = new FieldProperty();
 			fieldProperty.addAttribute("name", propertyDefinition.getLocalName());
 			fieldProperty.addAttribute("property", propertyDefinition.getId());
@@ -99,11 +104,11 @@ public class BulkInfoCoolImpl extends BulkInfoImpl implements BulkInfoCool, Seri
 			if (isBoolean) {
 				if (propertyDefinition.getDescription().contains("ui.radio")) {
 					fieldProperty.addAttribute("inputType", "RADIOGROUP");
-					fieldProperty.addAttribute("widget", "ui.radio");
+					fieldProperty.addAttribute(WIDGET, "ui.radio");
 					fieldProperty.addAttribute(CLASS, Optional.ofNullable(fieldProperty.getAttribute(CLASS)).map(x -> x.concat(" check")).orElse("check"));
 					
 					FieldProperty field = new FieldProperty();
-					field.setElementName("jsonlist");
+					field.setElementName(JSONLIST);
 					FieldProperty yes = new FieldProperty();
 					yes.addAttribute("defaultLabel", "Y");
 					yes.addAttribute("key", "true");
@@ -114,11 +119,10 @@ public class BulkInfoCoolImpl extends BulkInfoImpl implements BulkInfoCool, Seri
 					no.addAttribute("key", "false");
 					no.addAttribute("label", "label.option.no");										
 					field.addListElement(no);
-					fieldProperty.addSubProperty("jsonlist", field);
+					fieldProperty.addSubProperty(JSONLIST, field);
 				} else {					
 					fieldProperty.addAttribute("inputType", "CHECKBOX");
-					fieldProperty.addAttribute("widget", "ui.checkbox");
-					
+					fieldProperty.addAttribute(WIDGET, "ui.checkbox");
 				}
 			} else {
 				if (propertyDefinition.getDescription().indexOf("inputType:") != -1) {
@@ -131,17 +135,21 @@ public class BulkInfoCoolImpl extends BulkInfoImpl implements BulkInfoCool, Seri
 				}
 			}
 			if (propertyDefinition.getDescription().indexOf("widget:") != -1) {
-				fieldProperty.addAttribute("widget", propertyDefinition.getDescription().substring(propertyDefinition.getDescription().indexOf("widget:") + 7));
+				fieldProperty.addAttribute(WIDGET, propertyDefinition.getDescription().substring(propertyDefinition.getDescription().indexOf("widget:") + 7));
 			}
 			
 			if (propertyDefinition.getLocalName().contains("stato_estero")) {
-				fieldProperty.addAttribute("widget", "ui.country");
+				fieldProperty.addAttribute(WIDGET, "ui.country");
 			}
 			if (propertyDefinition.getLocalName().contains("comune")) {
-				fieldProperty.addAttribute("widget", "ui.city");
+				fieldProperty.addAttribute(WIDGET, "ui.city");
+			}
+			if (propertyDefinition.getLocalName().contains("username")) {
+				fieldProperty.addAttribute(WIDGET, "ui.authority");
+				jsonsettings.put("usersOnly", true);
 			}
 			if (isDateTime) {
-				fieldProperty.addAttribute("widget", "ui.datepicker");				
+				fieldProperty.addAttribute(WIDGET, "ui.datepicker");
 			}
 			if (propertyDefinition.getDefaultValue() != null && !propertyDefinition.getDefaultValue().isEmpty()) {
 				fieldProperty.addAttribute("default", String.valueOf(propertyDefinition.getDefaultValue().get(0)));
@@ -151,7 +159,7 @@ public class BulkInfoCoolImpl extends BulkInfoImpl implements BulkInfoCool, Seri
 				jsonvalidator.put("digits", true);
 			}
 			if (propertyDefinition.isRequired()) {
-				if (fieldProperty.getAttribute("widget") != null)
+				if (fieldProperty.getAttribute(WIDGET) != null)
 					jsonvalidator.put(REQUIRED_WIDGET, true);
 				else
 					jsonvalidator.put("required", true);
@@ -159,6 +167,9 @@ public class BulkInfoCoolImpl extends BulkInfoImpl implements BulkInfoCool, Seri
 						
 			if (jsonvalidator.length() > 0 ) {
 				fieldProperty.addAttribute(JSONVALIDATOR, jsonvalidator.toString());				
+			}
+			if (jsonsettings.length() > 0 ) {
+				fieldProperty.addAttribute(JSONSETTINGS, jsonsettings.toString());
 			}
 			fieldProperty.setBulkInfo(this);
 			if (!propertyDefinition.getUpdatability().equals(Updatability.READONLY)) {
@@ -175,12 +186,13 @@ public class BulkInfoCoolImpl extends BulkInfoImpl implements BulkInfoCool, Seri
 						for (Choice<?> choice : propertyDefinition.getChoices()) {
 							JSONObject jsonObj = new JSONObject();
 							jsonObj.put("key", choice.getValue().get(0));
-							jsonObj.put("label", choice.getDisplayName());
+							jsonObj.put("label", "label.".concat(propertyDefinition.getId()).concat(choice.getDisplayName()));
 							jsonObj.put("defaultLabel", choice.getDisplayName());
 							json.put(jsonObj);
 						}
-						fieldProperty.addAttribute("jsonlist", json.toString());
-						fieldProperty.addAttribute("widget", "ui.select");
+						fieldProperty.addAttribute(JSONLIST, json.toString());
+						if (fieldProperty.getAttribute(WIDGET) == null)
+							fieldProperty.addAttribute(WIDGET, UI_SELECT);
 						putClassValue(propertyDefinition, fieldProperty);
 						if (propertyDefinition.isRequired()) {
 							FieldProperty fieldPropertyValidator = new FieldProperty();
