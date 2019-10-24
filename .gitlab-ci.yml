@@ -24,14 +24,14 @@ maven-deploy:
   stage: deploy
   image: maven:alpine
   script: "mvn clean deploy $MAVEN_CLI_OPTS -Pprod"
-  except:
+  only:
     variables:
-      - $CI_COMMIT_MESSAGE =~ /^prepare release.*/ || $CI_COMMIT_MESSAGE =~ /^prepare for next development iteration*/
+      - $CI_COMMIT_MESSAGE !~ /prepare release/ && $CI_COMMIT_MESSAGE !~ /prepare for next development iteration/
+    refs:
+      - master
   artifacts:
     paths:
       - target/*.jar
-  only:
-    - master
 
 maven-install:
   stage: deploy
