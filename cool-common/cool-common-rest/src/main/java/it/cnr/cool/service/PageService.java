@@ -214,6 +214,7 @@ public class PageService implements InitializingBean{
 		if (Optional.ofNullable(pageModels)
 				.filter(stringListMap -> stringListMap.containsKey(pageId))
 				.isPresent()) {
+			LOGGER.info("User: {} with IP: {} Path: {} {}", user.getId(), req.getRemoteAddr(), req.getMethod(), req.getPathInfo());
 			pageModels.get(pageId)
 					.stream()
 					.forEach(pageModel -> model.putAll(pageModel.addToModel(paramz)));
