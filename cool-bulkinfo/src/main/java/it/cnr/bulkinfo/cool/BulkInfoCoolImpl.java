@@ -185,8 +185,9 @@ public class BulkInfoCoolImpl extends BulkInfoImpl implements BulkInfoCool, Seri
 						JSONArray json = new JSONArray();
 						for (Choice<?> choice : propertyDefinition.getChoices()) {
 							JSONObject jsonObj = new JSONObject();
-							jsonObj.put("key", choice.getValue().get(0));
-							jsonObj.put("label", "label.".concat(propertyDefinition.getId()).concat(choice.getDisplayName()));
+							final Object o = choice.getValue().get(0);
+							jsonObj.put("key", o);
+							jsonObj.put("label", "label.".concat(propertyDefinition.getId().replace(":", ".")).concat("_").concat(String.valueOf(o)));
 							jsonObj.put("defaultLabel", choice.getDisplayName());
 							json.put(jsonObj);
 						}
