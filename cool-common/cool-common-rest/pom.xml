@@ -47,7 +47,7 @@
         <!-- General dependencies for standard applications -->
         <dependency>
             <groupId>javax.mail</groupId>
-            <artifactId>mail</artifactId>
+            <artifactId>javax.mail-api</artifactId>
             <version>${mail.version}</version>
         </dependency>
 
