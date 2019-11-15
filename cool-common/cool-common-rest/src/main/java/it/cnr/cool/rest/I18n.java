@@ -23,6 +23,7 @@ import it.cnr.cool.service.I18nService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import javax.servlet.http.HttpServletRequest;
@@ -40,7 +41,8 @@ import java.util.Properties;
 @Produces(MediaType.APPLICATION_JSON)
 public class I18n {
 
-	private static final int CACHE_CONTROL = 86400;
+	@Value("${rest.cache.control}")
+	private int cacheControl;
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(I18n.class);
 
@@ -66,7 +68,7 @@ public class I18n {
 				+ locale.getLanguage() + " labels " + " uri " + uri);
 
 		ResponseBuilder rb = Response.ok(labels);
-		rb.cacheControl(Util.getCache(CACHE_CONTROL));
+		rb.cacheControl(Util.getCache(cacheControl));
 
 		return rb.build();
 	}
