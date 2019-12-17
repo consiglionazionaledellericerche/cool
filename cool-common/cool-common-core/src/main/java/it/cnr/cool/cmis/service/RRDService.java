@@ -59,6 +59,7 @@ import java.util.stream.Collectors;
 public class RRDService implements InitializingBean {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(RRDService.class);
+    public static final String D_BPM_WORKFLOW_DEFINITION = "D:bpm:workflowDefinition";
 
     @Autowired
     private CMISService cmisService;
@@ -146,11 +147,11 @@ public class RRDService implements InitializingBean {
                     properties.put(PropertyIds.OBJECT_TYPE_ID, dictionaryTypeId);
                     contentType = "text/xml";
                 } else if (fileName.endsWith(".jbpm.xml")) {
-                    properties.put(PropertyIds.OBJECT_TYPE_ID, "D:bpm:workflowDefinition");
+                    properties.put(PropertyIds.OBJECT_TYPE_ID, D_BPM_WORKFLOW_DEFINITION);
                     properties.put("bpm:engineId", "jbpm");
                     contentType = "text/xml";
                 } else if (fileName.endsWith(".activiti.xml")) {
-                    properties.put(PropertyIds.OBJECT_TYPE_ID, "D:bpm:workflowDefinition");
+                    properties.put(PropertyIds.OBJECT_TYPE_ID, D_BPM_WORKFLOW_DEFINITION);
                     properties.put("bpm:engineId", "activiti");
                     contentType = "text/xml";
                 } else {
@@ -205,25 +206,22 @@ public class RRDService implements InitializingBean {
                     cmisService.getAdminSession());
             LOGGER.debug("Refresh Web Scripts has responded: " + resp.getResponseMessage());
         }
-
-        if (!differentFiles.isEmpty()) {
-            String text = cmisSession.getRepositoryInfo().getProductName()
-                    + " " + cmisSession.getRepositoryInfo().getProductVersion();
-
-            for (String s : differentFiles) {
-                text += "<br>" + s;
-            }
-            String address = InetAddress.getLocalHost().getHostAddress();
-            try {
-                mailService.send("md5 " + RRDService.class.getSimpleName()
-                        + " " + cmisService.getBaseURL() + " " + address, text);
-            } catch (MailException e) {
-                LOGGER.warn("unable to send mail " + text, e);
-            }
-        }
-
+        final String text = cmisSession.getRepositoryInfo().getProductName()
+                + " " + cmisSession.getRepositoryInfo().getProductVersion();
+        String address = InetAddress.getLocalHost().getHostAddress();
+        Optional.ofNullable(differentFiles.stream()
+                .filter(s -> !s.contains("rbac.get.json.ftl"))
+                .collect(Collectors.joining("<br>")))
+                .filter(s -> !s.isEmpty())
+                .ifPresent(s -> {
+                    try {
+                        mailService.send("md5 " + RRDService.class.getSimpleName()
+                                + " " + cmisService.getBaseURL() + " " + address, text + "<br>"  + s);
+                    } catch (MailException e) {
+                        LOGGER.warn("unable to send mail " + s, e);
+                    }
+                });
     }
-
 
     List<Resource> getResources() throws IOException {
         PathMatchingResourcePatternResolver resolver = new PathMatchingResourcePatternResolver();
