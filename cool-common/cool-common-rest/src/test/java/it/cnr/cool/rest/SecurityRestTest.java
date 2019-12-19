@@ -47,6 +47,7 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 import java.util.Collections;
 import java.util.Locale;
+import java.util.regex.Pattern;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -227,5 +228,15 @@ public class SecurityRestTest {
 
         assertEquals(HttpStatus.OK.value(), res.getStatus());
 
+    }
+
+    @Test
+    public void testRegularExpTagHtml() {
+        String pattern ="[^<>()'\"]*";
+        assertTrue(!"<img>".matches(pattern));
+        assertTrue(!"confirm()".matches(pattern));
+        assertTrue(!"\"prova\"".matches(pattern));
+        assertTrue("nodeRef=2bf7c9c5-7b46-4dcb;1.0&guest=true".matches(pattern));
+        assertTrue("my-applications".matches(pattern));
     }
 }

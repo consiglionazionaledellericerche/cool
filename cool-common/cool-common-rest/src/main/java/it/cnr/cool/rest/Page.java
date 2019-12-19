@@ -113,14 +113,10 @@ public class Page {
 					.status(Status.NOT_FOUND)
 					.entity("page not found: " + id);
 		} else if (!isAuthorized(page, id, user, formParams != null)) {
-			String baseURI = req.getContextPath() + "/"
-					+ LOGIN_URL + "?redirect=" + id;
-			Map<?, ?> paramz = req.getParameterMap();
-			for (Object key : paramz.keySet()) {
-				String [] valuez =  (String[]) paramz.get(key);
-				if (valuez.length > 0) {
-					baseURI = baseURI.concat("&"+(String) key + "=" + it.cnr.cool.util.UriUtils.encode(valuez[0]));
-				}
+			String baseURI = req.getContextPath() + "/" + LOGIN_URL;
+			final Optional<String> redirect = Optional.ofNullable(SecurityRest.getRedirect(req, id));
+			if (redirect.isPresent()) {
+				baseURI = baseURI.concat(redirect.get());
 			}
 			URI uri = URI.create(baseURI);
 			rb = Response.seeOther(uri);

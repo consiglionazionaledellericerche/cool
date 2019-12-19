@@ -56,6 +56,7 @@ public class SecurityRest {
     private static final String TEMPLATE = "/surf/webscripts/security/create/account.change_password.html";
 
     private static final Logger LOGGER = LoggerFactory.getLogger(SecurityRest.class);
+    public static final String REGEX = "[^<>()'\"]*";
 
     @Autowired
     private UserService userService;
@@ -411,4 +412,18 @@ public class SecurityRest {
         return content;
     }
 
+    public static String getRedirect(HttpServletRequest req, String id) {
+        String redirect = "?redirect=" + id;
+        Map<?, ?> paramz = req.getParameterMap();
+        for (Object key : paramz.keySet()) {
+            String [] valuez =  (String[]) paramz.get(key);
+            if (valuez.length > 0) {
+                redirect = redirect.concat("&"+(String) key + "=" + it.cnr.cool.util.UriUtils.encode(valuez[0]));
+            }
+        }
+        if (redirect.matches(REGEX)) {
+            return redirect;
+        }
+        return null;
+    }
 }

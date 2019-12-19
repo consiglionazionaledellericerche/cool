@@ -20,6 +20,7 @@ package it.cnr.cool.service;
 import it.cnr.cool.cmis.service.VersionService;
 import it.cnr.cool.dto.CoolPage;
 import it.cnr.cool.dto.CoolPage.Authentication;
+import it.cnr.cool.rest.SecurityRest;
 import it.cnr.cool.security.service.impl.alfresco.CMISUser;
 import it.cnr.cool.web.PermissionService;
 import it.cnr.mock.CnrRegion;
@@ -195,8 +196,11 @@ public class PageService implements InitializingBean{
 		requestContext.put("requestMethod", req.getMethod());
 		request.put("requestContext", requestContext);
 		model.put("Request", request);
-		model.put("queryString", req.getQueryString());
-
+		model.put("queryString",
+				Optional.ofNullable(req.getQueryString())
+					.filter(s -> s.matches(SecurityRest.REGEX))
+					.orElse(null)
+		);
 		model.put("region", cnrRegion);
 
 		Map<String, Object> args = new HashMap<String, Object>();
@@ -205,7 +209,10 @@ public class PageService implements InitializingBean{
 		for (Object key : paramz.keySet()) {
 			String[] valuez = (String[]) paramz.get(key);
 			if (valuez.length > 0) {
-				args.put((String) key, valuez[0]);
+				final String s = valuez[0];
+				if (s.matches(SecurityRest.REGEX)) {
+					args.put((String) key, s);
+				}
 			}
 		}
 
