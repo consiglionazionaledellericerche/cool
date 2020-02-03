@@ -30,6 +30,7 @@ import org.dom4j.DocumentHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Repository;
 
@@ -112,5 +113,14 @@ public class BulkInfoRepository {
             LOGGER.error("Error finding Bulkinfo " + bulkInfoName, e);
         }
         return bi;
-	}	
+	}
+
+	@CacheEvict({
+            "bulkinfo-name",
+            "bulkinfo-xml-document",
+            "bulkinfo-object-type"
+    })
+	public void resetCache() {
+        LOGGER.warn("Reset BulkInfo cache");
+    }
 }
