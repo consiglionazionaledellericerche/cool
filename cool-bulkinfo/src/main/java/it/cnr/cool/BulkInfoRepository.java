@@ -115,12 +115,8 @@ public class BulkInfoRepository {
         return bi;
 	}
 
-	@CacheEvict({
-            "bulkinfo-name",
-            "bulkinfo-xml-document",
-            "bulkinfo-object-type"
-    })
-	public void resetCache() {
-        LOGGER.warn("Reset BulkInfo cache");
+	@CacheEvict(value = "bulkinfo-name", key = "#bulkInfoName")
+	public void resetCacheBulkInfoName() {
+        LOGGER.warn("Reset BulkInfoName cache");
     }
 }

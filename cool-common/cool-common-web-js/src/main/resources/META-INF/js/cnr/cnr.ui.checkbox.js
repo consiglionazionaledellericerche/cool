@@ -34,6 +34,7 @@ define(['jquery'], function ($) {
 
       if (on) {
         wid.show();
+        wid.find('.radio-tick').find('button.active').trigger('click');
         selectedItem.addClass(customClass);
       } else {
         wid.hide();
