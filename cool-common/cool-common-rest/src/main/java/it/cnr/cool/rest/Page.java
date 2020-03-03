@@ -26,6 +26,7 @@ import it.cnr.cool.service.I18nService;
 import it.cnr.cool.service.PageService;
 import it.cnr.cool.util.GroupsUtils;
 import it.cnr.cool.web.PermissionService;
+import it.cnr.mock.RequestUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -85,8 +86,12 @@ public class Page {
 	@Path("{id}")
 	public Response post(@Context HttpServletRequest req, @PathParam("id") String id,
 						 @RequestBody MultivaluedMap<String, String> formParams, @CookieParam("__lang") String cookieLang) {
+		Map formParamz = new HashMap<>();
+		formParamz.putAll(req.getParameterMap());
+		if (formParams != null && !formParams.isEmpty())
+			formParamz.putAll(RequestUtils.extractFormParams(formParams));
 
-		return processRequest(req, null, id, formParams, cookieLang, null);
+		return processRequest(req, null, id, formParamz, cookieLang, null);
 	}
 
 	private String i18nCookie(HttpServletResponse res, String lang, String reqLang) {
@@ -102,7 +107,7 @@ public class Page {
 	}
 
 	private Response processRequest(HttpServletRequest req, HttpServletResponse res, String id,
-									MultivaluedMap<String, String> formParams, String cookieLang, String reqLang) {
+									Map<String, List<String>> formParams, String cookieLang, String reqLang) {
 
 		ResponseBuilder rb;
 		String lang = i18nCookie(res, cookieLang, reqLang);
