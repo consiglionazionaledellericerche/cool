@@ -16,6 +16,7 @@
     <!-- custom style -->
     <link href="${url.context}/res/css/cool/cool.css?v=${artifact_version}" rel="stylesheet">
     <link href="${url.context}/res/css/style.css?v=${artifact_version}" rel="stylesheet">
+    <link href="${url.context}/res/css/custom.css?v=${artifact_version}" rel="stylesheet">
 
     <!-- Fav and touch icons -->
     <link rel="shortcut icon" href="${url.context}/res/img/favicon.ico">
