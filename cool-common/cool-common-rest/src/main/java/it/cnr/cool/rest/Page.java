@@ -45,10 +45,8 @@ import javax.ws.rs.core.Response.ResponseBuilder;
 import javax.ws.rs.core.Response.Status;
 import java.io.IOException;
 import java.net.URI;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Path("page")
 @Component
@@ -87,7 +85,15 @@ public class Page {
 	public Response post(@Context HttpServletRequest req, @PathParam("id") String id,
 						 @RequestBody MultivaluedMap<String, String> formParams, @CookieParam("__lang") String cookieLang) {
 		Map formParamz = new HashMap<>();
-		formParamz.putAll(req.getParameterMap());
+		formParamz.putAll(
+				req.getParameterMap()
+						.entrySet()
+						.stream()
+						.collect(Collectors.toMap(
+								Map.Entry::getKey,
+								entry -> Arrays.asList(entry.getValue())
+						))
+		);
 		if (formParams != null && !formParams.isEmpty())
 			formParamz.putAll(RequestUtils.extractFormParams(formParams));
 
