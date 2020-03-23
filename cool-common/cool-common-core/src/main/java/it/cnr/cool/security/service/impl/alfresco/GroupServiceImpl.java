@@ -38,7 +38,9 @@ import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.io.OutputStream;
+import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class GroupServiceImpl implements GroupService{
@@ -119,8 +121,12 @@ public class GroupServiceImpl implements GroupService{
 		mapper.configure(
 				DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 		try {
-			 return mapper.readValue(resp.getStream(),
-					 mapper.getTypeFactory().constructCollectionType(List.class, CMISAuthority.class));
+			 return Optional.ofNullable(mapper.readValue(resp.getStream(),
+					 mapper.getTypeFactory().constructType(GroupsChildren.class)))
+					 	.filter(GroupsChildren.class::isInstance)
+					 	.map(GroupsChildren.class::cast)
+					 	.map(GroupsChildren::getData)
+					 	.orElse(Collections.emptyList());
 		} catch (JsonProcessingException e) {
 			throw new CoolUserFactoryException("Exception for group " + group_name, e);
 		} catch (IOException e) {
