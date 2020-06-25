@@ -98,8 +98,8 @@ public class FaqTest {
                 Long.toString(after.getTime()),
                 Long.toString(before.getTime()), null, false, null);
         ArrayList<Faq> listFaq = (ArrayList<Faq>) response.get("docs");
-        assertTrue(listFaq.get(0).getAnswer().equals(answer));
-        assertTrue(listFaq.get(0).getQuestion().equals(question));
+        assertTrue(listFaq.stream().anyMatch(faq -> faq.getAnswer().equals(answer)));
+        assertTrue(listFaq.stream().anyMatch(faq -> faq.getQuestion().equals(question)));
 
         // getFaq con editor = false
         response = frontOfficeService.getFaq(adminSession, null, null, null,
