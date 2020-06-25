@@ -22,9 +22,12 @@ import com.google.gson.JsonParser;
 import it.cnr.cool.cmis.service.CmisAuthRepository;
 import it.cnr.cool.cmis.service.LoginException;
 import it.cnr.cool.security.service.impl.alfresco.CMISUser;
+import org.apache.chemistry.opencmis.client.bindings.impl.CmisBindingsHelper;
 import org.apache.chemistry.opencmis.client.bindings.spi.BindingSession;
+import org.apache.chemistry.opencmis.commons.impl.UrlBuilder;
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.HttpStatus;
+import org.apache.commons.httpclient.methods.GetMethod;
 import org.apache.commons.httpclient.methods.PostMethod;
 import org.apache.commons.httpclient.methods.RequestEntity;
 import org.apache.commons.httpclient.methods.StringRequestEntity;
@@ -34,6 +37,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+
+import java.io.IOException;
+import java.util.Optional;
 
 @Service
 public class CMISAuthenticatorFactory {
@@ -100,5 +106,15 @@ public class CMISAuthenticatorFactory {
 
     }
 
+    public boolean validateTicket(String ticket) throws IOException {
+        BindingSession bindingSession = cmisAuthRepository.getBindingSession(ticket);
+        String ticketURL = baseURL + "service/api/login/ticket/" + ticket;
+        UrlBuilder url = new UrlBuilder(ticketURL);
+        int status = CmisBindingsHelper.getHttpInvoker(bindingSession).invokeGET(url, bindingSession).getResponseCode();
+        if (status == HttpStatus.SC_OK) {
+            return Boolean.TRUE;
+        }
+        return Boolean.FALSE;
+    }
 
 }
