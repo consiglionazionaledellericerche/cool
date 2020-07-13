@@ -66,11 +66,51 @@ public class CreateAccountService {
     private Boolean mailCreateUserBCCEnabled;
 
     public Map<String, Object> update(Map<String, List<String>> form, Locale locale) {
-        return manage(form, locale, false, null);
+        try {
+            LOGGER.debug(form.toString());
+            CMISUser user = new CMISUser();
+            CalendarUtil.getBeanUtils().populate(user, form);
+            return manage(user, locale, false, null);
+        } catch (IllegalAccessException | InvocationTargetException e) {
+            LOGGER.warn(e.getMessage(), e);
+            throw new CoolException(e.getMessage(), e);
+        }
     }
 
     public Map<String, Object> create(Map<String, List<String>> form, Locale locale, String url) {
-        return manage(form, locale, true, url);
+        try {
+            LOGGER.debug(form.toString());
+            CMISUser user = new CMISUser();
+            CalendarUtil.getBeanUtils().populate(user, form);
+            return manage(user, locale, true, url);
+        } catch (IllegalAccessException | InvocationTargetException e) {
+            LOGGER.warn(e.getMessage(), e);
+            throw new CoolException(e.getMessage(), e);
+        }
+    }
+
+    public CMISUser update(CMISUser user, Locale locale) {
+        return manage(user, locale, false, null)
+                .entrySet()
+                .stream()
+                .filter(stringObjectEntry -> stringObjectEntry.getKey().equals("user"))
+                .map(Map.Entry::getValue)
+                .findAny()
+                .filter(CMISUser.class::isInstance)
+                .map(CMISUser.class::cast)
+                .orElseThrow(() -> new CoolException("Cannot update user"));
+    }
+
+    public CMISUser create(CMISUser user, Locale locale, String url) {
+        return manage(user, locale, true, url)
+                .entrySet()
+                .stream()
+                .filter(stringObjectEntry -> stringObjectEntry.getKey().equals("user"))
+                .map(Map.Entry::getValue)
+                .findAny()
+                .filter(CMISUser.class::isInstance)
+                .map(CMISUser.class::cast)
+                .orElseThrow(() -> new CoolException("Cannot create user"));
     }
 
     private String normalize(String src) {
@@ -80,14 +120,9 @@ public class CreateAccountService {
                 .replaceAll("\\W", "");
     }
 
-    private Map<String, Object> manage(Map<String, List<String>> form, Locale locale, boolean create, String url) {
-        CMISUser user = new CMISUser();
+    private Map<String, Object> manage(CMISUser user, Locale locale, boolean create, String url) {
         Map<String, Object> model = new HashMap<String, Object>();
-
         try {
-            LOGGER.debug(form.toString());
-            CalendarUtil.getBeanUtils().populate(user, form);
-
             String codicefiscale = user.getCodicefiscale();
             if (codicefiscale != null && !codicefiscale.equals(codicefiscale.toUpperCase())) {
                 LOGGER.debug("transforming codicefiscale to UpperCase for user "
@@ -149,7 +184,7 @@ public class CreateAccountService {
                 throw new CoolException(String.valueOf(model.get("error")));
             }
 
-        } catch (UserFactoryException | IllegalAccessException | InvocationTargetException e) {
+        } catch (UserFactoryException e) {
             LOGGER.warn(e.getMessage(), e);
             throw new CoolException(e.getMessage(), e);
         }
