@@ -72,6 +72,8 @@ public class CMISUser implements java.security.Principal, Serializable {
 	private String statoestero;
 	@JsonProperty("cnrperson:pin")
 	private String pin;
+	@JsonProperty("cmis:objectTypeId")
+	private String objectTypeId = "cm:person";
 
 	private Boolean ldapuser;
 
