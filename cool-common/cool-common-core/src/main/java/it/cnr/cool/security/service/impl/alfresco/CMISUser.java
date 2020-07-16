@@ -394,5 +394,6 @@ public class CMISUser implements java.security.Principal, Serializable {
 		capabilities = null;
 		immutability = null;
 		homeFolder = null;
+		objectTypeId = null;
 	}
 }

@@ -139,8 +139,6 @@ public class I18nService {
 
 	}
 
-
-
     public void setLocations(List<String> locations) {
         this.locations = locations;
     }

@@ -129,11 +129,7 @@ public class CreateAccountService {
                         + user.getId() + " [" + codicefiscale + "]");
                 user.setCodicefiscale(codicefiscale.toUpperCase());
             }
-
-
             LOGGER.debug((create ? "creation" : "update") + " for user " + user.getId() + " requested");
-
-
             if (create) {
                 if (!Optional.ofNullable(user.getUserName())
                         .map(s -> s.trim()).isPresent()) {
