@@ -186,7 +186,7 @@
   </head>
   <body>
     <div id="wrap">
-			<@region id="header" scope="template" />
+		<@region id="header" scope="template" />
 
 	    <div id="content" class="container">
 	      <@region id="main" scope="page" />

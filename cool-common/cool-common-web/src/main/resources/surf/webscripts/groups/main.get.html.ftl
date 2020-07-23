@@ -1,3 +1,6 @@
+<div class="header container">
+    <div class="jumbotron"><h1>${message('page.groups')}</h1></div>
+</div>
 <div class="container">
   <div class="container-fluid">
     <div class="row-fluid">
