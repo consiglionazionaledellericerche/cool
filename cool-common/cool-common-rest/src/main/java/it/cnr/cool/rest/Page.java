@@ -154,8 +154,9 @@ public class Page {
 										+ key
 										+ ", will be used only first entry");
 							}
-
-							requestParameters.put(key, value);
+							if (value.matches(SecurityRest.REGEX)) {
+								requestParameters.put(key, value);
+							}
 						} else {
 							LOGGER.debug(key + " is null");
 						}
