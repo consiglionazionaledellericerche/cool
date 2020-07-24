@@ -115,12 +115,12 @@
     </form>
 
     <form name="italy">
-        <formFieldProperty name="codicefiscale"/>
+        <formFieldProperty name="codicefiscale" class="span12"/>
     </form>
     <form name="foreign">
         <formFieldProperty name="sesso"/>
         <formFieldProperty name="dataDiNascita"/>
-        <formFieldProperty name="statoestero"/>
+        <formFieldProperty name="statoestero" class="span12"/>
     </form>
 
     <form name="createUser">
@@ -134,12 +134,12 @@
         <formFieldProperty name="nazionalita"/>
     </form>
     <form name="createUserWithoutUsername">
-        <formFieldProperty name="firstName"/>
-        <formFieldProperty name="lastName"/>
-        <formFieldProperty name="email"/>
-        <formFieldProperty name="confirmEmail"/>
-        <formFieldProperty name="password"/>
-        <formFieldProperty name="confirmPassword"/>
+        <formFieldProperty name="firstName" class="span12"/>
+        <formFieldProperty name="lastName" class="span12"/>
+        <formFieldProperty name="email" class="span12"/>
+        <formFieldProperty name="confirmEmail" class="span12"/>
+        <formFieldProperty name="password" class="span12"/>
+        <formFieldProperty name="confirmPassword" class="span12"/>
         <formFieldProperty name="nazionalita"/>
     </form>
 
