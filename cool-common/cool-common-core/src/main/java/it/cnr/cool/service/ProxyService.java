@@ -212,7 +212,7 @@ public class ProxyService {
         if (resp != null && (resp.getStream() != null || resp.getErrorContent() != null)) {
             if (responseCode != HttpStatus.SC_OK) {
             	LOGGER.error("status code {} for request url", responseCode + resp.getErrorContent());
-            	IOUtils.copy(new ByteArrayInputStream(resp.getErrorContent().getBytes("UTF-8")), outputStream);
+                throw new CoolException(resp.getResponseMessage(), responseCode);
             }
             if (resp.getStream() != null)
             	IOUtils.copy(resp.getStream(), outputStream);
@@ -224,6 +224,9 @@ public class ProxyService {
 
     public UrlBuilder getUrl(HttpServletRequest req, String base) {
         String urlParam = getUrlParam(req);
+        if (!Optional.ofNullable(urlParam).filter(s -> s.length() > 0).isPresent()) {
+            throw new CoolException("The request url is not specified", HttpStatus.SC_BAD_REQUEST);
+        }
         final Optional<String> urlBanned = Arrays.asList(proxyURLBanned).stream()
                 .filter(s -> urlParam.indexOf(s) != -1)
                 .findAny();

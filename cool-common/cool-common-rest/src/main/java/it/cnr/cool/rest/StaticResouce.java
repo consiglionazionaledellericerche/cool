@@ -17,11 +17,14 @@
 
 package it.cnr.cool.rest;
 
+import it.cnr.cool.exception.CoolException;
 import it.cnr.cool.service.StaticService;
+import org.apache.commons.httpclient.HttpStatus;
 import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
+import org.springframework.util.ResourceUtils;
 
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
@@ -32,8 +35,11 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URISyntaxException;
+import java.util.Optional;
 
 @Path("static")
 @Component
@@ -45,10 +51,16 @@ public class StaticResouce {
 	@GET
 	@Path("{path:.*}")
 	public Response getStaticResouce(@PathParam("path") String path,
-			@Context HttpServletResponse res) {
-
-		InputStream input = StaticResouce.class.getResourceAsStream("/META-INF/"
-				+ path);
+			@Context HttpServletResponse res) throws FileNotFoundException {
+		if (!Optional.ofNullable(path)
+				.filter(s -> s.length() > 0)
+				.filter(s -> !s.endsWith("/"))
+				.filter(s -> s.contains("."))
+				.isPresent() ||
+				StaticResouce.class.getResource("/META-INF/" + path) == null) {
+			throw new CoolException("Bad Request", HttpStatus.SC_BAD_REQUEST);
+		}
+		InputStream input = StaticResouce.class.getResourceAsStream("/META-INF/" + path);
 
 		if (input != null) {
 

@@ -35,6 +35,7 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import java.io.IOException;
 import java.util.Map;
+import java.util.Optional;
 
 
 @Path("proxy")
@@ -73,7 +74,9 @@ public class Proxy {
             }
 
             String base = (String) backends.get(backend).get("url");
-
+            if (!Optional.ofNullable(base).filter(s -> s.length() > 0).isPresent()) {
+                throw new CoolException("The request url is not specified", HttpStatus.SC_BAD_REQUEST);
+            }
             LOGGER.info(base);
 
             urlBuilder = proxyService.getUrl(req, base);
