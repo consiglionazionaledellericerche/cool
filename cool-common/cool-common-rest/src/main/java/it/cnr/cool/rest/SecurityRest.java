@@ -315,9 +315,7 @@ public class SecurityRest {
 
             rb = Response.seeOther(userService.getRedirect(cmisAuthenticatorFactory.getCMISUser(ticket), uri));
 
-            ResponseCookie cookie = getCookie(ticket, Optional.ofNullable(req.getProtocol())
-                    .map(s -> !s.equals("HTTP/1.1"))
-                    .orElse(Boolean.TRUE));
+            ResponseCookie cookie = getCookie(ticket, req.isSecure());
             res.addHeader("Set-Cookie", cookie.toString());
 
         } else {

@@ -120,11 +120,7 @@ public class Page {
 									Map<String, List<String>> formParams, String cookieLang, String reqLang) {
 
 		ResponseBuilder rb;
-		String lang = i18nCookie(res, cookieLang, reqLang,
-				Optional.ofNullable(req.getProtocol())
-					.map(s -> !s.equals("HTTP/1.1"))
-					.orElse(Boolean.TRUE)
-		);
+		String lang = i18nCookie(res, cookieLang, reqLang,req.isSecure());
 		CoolPage page = pageService.loadPages().get(id);
 		CMISUser user = cmisService.getCMISUserFromSession(req);
 		if (page == null) {
