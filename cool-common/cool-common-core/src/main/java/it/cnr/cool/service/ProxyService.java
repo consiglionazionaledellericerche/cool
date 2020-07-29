@@ -20,6 +20,7 @@ package it.cnr.cool.service;
 import it.cnr.cool.cmis.service.CMISService;
 import it.cnr.cool.exception.CoolException;
 import it.cnr.cool.interceptor.ProxyInterceptor;
+import it.cnr.cool.util.StringUtil;
 import org.apache.chemistry.opencmis.client.bindings.impl.CmisBindingsHelper;
 import org.apache.chemistry.opencmis.client.bindings.spi.BindingSession;
 import org.apache.chemistry.opencmis.client.bindings.spi.http.Output;
@@ -63,27 +64,6 @@ public class ProxyService {
     @Value("${proxy.url.banned:service/api/solr,s/api/solr,wcservice/api/solr,wcs/api/solr}")
     private String[] proxyURLBanned;
 
-    public Pattern[] patternsXSS = new Pattern[]{
-            // Script fragments
-            Pattern.compile("<script>(.*?)</script>", Pattern.CASE_INSENSITIVE),
-            // src='...'
-            Pattern.compile("src[\r\n]*=[\r\n]*\\\'(.*?)\\\'", Pattern.CASE_INSENSITIVE | Pattern.MULTILINE | Pattern.DOTALL),
-            Pattern.compile("src[\r\n]*=[\r\n]*\\\"(.*?)\\\"", Pattern.CASE_INSENSITIVE | Pattern.MULTILINE | Pattern.DOTALL),
-            // lonely script tags
-            Pattern.compile("</script>", Pattern.CASE_INSENSITIVE),
-            Pattern.compile("<script(.*?)>", Pattern.CASE_INSENSITIVE | Pattern.MULTILINE | Pattern.DOTALL),
-            // eval(...)
-            Pattern.compile("eval\\((.*?)\\)", Pattern.CASE_INSENSITIVE | Pattern.MULTILINE | Pattern.DOTALL),
-            // expression(...)
-            Pattern.compile("expression\\((.*?)\\)", Pattern.CASE_INSENSITIVE | Pattern.MULTILINE | Pattern.DOTALL),
-            // javascript:...
-            Pattern.compile("javascript:", Pattern.CASE_INSENSITIVE),
-            // vbscript:...
-            Pattern.compile("vbscript:", Pattern.CASE_INSENSITIVE),
-            // onload(...)=...
-            Pattern.compile("onload(.*?)=", Pattern.CASE_INSENSITIVE | Pattern.MULTILINE | Pattern.DOTALL)
-    };
-
     /**
      * Process POST or PUT request
      *
@@ -109,7 +89,7 @@ public class ProxyService {
         String body = new BufferedReader(new InputStreamReader(is)).lines()
                 .collect(Collectors.joining("\n"));
         // Remove all sections that match a pattern
-        for (Pattern scriptPattern : patternsXSS){
+        for (Pattern scriptPattern : StringUtil.patternsXSS){
             body = scriptPattern.matcher(body).replaceAll("");
         }
 

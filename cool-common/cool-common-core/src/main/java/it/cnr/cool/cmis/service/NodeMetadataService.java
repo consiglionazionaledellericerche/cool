@@ -40,6 +40,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.io.Serializable;
 import java.text.*;
 import java.util.*;
+import java.util.regex.Pattern;
 
 @Service
 public class NodeMetadataService {
@@ -87,8 +88,12 @@ public class NodeMetadataService {
 								value.add(Integer.valueOf(propertyValue[i]));
 							} else if (propertyDefinition instanceof PropertyStringDefinition || 
 									propertyDefinition instanceof PropertyIdDefinition) {
-								value.add(propertyValue[i].replaceAll(
-										RE_XML_PROP, " "));
+								String s = propertyValue[i].replaceAll(RE_XML_PROP, " ");
+								// Remove all sections that match a pattern
+								for (Pattern scriptPattern : StringUtil.patternsXSS){
+									s = scriptPattern.matcher(s).replaceAll("");
+								}
+								value.add(s);
 							} else if (propertyDefinition instanceof PropertyDecimalDefinition) {
 								value.add(nf.parse(propertyValue[i],
 										new ParsePosition(0)));
@@ -122,6 +127,10 @@ public class NodeMetadataService {
 						} else if (propertyDefinition instanceof PropertyStringDefinition
 								|| propertyDefinition instanceof PropertyIdDefinition) {
 							value = propertyValue.replaceAll(RE_XML_PROP, " ");
+							// Remove all sections that match a pattern
+							for (Pattern scriptPattern : StringUtil.patternsXSS){
+								value = scriptPattern.matcher(value.toString()).replaceAll("");
+							}
 						} else if (propertyDefinition instanceof PropertyDecimalDefinition) {
 							value = nf.parse(propertyValue,
 									new ParsePosition(0));
