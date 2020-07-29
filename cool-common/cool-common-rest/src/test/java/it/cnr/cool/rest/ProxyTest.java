@@ -96,12 +96,16 @@ public class ProxyTest {
     }
 
     @Test
-    public void testGet() throws IOException {
+    public void testGet() throws IOException, LoginException {
 
         MockHttpServletRequest req = new MockHttpServletRequest();
         req.setParameter(URL, "service/api/people/" + username);
 
         MockHttpServletResponse res = new MockHttpServletResponse();
+
+        String ticket = cmisAuthenticatorFactory.getTicket("admin", "admin");
+
+        req.addHeader(CMISService.AUTHENTICATION_HEADER, ticket);
 
         proxy.get(req, null, res);
 
