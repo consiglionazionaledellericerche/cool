@@ -107,6 +107,7 @@ public class Page {
 					.path("/")
 					.maxAge(-1)
 					.secure(secure)
+					.httpOnly(true)
 					.sameSite("strict")
 					.build();
 			res.addHeader("Set-Cookie", cookie.toString());
