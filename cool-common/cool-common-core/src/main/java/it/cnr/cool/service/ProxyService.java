@@ -43,6 +43,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 /**
  * Created by francesco on 17/02/15.
@@ -61,7 +63,26 @@ public class ProxyService {
     @Value("${proxy.url.banned:service/api/solr,s/api/solr,wcservice/api/solr,wcs/api/solr}")
     private String[] proxyURLBanned;
 
-
+    public Pattern[] patternsXSS = new Pattern[]{
+            // Script fragments
+            Pattern.compile("<script>(.*?)</script>", Pattern.CASE_INSENSITIVE),
+            // src='...'
+            Pattern.compile("src[\r\n]*=[\r\n]*\\\'(.*?)\\\'", Pattern.CASE_INSENSITIVE | Pattern.MULTILINE | Pattern.DOTALL),
+            Pattern.compile("src[\r\n]*=[\r\n]*\\\"(.*?)\\\"", Pattern.CASE_INSENSITIVE | Pattern.MULTILINE | Pattern.DOTALL),
+            // lonely script tags
+            Pattern.compile("</script>", Pattern.CASE_INSENSITIVE),
+            Pattern.compile("<script(.*?)>", Pattern.CASE_INSENSITIVE | Pattern.MULTILINE | Pattern.DOTALL),
+            // eval(...)
+            Pattern.compile("eval\\((.*?)\\)", Pattern.CASE_INSENSITIVE | Pattern.MULTILINE | Pattern.DOTALL),
+            // expression(...)
+            Pattern.compile("expression\\((.*?)\\)", Pattern.CASE_INSENSITIVE | Pattern.MULTILINE | Pattern.DOTALL),
+            // javascript:...
+            Pattern.compile("javascript:", Pattern.CASE_INSENSITIVE),
+            // vbscript:...
+            Pattern.compile("vbscript:", Pattern.CASE_INSENSITIVE),
+            // onload(...)=...
+            Pattern.compile("onload(.*?)=", Pattern.CASE_INSENSITIVE | Pattern.MULTILINE | Pattern.DOTALL)
+    };
 
     /**
      * Process POST or PUT request
@@ -84,9 +105,17 @@ public class ProxyService {
         UrlBuilder url = getUrl(req, cmisService.getBaseURL());
         String urlParam = getUrlParam(req);
 
-        final InputStream is = req.getInputStream();
+        InputStream is = req.getInputStream();
+        String body = new BufferedReader(new InputStreamReader(is)).lines()
+                .collect(Collectors.joining("\n"));
+        // Remove all sections that match a pattern
+        for (Pattern scriptPattern : patternsXSS){
+            body = scriptPattern.matcher(body).replaceAll("");
+        }
+
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        FileCopyUtils.copy(is, baos);
+        FileCopyUtils.copy(new ByteArrayInputStream(body.getBytes("UTF-8")), baos);
+
         final InputStream is1 = new ByteArrayInputStream(baos.toByteArray());
         final InputStream is2 = new ByteArrayInputStream(baos.toByteArray());
         final InputStream is3 = new ByteArrayInputStream(baos.toByteArray());

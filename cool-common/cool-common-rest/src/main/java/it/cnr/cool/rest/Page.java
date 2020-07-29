@@ -30,6 +30,7 @@ import it.cnr.mock.RequestUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseCookie;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.RequestBody;
 
@@ -100,13 +101,15 @@ public class Page {
 		return processRequest(req, null, id, formParamz, cookieLang, null);
 	}
 
-	private String i18nCookie(HttpServletResponse res, String lang, String reqLang) {
+	private String i18nCookie(HttpServletResponse res, String lang, String reqLang, boolean secure) {
 		if (reqLang != null && reqLang.length() > 0 && res != null) {
-	        Cookie cookie = new Cookie("__lang", reqLang);
-	        cookie.setPath("/");
-            cookie.setComment("Language user session");
-            cookie.setMaxAge(-1);
-            res.addCookie(cookie);
+			ResponseCookie cookie = ResponseCookie.from("__lang", reqLang)
+					.path("/")
+					.maxAge(-1)
+					.secure(secure)
+					.sameSite("strict")
+					.build();
+			res.addHeader("Set-Cookie", cookie.toString());
             return reqLang;
 		}
 		return lang;
@@ -116,7 +119,11 @@ public class Page {
 									Map<String, List<String>> formParams, String cookieLang, String reqLang) {
 
 		ResponseBuilder rb;
-		String lang = i18nCookie(res, cookieLang, reqLang);
+		String lang = i18nCookie(res, cookieLang, reqLang,
+				Optional.ofNullable(req.getProtocol())
+					.map(s -> !s.equals("HTTP/1.1"))
+					.orElse(Boolean.TRUE)
+		);
 		CoolPage page = pageService.loadPages().get(id);
 		CMISUser user = cmisService.getCMISUserFromSession(req);
 		if (page == null) {

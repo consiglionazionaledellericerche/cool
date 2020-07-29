@@ -189,8 +189,8 @@ define(['jquery', 'json!common', 'cnr/cnr', 'cnr/cnr.node', 'cnr/cnr.ui', 'cnr/c
               'zones': groupZones
             }),
             contentType: 'application/json'
-          }).done(function () {
-            UI.success('creato il gruppo ' + groupName);
+          }).done(function (result) {
+            UI.success('creato il gruppo ' + result.displayName);
             refresh();
           }).fail(function () {
             UI.error("impossibile creare il gruppo " + groupName);

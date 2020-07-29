@@ -19,9 +19,11 @@ package it.cnr.cool.rest;
 
 
 import it.cnr.cool.cmis.service.CMISService;
+import it.cnr.cool.exception.CoolException;
 import it.cnr.cool.service.ProxyService;
 import org.apache.chemistry.opencmis.client.bindings.spi.BindingSession;
 import org.apache.chemistry.opencmis.commons.impl.UrlBuilder;
+import org.apache.commons.httpclient.HttpStatus;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -77,6 +79,10 @@ public class Proxy {
             urlBuilder = proxyService.getUrl(req, base);
 
         } else {
+            if (cmisService.getCMISUserFromSession(req).isGuest()) {
+                LOGGER.error("The request url is forbidden");
+                throw new CoolException("The request url is forbidden", HttpStatus.SC_FORBIDDEN);
+            }
             bindingSession = cmisService.getCurrentBindingSession(req);
             urlBuilder = proxyService.getUrl(req, cmisService.getBaseURL());
         }

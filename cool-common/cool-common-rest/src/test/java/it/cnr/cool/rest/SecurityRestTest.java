@@ -114,7 +114,9 @@ public class SecurityRestTest {
     @Test
     public void test2LoginFailed() throws Exception {
         MockHttpServletRequest req = new MockHttpServletRequest();
-        Response response = security.login(req, NEWUSERNAME, NEWUSERNAME, "/home", null);
+        MockHttpServletResponse res = new MockHttpServletResponse();
+
+        Response response = security.login(req, res, NEWUSERNAME, NEWUSERNAME, "/home", null);
         assertEquals(Status.SEE_OTHER.getStatusCode(), response.getStatus());
         assertTrue(response.getHeaderString("Location").contains("failure=yes"));
     }
@@ -130,7 +132,9 @@ public class SecurityRestTest {
     @Test
     public void test4Login() throws Exception {
         MockHttpServletRequest req = new MockHttpServletRequest();
-        Response response = security.login(req, NEWUSERNAME, NEWUSERNAME, "/home", null);
+        MockHttpServletResponse res = new MockHttpServletResponse();
+
+        Response response = security.login(req, res, NEWUSERNAME, NEWUSERNAME, "/home", null);
         assertEquals(Status.SEE_OTHER.getStatusCode(), response.getStatus());
         assertTrue(response.getHeaderString("Location").equals("/home"));
     }

@@ -37,9 +37,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseCookie;
 import org.springframework.stereotype.Component;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.*;
 import javax.ws.rs.core.*;
 import javax.ws.rs.core.Response.ResponseBuilder;
@@ -294,6 +296,7 @@ public class SecurityRest {
     @Path(Page.LOGIN_URL)
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
     public Response login(@Context HttpServletRequest req,
+                          @Context HttpServletResponse res,
                           @FormParam("username") String username,
                           @FormParam("password") String password,
                           @FormParam("redirect") String redirect,
@@ -312,9 +315,10 @@ public class SecurityRest {
 
             rb = Response.seeOther(userService.getRedirect(cmisAuthenticatorFactory.getCMISUser(ticket), uri));
 
-            NewCookie cookie = getCookie(ticket);
-
-            rb.cookie(cookie);
+            ResponseCookie cookie = getCookie(ticket, Optional.ofNullable(req.getProtocol())
+                    .map(s -> !s.equals("HTTP/1.1"))
+                    .orElse(Boolean.TRUE));
+            res.addHeader("Set-Cookie", cookie.toString());
 
         } else {
             URI uri = URI.create("../" + Page.LOGIN_URL + "?failure=yes");
@@ -326,15 +330,20 @@ public class SecurityRest {
 
     }
 
-    private NewCookie getCookie(String ticket) {
+    private ResponseCookie getCookie(String ticket, boolean secure) {
         int maxAge = ticket == null ? 0 : 3600;
-        NewCookie cookie = new NewCookie("ticket", ticket, "/", null, 1, null, maxAge, false);
+        ResponseCookie cookie = ResponseCookie.from("ticket", ticket)
+                .path("/")
+                .maxAge(maxAge)
+                .secure(secure)
+                .sameSite("strict")
+                .build();
         return cookie;
     }
 
     @GET
     @Path(Page.LOGOUT_URL)
-    public Response logout(@Context HttpServletRequest req) {
+    public Response logout(@Context HttpServletRequest req, @Context HttpServletResponse res) {
         Optional.ofNullable(cmisService.extractTicketFromRequest(req)).ifPresent(ticket -> {
             LOGGER.info("logout {}", ticket);
             BindingSession bindingSession = cmisService.getCurrentBindingSession(req);
@@ -350,8 +359,11 @@ public class SecurityRest {
             }
         });
         URI uri = URI.create("../" + Page.LOGIN_URL);
-        NewCookie cookie = getCookie(null);
-        return Response.seeOther(uri).cookie(cookie).build();
+        ResponseCookie cookie = getCookie(null, Optional.ofNullable(req.getProtocol())
+                .map(s -> !s.equals("HTTP/1.1"))
+                .orElse(Boolean.TRUE));
+        res.addHeader("Set-Cookie", cookie.toString());
+        return Response.seeOther(uri).build();
     }
 
     @GET
