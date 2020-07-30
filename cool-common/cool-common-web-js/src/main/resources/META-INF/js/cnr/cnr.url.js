@@ -194,7 +194,9 @@ define(['jquery', 'cnr/cnr.ui', 'json!common', 'i18n', 'json!cache'], function (
       url: url,
       beforeSend: function (jqXHR) {
         jqXHR.startTime = new Date().getTime();
-        jqXHR.setRequestHeader(header, token);
+        if (token && header) {
+            jqXHR.setRequestHeader(header, token);
+        }
         // abort all active XHRs for "idQueue"
         while (idQueue && xhrs[idQueue].length) {
           xhrs[idQueue].pop().abort();
