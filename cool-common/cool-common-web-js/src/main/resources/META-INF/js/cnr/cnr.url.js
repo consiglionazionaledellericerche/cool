@@ -179,7 +179,9 @@ define(['jquery', 'cnr/cnr.ui', 'json!common', 'i18n', 'json!cache'], function (
     var idQueue = settings.queue ? (typeof settings.queue === 'string' ? settings.queue : url) : null,
       defaults,
       xhr,
-      customFunctions = {};
+      customFunctions = {},
+      token = $("meta[name='_csrf']").attr("content"),
+      header = $("meta[name='_csrf_header']").attr("content");
 
     // XHR queue initialization
     if (idQueue && !xhrs[idQueue]) {
@@ -192,6 +194,7 @@ define(['jquery', 'cnr/cnr.ui', 'json!common', 'i18n', 'json!cache'], function (
       url: url,
       beforeSend: function (jqXHR) {
         jqXHR.startTime = new Date().getTime();
+        jqXHR.setRequestHeader(header, token);
         // abort all active XHRs for "idQueue"
         while (idQueue && xhrs[idQueue].length) {
           xhrs[idQueue].pop().abort();

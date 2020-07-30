@@ -14,8 +14,10 @@
     <meta name="author" content="">
 
     <#if _csrf??>
-    <meta name="_csrf" content="${_csrf.token}"/>
-    <meta name="_csrf_header" content="${_csrf.headerName}"/>
+        <meta name="_csrf" content="${_csrf.token}"/>
+        <#if _csrf.headerName??>
+            <meta name="_csrf_header" content="${_csrf.headerName}"/>
+        </#if>
     </#if>
 
     <!-- custom style -->

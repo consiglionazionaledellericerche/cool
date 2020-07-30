@@ -226,6 +226,10 @@ public class PageService implements InitializingBean{
 					.stream()
 					.forEach(pageModel -> model.putAll(pageModel.addToModel(paramz)));
 		}
+		Optional<Object> csrf = Optional.ofNullable(req.getAttribute("_csrf"));
+		if (csrf.isPresent()) {
+			model.put("_csrf", csrf.get());
+		}
 		return model;
 	}
 

@@ -40,6 +40,11 @@
           <li class="divider-vertical"></li>
           <li>
             <form id="search" method="POST" action="${url.context}/search" class="form-search">
+              <#if _csrf??>
+                  <input type="hidden"
+                    name="${_csrf.parameterName}"
+                    value="${_csrf.token}"/>
+              </#if>
               <div class="input-append">
                 <input type="text" name="query" class="search-query input-small">
                 <button type="submit" class="btn"><i class="icon-search"></i> ${message("button.freesearch.find")}</button>
