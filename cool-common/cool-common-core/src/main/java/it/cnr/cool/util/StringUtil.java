@@ -54,7 +54,10 @@ public final class StringUtil {
 			// vbscript:...
 			Pattern.compile("vbscript:", Pattern.CASE_INSENSITIVE),
 			// onload(...)=...
-			Pattern.compile("onload(.*?)=", Pattern.CASE_INSENSITIVE | Pattern.MULTILINE | Pattern.DOTALL)
+			Pattern.compile("onload(.*?)=", Pattern.CASE_INSENSITIVE | Pattern.MULTILINE | Pattern.DOTALL),
+			// onerror(...)=...
+			Pattern.compile("onerror(.*?)=", Pattern.CASE_INSENSITIVE | Pattern.MULTILINE | Pattern.DOTALL)
+
 	};
 
 	/**

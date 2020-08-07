@@ -219,6 +219,19 @@ public class SecurityRest {
     }
 
     @POST
+    @Path("recover-password")
+    public Response recoverPassword(@Context HttpServletRequest req, @FormParam("email") String email) {
+        CMISUser userByEmail = userService.findUserByEmail(email, cmisService.getCurrentBindingSession(req));
+        return Response.ok(
+                Collections.singletonMap("userName",
+                        Optional.ofNullable(userByEmail)
+                            .map(CMISUser::getUserName)
+                            .orElse("")
+                )
+        ).build();
+    }
+
+    @POST
     @Path("forgotPassword")
     public Response forgotPassword(@Context HttpServletRequest req,
                                    @FormParam("userName") String userName, @CookieParam("__lang") String __lang) {

@@ -24,7 +24,8 @@ define(['jquery', 'cnr/cnr.ui', 'json!common', 'i18n', 'json!cache'], function (
         dynamicProxy: 'rest/proxy'
       },
       security : {
-        forgotPassword: 'rest/security/forgotPassword'
+        forgotPassword: 'rest/security/forgotPassword',
+        recoverPassword: 'rest/security/recover-password'
       },
       account: {
         changePassword: 'rest/security/change-password',
