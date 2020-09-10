@@ -30,6 +30,7 @@ import it.cnr.mock.RequestUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseCookie;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -71,6 +72,8 @@ public class Page {
 	@Autowired
 	private CMISService cmisService;
 
+	@Value("${cookie.secure:true}")
+	private Boolean cookieSecure;
 
 	@GET
 	@Path("{id}")
@@ -106,7 +109,7 @@ public class Page {
 			ResponseCookie cookie = ResponseCookie.from("__lang", reqLang)
 					.path("/")
 					.maxAge(-1)
-					.secure(secure)
+					.secure(secure && cookieSecure)
 					.httpOnly(true)
 					.sameSite("strict")
 					.build();

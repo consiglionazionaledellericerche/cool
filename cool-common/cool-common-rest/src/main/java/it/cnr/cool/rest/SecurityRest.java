@@ -36,6 +36,7 @@ import org.apache.chemistry.opencmis.commons.impl.UrlBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseCookie;
 import org.springframework.stereotype.Component;
@@ -77,6 +78,9 @@ public class SecurityRest {
 
     @Autowired
     private CMISAuthenticatorFactory cmisAuthenticatorFactory;
+
+    @Value("${cookie.secure:true}")
+    private Boolean cookieSecure;
 
     static String getUrl(HttpServletRequest req) {
         StringBuffer url = req.getRequestURL();
@@ -346,7 +350,7 @@ public class SecurityRest {
         ResponseCookie cookie = ResponseCookie.from("ticket", ticket)
                 .path("/")
                 .maxAge(maxAge)
-                .secure(secure)
+                .secure(secure && cookieSecure)
                 .httpOnly(true)
                 .sameSite("strict")
                 .build();
