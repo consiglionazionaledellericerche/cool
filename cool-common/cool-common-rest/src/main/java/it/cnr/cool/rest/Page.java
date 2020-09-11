@@ -72,7 +72,7 @@ public class Page {
 	@Autowired
 	private CMISService cmisService;
 
-	@Value("${cookie.secure:true}")
+	@Value("${cookie.secure}")
 	private Boolean cookieSecure;
 
 	@GET
