@@ -325,6 +325,8 @@ define(['jquery', 'cnr/cnr', 'cnr/cnr.ui', 'cnr/cnr.bulkinfo', 'i18n', 'cnr/cnr.
             }
 
             if (opts.requiresFile !== false && !fileinput) {
+              //Nel caso sia in una modale faccio lo scroll
+              $('div.modal-inner-fix').animate({ scrollTop: 10000 }, 'slow');
               UI.alert("inserire un allegato!");
               return false;
             } else {
