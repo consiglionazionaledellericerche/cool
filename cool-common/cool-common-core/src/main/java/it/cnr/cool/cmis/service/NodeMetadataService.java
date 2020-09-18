@@ -41,6 +41,7 @@ import java.io.Serializable;
 import java.text.*;
 import java.util.*;
 import java.util.regex.Pattern;
+import java.util.stream.Stream;
 
 @Service
 public class NodeMetadataService {
@@ -147,7 +148,7 @@ public class NodeMetadataService {
 		return properties;
 	}
 
-	private String[] getParameterValues(String key,
+	private String[]  getParameterValues(String key,
 			Map<String, ?> reqProperties, HttpServletRequest request) {
 		if (reqProperties != null) {
 			if (reqProperties.get(key) == null)
@@ -256,8 +257,7 @@ public class NodeMetadataService {
 					PolicyType.ASPECT_REQ_PARAMETER_NAME, reqProperties,
 					request)));
 
-			String[] aspects = getParameterValues(PolicyType.ADD_REMOVE_ASPECT_REQ_PARAMETER_NAME, reqProperties,
-					request);
+			String[] aspects = getParameterValues(PolicyType.ADD_REMOVE_ASPECT_REQ_PARAMETER_NAME, reqProperties, request);
 
 			aspectNames.addAll(PolicyType.getAspectToBeAdd(aspects));
 			if (aspectNames != null && !aspectNames.isEmpty()) {
@@ -267,7 +267,25 @@ public class NodeMetadataService {
 							.getPropertyDefinitions().values());
 				}
 			}
-			
+			Stream.concat(
+				Optional.ofNullable(reqProperties)
+					.map(Map::entrySet)
+					.orElse(Collections.emptySet()).stream(),
+				Collections.list(request.getParameterNames()).stream()
+			)
+					.filter(String.class::isInstance)
+					.map(String.class::cast)
+					.filter(s -> s.startsWith(PolicyType.ADD_REMOVE_ASPECT_REQ_PARAMETER_NAME.concat("-")))
+					.filter(s -> {
+						return Arrays.asList(getParameterValues(s, reqProperties, request)).stream().filter(s1 -> s1.startsWith("add-")).findAny().isPresent();
+					})
+					.map(s -> s.substring(PolicyType.ADD_REMOVE_ASPECT_REQ_PARAMETER_NAME.concat("-").length()))
+					.forEach(s -> {
+						aspectNames.add(s);
+						propertyDefinitions.addAll(cmisSession
+								.getTypeDefinition(s)
+								.getPropertyDefinitions().values());
+					});
 		}
 		Map<String, Object> result = internalPopulateMetadataFromRequest(reqProperties,
 				propertyDefinitions, request);
