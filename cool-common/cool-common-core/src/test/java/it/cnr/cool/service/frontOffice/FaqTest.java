@@ -91,7 +91,7 @@ public class FaqTest {
                 adminSession, nodeRefFaq);
     }
 
-    @Test
+    //@Test
     public void testGetFaq() throws IOException {
         // Recupero solo la faq creato da createFaq()
         Map<String, Object> response = frontOfficeService.getFaq(adminSession,
@@ -116,7 +116,7 @@ public class FaqTest {
         assertTrue(faqEditor.size() >= faqEditorFalse.size());
     }
 
-    @Test
+    //@Test
     public void testEditFaq() throws IOException {
 
         String questionUpdate = "Question testPostDeleteFaq";
