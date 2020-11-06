@@ -42,10 +42,7 @@ import org.springframework.stereotype.Service;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.xml.bind.DatatypeConverter;
-import java.util.HashMap;
-import java.util.Locale;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class CMISService implements InitializingBean, CMISSessionManager {
@@ -271,7 +268,14 @@ public class CMISService implements InitializingBean, CMISSessionManager {
             user.setCapabilities(capabilities);
 
         } else {
-            LOGGER.info("User: {} with ticket: {} IP: {} Path: {} {}", user.getId(), ticket, request.getRemoteAddr(), request.getMethod(), request.getPathInfo());
+            LOGGER.info("User: {} with ticket: {} IP: {} Path: {} {}?{}",
+                    user.getId(),
+                    ticket,
+                    request.getRemoteAddr(),
+                    request.getMethod(),
+                    request.getPathInfo(),
+                    request.getQueryString()
+            );
         }
         return user;
     }
