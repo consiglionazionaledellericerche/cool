@@ -28,6 +28,10 @@ function main() {
     return;
   }
   person.addAspect("cnrperson:metadati");
+  if (json.has("cnrexternaluser:application")) {
+    person.addAspect("cnrexternaluser:metadata");
+    person.properties["cnrexternaluser:application"] = json.get("cnrexternaluser:application");
+  }
   while (jsonKeys.hasNext()) {
     nextKey = jsonKeys.next();
     if (bannerField.indexOf(String(nextKey)) < 0) {

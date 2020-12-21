@@ -74,6 +74,8 @@ public class CMISUser implements java.security.Principal, Serializable {
 	private String pin;
 	@JsonProperty("cmis:objectTypeId")
 	private String objectTypeId = "cm:person";
+	@JsonProperty("cnrexternaluser:application")
+	private String application;
 
 	private Boolean ldapuser;
 
@@ -146,6 +148,14 @@ public class CMISUser implements java.security.Principal, Serializable {
 
 	public void setMobile(String mobile) {
 		this.mobile = mobile;
+	}
+
+	public String getApplication() {
+		return application;
+	}
+
+	public void setApplication(String application) {
+		this.application = application;
 	}
 
 	@JsonIgnore
@@ -377,7 +387,10 @@ public class CMISUser implements java.security.Principal, Serializable {
 			else if (name.equalsIgnoreCase("statoestero"))
 				setStatoestero((String) value);
 			else if (name.equalsIgnoreCase("pin"))
-				setPin((String) value);			
+				setPin((String) value);
+			else if (name.equalsIgnoreCase("application"))
+				setApplication((String) value);
+
 		}
 		if (Arrays.asList("admin", "name", "id", "guest", "locale").stream().noneMatch(x -> x.equals(name)))
 			Optional.ofNullable(value).map(x -> other.put(name, x));

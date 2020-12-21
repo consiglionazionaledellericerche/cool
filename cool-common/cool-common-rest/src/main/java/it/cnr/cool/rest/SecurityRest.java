@@ -254,11 +254,10 @@ public class SecurityRest {
 
                 LOGGER.debug("user retrieved" + user.getId());
 
-                if (cmisUser.getImmutability() != null
-                        && !cmisUser.getImmutability().isEmpty()) {
-
+                if (cmisUser.getImmutability() != null && !cmisUser.getImmutability().isEmpty()) {
                     error = "message.error.email.cnr.user";
-
+                } else if (Optional.ofNullable(cmisUser.getApplication()).filter(s -> s.length() > 0).isPresent()) {
+                    error = "message.error.user.forgot.password.application";
                 } else if (!cmisUser.getEnabled()) {
                     error = "message.error.user.is.not.active";
                 } else {

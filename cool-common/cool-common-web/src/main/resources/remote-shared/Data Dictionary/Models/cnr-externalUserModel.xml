@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<model name="cnrexternaluser:model" xmlns="http://www.alfresco.org/model/dictionary/1.0">
+
+   <description>CNR External User Model</description>
+   <author>Marco Spasiano</author>
+   <version>1.0</version>
+
+   <imports>
+      <import uri="http://www.alfresco.org/model/dictionary/1.0" prefix="d"/>
+      <import uri="http://www.alfresco.org/model/content/1.0" prefix="cm"/>
+   </imports>
+
+   <namespaces>
+      <namespace uri="http://www.cnr.it/model/cnrexternaluser" prefix="cnrexternaluser"/>
+   </namespaces>
+
+   <aspects>
+      <aspect name="cnrexternaluser:metadata">
+         <title>External User Registration</title>
+         <properties>
+            <property name="cnrexternaluser:application">
+               <title>Application</title>
+               <type>d:text</type>
+               <index enabled="true">
+                 <atomic>true</atomic>
+                 <stored>true</stored>
+                 <tokenised>false</tokenised>
+               </index>
+            </property>
+         </properties>
+      </aspect>
+   </aspects>
+</model>
