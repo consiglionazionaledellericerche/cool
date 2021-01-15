@@ -148,15 +148,19 @@ public class NodeMetadataService {
 		return properties;
 	}
 
-	private String[]  getParameterValues(String key,
+	private String[] getParameterValues(String key,
 			Map<String, ?> reqProperties, HttpServletRequest request) {
 		if (reqProperties != null) {
-			if (reqProperties.get(key) == null)
+			if (reqProperties.get(key) == null){
 				return null;
-			if (reqProperties.get(key).getClass().isArray()) {
+		    } else if (reqProperties.get(key).getClass().isArray()) {
 				return (String[]) reqProperties.get(key);
-			} else
-				return new String[] { (String) reqProperties.get(key) };
+			} else if (reqProperties.get(key) instanceof List) {
+				final List<String> list = (List<String>) reqProperties.get(key);
+				return list.toArray(new String[list.size()]);
+			} else {
+				return new String[]{(String) reqProperties.get(key)};
+			}
 		}
 		return request.getParameterValues(key);
 	}
