@@ -175,8 +175,11 @@ public class NodeMetadataService {
 						return value;
 				}
 				return null;
-			} else
-				return String.valueOf(reqProperties.get(key));
+			} else {
+				return Optional.ofNullable(reqProperties.get(key))
+						.map(o -> String.valueOf(o))
+						.orElse(null);
+			}
 		}
 		String[] values = request.getParameterValues(key);
 		if (values != null) {
