@@ -76,7 +76,7 @@ public class NodeMetadataService {
 						LOGGER.debug(propertyDefinition.getId() + " has value "
 								+ propertyValue);
 					List<Serializable> value = new ArrayList<Serializable>();
-					for (int i = 0; i < propertyValue.length; i++) {
+					for (int i = 0; i < Optional.ofNullable(propertyValue).map(strings -> strings.length).orElse(0); i++) {
 						if (propertyValue[i] != null
 								&& propertyValue[i].length() > 0) {
 							if (propertyDefinition instanceof PropertyDateTimeDefinition) {
