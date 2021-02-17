@@ -110,7 +110,7 @@ public class BulkInfoRepository {
         try {
             bi = bulkInfoCoolService.build(bulkInfoName);
         } catch (BulkInfoNotFoundException e) {
-            LOGGER.error("Error finding Bulkinfo " + bulkInfoName, e);
+            LOGGER.warn("Not found Bulkinfo width name: {}", bulkInfoName);
         }
         return bi;
 	}

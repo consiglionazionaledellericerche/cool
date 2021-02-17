@@ -20,6 +20,7 @@ package it.cnr.cool.service;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import it.cnr.bulkinfo.BulkInfo;
 import it.cnr.bulkinfo.BulkInfoImpl.FieldProperty;
 import it.cnr.bulkinfo.BulkInfoSerializer;
 import it.cnr.bulkinfo.cool.BulkInfoCool;
@@ -31,6 +32,7 @@ import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.stream.Stream;
 
 /**
  * Classe di utilita' per tradurre pojo BulkInfo in Json
@@ -52,9 +54,11 @@ public class BulkInfoCoolSerializer extends BulkInfoSerializer {
 	 */
 	private void putAspects(JsonObject result, BulkInfoCool bulkInfo) {
 		JsonArray aspectsJson = new JsonArray();
-		for(String aspect : bulkInfo.getCmisImplementsNameList()) {
-			aspectsJson.add(gson.toJsonTree(aspect));
-		}
+		Optional.ofNullable(bulkInfo)
+				.map(BulkInfo::getCmisImplementsNameList)
+				.map(List::stream)
+				.orElse(Stream.empty())
+				.forEach(aspect -> aspectsJson.add(gson.toJsonTree(aspect)));
 		result.add("aspect", aspectsJson);
 	}
 
@@ -65,7 +69,7 @@ public class BulkInfoCoolSerializer extends BulkInfoSerializer {
 		BulkInfoCool bulkInfo = (BulkInfoCool) model.get("bulkInfo");
 		CmisObject cmisObject = (CmisObject) model.get("cmisObject");
 
-		if(bulkInfo.getCmisTypeName() != null) {
+		if(Optional.ofNullable(bulkInfo).map(BulkInfoCool::getCmisTypeName).isPresent()) {
 			result.addProperty("cmisObjectTypeId", bulkInfo.getCmisTypeName());
 		}
 		result.addProperty("action", "/crud/cmis/object?cmis:objectId=" + (cmisObject != null ? cmisObject.getId() : "") ); //<#if cmisObject??>${cmisObject.id}</#if>");

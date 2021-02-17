@@ -28,6 +28,7 @@ import java.text.ParseException;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.Optional;
 
 /**
  * Classe di utilita' per tradurre pojo BulkInfo in Json
@@ -56,7 +57,7 @@ public abstract class BulkInfoSerializer {
 
     BulkInfo bulkInfo = (BulkInfo) model.get("bulkInfo");
 
-    result.addProperty("id", bulkInfo.getId());
+    result.addProperty("id", Optional.ofNullable(bulkInfo).map(BulkInfo::getId).orElse(""));
 
     // EXTENSION POINT
     // implement the protected putCustomProperties() method in sublcasses
