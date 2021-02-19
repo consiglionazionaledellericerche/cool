@@ -38,6 +38,7 @@ define(['jquery'], function ($) {
         selectedItem.addClass(customClass);
       } else {
         wid.hide();
+        $('[class*="' + item.name + '"]:not(".' + item.name + '_false' + '")').val('');
       }
     }
 
