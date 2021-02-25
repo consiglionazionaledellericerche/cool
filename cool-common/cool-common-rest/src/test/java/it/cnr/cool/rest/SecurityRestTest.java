@@ -25,6 +25,7 @@ import it.cnr.cool.security.CMISAuthenticatorFactory;
 import it.cnr.cool.security.service.UserService;
 import it.cnr.cool.security.service.impl.alfresco.CMISUser;
 import it.cnr.cool.service.I18nService;
+import it.cnr.mock.RequestUtils;
 import org.json.JSONObject;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Test;
@@ -94,12 +95,12 @@ public class SecurityRestTest {
         form.add("email", "pippo.paperino@pluto.it");
         form.add("codicefiscale", "LNUFNC84P23H501L");
 
-        Response outcome = security.doCreateUser(req, form, "it");
+        Response outcome = security.doCreateUser(req, form, RequestUtils.LANG.it.name());
         assertEquals(Status.INTERNAL_SERVER_ERROR.getStatusCode(), outcome.getStatus());
 
         form.remove("codicefiscale");
         form.add("codicefiscale", "SSSSSS73H02C495G");
-        outcome = security.doCreateUser(req, form, "it");
+        outcome = security.doCreateUser(req, form, RequestUtils.LANG.it.name());
         LOGGER.debug(outcome.getEntity().toString());
         assertEquals(Status.OK.getStatusCode(), outcome.getStatus());
     }
@@ -107,7 +108,7 @@ public class SecurityRestTest {
     @Test
     public void test1ConfirmAccountFail() throws Exception {
         MockHttpServletRequest req = new MockHttpServletRequest();
-        Response response = security.confirmAccount(req, NEWUSERNAME, "INVALID_PIN", "IT");
+        Response response = security.confirmAccount(req, NEWUSERNAME, "INVALID_PIN", RequestUtils.LANG.it.name());
         assertEquals(Status.FORBIDDEN.getStatusCode(), response.getStatus());
     }
 
@@ -125,7 +126,7 @@ public class SecurityRestTest {
     public void test3ConfirmAccount() throws Exception {
         CMISUser user = userService.loadUserForConfirm(NEWUSERNAME);
         MockHttpServletRequest req = new MockHttpServletRequest();
-        Response response = security.confirmAccount(req, NEWUSERNAME, user.getPin(), "IT");
+        Response response = security.confirmAccount(req, NEWUSERNAME, user.getPin(), RequestUtils.LANG.it.name());
         assertEquals(Status.SEE_OTHER.getStatusCode(), response.getStatus());
     }
 

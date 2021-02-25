@@ -18,10 +18,12 @@
 package it.cnr.mock;
 
 import javax.ws.rs.core.MultivaluedMap;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.stream.Stream;
 
 public final class RequestUtils {
 	
@@ -33,5 +35,17 @@ public final class RequestUtils {
 			properties.put(appo.getKey(), value.toArray(new String[value.size()]));
 		}
 		return properties;
+	}
+
+	public enum LANG {
+		it,en;
+
+		public static Stream<String> allowedValues() {
+			return Arrays.asList(RequestUtils.LANG.values()).stream().map(lang -> lang.name());
+		}
+
+		public static boolean isAllowed(String s) {
+			return Arrays.asList(RequestUtils.LANG.values()).stream().map(lang -> lang.name()).anyMatch(lang -> lang.equalsIgnoreCase(s));
+		}
 	}
 }

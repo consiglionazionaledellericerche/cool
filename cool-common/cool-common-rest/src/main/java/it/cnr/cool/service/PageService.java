@@ -24,6 +24,7 @@ import it.cnr.cool.rest.SecurityRest;
 import it.cnr.cool.security.service.impl.alfresco.CMISUser;
 import it.cnr.cool.web.PermissionService;
 import it.cnr.mock.CnrRegion;
+import it.cnr.mock.RequestUtils;
 import org.apache.commons.io.IOUtils;
 import org.dom4j.Document;
 import org.dom4j.DocumentException;
@@ -183,7 +184,9 @@ public class PageService implements InitializingBean{
 		context.put("page", currentPage);
 		model.put("context", context);
 
-		model.put("locale_suffix", locale.getLanguage());
+		model.put("locale_suffix", Optional.ofNullable(locale.getLanguage())
+				.filter(s -> s.matches(SecurityRest.REGEX))
+				.orElse(RequestUtils.LANG.it.name()));
 
 		model.put("pages", getPages());
 

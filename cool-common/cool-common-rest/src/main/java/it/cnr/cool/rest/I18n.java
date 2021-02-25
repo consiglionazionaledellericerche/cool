@@ -20,6 +20,7 @@ package it.cnr.cool.rest;
 
 import it.cnr.cool.rest.util.Util;
 import it.cnr.cool.service.I18nService;
+import it.cnr.mock.RequestUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -58,7 +59,10 @@ public class I18n {
 
 		LOGGER.debug(method + " " + uri);
 
-		String actualLanguage = Optional.ofNullable(lang).orElse(__lang);
+		String actualLanguage = Optional.ofNullable(lang)
+				.filter(s -> s.matches(SecurityRest.REGEX))
+				.filter(s -> RequestUtils.LANG.isAllowed(s))
+				.orElse(__lang);
 		LOGGER.info("actual language: {}", actualLanguage);
 		Locale locale = I18nService.getLocale(request, actualLanguage);
 

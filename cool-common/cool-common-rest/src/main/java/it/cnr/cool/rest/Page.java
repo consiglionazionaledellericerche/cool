@@ -105,6 +105,10 @@ public class Page {
 	}
 
 	private String i18nCookie(HttpServletResponse res, String lang, String reqLang, boolean secure) {
+		reqLang = Optional.ofNullable(reqLang)
+				.filter(s -> s.matches(SecurityRest.REGEX))
+				.filter(s -> RequestUtils.LANG.isAllowed(s))
+				.orElse(RequestUtils.LANG.it.name());
 		if (reqLang != null && reqLang.length() > 0 && res != null) {
 			ResponseCookie cookie = ResponseCookie.from("__lang", reqLang)
 					.path("/")
@@ -123,6 +127,9 @@ public class Page {
 									Map<String, List<String>> formParams, String cookieLang, String reqLang) {
 
 		ResponseBuilder rb;
+		reqLang = Optional.ofNullable(reqLang)
+				.filter(s -> s.matches(SecurityRest.REGEX))
+				.orElse(RequestUtils.LANG.it.name());
 		String lang = i18nCookie(res, cookieLang, reqLang,req.isSecure());
 		CoolPage page = pageService.loadPages().get(id);
 		CMISUser user = cmisService.getCMISUserFromSession(req);
