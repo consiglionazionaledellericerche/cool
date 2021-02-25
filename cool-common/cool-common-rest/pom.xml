@@ -20,7 +20,7 @@
     <parent>
         <groupId>it.cnr.si.cool</groupId>
         <artifactId>cool-common</artifactId>
-        <version>3.2.32</version>
+        <version>3.2.33-SNAPSHOT</version>
     </parent>
 
     <artifactId>cool-common-rest</artifactId>
