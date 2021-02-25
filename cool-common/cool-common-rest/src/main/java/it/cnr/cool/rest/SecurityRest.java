@@ -83,9 +83,9 @@ public class SecurityRest {
     private Boolean cookieSecure;
 
     static String getUrl(HttpServletRequest req) {
-        StringBuffer url = req.getRequestURL();
-        int l = url.indexOf(req.getServletPath());
-        return url.substring(0, l);
+        return req.getScheme() + "://" +
+                Optional.ofNullable(req.getHeader("Host")).orElseGet(() -> req.getServerName() + ":"
+                        + req.getServerPort()) + req.getContextPath();
     }
 
     @POST
@@ -225,7 +225,7 @@ public class SecurityRest {
     @POST
     @Path("recover-password")
     public Response recoverPassword(@Context HttpServletRequest req, @FormParam("email") String email) {
-        CMISUser userByEmail = userService.findUserByEmail(email, cmisService.getCurrentBindingSession(req));
+        CMISUser userByEmail = userService.findUserByEmail(email, cmisService.getAdminSession());
         return Response.ok(
                 Collections.singletonMap("userName",
                         Optional.ofNullable(userByEmail)
