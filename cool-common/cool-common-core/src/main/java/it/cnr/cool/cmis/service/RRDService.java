@@ -85,6 +85,9 @@ public class RRDService implements InitializingBean {
     @Value("${rrd.skipmd5:false}")
     private boolean skipMD5;
 
+    @Value("${rrd.excludefiles}")
+    private List<String> excludeFiles;
+
     @Override
     public void afterPropertiesSet() throws Exception {
         if (!versionService.isProduction()) {
@@ -210,7 +213,7 @@ public class RRDService implements InitializingBean {
                 + " " + cmisSession.getRepositoryInfo().getProductVersion();
         String address = InetAddress.getLocalHost().getHostAddress();
         Optional.ofNullable(differentFiles.stream()
-                .filter(s -> !s.contains("rbac.get.json.ftl"))
+                .filter(s -> !excludeFiles.stream().anyMatch(s1 -> s.contains(s1)))
                 .collect(Collectors.joining("<br>")))
                 .filter(s -> !s.isEmpty())
                 .ifPresent(s -> {
