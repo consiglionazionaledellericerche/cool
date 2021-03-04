@@ -282,27 +282,22 @@ public class CMISService implements InitializingBean, CMISSessionManager {
 
     public String extractTicketFromRequest(HttpServletRequest req) {
 
-        String ticket;
+        String ticket = null;
 
         String authorization = req.getHeader("Authorization");
 
         if (authorization != null) {
-
             LOGGER.info("basic auth: " + authorization);
-
-            Credentials credentials = extractCredentials(authorization);
-
-            String username = credentials.getUsername();
-            String password = credentials.getPassword();
-
-            LOGGER.debug("basic auth user: " + username);
-
-            ticket = cmisAuthenticatorFactory.authenticate(username, password);
-
+            Optional<Credentials> credentials = extractCredentials(authorization);
+            if (credentials.isPresent()) {
+                String username = credentials.get().getUsername();
+                String password = credentials.get().getPassword();
+                LOGGER.debug("basic auth user: " + username);
+                ticket = cmisAuthenticatorFactory.authenticate(username, password);
+            }
         } else {
             ticket = req.getHeader(AUTHENTICATION_HEADER);
         }
-
 
         if (ticket != null) {
             LOGGER.info("extracted ticket: " + ticket);
@@ -323,16 +318,18 @@ public class CMISService implements InitializingBean, CMISSessionManager {
         return ticket;
     }
 
-
-
-    private static Credentials extractCredentials(String authorization) {
-
-        if (authorization == null || authorization.isEmpty()) {
+    private static Optional<Credentials> extractCredentials(String authorization) {
+        if (!Optional.ofNullable(authorization)
+                .filter(s -> !s.isEmpty())
+                .map(s -> s.split(" "))
+                .filter(strings -> strings.length == 2)
+                .isPresent()) {
             LOGGER.debug("no authorization header provided");
-            return null;
+            return Optional.empty();
         }
 
-        String usernameAndPasswordBase64 = authorization.split(" ")[1];
+        final String[] s = authorization.split(" ");
+        String usernameAndPasswordBase64 = s[1];
 
         byte[] usernameAndPasswordByteArray = DatatypeConverter.parseBase64Binary(usernameAndPasswordBase64);
 
@@ -343,9 +340,8 @@ public class CMISService implements InitializingBean, CMISSessionManager {
 
         LOGGER.info("using BASIC auth for user: " + username);
 
-        return new Credentials(username, password);
+        return Optional.of(new Credentials(username, password));
 
     }
-
 
 }

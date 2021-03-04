@@ -242,6 +242,14 @@ public class CMISServiceTest {
     }
 
     @Test
+    public void testAuthorizationInvalid() {
+        MockHttpServletRequest request = new MockHttpServletRequest();
+        request.addHeader("Authorization", "Basic ");
+
+        assertNull(cmisService.extractTicketFromRequest(request));
+    }
+
+    @Test
     public void testExtractTicketFromRequestXAlfrescoTicket() {
         MockHttpServletRequest request = new MockHttpServletRequest();
         String ticket = cmisAuthenticatorFactory.authenticate(ADMIN_USERNAME, ADMIN_PASSWORD);
