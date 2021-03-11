@@ -56,7 +56,7 @@ public class BulkInfoRepository {
     public ObjectType getObjectType(String bulkTypeName) {
         LOGGER.info("loading from CMIS server type: " + bulkTypeName);
         try {
-            return cmisService.createAdminSession().getTypeDefinition(bulkTypeName);        	
+            return cmisService.createAdminSession().getTypeDefinition(bulkTypeName, false);
         } catch (CmisObjectNotFoundException _ex) {
             LOGGER.warn("Type: {} not found!", bulkTypeName);
         	return null;
