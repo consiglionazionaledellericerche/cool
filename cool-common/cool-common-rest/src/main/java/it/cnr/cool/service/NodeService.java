@@ -61,10 +61,10 @@ public class NodeService {
 	private static final String STATUS_TO_BE_INSERT = "INSERT";
 	private static final String STATUS_TO_BE_UPDATE = "UPDATE";
 
-	@Value("${multipart.resolver.default.upload.size:15360000}")
+	@Value("${multipart.resolver.default.upload.size}")
 	private Long defaultUploadSize;
 
-	@Value("${multipart.resolver.max.upload.size:262144000}")
+	@Value("${multipart.resolver.max.upload.size}")
 	private Long maxUploadSize;
 
 	@Value("${multipart.resolver.encoding:UTF-8}")
@@ -73,7 +73,9 @@ public class NodeService {
 	@Bean("resolver")
 	public CommonsMultipartResolver getResolver() {
 		CustomMultipartResolver customMultipartResolver = new CustomMultipartResolver();
-		customMultipartResolver.setMaxUploadSize(defaultUploadSize);
+		customMultipartResolver.setMaxUploadSize(
+				Optional.ofNullable(defaultUploadSize).orElse(Long.valueOf(15360000))
+		);
 		customMultipartResolver.setCharacterEncoding(multipartResolverEncoding);
 		return customMultipartResolver;
 	}
@@ -81,7 +83,9 @@ public class NodeService {
 	@Bean("multipartResolverMax")
 	public CommonsMultipartResolver getResolverMax() {
 		CustomMultipartResolver customMultipartResolver = new CustomMultipartResolver();
-		customMultipartResolver.setMaxUploadSize(maxUploadSize);
+		customMultipartResolver.setMaxUploadSize(
+				Optional.ofNullable(maxUploadSize).orElse(Long.valueOf(262144000))
+		);
 		customMultipartResolver.setCharacterEncoding(multipartResolverEncoding);
 		return customMultipartResolver;
 	}
