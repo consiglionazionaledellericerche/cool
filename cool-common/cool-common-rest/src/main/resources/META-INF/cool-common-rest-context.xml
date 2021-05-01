@@ -95,5 +95,4 @@
     <bean class="it.cnr.cool.service.ProxyService">
         <property name="proxyInterceptor" ref="proxyInterceptor"/>
     </bean>
-    <bean id="securityCheckInterceptor" class="it.cnr.cool.security.SecurityCheckInterceptor"></bean>
 </beans>

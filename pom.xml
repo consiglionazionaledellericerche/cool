@@ -32,14 +32,14 @@
 
   <properties>
     <opencmis.version>1.1.0</opencmis.version>
-    <spring.version>5.1.6.RELEASE</spring.version>
+    <spring.version>5.3.6</spring.version>
     <jslint4java.version>2.0.2</jslint4java.version>
     <junit.version>5.4.2</junit.version>
     <slf4j.version>1.7.21</slf4j.version>
     <dom4j.version>1.6</dom4j.version>
     <jaxen.version>1.1.4</jaxen.version>
     <mail.version>1.5.6</mail.version>
-    <cnr.rest.version>1.0.1</cnr.rest.version>
+    <cnr.rest.version>2.0.0</cnr.rest.version>
     <servlet.version>3.1.0</servlet.version>
   </properties>
 
