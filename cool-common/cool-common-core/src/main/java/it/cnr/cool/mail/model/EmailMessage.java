@@ -30,6 +30,7 @@ import java.util.List;
 public class EmailMessage implements Serializable {
 	private static final long serialVersionUID = 1L;
 	private String sender;
+	private String replyTo;
 	private String subject;
 	private StringBuffer body;
 	private String templateBody;
@@ -138,5 +139,13 @@ public class EmailMessage implements Serializable {
 	}
 	public void setHtmlBody(boolean htmlBody) {
 		this.htmlBody = htmlBody;
+	}
+
+	public String getReplyTo() {
+		return replyTo;
+	}
+
+	public void setReplyTo(String replyTo) {
+		this.replyTo = replyTo;
 	}
 }

@@ -38,6 +38,7 @@ import org.springframework.mail.javamail.MimeMessagePreparator;
 
 import javax.activation.CommandMap;
 import javax.activation.MailcapCommandMap;
+import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 import java.io.*;
 import java.util.*;
@@ -106,7 +107,14 @@ public class MailServiceImpl implements MailService, InitializingBean {
 
 			message.setSubject(emailMessage.getSubject());
 			message.setText(bodyMessage.toString(), emailMessage.isHtmlBody());
-
+			Optional.ofNullable(emailMessage.getReplyTo())
+					.ifPresent(s -> {
+						try {
+							message.setReplyTo(s);
+						} catch (MessagingException e) {
+							throw new RuntimeException(e);
+						}
+					});
 			if (emailMessage.getCcRecipients()!=null && !emailMessage.getCcRecipients().isEmpty())
 				message.setCc(emailMessage.getCcRecipients().toArray(new String[emailMessage.getCcRecipients().size()]));
 			if (emailMessage.getBccRecipients()!=null && !emailMessage.getBccRecipients().isEmpty())
