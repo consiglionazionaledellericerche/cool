@@ -1,1 +1,0 @@
-##Selezioni online - Funzione pubblica remote resources
