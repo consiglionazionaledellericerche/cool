@@ -108,6 +108,7 @@ public class RRDService implements InitializingBean {
         Boolean webscriptCreated = Boolean.FALSE;
         List<Document> documentsToBeActive = new ArrayList<Document>();
         List<String> differentFiles = new ArrayList<String>();
+        List<String> cmisPaths = new ArrayList<String>();
         for (Resource resource : resources) {
             if (!resource.isReadable())
                 continue;
@@ -120,9 +121,12 @@ public class RRDService implements InitializingBean {
 
             String cmisPath = URIUtil.decode(substring);
             LOGGER.debug(urlPath);
+            if (cmisPaths.contains(cmisPath)) {
+                continue;
+            }
             try {
                 CmisObject doc = cmisSession.getObjectByPath(cmisPath);
-
+                cmisPaths.add(cmisPath);
                 if (doc instanceof Document) {
                     InputStream remote = ((Document) doc).getContentStream().getStream();
                     InputStream local = resource.getInputStream();
@@ -130,9 +134,7 @@ public class RRDService implements InitializingBean {
                         LOGGER.error("different md5 for element " + cmisPath);
                         differentFiles.add(cmisPath);
                     }
-
                 }
-
             } catch (CmisObjectNotFoundException _ex) {
                 LOGGER.debug("object not found: {}", resource, _ex);
                 String fileName = cmisPath.substring(cmisPath.lastIndexOf("/") + 1);
