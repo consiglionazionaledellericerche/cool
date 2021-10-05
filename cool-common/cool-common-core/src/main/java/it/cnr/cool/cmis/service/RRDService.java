@@ -197,7 +197,7 @@ public class RRDService implements InitializingBean {
                     document.updateProperties(properties);
                     iterator.remove();
                 } catch (Exception ex) {
-                    LOGGER.warn("Cannot activate Model:" + document.getName(), ex);
+                    LOGGER.warn("Cannot activate Model: {}, check in the Alfresco templates and messages console!", document.getName());
                 }
             }
         }
