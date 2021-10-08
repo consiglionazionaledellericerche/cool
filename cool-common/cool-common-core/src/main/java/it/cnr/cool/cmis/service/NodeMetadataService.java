@@ -62,9 +62,13 @@ public class NodeMetadataService {
 			List<PropertyDefinition<?>> propertyDefinitions,
 			HttpServletRequest request) throws ParseException {
 		final boolean debug = LOGGER.isDebugEnabled();
-		DecimalFormat nf = (DecimalFormat) NumberFormat
-				.getInstance(CMISService.DEFAULT_LOCALE);
-		nf.setParseBigDecimal(true);
+		DecimalFormatSymbols symbols = new DecimalFormatSymbols();
+		symbols.setGroupingSeparator(',');
+		symbols.setDecimalSeparator('.');
+		String pattern = "#";
+		DecimalFormat decimalFormat = new DecimalFormat(pattern, symbols);
+		decimalFormat.setParseBigDecimal(true);
+
 		Map<String, Object> properties = new HashMap<String, Object>();
 		for (PropertyDefinition<?> propertyDefinition : propertyDefinitions) {
 			if (propertyDefinition.getCardinality().equals(Cardinality.MULTI)) {
@@ -96,8 +100,7 @@ public class NodeMetadataService {
 								}
 								value.add(s);
 							} else if (propertyDefinition instanceof PropertyDecimalDefinition) {
-								value.add(nf.parse(propertyValue[i],
-										new ParsePosition(0)));
+								value.add(decimalFormat.parse(propertyValue[i]));
 							} else {
 								throw new CoolException(
 										"Failed to get parameter value:"
@@ -133,8 +136,7 @@ public class NodeMetadataService {
 								value = scriptPattern.matcher(value.toString()).replaceAll("");
 							}
 						} else if (propertyDefinition instanceof PropertyDecimalDefinition) {
-							value = nf.parse(propertyValue,
-									new ParsePosition(0));
+							value = decimalFormat.parse(propertyValue);
 						} else {
 							throw new CoolException(
 									"Failed to get parameter value:"
