@@ -122,6 +122,10 @@
         <formFieldProperty name="dataDiNascita"/>
         <formFieldProperty name="statoestero" class="span12"/>
     </form>
+    <form name="changeEmail">
+        <formFieldProperty name="email" class="w-100"/>
+        <formFieldProperty name="confirmEmail" class="w-100"/>
+    </form>
 
     <form name="createUser">
         <formFieldProperty name="firstName"/>

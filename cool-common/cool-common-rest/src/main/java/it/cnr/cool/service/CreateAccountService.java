@@ -158,8 +158,6 @@ public class CreateAccountService {
             }
 
             if (model.containsKey("account")) {
-
-
                 Map<String, Object> data = new HashMap<String, Object>();
                 Map<String, Object> userData = new HashMap<String, Object>();
 

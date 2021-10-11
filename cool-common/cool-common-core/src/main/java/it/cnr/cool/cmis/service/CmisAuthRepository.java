@@ -29,6 +29,7 @@ import org.apache.commons.httpclient.HttpStatus;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Repository;
@@ -62,6 +63,10 @@ public class CmisAuthRepository {
         return createSession("", ticket);
     }
 
+    @CacheEvict(value= USER, key="#ticket")
+    public void removeTicketFromCache(String ticket) {
+        LOGGER.info("cleared ticket with id {}", ticket);
+    }
 
     @Cacheable(value= USER, key="#ticket")
     public CMISUser getCachedCMISUser(String ticket, BindingSession bindingSession) {

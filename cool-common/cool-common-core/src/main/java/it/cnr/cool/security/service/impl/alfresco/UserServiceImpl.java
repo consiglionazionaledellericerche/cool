@@ -252,7 +252,6 @@ public class UserServiceImpl implements UserService{
 		} catch (IOException e) {
 			throw new CoolUserFactoryException("Create user error.", e);
 		}
-
 		return loadUser(user.getId(), cmisSession);
 	}
 

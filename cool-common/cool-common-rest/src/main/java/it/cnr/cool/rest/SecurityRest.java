@@ -136,6 +136,7 @@ public class SecurityRest {
         CMISUser user;
         try {
             BindingSession bindingSession = cmisService.getCurrentBindingSession(request);
+            cmisService.removeTicketFromCache(cmisService.extractTicketFromRequest(request));
             user = userService.loadUser(oldUser.getId(), bindingSession);
             LOGGER.debug("lodad user: " + user.getId());
         } catch (CoolUserFactoryException e) {

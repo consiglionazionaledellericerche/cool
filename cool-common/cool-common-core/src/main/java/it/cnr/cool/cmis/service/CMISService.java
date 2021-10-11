@@ -344,4 +344,7 @@ public class CMISService implements InitializingBean, CMISSessionManager {
 
     }
 
+    public void removeTicketFromCache(String ticket) {
+        cmisAuthRepository.removeTicketFromCache(ticket);
+    }
 }
