@@ -34,7 +34,8 @@ public interface UserService {
 	CMISUser updateUser(CMISUser user) throws CoolUserFactoryException;
 	void deleteUser(CMISUser user) throws CoolUserFactoryException;
 	CMISUser findUserByEmail(String email, BindingSession cmisSession) throws CoolUserFactoryException;
-	CMISUser findUserByCodiceFiscale(String codicefiscale, BindingSession cmisSession) throws CoolUserFactoryException;	
+	CMISUser findUserByCodiceFiscale(String codicefiscale, BindingSession cmisSession) throws CoolUserFactoryException;
+	CMISUser findUserByCodiceFiscale(String codicefiscale, BindingSession cmisSession, String userName) throws CoolUserFactoryException;
 	InputStream findUser(String term, BindingSession cmisSession) throws CoolUserFactoryException;
 	boolean isUserExists(String userId);
 	CMISUser changeUserPassword(final CMISUser user, String newPassword) throws CoolUserFactoryException;

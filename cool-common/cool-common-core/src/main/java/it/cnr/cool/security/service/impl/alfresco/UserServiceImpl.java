@@ -48,6 +48,8 @@ import java.io.*;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.IntStream;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 @Service
@@ -176,11 +178,10 @@ public class UserServiceImpl implements UserService{
 			return null;
 		}
 	}
-
 	@Override
-	public CMISUser findUserByCodiceFiscale(String codicefiscale, BindingSession cmisSession) throws CoolUserFactoryException {
+	public CMISUser findUserByCodiceFiscale(String codicefiscale, BindingSession cmisSession, String userName) throws CoolUserFactoryException {
 		String link = cmisService.getBaseURL().concat(SERVICE_CNR_PERSON_PEOPLE).concat("?filter=codicefiscale:"+codicefiscale);
-        UrlBuilder url = new UrlBuilder(link);
+		UrlBuilder url = new UrlBuilder(link);
 		Response resp = CmisBindingsHelper.getHttpInvoker(cmisSession).invokeGET(url, cmisSession);
 		int status = resp.getResponseCode();
 		if (status == HttpStatus.SC_NOT_FOUND
@@ -195,13 +196,25 @@ public class UserServiceImpl implements UserService{
 				return null;
 			else if (jsonArray.length() == 1) {
 				return gsonParser.fromJson( new StringReader(jsonArray.getJSONObject(0).toString()), CMISUser.class);
-			}else {
+			} else {
+				if (userName != null) {
+					return IntStream
+							.range(0, jsonArray.length())
+							.mapToObj(i -> gsonParser.fromJson(new StringReader(jsonArray.getJSONObject(i).toString()), CMISUser.class))
+							.filter(cmisUser -> cmisUser.getUserName().equalsIgnoreCase(userName))
+							.findAny()
+							.orElseThrow(() -> new CoolUserFactoryException("For this tax code "+codicefiscale+" found user: "+ jsonArray.length()));
+				}
 				throw new CoolUserFactoryException("For this tax code "+codicefiscale+" found user: "+ jsonArray.length());
 			}
 		} catch (JSONException e) {
 			LOGGER.error("json exception", e);
 			return null;
 		}
+	}
+	@Override
+	public CMISUser findUserByCodiceFiscale(String codicefiscale, BindingSession cmisSession) throws CoolUserFactoryException {
+		return findUserByCodiceFiscale(codicefiscale, cmisSession, null);
 	}
 
 	@Override
