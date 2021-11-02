@@ -169,10 +169,13 @@ public class AlfrescoHandler implements ILoggerHandler, InitializingBean {
 					permissionsConsumer.add(ACLType.Consumer.name());
 					Ace aceContributor = new AccessControlEntryImpl(
 							ace.getPrincipal(), permissionsConsumer);
-					removeAces.add(aceContributor);
+					if (ace.isDirect()) {
+						removeAces.add(aceContributor);
+					}
 				}
 				doc.applyAcl(newAces, removeAces, null);
-				doc.setContentStream(contentStream, true);
+				((Document)adminSession.getObject(nodeRefToEdit))
+						.setContentStream(contentStream, true);
 			} else {
 				doc = parent.createDocument(properties, contentStream, VersioningState.MAJOR);
 				// se la notice è stata creata, ovviamente non avrà gli acl

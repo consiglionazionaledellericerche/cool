@@ -146,11 +146,7 @@ define(['jquery', 'header', 'cnr/cnr.bulkinfo', 'i18n', 'cnr/cnr', 'cnr/cnr.ui.a
   }
 
   function showDelete(docs) {
-    target
-        .html('')
-        .append('<br/>')
-        .append('<span class="label">' + docs.totalNumItems + ' ' + $('#typeDocument .active').data('state') + ' cancellato</span>')
-        .append('<br/>');
+    UI.info($('#typeDocument .active').data('state') + ' è stato cancellato');
   }
 
   function mostraDati(docs) {
@@ -247,8 +243,7 @@ define(['jquery', 'header', 'cnr/cnr.bulkinfo', 'i18n', 'cnr/cnr', 'cnr/cnr.ui.a
       },
       success: function (data) {
         showDelete(data);
-        spinner.remove();
-        target.fadeIn();
+        $('#applyFilter').click();
       },
       error: function () {
         UI.error('Errore nella rimozione dei Documenti');

@@ -112,9 +112,9 @@ public class Content {
 			res.setStatus(HttpStatus.SC_INTERNAL_SERVER_ERROR);
 		} catch (IOException e) {
 			if (e.getCause() instanceof SocketException) {
-				LOGGER.warn("unable to send content {} {}", path, nodeRef, e);
+				LOGGER.warn("unable to send content {} {}", path, nodeRef);
 			} else {
-				LOGGER.error("unable to get content for path " + path + " or nodeRef "+ nodeRef + ", URL " + req.getRequestURL() + " - " + e.getMessage(), e);				
+				LOGGER.error("unable to get content for path {}  or nodeRef {}, URL {} Message: {}", path, nodeRef, req.getRequestURL(), e.getMessage());
 			}
 			res.setStatus(HttpStatus.SC_INTERNAL_SERVER_ERROR);
 		}

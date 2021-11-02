@@ -37,14 +37,14 @@ public class AlfrescoDocument {
         createdBy = doc.getPropertyValue(PropertyIds.CREATED_BY);
         dataCreazione = ALFRESCO_DATE_FORMAT.format(((GregorianCalendar) doc.getPropertyValue(PropertyIds.CREATION_DATE)).getTime());
         name = doc.getPropertyValue(PropertyIds.NAME);
-        nodeRef = doc.getPropertyValue(PropertyIds.OBJECT_ID);
+        nodeRef = doc.getPropertyValue("alfcmis:nodeRef");
     }
 
     public AlfrescoDocument(QueryResult doc) {
         createdBy = doc.getPropertyValueById(PropertyIds.CREATED_BY);
         dataCreazione = ALFRESCO_DATE_FORMAT.format(((GregorianCalendar) doc.getPropertyValueById(PropertyIds.CREATION_DATE)).getTime());
         name = doc.getPropertyValueById(PropertyIds.NAME);
-        nodeRef = doc.getPropertyValueById(PropertyIds.OBJECT_ID);
+        nodeRef = doc.getPropertyValueById("alfcmis:nodeRef");
     }
 
 
