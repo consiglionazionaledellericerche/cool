@@ -89,7 +89,7 @@ public class ACLService {
 		if (status == HttpStatus.SC_NOT_FOUND
 				|| status == HttpStatus.SC_BAD_REQUEST
 				|| status == HttpStatus.SC_INTERNAL_SERVER_ERROR)
-			throw new CoolException("Create user error. Exception: "
+			throw new CoolException("Cannot POST permission. Exception: "
 					+ resp.getErrorContent());
 	}
 
@@ -115,7 +115,7 @@ public class ACLService {
 		if (status == HttpStatus.SC_NOT_FOUND
 				|| status == HttpStatus.SC_BAD_REQUEST
 				|| status == HttpStatus.SC_INTERNAL_SERVER_ERROR)
-			throw new CoolException("Create user error. Exception: "
+			throw new CoolException("Cannot chenge ownership. Exception: "
 					+ resp.getErrorContent());
 	}
 
@@ -140,7 +140,7 @@ public class ACLService {
 		if (status == HttpStatus.SC_NOT_FOUND
 				|| status == HttpStatus.SC_BAD_REQUEST
 				|| status == HttpStatus.SC_INTERNAL_SERVER_ERROR)
-			throw new CoolException("Create user error. Exception: "
+			throw new CoolException("Cannot set Inherited Permission. Exception: "
 					+ resp.getErrorContent());
 	}
 
