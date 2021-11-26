@@ -24,6 +24,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.Locale;
 import java.util.regex.Pattern;
@@ -79,6 +80,12 @@ public final class StringUtil {
 
     }
 
+	public static String removeXSS(String s) {
+		for (Pattern scriptPattern : StringUtil.patternsXSS){
+			s = scriptPattern.matcher(s).replaceAll("");
+		}
+		return s;
+	}
 
 	public static String readableFileSize(long size) {
 	    if(size <= 0) return "0";

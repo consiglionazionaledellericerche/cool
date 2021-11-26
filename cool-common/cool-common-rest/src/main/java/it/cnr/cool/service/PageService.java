@@ -22,6 +22,7 @@ import it.cnr.cool.dto.CoolPage;
 import it.cnr.cool.dto.CoolPage.Authentication;
 import it.cnr.cool.rest.SecurityRest;
 import it.cnr.cool.security.service.impl.alfresco.CMISUser;
+import it.cnr.cool.util.StringUtil;
 import it.cnr.cool.web.PermissionService;
 import it.cnr.mock.CnrRegion;
 import it.cnr.mock.RequestUtils;
@@ -214,7 +215,7 @@ public class PageService implements InitializingBean{
 			if (valuez.length > 0) {
 				final String s = valuez[0];
 				if (s.matches(SecurityRest.REGEX)) {
-					args.put((String) key, s);
+					args.put(StringUtil.removeXSS((String) key), StringUtil.removeXSS(s));
 				}
 			}
 		}
