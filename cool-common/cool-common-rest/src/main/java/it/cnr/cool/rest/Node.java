@@ -32,6 +32,7 @@ import org.apache.chemistry.opencmis.client.api.OperationContext;
 import org.apache.chemistry.opencmis.client.api.Session;
 import org.apache.chemistry.opencmis.client.runtime.OperationContextImpl;
 import org.apache.chemistry.opencmis.commons.exceptions.CmisContentAlreadyExistsException;
+import org.apache.chemistry.opencmis.commons.exceptions.CmisPermissionDeniedException;
 import org.apache.chemistry.opencmis.commons.exceptions.CmisUnauthorizedException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -118,7 +119,7 @@ public class Node {
 			String message = "Il file ( " + readableFileSize + ") supera la dimensione massima consentita (" + readableFileSize(_ex.getMaxUploadSize()) + ")";
 			model.put("message", message);
 			rb = Response.status(Status.INTERNAL_SERVER_ERROR).entity(model);			
-		} catch(CmisUnauthorizedException _ex) {
+		} catch(CmisUnauthorizedException| CmisPermissionDeniedException _ex) {
 			LOGGER.error("unauthorized", _ex);
 			rb = Response.status(Status.UNAUTHORIZED);			
 		} catch (Exception e) {
@@ -139,7 +140,7 @@ public class Node {
 		try {
 			String json = serializeJson(l);
 			rb = Response.ok(json);
-		} catch(CmisUnauthorizedException _ex) {
+		} catch(CmisUnauthorizedException|CmisPermissionDeniedException _ex) {
 			rb = Response.status(Status.UNAUTHORIZED);			
 		} catch (Exception e) {
 			LOGGER.error("Exception: " + e.getMessage(), e);
@@ -180,7 +181,7 @@ public class Node {
 				CacheControl cache = Util.getCache(MAX_AGE);
 				builder.cacheControl(cache);
 			}
-		} catch(CmisUnauthorizedException _ex) {
+		} catch(CmisUnauthorizedException|CmisPermissionDeniedException _ex) {
 			builder = Response.status(Status.UNAUTHORIZED);
 		} catch (Exception e) {
 			model.put("message", e.getMessage());
@@ -206,7 +207,7 @@ public class Node {
 			CmisObject cmisObject = nodeMetedataService.updateObjectProperties(
 					formParamz, session, req);
 			builder = Response.ok(CMISUtil.convertToProperties(cmisObject));
-		} catch(CmisUnauthorizedException _ex) {
+		} catch(CmisUnauthorizedException|CmisPermissionDeniedException _ex) {
 			builder = Response.status(Status.UNAUTHORIZED);
 		} catch (Exception e) {
 			if (!(e.getCause() instanceof CmisContentAlreadyExistsException))

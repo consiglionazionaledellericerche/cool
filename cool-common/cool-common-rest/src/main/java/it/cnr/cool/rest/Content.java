@@ -24,6 +24,7 @@ import org.apache.chemistry.opencmis.client.api.Document;
 import org.apache.chemistry.opencmis.client.api.Session;
 import org.apache.chemistry.opencmis.commons.data.ContentStream;
 import org.apache.chemistry.opencmis.commons.exceptions.CmisObjectNotFoundException;
+import org.apache.chemistry.opencmis.commons.exceptions.CmisPermissionDeniedException;
 import org.apache.chemistry.opencmis.commons.exceptions.CmisUnauthorizedException;
 import org.apache.commons.httpclient.HttpStatus;
 import org.apache.commons.io.IOUtils;
@@ -96,7 +97,7 @@ public class Content {
 			outputStream.flush();
 			inputStream.close();
 			outputStream.close();
-		} catch(CmisUnauthorizedException e) {
+		} catch(CmisUnauthorizedException|CmisPermissionDeniedException e) {
 			return redirect(req, nodeRef, path, "content", e);
 		} catch (CmisObjectNotFoundException _ex) {
 			LOGGER.warn("unable to send content {} {}", path, nodeRef, _ex);
@@ -126,7 +127,7 @@ public class Content {
 		return Response.ok().build();
 	}
 
-	public Response redirect(HttpServletRequest req, String nodeRef, String path, String content, CmisUnauthorizedException e) throws URISyntaxException {
+	public Response redirect(HttpServletRequest req, String nodeRef, String path, String content, Exception e) throws URISyntaxException {
         LOGGER.debug("unauthorized to get {}", nodeRef, e);
         String redirect = "/" + Page.LOGIN_URL;
         redirect = redirect.concat("?redirect=rest/").concat(content);

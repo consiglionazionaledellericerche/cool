@@ -37,6 +37,7 @@ import org.apache.chemistry.opencmis.client.api.*;
 import org.apache.chemistry.opencmis.client.runtime.ObjectIdImpl;
 import org.apache.chemistry.opencmis.client.runtime.OperationContextImpl;
 import org.apache.chemistry.opencmis.commons.PropertyIds;
+import org.apache.chemistry.opencmis.commons.exceptions.CmisPermissionDeniedException;
 import org.apache.chemistry.opencmis.commons.exceptions.CmisUnauthorizedException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -104,7 +105,7 @@ public class FrontOfficeService implements InitializingBean {
             model.put("docs", result);
             if (editor)
                 model.put("maxNotice", alfrescoHandler.getMax(CoolPropertyIds.NOTICE_QUERY_NAME.value(), CoolPropertyIds.NOTICE_NUMBER.value()));
-        } catch (CmisUnauthorizedException e) {
+        } catch (CmisUnauthorizedException| CmisPermissionDeniedException e) {
             LOGGER.error("cmis unauthorized exception", e);
         }
         return model;

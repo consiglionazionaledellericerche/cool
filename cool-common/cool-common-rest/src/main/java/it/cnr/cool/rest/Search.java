@@ -22,6 +22,7 @@ import it.cnr.cool.exception.UnauthorizedException;
 import it.cnr.cool.rest.util.Util;
 import it.cnr.cool.service.QueryService;
 import org.apache.chemistry.opencmis.client.api.Session;
+import org.apache.chemistry.opencmis.commons.exceptions.CmisPermissionDeniedException;
 import org.apache.chemistry.opencmis.commons.exceptions.CmisUnauthorizedException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -64,7 +65,7 @@ public class Search {
         try {
             Session session = cmisService.getCurrentCMISSession(request);
             model = queryService.query(request, session);
-        } catch (CmisUnauthorizedException e) {
+        } catch (CmisUnauthorizedException|CmisPermissionDeniedException e) {
             throw new UnauthorizedException("unauthorized search", e);
         }
         try {

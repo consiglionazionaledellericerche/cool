@@ -17,6 +17,8 @@
 
 package it.cnr.cool.exception;
 
+import org.apache.chemistry.opencmis.commons.exceptions.CmisPermissionDeniedException;
+import org.apache.chemistry.opencmis.commons.exceptions.CmisRuntimeException;
 import org.apache.chemistry.opencmis.commons.exceptions.CmisUnauthorizedException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,9 +33,10 @@ public class UnauthorizedException extends WebApplicationException {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(UnauthorizedException.class);
 
-    public UnauthorizedException(String message, CmisUnauthorizedException e) {
+    public UnauthorizedException(String message, Exception e) {
         super(Response.status(Response.Status.UNAUTHORIZED).entity(message).build());
         LOGGER.debug(e.getMessage());
 
     }
+
 }
