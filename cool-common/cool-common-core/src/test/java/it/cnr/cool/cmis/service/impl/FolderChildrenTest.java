@@ -33,6 +33,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -60,7 +61,7 @@ public class FolderChildrenTest {
 
         // recupero il noderef di Company Home
         String parentFolderId = cmisSession.getObjectByPath("/").getId();
-        ArrayList<AlfrescoFolder> json = folderChildrenService.get(
+        List<AlfrescoFolder> json = folderChildrenService.get(
                 cmisSession, parentFolderId, username);
 
         assertTrue(json.size() > 0);

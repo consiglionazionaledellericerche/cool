@@ -17,11 +17,14 @@
 
 package it.cnr.cool.service.util;
 
+import org.apache.chemistry.opencmis.client.api.CmisObject;
 import org.apache.chemistry.opencmis.client.api.QueryResult;
 import org.apache.chemistry.opencmis.commons.PropertyIds;
+import org.apache.chemistry.opencmis.commons.data.AllowableActions;
 
+import java.util.Collections;
 import java.util.HashMap;
-
+import java.util.Optional;
 
 
 public class AlfrescoFolder {
@@ -31,14 +34,35 @@ public class AlfrescoFolder {
 
 	private String state;
 
+	public AlfrescoFolder(CmisObject folder, boolean isLeaf) {
+		attr = new HashMap<String, Object>();
+		attr.put("id", folder.getId());
+		attr.put("rel", "folder");
+		attr.put("type",folder.getType().getId());
+		attr.put(
+				"allowableActions",
+				Optional.ofNullable(folder.getAllowableActions())
+						.map(AllowableActions::getAllowableActions)
+						.orElse(Collections.emptySet())
+		);
+		data = folder.getName();
+		if (!isLeaf) {
+			state = "closed";
+		}
+	}
+
 	public AlfrescoFolder(QueryResult folder, boolean isLeaf) {
 		attr = new HashMap<String, Object>();
 		attr.put("id", folder.getPropertyValueById(PropertyIds.OBJECT_ID));
 		attr.put("rel", "folder");
 		attr.put("type",
 				folder.getPropertyValueById(PropertyIds.OBJECT_TYPE_ID));
-		attr.put("allowableActions", folder.getAllowableActions()
-				.getAllowableActions());
+		attr.put(
+				"allowableActions",
+				Optional.ofNullable(folder.getAllowableActions())
+						.map(AllowableActions::getAllowableActions)
+						.orElse(Collections.emptySet())
+		);
 		data = folder.getPropertyValueById(PropertyIds.NAME);
 		if (!isLeaf) {
 			state = "closed";

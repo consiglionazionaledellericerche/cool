@@ -68,7 +68,7 @@ public class FolderChildren {
 
         String username = cmisService.getCMISUserFromSession(req).getId();
 
-		ArrayList<AlfrescoFolder> model;
+		List<AlfrescoFolder> model;
 		Response response;
 
 		try {

@@ -19,9 +19,8 @@ package it.cnr.cool.service;
 
 import it.cnr.cool.cmis.service.FolderService;
 import it.cnr.cool.service.util.AlfrescoFolder;
-import org.apache.chemistry.opencmis.client.api.ItemIterable;
-import org.apache.chemistry.opencmis.client.api.QueryResult;
-import org.apache.chemistry.opencmis.client.api.Session;
+import org.apache.chemistry.opencmis.client.api.*;
+import org.apache.chemistry.opencmis.client.util.OperationContextUtils;
 import org.apache.chemistry.opencmis.commons.exceptions.CmisRuntimeException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,6 +28,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class FolderChildrenService {
@@ -37,18 +38,28 @@ public class FolderChildrenService {
     @Autowired
     private FolderService folderService;
 
-    public ArrayList<AlfrescoFolder> get(Session cmisSession,
+    public List<AlfrescoFolder> get(Session cmisSession,
                                          String parentFolderId,
                                          String username) throws CmisRuntimeException {
         ArrayList<AlfrescoFolder> model = new ArrayList<AlfrescoFolder>();
+        final OperationContext operationContext = OperationContextUtils.copyOperationContext(cmisSession.getDefaultContext());
+        operationContext.setIncludePathSegments(false);
+        operationContext.setIncludeAllowableActions(true);
+        operationContext.setMaxItemsPerPage(100);
+        cmisSession.setDefaultContext(operationContext);
         if (parentFolderId != null) {
             LOGGER.info("get children of folder {}", parentFolderId);
-            ItemIterable<QueryResult> children = folderService.getFolderTree(
-                    cmisSession, parentFolderId, true);
-            for (QueryResult result : children.getPage(Integer.MAX_VALUE)) {
-                model.add(new AlfrescoFolder(result, false));
-            }
+            final List<Tree<FileableCmisObject>> folderTree = ((Folder) cmisSession.getObject(parentFolderId))
+                    .getFolderTree(1, operationContext);
+            folderTree.stream()
+                    .forEach(fileableCmisObjectTree -> {
+                        final FileableCmisObject item = fileableCmisObjectTree.getItem();
+                        model.add(new AlfrescoFolder(item,false));
+                    });
         }
-        return model;
+        return model
+                .stream()
+                .sorted((o1, o2) -> o1.getData().toUpperCase().compareTo(o2.getData().toUpperCase()))
+                .collect(Collectors.toList());
     }
 }
