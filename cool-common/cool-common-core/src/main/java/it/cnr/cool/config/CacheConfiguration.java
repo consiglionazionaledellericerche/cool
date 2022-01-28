@@ -17,12 +17,12 @@
 
 package it.cnr.cool.config;
 
+import com.hazelcast.cluster.Cluster;
 import com.hazelcast.config.*;
-import com.hazelcast.core.Cluster;
 import com.hazelcast.core.Hazelcast;
 import com.hazelcast.core.HazelcastInstance;
-import com.hazelcast.instance.GroupProperty;
-import com.hazelcast.instance.HazelcastInstanceFactory;
+import com.hazelcast.instance.impl.HazelcastInstanceFactory;
+import com.hazelcast.spi.properties.ClusterProperty;
 import com.hazelcast.spring.cache.HazelcastCacheManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -75,8 +75,9 @@ public class CacheConfiguration {
         if (mancenter != null) {
           LOGGER.info("using mancenter: " + mancenter);
           ManagementCenterConfig mc = new ManagementCenterConfig();
-          mc.setEnabled(true);
-          mc.setUrl(mancenter);
+
+          mc.setScriptingEnabled(true);
+          //mc.setUrl(mancenter);
           config.setManagementCenterConfig(mc);
         } else {
           LOGGER.info("no mancenter configured");
@@ -85,6 +86,7 @@ public class CacheConfiguration {
         Optional.ofNullable(hazelcastInstanceName)
                 .ifPresent(s -> {
                     config.setInstanceName(s);
+                    config.setClusterName(s);
                 });
         config.getNetworkConfig().setPort(hazelcastPort);
         config.getNetworkConfig().setPortAutoIncrement(portAutoincrement);
@@ -105,9 +107,7 @@ public class CacheConfiguration {
             config.getNetworkConfig().getJoin().getTcpIpConfig().setEnabled(true);
         }
 
-
-        config.setProperty(GroupProperty.ENABLE_JMX, Boolean.TRUE.toString());
-        config.setProperty(GroupProperty.ENABLE_JMX_DETAILED, Boolean.TRUE.toString());
+        config.setProperty(ClusterProperty.ENABLE_JMX.getName(), Boolean.TRUE.toString());
 
         config.getMapConfigs().put("default", initializeDefaultMapConfig());
 
@@ -138,6 +138,7 @@ public class CacheConfiguration {
             fail-safety. Valid numbers are 0 (no backup), 1, 2, 3.
          */
         mapConfig.setBackupCount(1);
+        EvictionConfig evictionConfig = new EvictionConfig();
 
         /*
             Valid values are:
@@ -146,7 +147,7 @@ public class CacheConfiguration {
             LFU (Least Frequently Used).
             NONE is the default.
          */
-        mapConfig.setEvictionPolicy(EvictionPolicy.LRU);
+        evictionConfig.setEvictionPolicy(EvictionPolicy.LRU);
 
         /*
             Maximum size of the map. When max size is reached,
@@ -154,7 +155,7 @@ public class CacheConfiguration {
             Any integer between 0 and Integer.MAX_VALUE. 0 means
             Integer.MAX_VALUE. Default is 0.
          */
-        mapConfig.setMaxSizeConfig(new MaxSizeConfig(0, MaxSizeConfig.MaxSizePolicy.USED_HEAP_SIZE));
+        evictionConfig.setMaxSizePolicy(MaxSizePolicy.USED_HEAP_SIZE);
 
         /*
             When max. size is reached, specified percentage of
@@ -162,7 +163,9 @@ public class CacheConfiguration {
             If 25 is set for example, 25% of the entries will
             get evicted.
          */
-        mapConfig.setEvictionPercentage(25);
+        //mapConfig.setEvictionPercentage(25);
+
+        mapConfig.setEvictionConfig(evictionConfig);
 
         LOGGER.info("time to live: " + ttl);
         mapConfig.setTimeToLiveSeconds(ttl);

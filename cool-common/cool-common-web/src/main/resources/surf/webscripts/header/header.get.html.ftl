@@ -39,7 +39,7 @@
           <#if !context.user.guest!>
           <li class="divider-vertical"></li>
           <li>
-            <form id="search" method="POST" action="${url.context}/search" class="form-search">
+            <form id="search" method="GET" action="${url.context}/search" class="form-search">
               <#if _csrf??>
                   <input type="hidden"
                     name="${_csrf.parameterName}"
