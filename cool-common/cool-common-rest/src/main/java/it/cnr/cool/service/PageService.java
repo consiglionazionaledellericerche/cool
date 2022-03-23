@@ -167,6 +167,7 @@ public class PageService implements InitializingBean{
 			String urlContext, final Locale locale, CMISUser user) {
 		Map<String, Object> model = new HashMap<String, Object>();
 		model.put("message", applicationContext.getBean("messageMethod", locale, pageId));
+		model.put("activeProfiles", env.getActiveProfiles());
 
 		HashMap<String, String> pagex = new HashMap<String, String>();
 		pagex.put(ID, pageId);
