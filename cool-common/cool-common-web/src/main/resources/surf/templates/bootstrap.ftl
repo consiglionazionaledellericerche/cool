@@ -75,6 +75,7 @@
         datetimepicker: 'thirdparty/datetimepicker/bootstrap-datetimepicker',
         'datetimepicker-i18n': 'thirdparty/datetimepicker/locales/bootstrap-datetimepicker.${locale_suffix}',
         fileupload: 'thirdparty/jquery.fileupload',
+        cookie: 'thirdparty/cookie/jquery.cookie.min',
         handlebars: 'thirdparty/handlebars',
         header: 'ws/header',
         'i18n-data': '../../rest/i18n?method=${Request.requestContext.requestMethod}&uri=${page.id}&lang=${locale_suffix}',
@@ -178,6 +179,9 @@
         },
         'jquery.xmleditor': {
           deps: ['jquery', 'jquery-ui']
+        },
+        'cookie': {
+            deps: ['jquery']
         }
       }
     };
