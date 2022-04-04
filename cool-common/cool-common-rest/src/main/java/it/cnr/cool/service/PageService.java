@@ -36,6 +36,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 
@@ -68,8 +69,7 @@ public class PageService implements InitializingBean{
 	@Autowired
 	private PermissionService permissionService;
 
-	@Autowired
-	private CnrRegion cnrRegion;
+	private final CnrRegion cnrRegion;
 
 	@Autowired
 	private VersionService versionService;
@@ -87,6 +87,10 @@ public class PageService implements InitializingBean{
 	}
 
 	private Map<String, List<PageModel>> pageModels;
+
+	public PageService(@Lazy CnrRegion cnrRegion) {
+		this.cnrRegion = cnrRegion;
+	}
 
 	/**
 	 * 

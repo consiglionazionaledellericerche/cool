@@ -46,15 +46,14 @@ public class CmisAuthRepository {
     public static final String USER = "user";
 
     private CMISService cmisService;
+    private UserService userService;
 
     @Autowired
     private CMISConfig cmisConfig;
 
-    @Autowired
-    private UserService userService;
-
-    public CmisAuthRepository (@Lazy CMISService cmisService) {
+    public CmisAuthRepository (@Lazy CMISService cmisService, @Lazy UserService userService) {
         this.cmisService = cmisService;
+        this.userService = userService;
     }
 
     @Cacheable("cmis-session")
