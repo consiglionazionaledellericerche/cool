@@ -67,11 +67,13 @@ public class QueryService {
                 .getParameterValues("relationship.field");
         String parameter_skip_count = req.getParameter("skipCount");
         String orderBy = req.getParameter("orderBy");
+        Boolean includeAllowableActions = Boolean.valueOf(Optional.ofNullable(req
+                .getParameter("includeAllowableActions")).orElse("true"));
         Boolean allColumns = Boolean.valueOf(req.getParameter("allColumns"));
 
         return query(cmisSession, parameter_relationship,
                 parameter_relationship_name, maxItems, folder,
-                objectRel, fetchCmisObject, calculateTotalNumItems, statement,
+                objectRel, fetchCmisObject, calculateTotalNumItems, includeAllowableActions, statement,
                 parameter_relationship_field, parameter_skip_count, orderBy, allColumns);
 
     }
@@ -100,6 +102,7 @@ public class QueryService {
                                       String[] parameter_relationship_name, String maxItems,
                                       String folder, String objectRel,
                                       Boolean fetchCmisObject, Boolean calculateTotalNumItems,
+                                      Boolean includeAllowableActions,
                                       String statement, String[] parameter_relationship_field,
                                       String parameter_skip_count, String orderBy, boolean allColumns) {
 
@@ -117,7 +120,7 @@ public class QueryService {
         if (parameter_relationship_field != null && parameter_relationship_field.length > 0)
             relationshipField = Arrays.asList(parameter_relationship_field);
         OperationContext operationContext = new OperationContextImpl(cmisDefaultOperationContext);
-
+        operationContext.setIncludeAllowableActions(includeAllowableActions);
 
         if (maxItems != null)
             operationContext.setMaxItemsPerPage(Integer.valueOf(maxItems));
