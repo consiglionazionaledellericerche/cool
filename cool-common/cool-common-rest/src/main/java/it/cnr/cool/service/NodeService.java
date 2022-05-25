@@ -57,6 +57,10 @@ public class NodeService {
 	@Autowired
 	private CMISService cmisService;
 
+	@Autowired
+	private I18nService i18nService;
+
+
 	private static final String CRUD_STATUS = "crudStatus";
 	private static final String STATUS_TO_BE_INSERT = "INSERT";
 	private static final String STATUS_TO_BE_UPDATE = "UPDATE";
@@ -69,6 +73,12 @@ public class NodeService {
 
 	@Value("${multipart.resolver.encoding:UTF-8}")
 	private String multipartResolverEncoding;
+
+	@Value("${document.content.type.whitelist}")
+	private List<String> contentTypeWhitelist;
+
+	@Value("${document.content.type.blacklist}")
+	private List<String> contentTypeBlacklist;
 
 	@Bean("resolver")
 	public CommonsMultipartResolver getResolver() {
@@ -130,16 +140,16 @@ public class NodeService {
 				for (MultipartFile file : mRequest.getFileMap().values()) {
 					if (objectId == null){
 						throw new ClientMessageException("message.source.folder.empty");
-					}else{
+					} else {
 						String cmisType = mRequest.getParameter("cmis:objectTypeDocument");
 						if (cmisType == null || cmisType.length() == 0 ){
 							throw new ClientMessageException("message.select.type");
 						} else {
 							String originalFilename = file.getOriginalFilename();
-							if (forbidArchives
-									&& isArchive(originalFilename)) {
+							isContentTypeAllowed(originalFilename, req.getLocale());
+							if (forbidArchives && isArchive(originalFilename)) {
 								throw new ClientMessageException("message.archive");
-							} else{
+							} else {
 								try{
 									cmisSession.getTypeDefinition(cmisType);
 									attachments.add(uploadDocument(mRequest, file, cmisSession,
@@ -154,16 +164,13 @@ public class NodeService {
 						}
 					}
 				}
-
-
 			} else if (isStatusToBeUpdate) {
-
 				MultipartFile file = mRequest.getFile("file-0");
-
 				if (file.getSize() == 0)
-					throw new ClientMessageException(
-							"Il file allegato non è leggibile!");
-				if (forbidArchives && isArchive(file.getOriginalFilename())) {
+					throw new ClientMessageException("Il file allegato non è leggibile!");
+				final String originalFilename = file.getOriginalFilename();
+				isContentTypeAllowed(originalFilename, req.getLocale());
+				if (forbidArchives && isArchive(originalFilename)) {
 					throw new ClientMessageException("message.archive");
 				} else {
 					try {
@@ -175,8 +182,6 @@ public class NodeService {
 						throw new ClientMessageException(e.getMessage(), e);
 					}
 				}
-
-
 			}
 		} else if (isDELETE) {
 			try{
@@ -204,6 +209,28 @@ public class NodeService {
 			}
 		}
 		return attachments;
+	}
+
+	private void isContentTypeAllowed(String originalFilename, Locale locale) {
+		final Optional<String> extension = Optional.ofNullable(originalFilename)
+				.filter(s -> s.lastIndexOf(".") != -1)
+				.map(s -> s.substring(s.lastIndexOf("."), s.length()));
+		final Optional<List<String>> whiteList = Optional.ofNullable(contentTypeWhitelist).filter(s -> !s.isEmpty());
+		final Optional<List<String>> blackList = Optional.ofNullable(contentTypeBlacklist).filter(s -> !s.isEmpty());
+		if (extension.isPresent()) {
+			if (whiteList.isPresent() &&
+					!whiteList.get()
+					.stream()
+					.anyMatch(s -> s.equalsIgnoreCase(extension.get()))) {
+				throw new ClientMessageException(i18nService.getLabel("message.content.type.whitelist", locale, contentTypeWhitelist));
+			}
+			if (blackList.isPresent() &&
+					blackList.get()
+							.stream()
+							.anyMatch(s -> s.equalsIgnoreCase(extension.get()))) {
+				throw new ClientMessageException(i18nService.getLabel("message.content.type.blacklist", locale, contentTypeBlacklist));
+			}
+		}
 	}
 
 	private boolean isArchive(String originalFilename) {

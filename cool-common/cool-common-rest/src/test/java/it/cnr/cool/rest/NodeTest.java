@@ -23,6 +23,7 @@ import it.cnr.cool.MainTestContext;
 import it.cnr.cool.cmis.service.CMISService;
 import it.cnr.cool.cmis.service.LoginException;
 import it.cnr.cool.security.CMISAuthenticatorFactory;
+import it.cnr.cool.service.I18nService;
 import org.apache.chemistry.opencmis.client.api.Folder;
 import org.apache.chemistry.opencmis.client.api.*;
 import org.apache.chemistry.opencmis.commons.PropertyIds;
@@ -86,6 +87,8 @@ public class NodeTest {
     private CMISService cmisService;
     @Autowired
     private CMISAuthenticatorFactory cmisAuthenticatorFactory;
+    @Autowired
+    private I18nService i18nService;
 
     @AfterAll
     public static void tearDown() {
@@ -98,6 +101,7 @@ public class NodeTest {
 
     @BeforeEach
     public void setUp() {
+        i18nService.setLocations(Arrays.asList("i18n/labels"));
         adminSession = cmisService.createAdminSession();
         try {
             folder = (Folder) adminSession.getObjectByPath(DATA_PATH);
