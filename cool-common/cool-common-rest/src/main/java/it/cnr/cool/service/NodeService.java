@@ -57,10 +57,6 @@ public class NodeService {
 	@Autowired
 	private CMISService cmisService;
 
-	@Autowired
-	private I18nService i18nService;
-
-
 	private static final String CRUD_STATUS = "crudStatus";
 	private static final String STATUS_TO_BE_INSERT = "INSERT";
 	private static final String STATUS_TO_BE_UPDATE = "UPDATE";
@@ -73,12 +69,6 @@ public class NodeService {
 
 	@Value("${multipart.resolver.encoding:UTF-8}")
 	private String multipartResolverEncoding;
-
-	@Value("${document.content.type.whitelist}")
-	private List<String> contentTypeWhitelist;
-
-	@Value("${document.content.type.blacklist}")
-	private List<String> contentTypeBlacklist;
 
 	@Bean("resolver")
 	public CommonsMultipartResolver getResolver() {
@@ -146,7 +136,7 @@ public class NodeService {
 							throw new ClientMessageException("message.select.type");
 						} else {
 							String originalFilename = file.getOriginalFilename();
-							isContentTypeAllowed(originalFilename, req.getLocale());
+							nodeMetadataService.isContentTypeAllowed(originalFilename, req.getLocale());
 							if (forbidArchives && isArchive(originalFilename)) {
 								throw new ClientMessageException("message.archive");
 							} else {
@@ -169,7 +159,7 @@ public class NodeService {
 				if (file.getSize() == 0)
 					throw new ClientMessageException("Il file allegato non è leggibile!");
 				final String originalFilename = file.getOriginalFilename();
-				isContentTypeAllowed(originalFilename, req.getLocale());
+				nodeMetadataService.isContentTypeAllowed(originalFilename, req.getLocale());
 				if (forbidArchives && isArchive(originalFilename)) {
 					throw new ClientMessageException("message.archive");
 				} else {
@@ -209,28 +199,6 @@ public class NodeService {
 			}
 		}
 		return attachments;
-	}
-
-	private void isContentTypeAllowed(String originalFilename, Locale locale) {
-		final Optional<String> extension = Optional.ofNullable(originalFilename)
-				.filter(s -> s.lastIndexOf(".") != -1)
-				.map(s -> s.substring(s.lastIndexOf("."), s.length()));
-		final Optional<List<String>> whiteList = Optional.ofNullable(contentTypeWhitelist).filter(s -> !s.isEmpty());
-		final Optional<List<String>> blackList = Optional.ofNullable(contentTypeBlacklist).filter(s -> !s.isEmpty());
-		if (extension.isPresent()) {
-			if (whiteList.isPresent() &&
-					!whiteList.get()
-					.stream()
-					.anyMatch(s -> s.equalsIgnoreCase(extension.get()))) {
-				throw new ClientMessageException(i18nService.getLabel("message.content.type.whitelist", locale, contentTypeWhitelist));
-			}
-			if (blackList.isPresent() &&
-					blackList.get()
-							.stream()
-							.anyMatch(s -> s.equalsIgnoreCase(extension.get()))) {
-				throw new ClientMessageException(i18nService.getLabel("message.content.type.blacklist", locale, contentTypeBlacklist));
-			}
-		}
 	}
 
 	private boolean isArchive(String originalFilename) {

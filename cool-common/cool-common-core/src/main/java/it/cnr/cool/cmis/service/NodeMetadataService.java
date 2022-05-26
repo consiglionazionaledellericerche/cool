@@ -21,6 +21,7 @@ import it.cnr.cool.cmis.model.CoolPropertyIds;
 import it.cnr.cool.cmis.model.PolicyType;
 import it.cnr.cool.exception.CoolClientException;
 import it.cnr.cool.exception.CoolException;
+import it.cnr.cool.service.I18nService;
 import it.cnr.cool.util.StringUtil;
 import org.apache.chemistry.opencmis.client.api.CmisObject;
 import org.apache.chemistry.opencmis.client.api.ObjectType;
@@ -56,6 +57,14 @@ public class NodeMetadataService {
 	private ACLService aclService;
 	@Autowired
 	private CMISService cmisService;
+	@Autowired
+	private I18nService i18nService;
+
+	@Value("${document.content.type.whitelist}")
+	private List<String> contentTypeWhitelist;
+
+	@Value("${document.content.type.blacklist}")
+	private List<String> contentTypeBlacklist;
 
 	private Map<String, Object> internalPopulateMetadataFromRequest(
 			Map<String, ?> reqProperties,
@@ -345,8 +354,14 @@ public class NodeMetadataService {
 			String objectId, String objectTypeId, String objectParentId, String inheritedPermission,
 			List<String> aspectNames, Map<String, Object> aspectProperties,
 			Map<String, Object> properties) {
-
 		try {
+			isContentTypeAllowed(
+					Optional.ofNullable(properties.get(PropertyIds.NAME))
+							.filter(String.class::isInstance)
+							.map(String.class::cast)
+							.orElse(null),
+					CMISService.DEFAULT_LOCALE
+			);
 			CmisObject cmisObject = null;
 			properties.put(PropertyIds.OBJECT_TYPE_ID, objectTypeId);
 			properties.put(PropertyIds.SECONDARY_OBJECT_TYPE_IDS, aspectNames);
@@ -378,6 +393,28 @@ public class NodeMetadataService {
 
 	public void setDatePattern(String datePattern) {
 		this.datePattern = datePattern;
+	}
+
+	public void isContentTypeAllowed(String originalFilename, Locale locale) {
+		final Optional<String> extension = Optional.ofNullable(originalFilename)
+				.filter(s -> s.lastIndexOf(".") != -1)
+				.map(s -> s.substring(s.lastIndexOf("."), s.length()));
+		final Optional<List<String>> whiteList = Optional.ofNullable(contentTypeWhitelist).filter(s -> !s.isEmpty());
+		final Optional<List<String>> blackList = Optional.ofNullable(contentTypeBlacklist).filter(s -> !s.isEmpty());
+		if (extension.isPresent()) {
+			if (whiteList.isPresent() &&
+					!whiteList.get()
+							.stream()
+							.anyMatch(s -> s.equalsIgnoreCase(extension.get()))) {
+				throw new CoolClientException(i18nService.getLabel("message.content.type.whitelist", locale, contentTypeWhitelist));
+			}
+			if (blackList.isPresent() &&
+					blackList.get()
+							.stream()
+							.anyMatch(s -> s.equalsIgnoreCase(extension.get()))) {
+				throw new CoolClientException(i18nService.getLabel("message.content.type.blacklist", locale, contentTypeBlacklist));
+			}
+		}
 	}
 
 }
