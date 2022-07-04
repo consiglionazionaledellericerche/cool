@@ -1,34 +1,18 @@
 require(['json!common', 'modernizr'], function (common, Modernizr) {
   "use strict";
 
-  if (common.ga) {
-
-    window._gaq = window._gaq || [];
-    window._gaq.push(['_setAccount', common.ga]); // testselezioni: UA-41492910-1
-    window._gaq.push(['_trackPageview']);
-
-    // CNR custom variables
-    window._gaq.push(['_setCustomVar', 1, 'artifact_version', common.artifact_version, 1]);
-    if (!common.User.isGuest) {
-      window._gaq.push(['_setCustomVar', 2, 'username', common.User.id, 1]);
-    }
-
-    var result = /JSESSIONID=[A-F0-9]+\.([a-zA-Z0-9]+)/g.exec(document.cookie);
-    if (result && result[1]) {
-      window._gaq.push(['_setCustomVar', 3, 'alf_server', result[1], 1]);
-    }
-
-    window._gaq.push(['_setCustomVar', 4, 'fileApi', (Modernizr.fileinput && Modernizr.filereader) ? "yes" : "no", 1]);
-    // end of CNR custom variables
-
-    (function () {
-      var ga = document.createElement('script'), s;
-      ga.type = 'text/javascript';
-      ga.async = true;
-      ga.src = ('https:' === document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-      s = document.getElementsByTagName('script')[0];
-      s.parentNode.insertBefore(ga, s);
-    }());
+  if (common.analytics_url) {
+    var _paq = window._paq = window._paq || [];
+    /* tracker methods like "setCustomDimension" should be called before "trackPageView" */
+    _paq.push(['trackPageView']);
+    _paq.push(['enableLinkTracking']);
+   (function() {
+      var u = common.analytics_url;
+      _paq.push(['setTrackerUrl', u+'matomo.php']);
+      _paq.push(['setSiteId', common.analytics_siteId]);
+      var d=document, g=d.createElement('script'), s=d.getElementsByTagName('script')[0];
+      g.async=true; g.src=u+'matomo.js'; s.parentNode.insertBefore(g,s);
+    })();
   }
 
 });
