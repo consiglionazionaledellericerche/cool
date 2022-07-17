@@ -4,9 +4,13 @@
     <meta charset="utf-8">
     <meta name="google" content="notranslate" />
   <title>
-    ${message("main.title")}
-    <#if message("page."+page.id)??>
-      - ${message("page."+page.id)}
+    <#if page_title??>
+        ${page_title}
+    <#else>
+        ${message("main.title")}
+        <#if message("page."+page.id)??>
+          - ${message("page."+page.id)}
+        </#if>
     </#if>
   </title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
