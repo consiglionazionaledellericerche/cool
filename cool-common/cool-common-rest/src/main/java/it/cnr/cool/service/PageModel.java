@@ -17,8 +17,9 @@
 
 package it.cnr.cool.service;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.Map;
 
 public interface PageModel {
-    Map<String, Object> addToModel(Map<String, String[]> paramz);
+    Map<String, Object> addToModel(Map<String, String[]> paramz, HttpServletRequest req);
 }

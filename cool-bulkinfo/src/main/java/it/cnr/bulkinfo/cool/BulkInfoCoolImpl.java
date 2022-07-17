@@ -148,7 +148,7 @@ public class BulkInfoCoolImpl extends BulkInfoImpl implements BulkInfoCool, Seri
 				fieldProperty.addAttribute(WIDGET, "ui.authority");
 				jsonsettings.put("usersOnly", true);
 			}
-			if (isDateTime) {
+			if (isDateTime && propertyDefinition.getDescription().indexOf("widget:") == -1) {
 				fieldProperty.addAttribute(WIDGET, "ui.datepicker");
 			}
 			if (propertyDefinition.getDefaultValue() != null && !propertyDefinition.getDefaultValue().isEmpty()) {

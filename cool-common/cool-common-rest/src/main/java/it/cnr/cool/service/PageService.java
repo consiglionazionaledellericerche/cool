@@ -233,7 +233,7 @@ public class PageService implements InitializingBean{
 			LOGGER.info("User: {} with IP: {} Path: {} {}", user.getId(), req.getRemoteAddr(), req.getMethod(), req.getPathInfo());
 			pageModels.get(pageId)
 					.stream()
-					.forEach(pageModel -> model.putAll(pageModel.addToModel(paramz)));
+					.forEach(pageModel -> model.putAll(pageModel.addToModel(paramz, req)));
 		}
 		Optional<Object> csrf = Optional.ofNullable(req.getAttribute("_csrf"));
 		if (csrf.isPresent()) {
