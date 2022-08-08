@@ -240,6 +240,7 @@ public class PageService implements InitializingBean{
 			model.put("_csrf", csrf.get());
 		}
 		model.put("fontsURL", env.getProperty("fonts.url", ""));
+		model.put("fontsName", env.getProperty("fonts.name", ""));
 		return model;
 	}
 
