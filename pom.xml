@@ -44,6 +44,7 @@
     <commons-io.version>2.7</commons-io.version>
     <commons-collections.version>3.2.2</commons-collections.version>
     <commons-beanutils.version>1.9.4</commons-beanutils.version>
+    <jackson-databind.version>2.13.4</jackson-databind.version>
 
   </properties>
 
