@@ -94,6 +94,12 @@ define(['jquery', 'bootstrap', 'i18n', 'validate', 'json!common'], function ($, 
       }, i18n['message.currency.valid']
       );
 
+    $.validator.addMethod('notblank',
+      function (value) {
+        return !($.trim(value).length === 0 && value.length > 0);
+      }, i18n['message.notblank.valid']
+      );
+
     $.validator.addMethod('requiredWidget', function (value, element, enabled) {
       function isValid(e) {
         var widgetValue = e.data('value');
