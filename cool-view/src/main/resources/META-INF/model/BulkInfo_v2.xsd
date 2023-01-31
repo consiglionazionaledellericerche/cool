@@ -233,6 +233,7 @@
 		 			<xsd:attribute name="required" type="xsd:boolean" />
 		 			<xsd:attribute name="requiredWidget" type="xsd:boolean" />
 		 			<xsd:attribute name="email" type="xsd:boolean" />
+					<xsd:attribute name="notblank" type="xsd:boolean" />
 		 			<xsd:attribute name="controlloUserId" type="xsd:boolean" />
 		 			<xsd:attribute name="maxlength" type="xsd:int" />
 		 			<xsd:attribute name="minlength" type="xsd:int" />
