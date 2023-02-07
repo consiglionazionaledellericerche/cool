@@ -30,7 +30,9 @@ import it.cnr.mock.RequestUtils;
 import org.apache.chemistry.opencmis.client.api.CmisObject;
 import org.apache.chemistry.opencmis.client.api.OperationContext;
 import org.apache.chemistry.opencmis.client.api.Session;
+import org.apache.chemistry.opencmis.client.runtime.ObjectIdImpl;
 import org.apache.chemistry.opencmis.client.runtime.OperationContextImpl;
+import org.apache.chemistry.opencmis.commons.PropertyIds;
 import org.apache.chemistry.opencmis.commons.exceptions.CmisContentAlreadyExistsException;
 import org.apache.chemistry.opencmis.commons.exceptions.CmisPermissionDeniedException;
 import org.apache.chemistry.opencmis.commons.exceptions.CmisUnauthorizedException;
@@ -40,6 +42,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MaxUploadSizeExceededException;
+import org.springframework.web.multipart.support.DefaultMultipartHttpServletRequest;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.*;
@@ -50,6 +53,7 @@ import java.text.DecimalFormat;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 /**
  * Node resource
@@ -88,6 +92,11 @@ public class Node {
 			String readableFileSize = readableFileSize(request.getContentLength());
 			String maxFileSize = readableFileSize(_ex.getMaxUploadSize());
 			String message = "Il file ( " + readableFileSize + ") supera la dimensione massima consentita (" + maxFileSize + ")";
+			Optional.ofNullable(request.getParameter(PropertyIds.OBJECT_ID))
+				.map(s -> new ObjectIdImpl(s))
+				.ifPresent(objectId -> {
+					cmisService.getCurrentCMISSession(request).delete(objectId);
+				});
 			throw new ClientMessageException(message);
 		} catch (Exception e) {
 			if (e instanceof ClientMessageException)
@@ -104,7 +113,6 @@ public class Node {
 
 	@POST
 	public Response post(@Context HttpServletRequest request) {
-
 		ResponseBuilder rb;
 		try {
 			List<CmisObject> l = nodeService
@@ -118,7 +126,12 @@ public class Node {
 			String readableFileSize = readableFileSize(request.getContentLength());
 			String message = "Il file ( " + readableFileSize + ") supera la dimensione massima consentita (" + readableFileSize(_ex.getMaxUploadSize()) + ")";
 			model.put("message", message);
-			rb = Response.status(Status.INTERNAL_SERVER_ERROR).entity(model);			
+			Optional.ofNullable(request.getParameter(PropertyIds.OBJECT_ID))
+					.map(s -> new ObjectIdImpl(s))
+					.ifPresent(objectId -> {
+						cmisService.getCurrentCMISSession(request).delete(objectId);
+					});
+			rb = Response.status(Status.INTERNAL_SERVER_ERROR).entity(model);
 		} catch(CmisUnauthorizedException| CmisPermissionDeniedException _ex) {
 			LOGGER.error("unauthorized", _ex);
 			rb = Response.status(Status.UNAUTHORIZED);			

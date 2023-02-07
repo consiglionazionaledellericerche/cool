@@ -51,7 +51,8 @@ define(['jquery', 'cnr/cnr', 'cnr/cnr.ui', 'cnr/cnr.bulkinfo', 'i18n', 'cnr/cnr.
         processData: false,
         type: httpMethod,
         placeholder : {
-          maxUploadSize : maxUploadSize || false
+          maxUploadSize : maxUploadSize || false,
+          'cmis:objectId': nodeRef.split(';')[0]
         }
       });
     }
