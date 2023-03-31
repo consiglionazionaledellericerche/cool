@@ -278,6 +278,8 @@ public class NodeMetadataService {
 			String[] aspects = getParameterValues(PolicyType.ADD_REMOVE_ASPECT_REQ_PARAMETER_NAME, reqProperties, request);
 
 			aspectNames.addAll(PolicyType.getAspectToBeAdd(aspects));
+			aspectNames.removeAll(PolicyType.getAspectToBeRemoved(aspects));
+
 			if (aspectNames != null && !aspectNames.isEmpty()) {
 				for (String aspectName : aspectNames) {
 					propertyDefinitions.addAll(cmisSession
