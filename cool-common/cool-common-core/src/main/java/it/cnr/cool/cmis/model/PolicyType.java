@@ -64,11 +64,13 @@ public enum PolicyType {
     
     public static List<String> getAspectToBeRemoved(String[] aspects){
     	List<String> results = new ArrayList<String>();
-    	for (int i = 0; i < aspects.length; i++) {
-			String name = aspects[i];
-			if (name.startsWith("remove-"))
-				results.add(name.substring(7));
-		}
+        if (aspects != null) {
+            for (int i = 0; i < aspects.length; i++) {
+                String name = aspects[i];
+                if (name.startsWith("remove-"))
+                    results.add(name.substring(7));
+            }
+        }
     	return results;
     }
 
