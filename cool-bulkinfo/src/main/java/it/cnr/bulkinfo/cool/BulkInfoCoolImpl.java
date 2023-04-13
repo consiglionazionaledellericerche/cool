@@ -20,6 +20,7 @@ package it.cnr.bulkinfo.cool;
 import it.cnr.bulkinfo.BulkInfoImpl;
 import org.apache.chemistry.opencmis.client.api.CmisObject;
 import org.apache.chemistry.opencmis.client.api.ObjectType;
+import org.apache.chemistry.opencmis.client.api.Property;
 import org.apache.chemistry.opencmis.client.api.Session;
 import org.apache.chemistry.opencmis.commons.definitions.Choice;
 import org.apache.chemistry.opencmis.commons.definitions.PropertyDefinition;
@@ -236,7 +237,9 @@ public class BulkInfoCoolImpl extends BulkInfoImpl implements BulkInfoCool, Seri
 	public PropertyDefinition<?> getPropertyDefinition(Session session,
 			CmisObject cmisObject, FieldProperty fieldProperty) {
 		if (cmisObject != null)
-			return cmisObject.getProperty(fieldProperty.getProperty()).getDefinition();
+			return Optional.ofNullable(cmisObject.getProperty(fieldProperty.getProperty()))
+					.map(Property::getDefinition)
+					.orElse(null);
 		else {
 			ObjectType objectType = session.getTypeDefinition(getCmisTypeName());
 			if (objectType.getPropertyDefinitions().containsKey(fieldProperty.getProperty()))

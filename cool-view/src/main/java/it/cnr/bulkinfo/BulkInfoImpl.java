@@ -829,6 +829,10 @@ public class BulkInfoImpl implements BulkInfo {
 			setElementName(null);
 		}
 
+		public BulkInfo getOuter() {
+			return BulkInfoImpl.this;
+		}
+
 		public void addListElement(FieldProperty listElement) {
 			listElements.add(listElement);
 		}
