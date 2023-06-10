@@ -155,7 +155,15 @@ public class BulkInfoCoolImpl extends BulkInfoImpl implements BulkInfoCool, Seri
 			if (propertyDefinition.getDefaultValue() != null && !propertyDefinition.getDefaultValue().isEmpty()) {
 				fieldProperty.addAttribute("default", String.valueOf(propertyDefinition.getDefaultValue().get(0)));
 			}
-			fieldProperty.addAttribute("labelClass", "control-label");
+			if (propertyDefinition.getDescription().indexOf("labelClass:") != -1) {
+				final String labelClass = propertyDefinition.getDescription().substring(propertyDefinition.getDescription().indexOf("labelClass:") + 11);
+				fieldProperty.addAttribute(
+						"labelClass",
+						labelClass
+				);
+			} else {
+				fieldProperty.addAttribute("labelClass", "control-label");
+			}
 			if (propertyDefinition.getPropertyType().equals(PropertyType.INTEGER)) {
 				jsonvalidator.put("digits", true);
 			}
