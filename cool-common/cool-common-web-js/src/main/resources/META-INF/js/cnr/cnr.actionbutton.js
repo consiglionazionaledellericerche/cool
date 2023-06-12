@@ -13,7 +13,7 @@ define(['jquery', 'json!common', 'cnr/cnr', 'cnr/cnr.ui', 'cnr/cnr.node', 'cnr/c
    * @return {object} dropdownElements all the buttons added to the dropdown
    *
    */
-  function populateDropdown(dropdown, buttons, icons) {
+  function populateDropdown(dropdown, buttons, icons, titles) {
 
     var dropdownElements = {};
 
@@ -23,7 +23,7 @@ define(['jquery', 'json!common', 'cnr/cnr', 'cnr/cnr.ui', 'cnr/cnr.node', 'cnr/c
         btn,
         ul,
         li = $('<li></li>'),
-        title = i18n['actions.' + action];
+        title = titles[action] || i18n['actions.' + action];
 
       btn = $(simpleButton ? '<a href="#"></a>' : '<span class="dropdown-parent"></span>')
         .attr('data-name', action)
@@ -233,7 +233,7 @@ define(['jquery', 'json!common', 'cnr/cnr', 'cnr/cnr.ui', 'cnr/cnr.node', 'cnr/c
     criteria.list(versioni);
   }
   // returns a new "actions button"
-  function actionButton(obj, customPermission, customButtons, customIcons, refreshFn, nodropdown, maxUploadSize, extendClass) {
+  function actionButton(obj, customPermission, customButtons, customIcons, refreshFn, nodropdown, maxUploadSize, extendClass, titles) {
     var name = obj.name || "",
       nodeRef = obj.nodeRef ? obj.nodeRef.split(';')[0] : obj.nodeRef,
       baseTypeId = obj.baseTypeId || 'cmis:document',
@@ -399,7 +399,7 @@ define(['jquery', 'json!common', 'cnr/cnr', 'cnr/cnr.ui', 'cnr/cnr.node', 'cnr/c
 
     addActions(customButtons);
 
-    buttons = populateDropdown(dropdown, buttons, icons);
+    buttons = populateDropdown(dropdown, buttons, icons, titles || {});
     if (nodropdown) {
       dropdown.css('display', 'block').css('position', 'static');
       dropdown.addClass('pull-right');
