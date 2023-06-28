@@ -20,6 +20,8 @@ package it.cnr.cool.security.service.impl.alfresco;
 import com.fasterxml.jackson.core.JsonGenerationException;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.*;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonPrimitive;
 import it.cnr.cool.cmis.service.CMISService;
 import it.cnr.cool.exception.CoolUserFactoryException;
 import it.cnr.cool.security.service.GroupService;
@@ -134,4 +136,25 @@ public class GroupServiceImpl implements GroupService{
 		}
 	}
 
+	@Override
+	public void addAuthority(BindingSession cmisSession, String groupName,  String authorityName) {
+		String link = cmisService.getBaseURL().concat("service/cnr/groups/children");
+		UrlBuilder url = new UrlBuilder(link);
+		JsonObject groupJson = new JsonObject();
+		groupJson.add("parent_group_name", new JsonPrimitive(groupName));
+		groupJson.add("child_name", new JsonPrimitive(authorityName));
+		Response resp = CmisBindingsHelper.getHttpInvoker(cmisSession).invokePOST(url, MimeTypes.JSON.mimetype(),
+				new Output() {
+					@Override
+					public void write(OutputStream out) throws Exception {
+						out.write(groupJson.toString().getBytes());
+					}
+				}, cmisSession);
+		int status = resp.getResponseCode();
+		if (status == HttpStatus.SC_NOT_FOUND|| status == HttpStatus.SC_BAD_REQUEST|| status == HttpStatus.SC_INTERNAL_SERVER_ERROR)
+			throw new CoolUserFactoryException("Create group error. Exception: " + resp.getErrorContent(), status);
+		if (status == HttpStatus.SC_CONFLICT)
+			throw new CoolUserFactoryException("Group name already exists: " + groupName, status);
+
+	}
 }
