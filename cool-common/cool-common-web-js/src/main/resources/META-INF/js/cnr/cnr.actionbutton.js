@@ -297,6 +297,7 @@ define(['jquery', 'json!common', 'cnr/cnr', 'cnr/cnr.ui', 'cnr/cnr.node', 'cnr/c
             UI.modal("Modifica " + (baseTypeId === 'cmis:folder' ? 'cartella' : 'documento'), content, function () {
               if (!bulkinfo.validate()) {
                 UI.alert("alcuni campi non sono corretti");
+                content.find('.error').focus();
                 return false;
               }
               var d = bulkinfo.getData();

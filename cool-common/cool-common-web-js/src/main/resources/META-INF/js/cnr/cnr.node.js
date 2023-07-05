@@ -271,6 +271,7 @@ define(['jquery', 'cnr/cnr', 'cnr/cnr.ui', 'cnr/cnr.bulkinfo', 'i18n', 'cnr/cnr.
           modal = UI.modal(opts.modalTitle || (isInsert ? 'Inserimento allegato' : 'Aggiornamento allegato'), content, function () {
             if (!bulkinfo.validate()) {
               UI.alert("alcuni campi non sono corretti");
+              content.find('.error').focus();
               return false;
             }
 
