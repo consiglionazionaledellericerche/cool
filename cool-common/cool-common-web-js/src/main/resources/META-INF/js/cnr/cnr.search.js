@@ -13,6 +13,7 @@ define(['jquery', 'cnr/cnr', 'i18n', 'cnr/cnr.url', 'cnr/cnr.searchfilter', 'cnr
         joinTables: [],
         fetchCmisObject: false,
         calculateTotalNumItems: false,
+        i18nLabelsObj: {},
         fields: {
           "nome": "cmis:name",
           "data di creazione": "cmis:creationDate"
@@ -284,7 +285,7 @@ define(['jquery', 'cnr/cnr', 'i18n', 'cnr/cnr.url', 'cnr/cnr.searchfilter', 'cnr
           settings.display.resultSet(resultSet, settings.elements.table);
         } else {
           $.each(resultSet, function (key, el) {
-            var row = settings.display.row(el, settings.refreshFn);
+            var row = settings.display.row(el, settings.refreshFn, settings.i18nLabelsObj);
             if (settings.elements.table) {
               settings.elements.table.append(row);
             }
