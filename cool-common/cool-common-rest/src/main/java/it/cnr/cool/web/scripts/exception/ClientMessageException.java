@@ -18,6 +18,8 @@
 package it.cnr.cool.web.scripts.exception;
 
 
+import java.util.Objects;
+
 public class ClientMessageException extends RuntimeException {
 	public static int MESSAGE_CODE = 1002;
 	private static final long serialVersionUID = 1L;
@@ -43,4 +45,16 @@ public class ClientMessageException extends RuntimeException {
 		return this;
 	}
 
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+		ClientMessageException that = (ClientMessageException) o;
+		return Objects.equals(keyMessage, that.keyMessage);
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(keyMessage);
+	}
 }
