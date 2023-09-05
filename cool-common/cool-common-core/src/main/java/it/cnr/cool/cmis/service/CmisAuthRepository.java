@@ -30,12 +30,16 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Repository;
 
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 
 @Repository
@@ -44,6 +48,8 @@ public class CmisAuthRepository {
     private static final Logger LOGGER = LoggerFactory.getLogger(CmisAuthRepository.class);
 
     public static final String USER = "user";
+
+    public static final String GROUPS = "groups";
 
     private CMISService cmisService;
     private UserService userService;
@@ -62,12 +68,26 @@ public class CmisAuthRepository {
         return createSession("", ticket);
     }
 
-    @CacheEvict(value= USER, key="#ticket")
+    @CacheEvict(value=GROUPS, key="#userid")
+    public void removeGroupsFromCache(String userid) {
+        LOGGER.info("cleared groups for user {}", userid);
+    }
+
+    @Cacheable(value=GROUPS, key="#userid")
+    public List<String> getCachedGroups(String userid) {
+        return Collections.emptyList();
+    }
+    @CachePut(value=GROUPS, key="#userid")
+    public List<String> putCachedGroups(String userid, List<String> groups) {
+        return groups;
+    }
+
+    @CacheEvict(value=USER, key="#ticket")
     public void removeTicketFromCache(String ticket) {
         LOGGER.info("cleared ticket with id {}", ticket);
     }
 
-    @Cacheable(value= USER, key="#ticket")
+    @Cacheable(value=USER, key="#ticket")
     public CMISUser getCachedCMISUser(String ticket, BindingSession bindingSession) {
         LOGGER.info("user not cached for ticket " + ticket);
 

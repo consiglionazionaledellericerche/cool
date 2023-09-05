@@ -28,5 +28,6 @@ public interface GroupService {
 	CMISGroup createGroup(String group_name, String display_name, BindingSession cmisSession) throws CoolUserFactoryException;
 	CMISGroup loadGroup(String group_name, BindingSession cmisSession) throws CoolUserFactoryException;
 	List<CMISAuthority> children(String group_name, BindingSession cmisSession) throws CoolUserFactoryException;
+	List<CMISAuthority> parents(String group_name, BindingSession cmisSession) throws CoolUserFactoryException;
 	void addAuthority(BindingSession cmisSession, String groupName,  String authorityName) throws CoolUserFactoryException;
 }

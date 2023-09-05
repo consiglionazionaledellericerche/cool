@@ -19,8 +19,10 @@ package it.cnr.cool.rest;
 
 import freemarker.template.TemplateException;
 import it.cnr.cool.cmis.service.CMISService;
+import it.cnr.cool.cmis.service.CmisAuthRepository;
 import it.cnr.cool.dto.CoolPage;
 import it.cnr.cool.rest.util.Util;
+import it.cnr.cool.security.service.impl.alfresco.CMISGroup;
 import it.cnr.cool.security.service.impl.alfresco.CMISUser;
 import it.cnr.cool.service.I18nService;
 import it.cnr.cool.service.PageService;
@@ -72,6 +74,8 @@ public class Page {
 	@Autowired
 	private CMISService cmisService;
 
+	@Autowired
+	CmisAuthRepository cmisAuthRepository;
 	@Value("${cookie.secure}")
 	private Boolean cookieSecure;
 
@@ -133,6 +137,16 @@ public class Page {
 		String lang = i18nCookie(res, cookieLang, reqLang, req.isSecure());
 		CoolPage page = pageService.loadPages().get(id);
 		CMISUser user = cmisService.getCMISUserFromSession(req);
+		final Optional<List<String>> cachedGroups = Optional.ofNullable(cmisAuthRepository.getCachedGroups(user.getId()));
+		if (cachedGroups.isPresent()) {
+			cachedGroups.get()
+					.stream()
+					.forEach(s -> {
+						user.getGroups().add(new CMISGroup(s,s));
+						user.getGroupsArray().add(s);
+					});
+		}
+
 		if (page == null) {
 			rb = Response
 					.status(Status.NOT_FOUND)

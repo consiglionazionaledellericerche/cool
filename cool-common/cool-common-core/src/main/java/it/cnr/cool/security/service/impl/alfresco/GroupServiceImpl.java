@@ -106,6 +106,35 @@ public class GroupServiceImpl implements GroupService{
 		}
 	}
 
+
+	@Override
+	public List<CMISAuthority> parents(String group_name, BindingSession cmisSession) throws CoolUserFactoryException {
+		String link = cmisService.getBaseURL().concat("service/api/groups/").concat(UriUtils.encode(group_name)).concat("/parents");
+		UrlBuilder url = new UrlBuilder(link);
+		Response resp = CmisBindingsHelper.getHttpInvoker(cmisSession).invokeGET(url, cmisSession);
+		int status = resp.getResponseCode();
+		if (status == HttpStatus.SC_NOT_FOUND
+				|| status == HttpStatus.SC_BAD_REQUEST
+				|| status == HttpStatus.SC_INTERNAL_SERVER_ERROR) {
+			LOGGER.error("Group not found "+group_name+" Exception: "+resp.getErrorContent());
+			throw new CoolUserFactoryException("Group not found "+group_name+" Exception: "+resp.getErrorContent(), status);
+		}
+		ObjectMapper mapper = new ObjectMapper();
+		mapper.configure(
+				DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+		try {
+			return Optional.ofNullable(mapper.readValue(resp.getStream(),
+							mapper.getTypeFactory().constructType(GroupsChildren.class)))
+					.filter(GroupsChildren.class::isInstance)
+					.map(GroupsChildren.class::cast)
+					.map(GroupsChildren::getData)
+					.orElse(Collections.emptyList());
+		} catch (JsonProcessingException e) {
+			throw new CoolUserFactoryException("Exception for group " + group_name, e);
+		} catch (IOException e) {
+			throw new CoolUserFactoryException("Exception for group " + group_name, e);
+		}
+	}
 	@Override
 	public List<CMISAuthority> children(String group_name, BindingSession cmisSession) throws CoolUserFactoryException {
 		String link = cmisService.getBaseURL().concat("service/api/groups/").concat(UriUtils.encode(group_name)).concat("/children");
