@@ -352,7 +352,6 @@ public class SecurityRest {
                 .maxAge(maxAge)
                 .secure(secure && cookieSecure)
                 .httpOnly(true)
-                .sameSite("strict")
                 .build();
         return cookie;
     }
