@@ -100,7 +100,7 @@ public class FrontOfficeService implements InitializingBean {
             for (QueryResult qr : queryResult.getPage()) {
                 ObjectId objId = new ObjectIdImpl(
                         qr.getPropertyValueById(PropertyIds.OBJECT_ID));
-                result.add(new Notice(qr, adminSession.getAcl(objId, false).getAces().get(0).getPrincipal().getId()));
+                result.add(new Notice(qr, null));
             }
             model.put("docs", result);
             if (editor)

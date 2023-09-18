@@ -185,8 +185,6 @@ define(['jquery', 'header', 'cnr/cnr.bulkinfo', 'i18n', 'cnr/cnr', 'cnr/cnr.ui.a
         btnGroup.append(' ').append(btnEdit);
 
         if ($('#typeDocument .active').data('state') === 'notice') {
-          item.append('<strong>Avviso visibile a: </strong>' + el.visibility);
-
           item.append('<h5>Nome file Avviso: ' + el.name + '</h5>');
           if (el.number !== null) {
             item.append('<strong>Numero progressivo: </strong>').append(getBadge(el.number)).append('<br/>');
