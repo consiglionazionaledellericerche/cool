@@ -288,6 +288,7 @@ public class CreateAccountService {
                     userService.loadUserForConfirm(Optional.ofNullable(userName).
                             orElseThrow(CoolUserFactoryException::new))).orElseThrow(CoolUserFactoryException::new);
             if (!user.getEnabled()) {
+                LOGGER.warn("Delete user {}", user.getUserName());
                 userService.deleteUser(user);
             }
         }
