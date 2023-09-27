@@ -268,14 +268,19 @@ public class CMISService implements InitializingBean, CMISSessionManager {
             user.setCapabilities(capabilities);
 
         } else {
-            LOGGER.info("User: {} with ticket: {} IP: {} Path: {} {}?{}",
-                    user.getId(),
-                    ticket,
-                    request.getRemoteAddr(),
-                    request.getMethod(),
-                    request.getPathInfo(),
-                    request.getQueryString()
-            );
+            final String path = Optional.ofNullable(request.getPathInfo()).orElse(request.getRequestURI());
+            if (!(path.contains("/res/") || path.contains("/static/"))) {
+                LOGGER.info("User: {} with ticket: {} IP: {} Path: {} {}{}",
+                        user.getId(),
+                        ticket,
+                        request.getRemoteAddr(),
+                        request.getMethod(),
+                        path,
+                        Optional.ofNullable(request.getQueryString())
+                                .map(s -> "?".concat(s))
+                                .orElse("")
+                );
+            }
         }
         return user;
     }
