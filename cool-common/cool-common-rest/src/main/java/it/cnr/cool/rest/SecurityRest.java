@@ -404,12 +404,12 @@ public class SecurityRest {
                 if (user.getEnabled()) {
                     String msg = i18nService.getLabel("message.user.alredy.active", locale, user.getUserName());
                     LOGGER.warn(msg);
-                    rb = Response.status(Status.BAD_REQUEST).entity(msg);
+                    rb = Response.status(Status.BAD_REQUEST).entity(Collections.singletonMap("error", msg));
                 } else {
                     LOGGER.warn("user " + userId + ", PIN is not valid");
                     rb = Response
                             .status(Status.FORBIDDEN)
-                            .entity(i18nService.getLabel("message.pin.not.valid", locale));
+                            .entity(Collections.singletonMap("error", i18nService.getLabel("message.pin.not.valid", locale)));
                 }
             }
 
@@ -417,7 +417,7 @@ public class SecurityRest {
             LOGGER.error("Unable to confirm account, user " + userId, e);
             rb = Response
                     .status(Status.FORBIDDEN)
-                    .entity(i18nService.getLabel("message.user.not.found", locale, userId));
+                    .entity(Collections.singletonMap("error", i18nService.getLabel("message.user.not.found", locale, userId)));
         }
 
         return rb.build();
