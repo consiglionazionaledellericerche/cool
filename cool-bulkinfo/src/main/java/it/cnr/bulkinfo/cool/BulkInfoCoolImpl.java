@@ -107,18 +107,36 @@ public class BulkInfoCoolImpl extends BulkInfoImpl implements BulkInfoCool, Seri
 					fieldProperty.addAttribute("inputType", "RADIOGROUP");
 					fieldProperty.addAttribute(WIDGET, "ui.radio");
 					fieldProperty.addAttribute(CLASS, Optional.ofNullable(fieldProperty.getAttribute(CLASS)).map(x -> x.concat(" check")).orElse("check"));
-					
+
 					FieldProperty field = new FieldProperty();
 					field.setElementName(JSONLIST);
 					FieldProperty yes = new FieldProperty();
 					yes.addAttribute("defaultLabel", "Y");
 					yes.addAttribute("key", "true");
-					yes.addAttribute("label", "label.option.yes");					
+					yes.addAttribute("label", "label.option.yes");
 					field.addListElement(yes);
-					FieldProperty no = new FieldProperty();					
+					FieldProperty no = new FieldProperty();
 					no.addAttribute("defaultLabel", "N");
 					no.addAttribute("key", "false");
-					no.addAttribute("label", "label.option.no");										
+					no.addAttribute("label", "label.option.no");
+					field.addListElement(no);
+					fieldProperty.addSubProperty(JSONLIST, field);
+				} else if (propertyDefinition.getDescription().contains("ui.mandatory.radio")) {
+					fieldProperty.addAttribute("inputType", "RADIOGROUP");
+					fieldProperty.addAttribute(WIDGET, "ui.radio");
+					fieldProperty.addAttribute(CLASS, Optional.ofNullable(fieldProperty.getAttribute(CLASS)).map(x -> x.concat(" check")).orElse("check"));
+
+					FieldProperty field = new FieldProperty();
+					field.setElementName(JSONLIST);
+					FieldProperty yes = new FieldProperty();
+					yes.addAttribute("defaultLabel", "Y");
+					yes.addAttribute("key", "true");
+					yes.addAttribute("label", "label.option.yes");
+					field.addListElement(yes);
+					FieldProperty no = new FieldProperty();
+					no.addAttribute("defaultLabel", "N");
+					no.addAttribute("key", null);
+					no.addAttribute("label", "label.option.no");
 					field.addListElement(no);
 					fieldProperty.addSubProperty(JSONLIST, field);
 				} else {					
