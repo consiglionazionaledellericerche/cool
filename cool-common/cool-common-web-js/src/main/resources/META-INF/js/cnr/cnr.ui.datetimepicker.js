@@ -8,6 +8,10 @@ define(['jquery', 'i18n', 'moment', 'datetimepicker-i18n'], function ($, i18n, m
       input = $('<input data-format="dd/MM/yyyy hh:mm:ss" type="text"></input>').attr('id', id).appendTo(controls),
       span = $('<span class="add-on"><i data-time-icon="icon-time" class="icon-time" data-date-icon="icon-calendar"></i></span>').appendTo(controls);
 
+    if (item.inputType == 'ROTEXT') {
+        input.attr('disabled', true);
+    }
+
     if (item.parentGroupClass) {
       parent.addClass(item.parentGroupClass);
     }

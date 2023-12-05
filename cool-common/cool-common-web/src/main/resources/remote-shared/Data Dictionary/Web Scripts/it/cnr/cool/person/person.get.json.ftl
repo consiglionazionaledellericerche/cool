@@ -30,16 +30,18 @@
 			"${propertyName?substring(startIndex)}" : <#if propertyName == "cm:homeFolder" && propertyValue??>"${propertyValue.nodeRef}"<#else><@displayValue propertyValue/></#if>
 			<#if property_has_next>,</#if>
 	</#list>
-	<#if groups??>
-	,"groups": [
-	<#list groups as g>
-		<#assign authName = g.properties["cm:authorityName"]>
-		<#if authName?starts_with("GROUP_site")><#assign displayName = authName?substring(6)><#else><#assign displayName = g.properties["cm:authorityDisplayName"]!authName?substring(6)></#if>
-	{
-		"itemName": "${authName}",
-		"displayName": "${displayName}"
-	}<#if g_has_next>,</#if>
-	</#list>]
+	<#if arggroups??>
+		<#if arggroups?is_string>
+			,"groups": [
+			<#list groups as g>
+				<#assign authName = g.properties["cm:authorityName"]>
+				<#if authName?starts_with("GROUP_site")><#assign displayName = authName?substring(6)><#else><#assign displayName = g.properties["cm:authorityDisplayName"]!authName?substring(6)></#if>
+			{
+				"itemName": "${authName}",
+				"displayName": "${displayName}"
+			}<#if g_has_next>,</#if>
+			</#list>]
+		</#if>
 	</#if>
 	,"immutability":
 	{

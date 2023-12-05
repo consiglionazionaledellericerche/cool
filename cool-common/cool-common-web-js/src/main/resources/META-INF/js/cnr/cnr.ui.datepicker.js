@@ -9,7 +9,9 @@ define(['jquery', 'i18n', 'moment', 'datepicker-i18n'], function ($, i18n, momen
         .append(controls),
       input = $('<input type="text" class="input-small datepicker" />').attr('id', id),
       dateFormat = item.format || "DD/MM/YYYY";
-
+    if (item.inputType == 'ROTEXT') {
+        input.attr('disabled', true);
+    }
     if (item.placeholder) {
       input.attr("placeholder", i18n.prop(item.placeholder, item.placeholder));
     }
