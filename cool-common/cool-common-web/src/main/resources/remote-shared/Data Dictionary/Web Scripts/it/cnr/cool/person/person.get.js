@@ -5,7 +5,7 @@ var userName = url.extension;
 // Do we want to return containing groups?
 var arggroups = args.groups;
 if (arggroups == 'true') {
-  model.arggroups = true;
+  model.arggroups = 'true';
 }
 // Get the person who has that user name
 var person = people.getPerson(userName), properties = [];
