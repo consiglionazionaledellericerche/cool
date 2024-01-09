@@ -27,7 +27,7 @@
     <name>Cool Platform - Common - Core</name>
 
     <properties>
-        <hazelcast.version>5.1</hazelcast.version>
+        <hazelcast.version>5.1.3</hazelcast.version>
     </properties>
 
     <dependencies>
