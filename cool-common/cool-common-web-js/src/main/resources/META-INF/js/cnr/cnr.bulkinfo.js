@@ -95,7 +95,7 @@ define(['cnr/cnr.ui.widgets', 'jquery', 'cnr/cnr', 'cnr/cnr.style', 'handlebars'
       } else if (item.inputType === "PASSWORD") {
         input = $('<input type="password" />');
       } else if (item.inputType === "CURRENCY") {
-        input = $('<input type="text" />');
+        input = $('<input type="number" />');
       } else if (item.inputType === "FILE") {
         input = $('<input type="file" />');
       } else if (item.inputType === "ROTEXT") {
