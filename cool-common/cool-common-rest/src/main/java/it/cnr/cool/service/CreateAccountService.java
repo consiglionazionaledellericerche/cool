@@ -26,6 +26,9 @@ import it.cnr.cool.rest.util.Util;
 import it.cnr.cool.security.service.UserService;
 import it.cnr.cool.security.service.impl.alfresco.CMISUser;
 import it.cnr.cool.util.CalendarUtil;
+import org.apache.chemistry.opencmis.client.api.ItemIterable;
+import org.apache.chemistry.opencmis.client.api.QueryResult;
+import org.apache.chemistry.opencmis.commons.PropertyIds;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -287,7 +290,11 @@ public class CreateAccountService {
             CMISUser user = Optional.ofNullable(
                     userService.loadUserForConfirm(Optional.ofNullable(userName).
                             orElseThrow(CoolUserFactoryException::new))).orElseThrow(CoolUserFactoryException::new);
-            if (!user.getEnabled()) {
+            ItemIterable<QueryResult> query = cmisService.createAdminSession().query(
+                    String.format("select * from cmis:document where %s = '%s'", PropertyIds.CREATED_BY, user.getUserName()),
+                    false
+            );
+            if (!user.getEnabled() && query.getTotalNumItems() == 0) {
                 LOGGER.warn("Delete user {}", user.getUserName());
                 userService.deleteUser(user);
             }
