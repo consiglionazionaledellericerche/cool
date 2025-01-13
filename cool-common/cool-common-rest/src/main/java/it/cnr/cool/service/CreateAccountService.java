@@ -60,6 +60,9 @@ public class CreateAccountService {
     private I18nService i18nService;
 
     @Autowired
+    private UserServiceInterceptor userServiceInterceptor;
+
+    @Autowired
     private ApplicationContext applicationContext;
 
     @Value("${mail.from.default}")
@@ -67,6 +70,9 @@ public class CreateAccountService {
 
     @Value("${mail.create.user.bcc.enabled}")
     private Boolean mailCreateUserBCCEnabled;
+
+    @Value("${user.delete.timeout:3600000}")
+    private int deleteUserTimeout;
 
     public Map<String, Object> update(Map<String, List<String>> form, Locale locale) {
         try {
@@ -245,7 +251,7 @@ public class CreateAccountService {
             model.put("url", url);
             sendConfirmMail(model, locale);
             Timer timer = new Timer();
-            timer.schedule(new DeleteUserTimerTask(newUser.getUserName()), 1000 * 60 * 60);
+            timer.schedule(new DeleteUserTimerTask(newUser.getUserName()), deleteUserTimeout);
 
         } catch (CoolUserFactoryException e) {
             throw new UserFactoryException(e.getMessage(), e);
@@ -290,11 +296,7 @@ public class CreateAccountService {
             CMISUser user = Optional.ofNullable(
                     userService.loadUserForConfirm(Optional.ofNullable(userName).
                             orElseThrow(CoolUserFactoryException::new))).orElseThrow(CoolUserFactoryException::new);
-            ItemIterable<QueryResult> query = cmisService.createAdminSession().query(
-                    String.format("select * from cmis:document where %s = '%s'", PropertyIds.CREATED_BY, user.getUserName()),
-                    false
-            );
-            if (!user.getEnabled() && query.getTotalNumItems() == 0) {
+            if (!user.getEnabled() && !userServiceInterceptor.isUsed(userName)) {
                 LOGGER.warn("Delete user {}", user.getUserName());
                 userService.deleteUser(user);
             }
