@@ -178,6 +178,13 @@
         <groupId>net.alchim31.maven</groupId>
         <artifactId>yuicompressor-maven-plugin</artifactId>
         <version>1.3.2</version>
+        <dependencies>
+          <dependency>
+            <groupId>org.codehaus.plexus</groupId>
+            <artifactId>plexus-utils</artifactId>
+            <version>3.0.24</version> <!-- versione compatibile -->
+          </dependency>
+        </dependencies>
         <executions>
           <execution>
             <goals>

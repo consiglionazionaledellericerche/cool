@@ -334,7 +334,7 @@ public class SecurityRest {
 
             ResponseCookie cookie = getCookie(ticket, req.isSecure());
             res.addHeader("Set-Cookie", cookie.toString());
-
+            userService.successfulLogin(username);
         } else {
             URI uri = URI.create("../" + Page.LOGIN_URL + "?failure=yes");
             rb = Response.seeOther(uri);

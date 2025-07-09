@@ -23,6 +23,7 @@ import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import it.cnr.cool.cmis.service.CMISService;
 import it.cnr.cool.exception.CoolUserFactoryException;
+import it.cnr.cool.listener.LoginListener;
 import it.cnr.cool.listener.LogoutListener;
 import it.cnr.cool.security.service.UserService;
 import it.cnr.cool.util.MimeTypes;
@@ -64,7 +65,8 @@ public class UserServiceImpl implements UserService{
 	@Autowired
 	private CMISService cmisService;
 	
-	private List<LogoutListener> logutListener = new ArrayList<LogoutListener>();
+	private List<LogoutListener> logoutListeners = new ArrayList<LogoutListener>();
+	private List<LoginListener> loginListeners = new ArrayList<LoginListener>();
 
 	private	ObjectMapper mapper = new ObjectMapper();
  
@@ -335,12 +337,21 @@ public class UserServiceImpl implements UserService{
 			LOGGER.error("unable to get response content, user: " + userName, e);
 		}
 	}
+
 	public boolean addLogoutListener(LogoutListener logoutListener) {
-		return logutListener.add(logoutListener);
+		return logoutListeners.add(logoutListener);
 	}
-	
+
+	public boolean addLoginListener(LoginListener loginListener) {
+		return loginListeners.add(loginListener);
+	}
+
 	public void logout(String userId) {
-		logutListener.stream().forEach(listener -> listener.logout(userId));
+		logoutListeners.forEach(listener -> listener.logout(userId));
+	}
+
+	public void successfulLogin(String userId) {
+		loginListeners.forEach(listener -> listener.successful(userId));
 	}
 
 	@Override
