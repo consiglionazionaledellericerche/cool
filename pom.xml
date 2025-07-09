@@ -27,7 +27,7 @@
   <parent>
     <artifactId>archetype</artifactId>
     <groupId>it.cnr.si</groupId>
-    <version>1.0.12</version>
+    <version>1.1.2</version>
   </parent>
 
   <properties>
