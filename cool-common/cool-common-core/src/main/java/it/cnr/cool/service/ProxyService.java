@@ -189,9 +189,11 @@ public class ProxyService {
         res.setCharacterEncoding(resp.getCharset().toUpperCase());
 
         OutputStream outputStream = res.getOutputStream();
-        if (resp != null && (resp.getStream() != null || resp.getErrorContent() != null)) {
+        if (resp.getStream() != null || resp.getErrorContent() != null) {
             if (responseCode != HttpStatus.SC_OK) {
-            	LOGGER.error("status code {} for request url", responseCode + resp.getErrorContent());
+            	if (!resp.getErrorContent().contains("Wildcard has generated too many clauses")) {
+                    LOGGER.error("status code {} for request url", responseCode + resp.getErrorContent());
+                }
                 throw new CoolException(resp.getResponseMessage(), responseCode);
             }
             if (resp.getStream() != null)
