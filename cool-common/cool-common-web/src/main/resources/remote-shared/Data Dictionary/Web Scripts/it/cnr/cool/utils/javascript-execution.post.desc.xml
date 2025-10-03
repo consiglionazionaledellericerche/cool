@@ -22,7 +22,7 @@
    </description>
    <url>/cnr/utils/javascript-execution</url>
    <format default="json">argument</format>
-   <authentication>user</authentication>
+   <authentication>admin</authentication>
    <family>CNR</family>
    <family>utils</family>
 </webscript>
