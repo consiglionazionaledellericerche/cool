@@ -130,6 +130,7 @@ public class ProxyService {
                 throw new CoolException("The request url is forbidden", HttpStatus.SC_FORBIDDEN);
             }
             UrlBuilder url = getUrl(req, cmisService.getBaseURL());
+            proxyInterceptor.invokeBeforeDelete(getUrlParam(req), req);
 
             Response resp = CmisBindingsHelper
                     .getHttpInvoker(currentBindingSession).invokeDELETE(url,
@@ -146,6 +147,8 @@ public class ProxyService {
             } else {
                 LOGGER.info("DELETE failed with code " + resp.getResponseCode());
             }
+            proxyInterceptor.invokeAfterDelete(getUrlParam(req), req, resp);
+
         } catch (CoolException _ex) {
             res.setStatus(_ex.getStatus());
         }

@@ -19,6 +19,7 @@ package it.cnr.cool.interceptor;
 
 import it.cnr.cool.cmis.service.CMISService;
 import org.apache.chemistry.opencmis.client.bindings.spi.http.Response;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
@@ -30,17 +31,13 @@ import java.util.Map;
 public class ProxyInterceptor {
 	/** A list containing all the processor extenstions */
     protected Map<String, ProxyInterceptor> interceptorExtensions = new HashMap<String, ProxyInterceptor>();
+    @Autowired
     protected CMISService cmisService;
-    private ProxyInterceptor interceptor;
     private String path;
     
-    public void register(){
-    	interceptor.interceptorExtensions.put(path, this);
+    public void register(ProxyInterceptor proxyInterceptor){
+    	interceptorExtensions.put(proxyInterceptor.getPath(), proxyInterceptor);
     }
-    
-    public void setInterceptor(ProxyInterceptor interceptor) {
-		this.interceptor = interceptor;
-	}
 
 	public void setCmisService(CMISService cmisService) {
 		this.cmisService = cmisService;
@@ -69,5 +66,20 @@ public class ProxyInterceptor {
 			}
 		}
 	}
-	
+
+    public void invokeBeforeDelete(String url, HttpServletRequest req) {
+        for (String path : interceptorExtensions.keySet()) {
+            if (url.startsWith(path)) {
+                interceptorExtensions.get(path).invokeBeforeDelete(url, req);
+            }
+        }
+    }
+
+    public void invokeAfterDelete(String url, HttpServletRequest req, Response resp) {
+        for (String path : interceptorExtensions.keySet()) {
+            if (url.startsWith(path)) {
+                interceptorExtensions.get(path).invokeAfterDelete(url, req, resp);
+            }
+        }
+    }
 }

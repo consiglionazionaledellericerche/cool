@@ -144,6 +144,9 @@ define(['jquery', 'cnr/cnr.ui', 'json!common', 'i18n', 'json!cache'], function (
       if (jsonError && jsonError.keyMessage) {
         errorMessage = JSON.parse(jqXHR.responseText).keyMessage;
         UI.error(i18n.prop(errorMessage, errorMessage), context.callbackErrorFn);
+      } else if (jsonError && jsonError.error) {
+        errorMessage = jsonError.error;
+        UI.error(i18n.prop(errorMessage, errorMessage), context.callbackErrorFn);
       } else if (jsonError && jsonError.message) {
         errorMessage = jsonError.message;
         UI.error(i18n.prop(errorMessage, errorMessage), context.callbackErrorFn);
