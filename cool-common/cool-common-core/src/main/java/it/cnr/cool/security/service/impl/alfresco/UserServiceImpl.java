@@ -181,7 +181,7 @@ public class UserServiceImpl implements UserService{
 		}
 	}
 	@Override
-	public CMISUser findUserByCodiceFiscale(String codicefiscale, BindingSession cmisSession, String userName, String email) throws CoolUserFactoryException {
+	public CMISUser findUserByCodiceFiscale(String codicefiscale, BindingSession cmisSession, List<String> userNames, String email) throws CoolUserFactoryException {
 		String link = cmisService.getBaseURL().concat(SERVICE_CNR_PERSON_PEOPLE).concat("?filter=codicefiscale:"+codicefiscale);
 		UrlBuilder url = new UrlBuilder(link);
 		Response resp = CmisBindingsHelper.getHttpInvoker(cmisSession).invokeGET(url, cmisSession);
@@ -199,11 +199,11 @@ public class UserServiceImpl implements UserService{
 			else if (jsonArray.length() == 1) {
 				return gsonParser.fromJson( new StringReader(jsonArray.getJSONObject(0).toString()), CMISUser.class);
 			} else {
-				if (userName != null) {
+				if (userNames != null && !userNames.isEmpty()) {
 					return IntStream
 							.range(0, jsonArray.length())
 							.mapToObj(i -> gsonParser.fromJson(new StringReader(jsonArray.getJSONObject(i).toString()), CMISUser.class))
-							.filter(cmisUser -> cmisUser.getUserName().equalsIgnoreCase(userName) || cmisUser.getEmail().equalsIgnoreCase(email))
+							.filter(cmisUser -> userNames.contains(cmisUser.getUserName()) || cmisUser.getEmail().equalsIgnoreCase(email))
 							.findAny()
 							.orElseThrow(() -> new CoolUserFactoryException("For this tax code "+codicefiscale+" found user: "+ jsonArray.length()));
 				}
