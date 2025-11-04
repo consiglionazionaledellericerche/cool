@@ -181,7 +181,7 @@ public class UserServiceImpl implements UserService{
 		}
 	}
 	@Override
-	public CMISUser findUserByCodiceFiscale(String codicefiscale, BindingSession cmisSession, String userName) throws CoolUserFactoryException {
+	public CMISUser findUserByCodiceFiscale(String codicefiscale, BindingSession cmisSession, String userName, String email) throws CoolUserFactoryException {
 		String link = cmisService.getBaseURL().concat(SERVICE_CNR_PERSON_PEOPLE).concat("?filter=codicefiscale:"+codicefiscale);
 		UrlBuilder url = new UrlBuilder(link);
 		Response resp = CmisBindingsHelper.getHttpInvoker(cmisSession).invokeGET(url, cmisSession);
@@ -194,7 +194,7 @@ public class UserServiceImpl implements UserService{
 		try {
 			JSONObject jsonObject = new JSONObject(StringUtil.convertStreamToString(resp.getStream()));
 			JSONArray jsonArray = jsonObject.getJSONArray("people");
-			if (jsonArray.length() == 0)
+			if (jsonArray.isEmpty())
 				return null;
 			else if (jsonArray.length() == 1) {
 				return gsonParser.fromJson( new StringReader(jsonArray.getJSONObject(0).toString()), CMISUser.class);
@@ -203,7 +203,7 @@ public class UserServiceImpl implements UserService{
 					return IntStream
 							.range(0, jsonArray.length())
 							.mapToObj(i -> gsonParser.fromJson(new StringReader(jsonArray.getJSONObject(i).toString()), CMISUser.class))
-							.filter(cmisUser -> cmisUser.getUserName().equalsIgnoreCase(userName))
+							.filter(cmisUser -> cmisUser.getUserName().equalsIgnoreCase(userName) || cmisUser.getEmail().equalsIgnoreCase(email))
 							.findAny()
 							.orElseThrow(() -> new CoolUserFactoryException("For this tax code "+codicefiscale+" found user: "+ jsonArray.length()));
 				}
@@ -216,7 +216,7 @@ public class UserServiceImpl implements UserService{
 	}
 	@Override
 	public CMISUser findUserByCodiceFiscale(String codicefiscale, BindingSession cmisSession) throws CoolUserFactoryException {
-		return findUserByCodiceFiscale(codicefiscale, cmisSession, null);
+		return findUserByCodiceFiscale(codicefiscale, cmisSession, null, null);
 	}
 
 	@Override
