@@ -37,6 +37,7 @@ public interface UserService {
 	CMISUser findUserByEmail(String email, BindingSession cmisSession) throws CoolUserFactoryException;
 	CMISUser findUserByCodiceFiscale(String codicefiscale, BindingSession cmisSession) throws CoolUserFactoryException;
 	CMISUser findUserByCodiceFiscale(String codicefiscale, BindingSession cmisSession, List<String> userNames, String email) throws CoolUserFactoryException;
+    List<CMISUser> findUsersByCodiceFiscale(String codicefiscale, BindingSession cmisSession) throws CoolUserFactoryException;
 	InputStream findUser(String term, BindingSession cmisSession) throws CoolUserFactoryException;
 	boolean isUserExists(String userId);
 	CMISUser changeUserPassword(final CMISUser user, String newPassword) throws CoolUserFactoryException;
@@ -48,4 +49,5 @@ public interface UserService {
 	void logout(String userId);
 	void successfulLogin(String userId);
 	URI getRedirect(CMISUser cmisUser, URI uri);
+    String createTicketForUser(String userId);
 }
