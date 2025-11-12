@@ -246,7 +246,7 @@ public class UserServiceImpl implements UserService {
                             .range(0, jsonArray.length())
                             .mapToObj(i -> gsonParser.fromJson(new StringReader(jsonArray.getJSONObject(i).toString()), CMISUser.class))
                             .filter(cmisUser -> userNames.contains(cmisUser.getUserName()) || cmisUser.getEmail().equalsIgnoreCase(email))
-                            .findAny()
+                            .min((cmisUser1, cmisUser2) -> cmisUser1.getUserName().compareTo(cmisUser2.getUserName()))
                             .orElseThrow(() -> new CoolUserFactoryException("For this tax code " + codicefiscale + " found user: " + jsonArray.length()));
                 }
                 throw new CoolUserFactoryException("For this tax code " + codicefiscale + " found user: " + jsonArray.length());
