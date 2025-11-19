@@ -124,7 +124,7 @@ define(['jquery', 'header', 'cnr/cnr.url', 'cnr/cnr.ui.checkbox', 'cnr/cnr.ui', 
             });
           },
           edit: common.User.admin ? function () {
-            var content = $("<div>").addClass('modal-inner-fix'),
+            var content = $("<div>").addClass('modal-inner-fix row-fluid'),
               bulkinfo = User.renderBulkInfo(user, afterCreateForm, content);
 
             function callback() {
