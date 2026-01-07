@@ -19,7 +19,8 @@ define(['jquery', 'cnr/cnr.node', 'cnr/cnr.ui.select', 'i18n', 'cnr/cnr.search',
         callback : function (attachmentsData, data) {}
       },
       forbidArchives : true,
-      maxUploadSize : false
+      maxUploadSize : false,
+      inTree: false
     };
 
   function determinateType(settings) {
@@ -107,7 +108,11 @@ define(['jquery', 'cnr/cnr.node', 'cnr/cnr.ui.select', 'i18n', 'cnr/cnr.search',
     if (settings.search.filter !== false) {
       displayTable.before(blocco);
     }
-    criteria.inFolder(settings.cmisObjectId, settings.search.type);
+    if (settings.inTree) {
+        criteria.inTree(settings.cmisObjectId, settings.search.type);
+    } else {
+        criteria.inFolder(settings.cmisObjectId, settings.search.type);
+    }
 
     return {
       search: allegati,
