@@ -187,7 +187,11 @@ define(['jquery', 'cnr/cnr.node', 'cnr/cnr.ui.select', 'i18n', 'cnr/cnr.search',
             search.changeType(determinateType(settings));
             settings.search.baseType = settings.search.type;
             criteria = new Criteria();
-            criteria.inFolder(settings.cmisObjectId, settings.search.type).list(search);
+            if (settings.inTree) {
+                criteria.inTree(settings.cmisObjectId, settings.search.type).list(search);
+            } else {
+                criteria.inFolder(settings.cmisObjectId, settings.search.type).list(search);
+            }
           }
         }
 
