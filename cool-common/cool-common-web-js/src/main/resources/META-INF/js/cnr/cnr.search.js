@@ -376,7 +376,7 @@ define(['jquery', 'cnr/cnr', 'i18n', 'cnr/cnr.url', 'cnr/cnr.searchfilter', 'cnr
             disableFilterFn();
             executeQuery();
           },
-          Object.keys(defaultMapping({})).filter(key => key !== 'name')
+          Object.keys(defaultMapping({})).filter(function(key) { return key !== 'name'; })
         );
       }
     }
