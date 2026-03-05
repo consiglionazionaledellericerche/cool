@@ -42,6 +42,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 
+import javax.print.Doc;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.math.BigInteger;
@@ -186,8 +187,12 @@ public class NodeService {
 					}
 				}
 				if (cmisObject.getBaseTypeId().equals(BaseTypeId.CMIS_DOCUMENT)){
-					cmisObject.delete(true);
-				}else if (cmisObject.getBaseTypeId().equals(BaseTypeId.CMIS_FOLDER)) {
+					Document document = (Document) cmisObject;
+					Optional<Folder> optionalFolder = document.getParents().stream().findAny();
+					DocumentType documentType = document.getDocumentType();
+					document.delete(true);
+					afterDeleteDocument(document, optionalFolder, documentType);
+				} else if (cmisObject.getBaseTypeId().equals(BaseTypeId.CMIS_FOLDER)) {
 					((Folder)cmisObject).deleteTree(true, UnfileObject.DELETE, false);
 				}
 			}catch (CmisObjectNotFoundException e) {
@@ -200,6 +205,8 @@ public class NodeService {
 		}
 		return attachments;
 	}
+
+	protected void afterDeleteDocument(Document document, Optional<Folder> optionalParent, DocumentType documentType) {}
 
 	private boolean isArchive(String originalFilename) {
 		List<String> extensions = Arrays.asList("zip", "gz", "tar", "7z", "rar", "iso");
