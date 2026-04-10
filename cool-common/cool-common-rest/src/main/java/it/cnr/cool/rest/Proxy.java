@@ -83,7 +83,7 @@ public class Proxy {
 
         } else {
             if (cmisService.getCMISUserFromSession(req).isGuest()) {
-                LOGGER.error("The request url is forbidden");
+                LOGGER.error("The request url {} is forbidden", req.getQueryString());
                 throw new CoolException("The request url is forbidden", HttpStatus.SC_FORBIDDEN);
             }
             bindingSession = cmisService.getCurrentBindingSession(req);

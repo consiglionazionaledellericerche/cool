@@ -35,6 +35,12 @@ define(['jquery', 'i18n', 'select2', 'select2-i18n', 'cnr/cnr'], function ($, i1
         if ((item.val === undefined || item.val === "") && item.default && key !== "" && [].concat(item.default).indexOf(key) >= 0) {
           opt.attr('selected', 'true');
         }
+        if (el.readonly) {
+          opt.attr('readonly', el.readonly);
+        }
+        if (el.disabled) {
+          opt.attr('disabled', el.disabled);
+        }
         if (el.group) {
           if ($.inArray(el.group, optgroup) === -1) {
             optgroup.push(el.group);
