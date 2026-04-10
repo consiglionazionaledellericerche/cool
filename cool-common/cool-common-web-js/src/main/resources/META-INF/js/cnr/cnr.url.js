@@ -74,7 +74,8 @@ define(['jquery', 'cnr/cnr.ui', 'json!common', 'i18n', 'json!cache'], function (
       logout: "rest/security/logout",
       common: "rest/common",
       handlebars: 'res/js/handlebars/$id',
-      sedi: 'rest/sedi'
+      sedi: 'rest/sedi',
+      sedigestori: 'rest/sedi/gestori'
     };
 
   function template(url, placeholder) {
